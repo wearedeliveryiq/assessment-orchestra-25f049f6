@@ -163,6 +163,22 @@ export class KnowledgePackLoader {
     return this.load(packId).patterns.categories;
   }
 
+  /** Scoring dimensions exposed to the Scoring Engine. */
+  scoreDefinitions(packId: string = this.activePackId) {
+    return this.load(packId).scoring.dimensions;
+  }
+
+  /** Overall aggregation model declared by the pack. */
+  overallScoreDefinition(packId: string = this.activePackId) {
+    return this.load(packId).scoring.overall;
+  }
+
+  /** Pack-wide scoring defaults (maturity bands, severity multipliers). */
+  scoringDefaults(packId: string = this.activePackId) {
+    return this.load(packId).scoring.defaults;
+  }
+
+
 
 
   clearCache(): void {
