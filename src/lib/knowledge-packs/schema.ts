@@ -92,7 +92,52 @@ export const observationsSchema = z.object({
   definitions: z.array(observationDefinitionSchema).min(1),
 });
 
-export const signalsSchema = z.object({ signals: z.array(z.record(z.unknown())).min(1) });
+/**
+ * Signal definitions. A signal is inferred purely from Observations, so a
+ * definition selects supporting observations either by explicit definition id
+ * or by a regular expression, and declares its own confidence/severity policy.
+ */
+export const signalMatchSchema = z.object({
+  /** Observation definition ids that can support this signal. */
+  observationIds: z.array(z.string().min(1)).default([]),
+  /** Optional regex matched against observation definition ids. */
+  definitionIdMatches: z.string().min(1).optional(),
+  /** Optional filter on the severity of supporting observations. */
+  severityIn: z.array(severitySchema).optional(),
+  /** Optional filter on the category of supporting observations. */
+  categoryIn: z.array(z.string().min(1)).optional(),
+  /** How many supporting observations must be present for the signal to fire. */
+  minMatches: z.number().int().positive().default(1),
+});
+
+export const signalDefinitionSchema = z.object({
+  code: z.string().min(1),
+  name: z.string().min(1),
+  category: z.string().min(1),
+  description: z.string().min(1),
+  rationale: z.string().min(1),
+  match: signalMatchSchema,
+  /** Signal is discarded when calculated confidence falls below this floor. */
+  minConfidence: z.number().min(0).max(1),
+  severity: severitySchema,
+  weight: z.number().min(0),
+  /** Evidence count considered "complete" — drives the completeness factor. */
+  expectedEvidence: z.number().int().positive(),
+  /** Raise severity to the strongest supporting observation severity. */
+  escalateWithEvidence: z.boolean().default(false),
+});
+
+export type SignalDefinition = z.infer<typeof signalDefinitionSchema>;
+export type SignalMatch = z.infer<typeof signalMatchSchema>;
+
+export const signalsSchema = z.object({
+  /** Legacy section-benchmark signals consumed by the assessment runtime. */
+  signals: z.array(z.record(z.unknown())).min(1),
+  /** Categories exposed by the pack; the Signal Explorer reads these. */
+  categories: z.array(z.string().min(1)).default([]),
+  /** Observation-driven signal definitions used by the Signal Engine. */
+  definitions: z.array(signalDefinitionSchema).default([]),
+});
 export const rulesSchema = z.object({ rules: z.array(z.record(z.unknown())).min(1) });
 export const patternsSchema = z.object({ patterns: z.array(z.record(z.unknown())).min(1) });
 export const recommendationsSchema = z.object({
