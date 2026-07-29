@@ -153,6 +153,18 @@ export class KnowledgePackLoader {
     return this.load(packId).rules.categories;
   }
 
+  /** Pattern definitions exposed to the Pattern Engine. */
+  patternDefinitions(packId: string = this.activePackId) {
+    return this.load(packId).patterns.definitions;
+  }
+
+  /** Pattern categories declared by the pack, used by the Pattern Explorer. */
+  patternCategories(packId: string = this.activePackId) {
+    return this.load(packId).patterns.categories;
+  }
+
+
+
   clearCache(): void {
     this.cache.clear();
   }
