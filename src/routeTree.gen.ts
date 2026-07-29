@@ -15,8 +15,10 @@ import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
 import { Route as RuntimeObservationsRouteImport } from './routes/runtime.observations'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
 import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
+import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
 import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
 import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
@@ -59,6 +61,11 @@ const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   path: '/api/assessments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
+  id: '/internal/signals/',
+  path: '/internal/signals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InternalObservationsIndexRoute =
   InternalObservationsIndexRouteImport.update({
     id: '/internal/observations/',
@@ -68,6 +75,11 @@ const InternalObservationsIndexRoute =
 const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
   id: '/assessment/$id/',
   path: '/assessment/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
+  id: '/internal/signals/$id',
+  path: '/internal/signals/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalObservationsIdRoute = InternalObservationsIdRouteImport.update({
@@ -140,8 +152,10 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
+  '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
+  '/internal/signals/': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -161,8 +175,10 @@ export interface FileRoutesByTo {
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
+  '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
   '/internal/observations': typeof InternalObservationsIndexRoute
+  '/internal/signals': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -183,8 +199,10 @@ export interface FileRoutesById {
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
+  '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
+  '/internal/signals/': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -206,8 +224,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/results'
     | '/assessment/$id/signals'
     | '/internal/observations/$id'
+    | '/internal/signals/$id'
     | '/assessment/$id/'
     | '/internal/observations/'
+    | '/internal/signals/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -227,8 +247,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/results'
     | '/assessment/$id/signals'
     | '/internal/observations/$id'
+    | '/internal/signals/$id'
     | '/assessment/$id'
     | '/internal/observations'
+    | '/internal/signals'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -248,8 +270,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/results'
     | '/assessment/$id/signals'
     | '/internal/observations/$id'
+    | '/internal/signals/$id'
     | '/assessment/$id/'
     | '/internal/observations/'
+    | '/internal/signals/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -269,8 +293,10 @@ export interface RootRouteChildren {
   AssessmentIdResultsRoute: typeof AssessmentIdResultsRoute
   AssessmentIdSignalsRoute: typeof AssessmentIdSignalsRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
+  InternalSignalsIdRoute: typeof InternalSignalsIdRoute
   AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
+  InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/signals/': {
+      id: '/internal/signals/'
+      path: '/internal/signals'
+      fullPath: '/internal/signals/'
+      preLoaderRoute: typeof InternalSignalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/internal/observations/': {
       id: '/internal/observations/'
       path: '/internal/observations'
@@ -329,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/assessment/$id'
       fullPath: '/assessment/$id/'
       preLoaderRoute: typeof AssessmentIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/signals/$id': {
+      id: '/internal/signals/$id'
+      path: '/internal/signals/$id'
+      fullPath: '/internal/signals/$id'
+      preLoaderRoute: typeof InternalSignalsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/observations/$id': {
@@ -454,8 +494,10 @@ const rootRouteChildren: RootRouteChildren = {
   AssessmentIdResultsRoute: AssessmentIdResultsRoute,
   AssessmentIdSignalsRoute: AssessmentIdSignalsRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
+  InternalSignalsIdRoute: InternalSignalsIdRoute,
   AssessmentIdIndexRoute: AssessmentIdIndexRoute,
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
+  InternalSignalsIndexRoute: InternalSignalsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
