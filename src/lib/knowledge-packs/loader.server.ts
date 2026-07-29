@@ -143,6 +143,16 @@ export class KnowledgePackLoader {
     return this.load(packId).signals.categories;
   }
 
+  /** Rule definitions exposed to the Rule Engine. */
+  ruleDefinitions(packId: string = this.activePackId) {
+    return this.load(packId).rules.definitions;
+  }
+
+  /** Rule categories declared by the pack, used by the Rule Explorer. */
+  ruleCategories(packId: string = this.activePackId) {
+    return this.load(packId).rules.categories;
+  }
+
   clearCache(): void {
     this.cache.clear();
   }
