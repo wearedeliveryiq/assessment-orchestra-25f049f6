@@ -90,9 +90,9 @@ const session = { id: "s1", progress: 100 };
 
 describe("MaturityCalculator", () => {
   it("maps percentages onto the highest matching band", () => {
-    expect(maturityCalculator.calculate(90, bands).name).toBe("Optimised");
-    expect(maturityCalculator.calculate(55, bands).name).toBe("Developing");
-    expect(maturityCalculator.calculate(10, bands).name).toBe("Critical");
+    expect(maturityCalculator.calculate(90, bands).level).toBe("Optimised");
+    expect(maturityCalculator.calculate(55, bands).level).toBe("Developing");
+    expect(maturityCalculator.calculate(10, bands).level).toBe("Critical");
   });
 });
 
