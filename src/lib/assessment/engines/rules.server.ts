@@ -1,3 +1,7 @@
+import { knowledgePackLoader } from "../../knowledge-packs/loader.server";
+import { ruleEngine } from "../../rules/engine.server";
+import { replaceRuleResults } from "../../rules/repository.server";
+import { listSignals } from "../../signals/repository.server";
 import type { ObservationItem, RuleHit, SignalItem } from "../types";
 import { artifact, type EngineService } from "./contract.server";
 
