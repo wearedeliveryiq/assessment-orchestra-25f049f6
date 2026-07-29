@@ -22,7 +22,7 @@ export interface ScoreValidationResult {
 export class ScoreValidator {
   validate(pack: KnowledgePackDocument): ScoreValidationResult {
     const definitions = pack.scoring.dimensions ?? [];
-    const patternCodes = new Set((pack.patterns.definitions ?? []).map((d) => d.patternCode));
+    const patternCodes = new Set((pack.patterns?.definitions ?? []).map((d) => d.patternCode));
     const defaultBands = pack.scoring.defaults?.maturityBands ?? [];
 
     const valid: ScoreDefinition[] = [];

@@ -18,6 +18,7 @@ function pack(overrides: Partial<KnowledgePackDocument["scoring"]> = {}) {
   return {
     manifest: { id: "test-pack", version: "1.0.0" },
     questions: { questions: [] },
+    patterns: { definitions: [{ patternCode: "PAT-001" }, { patternCode: "PAT-002" }] },
     scoring: {
       defaults: {
         severityMultipliers: { critical: 1, high: 0.8, medium: 0.5, low: 0.3, info: 0.2 },
