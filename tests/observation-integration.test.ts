@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AssessmentResponse, AssessmentSession } from "@/lib/assessment/types";
 import type { Observation } from "@/lib/observations/types";
+import { knowledgePackLoader } from "@/lib/knowledge-packs/loader.server";
 
 /**
  * Integration coverage: Assessment -> Observation Engine -> persistence.
