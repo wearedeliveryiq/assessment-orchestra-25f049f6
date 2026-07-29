@@ -204,6 +204,21 @@ function LandingPage() {
             Open →
           </Link>
         </div>
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface px-4 py-3.5">
+          <div>
+            <p className="text-sm font-medium">Pattern Explorer</p>
+            <p className="text-xs text-muted-foreground">
+              Internal tooling — organisational patterns inferred from rule results.
+            </p>
+          </div>
+          <Link
+            to="/internal/patterns"
+            className="shrink-0 text-xs font-semibold text-primary transition-opacity hover:opacity-80"
+          >
+            Open →
+          </Link>
+        </div>
+
       </div>
     </AppShell>
   );

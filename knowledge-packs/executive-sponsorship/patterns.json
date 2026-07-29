@@ -64,5 +64,156 @@
         "spreadBelow": 0.6
       }
     }
+  ],
+  "categories": [
+    "Executive Leadership",
+    "Governance",
+    "Delivery Execution",
+    "Value Realisation",
+    "Engineering Assurance",
+    "Organisational Change"
+  ],
+  "definitions": [
+    {
+      "patternCode": "PAT-001",
+      "name": "Leadership Vacuum",
+      "category": "Executive Leadership",
+      "description": "Sponsorship, governance and decision ownership are simultaneously ineffective.",
+      "businessImpact": "Executive ownership is inconsistent, slowing strategic decision making, reducing accountability and increasing delivery risk.",
+      "requiredRules": [
+        "RULE-001",
+        "RULE-002",
+        "RULE-003"
+      ],
+      "logic": "ALL",
+      "minimumConfidence": 60,
+      "severity": "critical",
+      "weight": 1.4,
+      "expectedEvidence": 3,
+      "explanationTemplate": "Leadership vacuum confirmed by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-002",
+      "name": "Governance Theatre",
+      "category": "Governance",
+      "description": "Governance ceremonies run while decisions and portfolio visibility do not improve.",
+      "businessImpact": "Governance consumes senior capacity without improving decision quality, creating a false sense of control while risk accumulates unseen.",
+      "requiredRules": [
+        "RULE-002",
+        "RULE-003",
+        "RULE-008"
+      ],
+      "logic": "AT_LEAST",
+      "threshold": 2,
+      "minimumConfidence": 55,
+      "severity": "high",
+      "weight": 1.2,
+      "expectedEvidence": 3,
+      "explanationTemplate": "Governance theatre indicated by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-003",
+      "name": "Firefighting Culture",
+      "category": "Delivery Execution",
+      "description": "Predictability, systemic delivery risk and engineering assurance all degrade together.",
+      "businessImpact": "Teams operate reactively, consuming capacity on unplanned work, eroding forecast reliability and burning out delivery leadership.",
+      "requiredRules": [
+        "RULE-005",
+        "RULE-006",
+        "RULE-010"
+      ],
+      "logic": "AT_LEAST",
+      "threshold": 2,
+      "minimumConfidence": 55,
+      "severity": "critical",
+      "weight": 1.3,
+      "expectedEvidence": 3,
+      "explanationTemplate": "Firefighting culture indicated by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-004",
+      "name": "Benefits Drift",
+      "category": "Value Realisation",
+      "description": "Benefits ownership is weak and adoption of change is not tracked.",
+      "businessImpact": "Investment is committed without a credible line of sight to benefits, so value leaks quietly and reinvestment decisions are made on unreliable evidence.",
+      "requiredRules": [
+        "RULE-004",
+        "RULE-009"
+      ],
+      "logic": "ALL",
+      "minimumConfidence": 55,
+      "severity": "high",
+      "weight": 1.2,
+      "expectedEvidence": 2,
+      "explanationTemplate": "Benefits drift confirmed by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-005",
+      "name": "Fragile Engineering Base",
+      "category": "Engineering Assurance",
+      "description": "Engineering assurance risk is present and delivery predictability cannot compensate.",
+      "businessImpact": "Change carries unquantified technical risk, making release dates unreliable and increasing the cost of every subsequent change.",
+      "requiredRules": [
+        "RULE-006",
+        "RULE-005"
+      ],
+      "logic": "AT_LEAST",
+      "threshold": 1,
+      "minimumConfidence": 60,
+      "severity": "high",
+      "weight": 1.1,
+      "expectedEvidence": 2,
+      "explanationTemplate": "Fragile engineering base indicated by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-006",
+      "name": "Change Absorption Overload",
+      "category": "Organisational Change",
+      "description": "Change adoption risk combines with portfolio visibility gaps.",
+      "businessImpact": "The organisation is asked to absorb more change than it can operationalise, so delivered capability is not converted into working practice.",
+      "requiredRules": [
+        "RULE-009",
+        "RULE-008"
+      ],
+      "logic": "ALL",
+      "minimumConfidence": 55,
+      "severity": "medium",
+      "weight": 1.0,
+      "expectedEvidence": 2,
+      "explanationTemplate": "Change absorption overload confirmed by {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-007",
+      "name": "Evidence Poor Assessment",
+      "category": "Governance",
+      "description": "Insufficient assessment evidence undermines the reliability of downstream findings.",
+      "businessImpact": "Conclusions rest on partial evidence, so leadership should treat scoring as indicative until the assessment is completed.",
+      "requiredRules": [
+        "RULE-011"
+      ],
+      "logic": "ANY",
+      "minimumConfidence": 40,
+      "severity": "low",
+      "weight": 0.8,
+      "expectedEvidence": 1,
+      "explanationTemplate": "Evidence gaps detected via {count} rule(s): {rules} (confidence {confidence})."
+    },
+    {
+      "patternCode": "PAT-008",
+      "name": "Healthy Sponsorship System",
+      "category": "Executive Leadership",
+      "description": "Sponsorship and delivery leadership are confirmed effective with no systemic delivery risk.",
+      "businessImpact": "Executive sponsorship is translating intent into dependable delivery; the operating model should be protected and reused as a reference pattern.",
+      "requiredRules": [
+        "RULE-007",
+        "RULE-012"
+      ],
+      "logic": "ALL",
+      "minimumConfidence": 50,
+      "severity": "info",
+      "weight": 1.0,
+      "expectedEvidence": 2,
+      "explanationTemplate": "Healthy sponsorship confirmed by {count} rule(s): {rules} (confidence {confidence})."
+    }
   ]
 }
