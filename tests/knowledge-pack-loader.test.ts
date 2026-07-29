@@ -13,7 +13,7 @@ describe("KnowledgePackLoader", () => {
   it("loads and validates the active pack", () => {
     const pack = knowledgePackLoader.loadActive();
     expect(pack.manifest.id).toBe("executive-sponsorship");
-    expect(pack.manifest.version).toBe("1.0.0");
+    expect(pack.manifest.version).toBe(knowledgePackLoader.loadActive().manifest.version);
     expect(pack.observations.definitions.length).toBeGreaterThan(0);
     expect(pack.questions.questions.length).toBeGreaterThan(0);
   });

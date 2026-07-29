@@ -133,6 +133,16 @@ export class KnowledgePackLoader {
     return this.load(packId).observations.definitions;
   }
 
+  /** Signal definitions exposed to the Signal Engine. */
+  signalDefinitions(packId: string = this.activePackId) {
+    return this.load(packId).signals.definitions;
+  }
+
+  /** Signal categories declared by the pack, used by the Signal Explorer. */
+  signalCategories(packId: string = this.activePackId) {
+    return this.load(packId).signals.categories;
+  }
+
   clearCache(): void {
     this.cache.clear();
   }

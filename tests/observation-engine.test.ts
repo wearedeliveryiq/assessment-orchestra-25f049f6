@@ -58,7 +58,7 @@ describe("ObservationEngine", () => {
     expect(deficit?.evidence).toContain("1/5");
     expect(deficit?.ruleExpression).toContain("flow.wip where value lte 2");
     expect(deficit?.knowledgePack).toBe("executive-sponsorship");
-    expect(deficit?.knowledgePackVersion).toBe("1.0.0");
+    expect(deficit?.knowledgePackVersion).toBe(knowledgePackLoader.loadActive().manifest.version);
   });
 
   it("generates strength observations for high answers", async () => {

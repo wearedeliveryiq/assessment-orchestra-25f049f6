@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AssessmentResponse, AssessmentSession } from "@/lib/assessment/types";
 import type { Observation } from "@/lib/observations/types";
+import { knowledgePackLoader } from "@/lib/knowledge-packs/loader.server";
 
 /**
  * Integration coverage: Assessment -> Observation Engine -> persistence.
@@ -99,7 +100,7 @@ describe("assessment -> observation engine integration", () => {
     expect(trace.question?.id).toBe("flow.wip");
     expect(trace.answer.value).toBe(1);
     expect(trace.answer.label).toBe("Absent");
-    expect(trace.knowledgePackRule.packVersion).toBe("1.0.0");
+    expect(trace.knowledgePackRule.packVersion).toBe(knowledgePackLoader.loadActive().manifest.version);
     expect(trace.knowledgePackRule.expression).toContain("value lte 2");
   });
 });

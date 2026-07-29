@@ -2,12 +2,41 @@ import { QUESTIONNAIRE } from "../questionnaire";
 import type { KnowledgePack } from "./contract.server";
 import type { ObservationItem, SignalItem } from "../types";
 import { artifact, type EngineService } from "./contract.server";
+import { knowledgePackLoader } from "@/lib/knowledge-packs/loader.server";
+import { signalEngine } from "@/lib/signals/engine.server";
+import { listObservations } from "@/lib/observations/repository.server";
+import { replaceSignals } from "@/lib/signals/repository.server";
 
+/**
+ * Signal stage of the reasoning pipeline.
+ *
+ * Organisational signals are inferred purely from persisted Observations using
+ * the active Knowledge Pack, then persisted for the Rule Engine and the Signal
+ * Explorer. The per-section view returned here keeps the existing downstream
+ * stages (rules, patterns, scores) working unchanged.
+ */
 export const signalsEngine: EngineService<SignalItem[]> = {
   id: "signals",
   async run(context) {
     const pack = artifact<KnowledgePack>(context, "knowledge_pack");
     const observations = artifact<ObservationItem[]>(context, "observations");
+
+    try {
+      const packDocument = knowledgePackLoader.loadActive();
+      const persistedObservations = await listObservations(context.session.id);
+      const { signals, summary } = await signalEngine.run({
+        session: context.session,
+        observations: persistedObservations,
+        pack: packDocument,
+      });
+      await replaceSignals(context.session.id, signals);
+      if (summary.failed.length > 0) {
+        console.error("[signals-stage] definitions failed", summary.failed);
+      }
+    } catch (error) {
+      // Signal inference must not break the legacy scoring pipeline.
+      console.error("[signals-stage] signal engine failed", error);
+    }
 
     return QUESTIONNAIRE.map<SignalItem>((section) => {
       const items = observations.filter((o) => o.sectionId === section.id);
