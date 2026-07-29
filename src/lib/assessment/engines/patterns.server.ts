@@ -1,7 +1,20 @@
+import { knowledgePackLoader } from "../../knowledge-packs/loader.server";
+import { patternEngine } from "../../patterns/engine.server";
+import { replacePatterns } from "../../patterns/repository.server";
+import { listRuleResults } from "../../rules/repository.server";
 import type { PatternItem, RuleHit, SignalItem } from "../types";
 import { artifact, type EngineService } from "./contract.server";
 
-interface PatternDefinition {
+/**
+ * Patterns stage.
+ *
+ * Runs the pack-driven Pattern Engine over the persisted RuleResults and stores
+ * immutable Patterns for the Pattern Explorer and downstream Scoring Engine.
+ * The legacy in-memory patterns are retained so the existing scoring/narrative
+ * stages stay backward compatible while they migrate to the new entity.
+ */
+
+interface LegacyPatternDefinition {
   id: string;
   name: string;
   description: string;
@@ -10,7 +23,7 @@ interface PatternDefinition {
 
 const hasRule = (rules: RuleHit[], id: string) => rules.some((r) => r.id === id);
 
-const PATTERNS: PatternDefinition[] = [
+const PATTERNS: LegacyPatternDefinition[] = [
   {
     id: "pattern.release_train_jam",
     name: "Release Train Jam",
@@ -56,13 +69,38 @@ export const patternsEngine: EngineService<PatternItem[]> = {
     const rules = artifact<RuleHit[]>(context, "rules");
     const signals = artifact<SignalItem[]>(context, "signals");
 
-    return PATTERNS.map((pattern) => ({
+    // Pack-driven Pattern Engine: consumes RuleResults only.
+    let packPatterns: PatternItem[] = [];
+    try {
+      const pack = knowledgePackLoader.loadActive();
+      const ruleResults = await listRuleResults(context.session.id);
+      const { patterns, summary } = await patternEngine.run({
+        session: context.session,
+        rules: ruleResults,
+        pack,
+      });
+      await replacePatterns(context.session.id, patterns);
+      if (summary.errored.length > 0) {
+        console.error("[patterns-stage] patterns failed", summary.errored);
+      }
+      packPatterns = patterns.map((pattern) => ({
+        id: pattern.patternCode,
+        name: pattern.name,
+        description: pattern.businessImpact,
+        confidence: pattern.confidence,
+      }));
+    } catch (error) {
+      // Pattern generation must not break the legacy scoring pipeline.
+      console.error("[patterns-stage] pattern engine failed", error);
+    }
+
+    const legacy = PATTERNS.map((pattern) => ({
       id: pattern.id,
       name: pattern.name,
       description: pattern.description,
       confidence: Math.min(1, Number(pattern.match({ rules, signals }).toFixed(2))),
-    }))
-      .filter((pattern) => pattern.confidence > 0)
-      .sort((a, b) => b.confidence - a.confidence);
+    })).filter((pattern) => pattern.confidence > 0);
+
+    return [...packPatterns, ...legacy].sort((a, b) => b.confidence - a.confidence);
   },
 };
