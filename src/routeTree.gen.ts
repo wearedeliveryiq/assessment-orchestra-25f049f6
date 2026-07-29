@@ -10,33 +10,161 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
+import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
+import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.$id.processing'
+import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
+import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
+import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
+import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
+import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
+import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
+  id: '/api/assessments',
+  path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
+  id: '/assessment/$id/',
+  path: '/assessment/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdResultsRoute = AssessmentIdResultsRouteImport.update({
+  id: '/assessment/$id/results',
+  path: '/assessment/$id/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdProcessingRoute = AssessmentIdProcessingRouteImport.update({
+  id: '/assessment/$id/processing',
+  path: '/assessment/$id/processing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAssessmentsRoute,
+} as any)
+const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdStatusRoute = ApiAssessmentsIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdRetryRoute = ApiAssessmentsIdRetryRouteImport.update({
+  id: '/retry',
+  path: '/retry',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdResultsRoute = ApiAssessmentsIdResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
+  id: '/advance',
+  path: '/advance',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/results': typeof AssessmentIdResultsRoute
+  '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
+  '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
+  '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
+  '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/results': typeof AssessmentIdResultsRoute
+  '/assessment/$id': typeof AssessmentIdIndexRoute
+  '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
+  '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
+  '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
+  '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/results': typeof AssessmentIdResultsRoute
+  '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
+  '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
+  '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
+  '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/assessments'
+    | '/api/assessments/$id'
+    | '/assessment/$id/processing'
+    | '/assessment/$id/results'
+    | '/assessment/$id/'
+    | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/results'
+    | '/api/assessments/$id/retry'
+    | '/api/assessments/$id/status'
+    | '/api/assessments/$id/submit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/assessments'
+    | '/api/assessments/$id'
+    | '/assessment/$id/processing'
+    | '/assessment/$id/results'
+    | '/assessment/$id'
+    | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/results'
+    | '/api/assessments/$id/retry'
+    | '/api/assessments/$id/status'
+    | '/api/assessments/$id/submit'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/assessments'
+    | '/api/assessments/$id'
+    | '/assessment/$id/processing'
+    | '/assessment/$id/results'
+    | '/assessment/$id/'
+    | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/results'
+    | '/api/assessments/$id/retry'
+    | '/api/assessments/$id/status'
+    | '/api/assessments/$id/submit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
+  AssessmentIdProcessingRoute: typeof AssessmentIdProcessingRoute
+  AssessmentIdResultsRoute: typeof AssessmentIdResultsRoute
+  AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +176,117 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/assessments': {
+      id: '/api/assessments'
+      path: '/api/assessments'
+      fullPath: '/api/assessments'
+      preLoaderRoute: typeof ApiAssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/': {
+      id: '/assessment/$id/'
+      path: '/assessment/$id'
+      fullPath: '/assessment/$id/'
+      preLoaderRoute: typeof AssessmentIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/results': {
+      id: '/assessment/$id/results'
+      path: '/assessment/$id/results'
+      fullPath: '/assessment/$id/results'
+      preLoaderRoute: typeof AssessmentIdResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/processing': {
+      id: '/assessment/$id/processing'
+      path: '/assessment/$id/processing'
+      fullPath: '/assessment/$id/processing'
+      preLoaderRoute: typeof AssessmentIdProcessingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessments/$id': {
+      id: '/api/assessments/$id'
+      path: '/$id'
+      fullPath: '/api/assessments/$id'
+      preLoaderRoute: typeof ApiAssessmentsIdRouteImport
+      parentRoute: typeof ApiAssessmentsRoute
+    }
+    '/api/assessments/$id/submit': {
+      id: '/api/assessments/$id/submit'
+      path: '/submit'
+      fullPath: '/api/assessments/$id/submit'
+      preLoaderRoute: typeof ApiAssessmentsIdSubmitRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/status': {
+      id: '/api/assessments/$id/status'
+      path: '/status'
+      fullPath: '/api/assessments/$id/status'
+      preLoaderRoute: typeof ApiAssessmentsIdStatusRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/retry': {
+      id: '/api/assessments/$id/retry'
+      path: '/retry'
+      fullPath: '/api/assessments/$id/retry'
+      preLoaderRoute: typeof ApiAssessmentsIdRetryRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/results': {
+      id: '/api/assessments/$id/results'
+      path: '/results'
+      fullPath: '/api/assessments/$id/results'
+      preLoaderRoute: typeof ApiAssessmentsIdResultsRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/advance': {
+      id: '/api/assessments/$id/advance'
+      path: '/advance'
+      fullPath: '/api/assessments/$id/advance'
+      preLoaderRoute: typeof ApiAssessmentsIdAdvanceRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
   }
 }
 
+interface ApiAssessmentsIdRouteChildren {
+  ApiAssessmentsIdAdvanceRoute: typeof ApiAssessmentsIdAdvanceRoute
+  ApiAssessmentsIdResultsRoute: typeof ApiAssessmentsIdResultsRoute
+  ApiAssessmentsIdRetryRoute: typeof ApiAssessmentsIdRetryRoute
+  ApiAssessmentsIdStatusRoute: typeof ApiAssessmentsIdStatusRoute
+  ApiAssessmentsIdSubmitRoute: typeof ApiAssessmentsIdSubmitRoute
+}
+
+const ApiAssessmentsIdRouteChildren: ApiAssessmentsIdRouteChildren = {
+  ApiAssessmentsIdAdvanceRoute: ApiAssessmentsIdAdvanceRoute,
+  ApiAssessmentsIdResultsRoute: ApiAssessmentsIdResultsRoute,
+  ApiAssessmentsIdRetryRoute: ApiAssessmentsIdRetryRoute,
+  ApiAssessmentsIdStatusRoute: ApiAssessmentsIdStatusRoute,
+  ApiAssessmentsIdSubmitRoute: ApiAssessmentsIdSubmitRoute,
+}
+
+const ApiAssessmentsIdRouteWithChildren =
+  ApiAssessmentsIdRoute._addFileChildren(ApiAssessmentsIdRouteChildren)
+
+interface ApiAssessmentsRouteChildren {
+  ApiAssessmentsIdRoute: typeof ApiAssessmentsIdRouteWithChildren
+}
+
+const ApiAssessmentsRouteChildren: ApiAssessmentsRouteChildren = {
+  ApiAssessmentsIdRoute: ApiAssessmentsIdRouteWithChildren,
+}
+
+const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
+  ApiAssessmentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
+  AssessmentIdProcessingRoute: AssessmentIdProcessingRoute,
+  AssessmentIdResultsRoute: AssessmentIdResultsRoute,
+  AssessmentIdIndexRoute: AssessmentIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
