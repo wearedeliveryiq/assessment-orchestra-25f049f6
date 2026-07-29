@@ -32,5 +32,323 @@
       "positiveStatement": "Value & Outcomes is ahead of the sponsorship benchmark.",
       "negativeStatement": "Value & Outcomes is behind the sponsorship benchmark."
     }
+  ],
+  "categories": [
+    "Executive Sponsorship",
+    "Governance",
+    "Decision Making",
+    "Benefits",
+    "Planning",
+    "Risk",
+    "Delivery Leadership",
+    "PMO",
+    "Change Management"
+  ],
+  "definitions": [
+    {
+      "code": "SIG-001",
+      "name": "Weak Executive Sponsorship",
+      "category": "Executive Sponsorship",
+      "description": "Sponsors are not converting intent into decisions, visibility or outcome ownership.",
+      "rationale": "Two or more sponsorship deficits across decision making, reporting, outcomes or benefits.",
+      "match": {
+        "observationIds": [
+          "obs.gov_decisions.deficit",
+          "obs.gov_reporting.deficit",
+          "obs.value_outcomes.deficit",
+          "obs.value_benefits.deficit"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.65,
+      "severity": "high",
+      "weight": 1.5,
+      "expectedEvidence": 4,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-002",
+      "name": "Effective Executive Sponsorship",
+      "category": "Executive Sponsorship",
+      "description": "Sponsors are actively steering decisions, visibility and outcomes.",
+      "rationale": "Two or more sponsorship strengths across decision making, reporting and outcomes.",
+      "match": {
+        "observationIds": [
+          "obs.gov_decisions.strength",
+          "obs.gov_reporting.strength",
+          "obs.value_outcomes.strength",
+          "obs.value_benefits.strength"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "info",
+      "weight": 0.9,
+      "expectedEvidence": 4,
+      "escalateWithEvidence": false
+    },
+    {
+      "code": "SIG-003",
+      "name": "Governance Theatre",
+      "category": "Governance",
+      "description": "Governance forums are producing reporting activity without assurance value.",
+      "rationale": "Two or more deficits across reporting, compliance and risk governance.",
+      "match": {
+        "observationIds": [
+          "obs.gov_reporting.deficit",
+          "obs.gov_compliance.deficit",
+          "obs.gov_risk.deficit",
+          "obs.gov_reporting.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.3,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-004",
+      "name": "Assurance Gap",
+      "category": "Governance",
+      "description": "Compliance obligations are not backed by dependable delivery assurance.",
+      "rationale": "Compliance weakness combined with weak automated testing.",
+      "match": {
+        "observationIds": [
+          "obs.gov_compliance.deficit",
+          "obs.gov_compliance.partial",
+          "obs.eng_tests.deficit",
+          "obs.eng_tests.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.55,
+      "severity": "medium",
+      "weight": 1.0,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-005",
+      "name": "Slow Decision Making",
+      "category": "Decision Making",
+      "description": "Decisions are escalating late and dependencies stall waiting for direction.",
+      "rationale": "Weak decision ownership together with unmanaged cross-team dependencies.",
+      "match": {
+        "observationIds": [
+          "obs.gov_decisions.deficit",
+          "obs.gov_decisions.partial",
+          "obs.flow_dependencies.deficit",
+          "obs.flow_dependencies.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.25,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-006",
+      "name": "Clear Decision Ownership",
+      "category": "Decision Making",
+      "description": "Decision rights are explicit and dependencies are resolved without escalation.",
+      "rationale": "Decision-making and dependency strengths observed together.",
+      "match": {
+        "observationIds": [
+          "obs.gov_decisions.strength",
+          "obs.flow_dependencies.strength"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "info",
+      "weight": 0.8,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": false
+    },
+    {
+      "code": "SIG-007",
+      "name": "Benefits Not Tracked",
+      "category": "Benefits",
+      "description": "Investment is proceeding without measured benefit realisation.",
+      "rationale": "Benefits tracking weakness alongside weak outcome ownership.",
+      "match": {
+        "observationIds": [
+          "obs.value_benefits.deficit",
+          "obs.value_benefits.partial",
+          "obs.value_outcomes.deficit",
+          "obs.value_outcomes.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.35,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-008",
+      "name": "Unreliable Delivery Planning",
+      "category": "Planning",
+      "description": "Plans cannot be trusted because flow is unconstrained and unmeasured.",
+      "rationale": "Two or more deficits across work in progress, cycle time and unplanned work.",
+      "match": {
+        "observationIds": [
+          "obs.flow_wip.deficit",
+          "obs.flow_cycle_time.deficit",
+          "obs.flow_unplanned.deficit"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.3,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-009",
+      "name": "Delivery Risk Blind Spots",
+      "category": "Risk",
+      "description": "Material delivery risk is accumulating without sponsor visibility.",
+      "rationale": "Weak risk governance combined with technical debt or unplanned work pressure.",
+      "match": {
+        "observationIds": [
+          "obs.gov_risk.deficit",
+          "obs.gov_risk.partial",
+          "obs.eng_debt.deficit",
+          "obs.flow_unplanned.deficit"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.4,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-010",
+      "name": "Engineering Fragility",
+      "category": "Risk",
+      "description": "The delivery system cannot release change safely or repeatably.",
+      "rationale": "Two or more deficits across continuous integration, automated testing and deployment.",
+      "match": {
+        "observationIds": [
+          "obs.eng_ci.deficit",
+          "obs.eng_tests.deficit",
+          "obs.eng_deploy.deficit"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "critical",
+      "weight": 1.5,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-011",
+      "name": "Delivery Leadership Overload",
+      "category": "Delivery Leadership",
+      "description": "Delivery leadership is absorbing demand instead of shaping it.",
+      "rationale": "Two or more deficits across work in progress, unplanned work and dependencies.",
+      "match": {
+        "observationIds": [
+          "obs.flow_wip.deficit",
+          "obs.flow_unplanned.deficit",
+          "obs.flow_dependencies.deficit"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.25,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-012",
+      "name": "Mature Delivery Leadership",
+      "category": "Delivery Leadership",
+      "description": "Delivery leadership protects focus and sustains a dependable release cadence.",
+      "rationale": "Two or more strengths across work in progress, cycle time and deployment.",
+      "match": {
+        "observationIds": [
+          "obs.flow_wip.strength",
+          "obs.flow_cycle_time.strength",
+          "obs.eng_deploy.strength"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "info",
+      "weight": 0.85,
+      "expectedEvidence": 3,
+      "escalateWithEvidence": false
+    },
+    {
+      "code": "SIG-013",
+      "name": "Ineffective Portfolio Reporting",
+      "category": "PMO",
+      "description": "Portfolio reporting does not reflect real delivery performance.",
+      "rationale": "Reporting weakness combined with unmeasured cycle time.",
+      "match": {
+        "observationIds": [
+          "obs.gov_reporting.deficit",
+          "obs.gov_reporting.partial",
+          "obs.flow_cycle_time.deficit",
+          "obs.flow_cycle_time.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.55,
+      "severity": "medium",
+      "weight": 1.0,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-014",
+      "name": "Change Adoption Risk",
+      "category": "Change Management",
+      "description": "Change is being delivered without evidence that users are adopting it.",
+      "rationale": "Weak feedback loops combined with weak outcome-based prioritisation.",
+      "match": {
+        "observationIds": [
+          "obs.value_feedback.deficit",
+          "obs.value_feedback.partial",
+          "obs.value_prioritisation.deficit",
+          "obs.value_prioritisation.partial"
+        ],
+        "minMatches": 2
+      },
+      "minConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.2,
+      "expectedEvidence": 2,
+      "escalateWithEvidence": true
+    },
+    {
+      "code": "SIG-015",
+      "name": "Incomplete Sponsorship Evidence",
+      "category": "Executive Sponsorship",
+      "description": "Too much of the sponsorship picture is unknown for confident reasoning.",
+      "rationale": "Three or more questions were left unanswered.",
+      "match": {
+        "observationIds": [],
+        "minMatches": 3,
+        "definitionIdMatches": "\\.unanswered$"
+      },
+      "minConfidence": 0.4,
+      "severity": "low",
+      "weight": 0.6,
+      "expectedEvidence": 4,
+      "escalateWithEvidence": false
+    }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "id": "executive-sponsorship",
   "name": "Executive Sponsorship",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "schemaVersion": 1,
   "status": "active",
   "description": "Assesses whether executive sponsorship is translating intent into dependable delivery outcomes.",
