@@ -55,5 +55,229 @@
       "title": "Work in progress is unmanaged",
       "detail": "Unlimited WIP hides true capacity from the sponsor."
     }
+  ],
+  "categories": [
+    "Executive Sponsorship",
+    "Governance",
+    "Decision Making",
+    "Benefits",
+    "Planning",
+    "Risk",
+    "Delivery Leadership",
+    "PMO",
+    "Change Management"
+  ],
+  "definitions": [
+    {
+      "ruleCode": "RULE-001",
+      "name": "Executive Sponsorship Risk",
+      "category": "Executive Sponsorship",
+      "description": "Sponsorship is not converting intent into decisions, visibility or ownership.",
+      "rationale": "Fires when weak sponsorship or governance theatre is present.",
+      "logic": "ANY",
+      "signals": [
+        "SIG-001",
+        "SIG-003"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.5,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "{count} supporting signal(s) \u2014 {signals} \u2014 indicate limited executive engagement and ineffective governance participation."
+    },
+    {
+      "ruleCode": "RULE-002",
+      "name": "Governance Effectiveness Risk",
+      "category": "Governance",
+      "description": "Governance forums report activity but provide no assurance.",
+      "rationale": "Requires both governance theatre and an assurance gap.",
+      "logic": "ALL",
+      "signals": [
+        "SIG-003",
+        "SIG-004"
+      ],
+      "minimumConfidence": 0.55,
+      "severity": "high",
+      "weight": 1.3,
+      "statusOnFail": "warning",
+      "explanationTemplate": "Governance risk confirmed by {count} signal(s): {signals}."
+    },
+    {
+      "ruleCode": "RULE-003",
+      "name": "Decision Latency Risk",
+      "category": "Decision Making",
+      "description": "Decisions escalate late and dependencies stall waiting for direction.",
+      "rationale": "Fires on the slow decision making signal.",
+      "logic": "ANY",
+      "signals": [
+        "SIG-005"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.25,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Decision latency evidenced by {signals} at {confidence} confidence."
+    },
+    {
+      "ruleCode": "RULE-004",
+      "name": "Benefits Realisation Risk",
+      "category": "Benefits",
+      "description": "Investment is proceeding without measured benefit realisation.",
+      "rationale": "Fires when benefits tracking is absent.",
+      "logic": "ALL",
+      "signals": [
+        "SIG-007"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.35,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Benefits realisation is unevidenced: {signals}."
+    },
+    {
+      "ruleCode": "RULE-005",
+      "name": "Delivery Predictability Risk",
+      "category": "Planning",
+      "description": "Plans, risks and leadership capacity are not dependable enough to forecast delivery.",
+      "rationale": "Needs at least two of the planning, risk and leadership signals.",
+      "logic": "AT_LEAST",
+      "threshold": 2,
+      "signals": [
+        "SIG-008",
+        "SIG-009",
+        "SIG-011"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.2,
+      "statusOnFail": "warning",
+      "explanationTemplate": "{count} of 3 predictability signals are present ({signals}), so delivery forecasts cannot be relied upon."
+    },
+    {
+      "ruleCode": "RULE-006",
+      "name": "Engineering Assurance Risk",
+      "category": "Risk",
+      "description": "Release confidence rests on manual verification and unmanaged technical risk.",
+      "rationale": "Fires on engineering fragility or a governance assurance gap.",
+      "logic": "ANY",
+      "signals": [
+        "SIG-010",
+        "SIG-004"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "critical",
+      "weight": 1.6,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Engineering assurance risk raised by {signals}."
+    },
+    {
+      "ruleCode": "RULE-007",
+      "name": "Sponsorship Operating Well",
+      "category": "Executive Sponsorship",
+      "description": "No sponsorship, governance or decision-making risk signals were inferred.",
+      "rationale": "Passes only when none of the core risk signals fired.",
+      "logic": "NONE",
+      "signals": [
+        "SIG-001",
+        "SIG-003",
+        "SIG-005"
+      ],
+      "minimumConfidence": 0.0,
+      "severity": "info",
+      "weight": 1.0,
+      "statusOnFail": "failed",
+      "explanationTemplate": "No sponsorship, governance or decision-making risk signals were present."
+    },
+    {
+      "ruleCode": "RULE-008",
+      "name": "Portfolio Visibility Risk",
+      "category": "PMO",
+      "description": "Portfolio reporting does not give the sponsor a dependable view.",
+      "rationale": "Fires on ineffective portfolio reporting.",
+      "logic": "ANY",
+      "signals": [
+        "SIG-013"
+      ],
+      "minimumConfidence": 0.55,
+      "severity": "medium",
+      "weight": 1.0,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Portfolio visibility is degraded: {signals}."
+    },
+    {
+      "ruleCode": "RULE-009",
+      "name": "Change Adoption Risk",
+      "category": "Change Management",
+      "description": "Delivered change is unlikely to be adopted by the business.",
+      "rationale": "Fires on the change adoption signal.",
+      "logic": "ALL",
+      "signals": [
+        "SIG-014"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "high",
+      "weight": 1.15,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Change adoption risk evidenced by {signals}."
+    },
+    {
+      "ruleCode": "RULE-010",
+      "name": "Systemic Delivery Risk",
+      "category": "Delivery Leadership",
+      "description": "Risk is present across sponsorship, governance, planning and engineering simultaneously.",
+      "rationale": "Fires when four or more core risk signals co-occur.",
+      "logic": "AT_LEAST",
+      "threshold": 4,
+      "signals": [
+        "SIG-001",
+        "SIG-003",
+        "SIG-005",
+        "SIG-007",
+        "SIG-008",
+        "SIG-009",
+        "SIG-010",
+        "SIG-011",
+        "SIG-014"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "critical",
+      "weight": 2.0,
+      "statusOnFail": "warning",
+      "explanationTemplate": "{count} concurrent risk signals ({signals}) indicate systemic delivery risk rather than isolated weaknesses."
+    },
+    {
+      "ruleCode": "RULE-011",
+      "name": "Insufficient Assessment Evidence",
+      "category": "Executive Sponsorship",
+      "description": "Too much of the assessment is unanswered for confident reasoning.",
+      "rationale": "Fires when exactly the evidence-completeness signal is present.",
+      "logic": "EXACTLY",
+      "threshold": 1,
+      "signals": [
+        "SIG-015"
+      ],
+      "minimumConfidence": 0.4,
+      "severity": "low",
+      "weight": 0.75,
+      "statusOnFail": "not_evaluated",
+      "explanationTemplate": "Reasoning confidence is limited: {signals}."
+    },
+    {
+      "ruleCode": "RULE-012",
+      "name": "Delivery Leadership Capability Confirmed",
+      "category": "Delivery Leadership",
+      "description": "Leadership and decision ownership are both operating at a mature level.",
+      "rationale": "Requires both positive leadership signals.",
+      "logic": "ALL",
+      "signals": [
+        "SIG-012",
+        "SIG-006"
+      ],
+      "minimumConfidence": 0.6,
+      "severity": "info",
+      "weight": 1.0,
+      "statusOnFail": "failed",
+      "explanationTemplate": "Mature leadership confirmed by {signals}."
+    }
   ]
 }

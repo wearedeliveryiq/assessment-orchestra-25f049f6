@@ -132,6 +132,77 @@ export type Database = {
           },
         ]
       }
+      assessment_rule_results: {
+        Row: {
+          category: string
+          confidence: number
+          created_at: string
+          description: string
+          evaluation_reason: string
+          executed_at: string
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          name: string
+          rule_code: string
+          rule_expression: string
+          session_id: string
+          severity: string
+          status: string
+          supporting_signal_codes: string[]
+          supporting_signal_ids: string[]
+          weight: number
+        }
+        Insert: {
+          category: string
+          confidence?: number
+          created_at?: string
+          description: string
+          evaluation_reason: string
+          executed_at?: string
+          id?: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          name: string
+          rule_code: string
+          rule_expression: string
+          session_id: string
+          severity: string
+          status: string
+          supporting_signal_codes?: string[]
+          supporting_signal_ids?: string[]
+          weight?: number
+        }
+        Update: {
+          category?: string
+          confidence?: number
+          created_at?: string
+          description?: string
+          evaluation_reason?: string
+          executed_at?: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          name?: string
+          rule_code?: string
+          rule_expression?: string
+          session_id?: string
+          severity?: string
+          status?: string
+          supporting_signal_codes?: string[]
+          supporting_signal_ids?: string[]
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_rule_results_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_sessions: {
         Row: {
           archived_at: string | null

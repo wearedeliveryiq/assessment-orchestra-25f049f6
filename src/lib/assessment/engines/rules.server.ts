@@ -1,7 +1,11 @@
+import { knowledgePackLoader } from "../../knowledge-packs/loader.server";
+import { ruleEngine } from "../../rules/engine.server";
+import { replaceRuleResults } from "../../rules/repository.server";
+import { listSignals } from "../../signals/repository.server";
 import type { ObservationItem, RuleHit, SignalItem } from "../types";
 import { artifact, type EngineService } from "./contract.server";
 
-interface RuleDefinition {
+interface LegacyRuleDefinition {
   id: string;
   severity: RuleHit["severity"];
   title: string;
@@ -13,7 +17,7 @@ const value = (observations: ObservationItem[], id: string) =>
   observations.find((o) => o.id === id)?.value ?? 0;
 
 /** Rule base is data, not control flow — extend by adding entries. */
-const RULES: RuleDefinition[] = [
+const RULES: LegacyRuleDefinition[] = [
   {
     id: "rule.deploy_manual",
     severity: "critical",
@@ -79,6 +83,26 @@ export const rulesEngine: EngineService<RuleHit[]> = {
   async run(context) {
     const observations = artifact<ObservationItem[]>(context, "observations");
     const signals = artifact<SignalItem[]>(context, "signals");
+
+    // Pack-driven Rule Engine: evaluates the knowledge pack rules over the
+    // persisted signals and stores immutable RuleResults for the explorer.
+    try {
+      const pack = knowledgePackLoader.loadActive();
+      const persistedSignals = await listSignals(context.session.id);
+      const { results, summary } = await ruleEngine.run({
+        session: context.session,
+        signals: persistedSignals,
+        pack,
+      });
+      await replaceRuleResults(context.session.id, results);
+      if (summary.errored.length > 0) {
+        console.error("[rules-stage] rules failed", summary.errored);
+      }
+    } catch (error) {
+      // Rule evaluation must not break the legacy scoring pipeline.
+      console.error("[rules-stage] rule engine failed", error);
+    }
+
     return RULES.filter((rule) => rule.when({ observations, signals })).map(
       ({ id, severity, title, detail }) => ({ id, severity, title, detail }),
     );
