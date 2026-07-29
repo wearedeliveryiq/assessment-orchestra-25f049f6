@@ -160,6 +160,21 @@ function LandingPage() {
           })}
         />
       </div>
+
+      <div className="mt-10 flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface px-4 py-3.5">
+        <div>
+          <p className="text-sm font-medium">Observation Explorer</p>
+          <p className="text-xs text-muted-foreground">
+            Internal tooling — inspect engine output and knowledge pack provenance.
+          </p>
+        </div>
+        <Link
+          to="/internal/observations"
+          className="shrink-0 text-xs font-semibold text-primary transition-opacity hover:opacity-80"
+        >
+          Open →
+        </Link>
+      </div>
     </AppShell>
   );
 }
