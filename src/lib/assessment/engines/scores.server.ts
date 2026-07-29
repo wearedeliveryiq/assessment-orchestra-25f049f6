@@ -1,3 +1,7 @@
+import { knowledgePackLoader } from "../../knowledge-packs/loader.server";
+import { listPatterns } from "../../patterns/repository.server";
+import { scoringEngine } from "../../scores/engine.server";
+import { replaceScores, replaceSummary } from "../../scores/repository.server";
 import { QUESTIONNAIRE } from "../questionnaire";
 import type { ObservationItem, RuleHit, ScoreSummary, SectionScore } from "../types";
 import { artifact, type EngineService, type KnowledgePack } from "./contract.server";

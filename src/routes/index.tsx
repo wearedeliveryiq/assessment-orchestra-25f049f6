@@ -218,6 +218,20 @@ function LandingPage() {
             Open →
           </Link>
         </div>
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface px-4 py-3.5">
+          <div>
+            <p className="text-sm font-medium">Score Explorer</p>
+            <p className="text-xs text-muted-foreground">
+              Internal tooling — weighted dimension scores and maturity derived from patterns.
+            </p>
+          </div>
+          <Link
+            to="/internal/scores"
+            className="shrink-0 text-xs font-semibold text-primary transition-opacity hover:opacity-80"
+          >
+            Open →
+          </Link>
+        </div>
 
       </div>
     </AppShell>
