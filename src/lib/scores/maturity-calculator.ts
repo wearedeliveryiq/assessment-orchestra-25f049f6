@@ -1,4 +1,6 @@
 import type { MaturityBand } from "../knowledge-packs/schema";
+
+export type { MaturityBand };
 import type { ObservationSeverity } from "../observations/types";
 
 /**
