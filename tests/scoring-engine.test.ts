@@ -9,9 +9,9 @@ import type { Pattern } from "@/lib/patterns/types";
 import type { KnowledgePackDocument } from "@/lib/knowledge-packs/schema";
 
 const bands = [
-  { level: "Optimised", minPercentage: 80 },
-  { level: "Developing", minPercentage: 50 },
-  { level: "Critical", minPercentage: 0 },
+  { name: "Optimised", min: 80, max: 100, severity: "info" as const },
+  { name: "Developing", min: 50, max: 79.99, severity: "medium" as const },
+  { name: "Critical", min: 0, max: 49.99, severity: "critical" as const },
 ];
 
 function pack(overrides: Partial<KnowledgePackDocument["scoring"]> = {}) {
@@ -34,8 +34,9 @@ function pack(overrides: Partial<KnowledgePackDocument["scoring"]> = {}) {
           baseScore: 100,
           direction: "deduct" as const,
           patterns: ["PAT-001"],
-          impacts: [{ patternCode: "PAT-001", impact: 40 }],
-          maturityBands: [],
+          patternImpacts: { "PAT-001": 40 },
+          defaultImpact: 0,
+          expectedEvidence: 1,
         },
         {
           scoreCode: "SCR-002",
@@ -46,8 +47,9 @@ function pack(overrides: Partial<KnowledgePackDocument["scoring"]> = {}) {
           baseScore: 100,
           direction: "deduct" as const,
           patterns: ["PAT-002"],
-          impacts: [{ patternCode: "PAT-002", impact: 20 }],
-          maturityBands: [],
+          patternImpacts: { "PAT-002": 20 },
+          defaultImpact: 0,
+          expectedEvidence: 1,
         },
       ],
       overall: {
@@ -55,7 +57,6 @@ function pack(overrides: Partial<KnowledgePackDocument["scoring"]> = {}) {
         dimension: "Overall",
         maximumScore: 100,
         weightingModel: "weighted-average" as const,
-        maturityBands: [],
       },
       ...overrides,
     },
@@ -89,9 +90,9 @@ const session = { id: "s1", progress: 100 };
 
 describe("MaturityCalculator", () => {
   it("maps percentages onto the highest matching band", () => {
-    expect(maturityCalculator.calculate(90, bands).level).toBe("Optimised");
-    expect(maturityCalculator.calculate(55, bands).level).toBe("Developing");
-    expect(maturityCalculator.calculate(10, bands).level).toBe("Critical");
+    expect(maturityCalculator.calculate(90, bands).name).toBe("Optimised");
+    expect(maturityCalculator.calculate(55, bands).name).toBe("Developing");
+    expect(maturityCalculator.calculate(10, bands).name).toBe("Critical");
   });
 });
 
