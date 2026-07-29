@@ -179,7 +179,59 @@ export const rulesSchema = z.object({
   /** Signal-driven rule definitions used by the Rule Engine. */
   definitions: z.array(ruleDefinitionSchema).default([]),
 });
-export const patternsSchema = z.object({ patterns: z.array(z.record(z.unknown())).min(1) });
+/**
+ * Pattern definitions. A Pattern is a higher-order organisational behaviour
+ * inferred from Rule Results ONLY. Like rules, patterns are pure configuration:
+ * a future knowledge pack introduces new patterns with zero platform changes.
+ */
+export const patternLogicSchema = ruleLogicSchema;
+export type PatternLogic = z.infer<typeof patternLogicSchema>;
+
+/**
+ * Confidence thresholds may be authored either as a fraction (0–1) or as a
+ * percentage (0–100). Both are normalised to the platform's 0–1 scale so pack
+ * authors can use whichever convention reads best.
+ */
+const normalisedConfidenceSchema = z
+  .number()
+  .min(0)
+  .max(100)
+  .transform((value) => (value > 1 ? value / 100 : value));
+
+export const patternDefinitionSchema = z.object({
+  patternCode: z.string().min(1),
+  name: z.string().min(1),
+  category: z.string().min(1),
+  description: z.string().min(1),
+  /** Statement surfaced to users and later consumed by the Narrative Engine. */
+  businessImpact: z.string().min(1),
+  logic: patternLogicSchema,
+  /** Rule codes the pattern reasons over. */
+  requiredRules: z.array(z.string().min(1)).min(1),
+  /** Required count for AT_LEAST / EXACTLY. */
+  threshold: z.number().int().nonnegative().optional(),
+  /** Rule results below this confidence are ignored as evidence. */
+  minimumConfidence: normalisedConfidenceSchema,
+  /** Rule statuses that count as supporting evidence. */
+  statusIn: z.array(ruleStatusSchema).default(["passed"]),
+  severity: severitySchema,
+  weight: z.number().min(0).default(1),
+  /** Rule count considered "complete" evidence — drives the completeness factor. */
+  expectedEvidence: z.number().int().positive().default(1),
+  /** Template for the explanation ({count}, {rules}, {confidence}, {name}). */
+  explanationTemplate: z.string().min(1),
+});
+
+export type PatternDefinition = z.infer<typeof patternDefinitionSchema>;
+
+export const patternsSchema = z.object({
+  /** Legacy section-score patterns consumed by the assessment runtime. */
+  patterns: z.array(z.record(z.unknown())).min(1),
+  /** Categories exposed by the pack; the Pattern Explorer reads these. */
+  categories: z.array(z.string().min(1)).default([]),
+  /** Rule-driven pattern definitions used by the Pattern Engine. */
+  definitions: z.array(patternDefinitionSchema).default([]),
+});
 export const recommendationsSchema = z.object({
   recommendations: z.array(z.record(z.unknown())).min(1),
 });
