@@ -10,35 +10,119 @@
     "value": 1.4
   },
   "bands": [
-    {
-      "min": 4.3,
-      "band": "leading"
-    },
-    {
-      "min": 3.4,
-      "band": "performing"
-    },
-    {
-      "min": 2.4,
-      "band": "developing"
-    },
-    {
-      "min": 0,
-      "band": "at-risk"
-    }
+    { "min": 4.3, "band": "leading" },
+    { "min": 3.4, "band": "performing" },
+    { "min": 2.4, "band": "developing" },
+    { "min": 0, "band": "at-risk" }
   ],
   "penalties": [
+    { "severity": "critical", "points": 0.3 },
+    { "severity": "high", "points": 0.15 },
+    { "severity": "medium", "points": 0.05 }
+  ],
+
+  "defaults": {
+    "severityMultipliers": {
+      "critical": 1.4,
+      "high": 1.15,
+      "medium": 1.0,
+      "low": 0.7,
+      "info": 0.4
+    },
+    "maturityBands": [
+      { "name": "Optimised", "min": 85, "max": 100, "severity": "info" },
+      { "name": "Managed", "min": 70, "max": 84, "severity": "low" },
+      { "name": "Developing", "min": 50, "max": 69, "severity": "medium" },
+      { "name": "At Risk", "min": 25, "max": 49, "severity": "high" },
+      { "name": "Critical", "min": 0, "max": 24, "severity": "critical" }
+    ]
+  },
+
+  "dimensions": [
     {
-      "severity": "critical",
-      "points": 0.3
+      "scoreCode": "SCR-001",
+      "dimension": "Executive Sponsorship",
+      "description": "Whether a named, engaged executive is converting strategic intent into delivery decisions.",
+      "patterns": ["PAT-001", "PAT-008"],
+      "weight": 25,
+      "maximumScore": 100,
+      "baseScore": 100,
+      "direction": "deduct",
+      "defaultImpact": 25,
+      "patternImpacts": {
+        "PAT-001": 55,
+        "PAT-008": -15
+      },
+      "expectedEvidence": 2
     },
     {
-      "severity": "high",
-      "points": 0.15
+      "scoreCode": "SCR-002",
+      "dimension": "Governance and Decision Making",
+      "description": "Whether governance improves the speed and quality of decisions rather than consuming capacity.",
+      "patterns": ["PAT-002", "PAT-007"],
+      "weight": 20,
+      "maximumScore": 100,
+      "baseScore": 100,
+      "direction": "deduct",
+      "defaultImpact": 25,
+      "patternImpacts": {
+        "PAT-002": 45,
+        "PAT-007": 15
+      },
+      "expectedEvidence": 2
     },
     {
-      "severity": "medium",
-      "points": 0.05
+      "scoreCode": "SCR-003",
+      "dimension": "Delivery Execution",
+      "description": "Whether delivery runs to a dependable plan rather than reacting to unplanned work.",
+      "patterns": ["PAT-003", "PAT-006"],
+      "weight": 25,
+      "maximumScore": 100,
+      "baseScore": 100,
+      "direction": "deduct",
+      "defaultImpact": 25,
+      "patternImpacts": {
+        "PAT-003": 50,
+        "PAT-006": 25
+      },
+      "expectedEvidence": 2
+    },
+    {
+      "scoreCode": "SCR-004",
+      "dimension": "Value Realisation",
+      "description": "Whether committed investment has a credible, evidenced line of sight to benefits.",
+      "patterns": ["PAT-004"],
+      "weight": 15,
+      "maximumScore": 100,
+      "baseScore": 100,
+      "direction": "deduct",
+      "defaultImpact": 30,
+      "patternImpacts": {
+        "PAT-004": 50
+      },
+      "expectedEvidence": 1
+    },
+    {
+      "scoreCode": "SCR-005",
+      "dimension": "Engineering Assurance",
+      "description": "Whether change can be released with quantified technical risk and repeatable quality gates.",
+      "patterns": ["PAT-005"],
+      "weight": 15,
+      "maximumScore": 100,
+      "baseScore": 100,
+      "direction": "deduct",
+      "defaultImpact": 30,
+      "patternImpacts": {
+        "PAT-005": 50
+      },
+      "expectedEvidence": 1
     }
-  ]
+  ],
+
+  "overall": {
+    "scoreCode": "SCR-OVERALL",
+    "dimension": "Overall Assessment",
+    "maximumScore": 100,
+    "weightingModel": "weighted-average"
+  }
 }
