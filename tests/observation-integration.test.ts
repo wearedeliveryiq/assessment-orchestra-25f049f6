@@ -99,7 +99,7 @@ describe("assessment -> observation engine integration", () => {
     expect(trace.question?.id).toBe("flow.wip");
     expect(trace.answer.value).toBe(1);
     expect(trace.answer.label).toBe("Absent");
-    expect(trace.knowledgePackRule.packVersion).toBe("1.0.0");
+    expect(trace.knowledgePackRule.packVersion).toBe(knowledgePackLoader.loadActive().manifest.version);
     expect(trace.knowledgePackRule.expression).toContain("value lte 2");
   });
 });
