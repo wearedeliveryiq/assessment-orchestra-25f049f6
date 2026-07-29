@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
+import { Route as ScoreIdRouteImport } from './routes/score.$id'
 import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
+import { Route as RuntimeScoresRouteImport } from './routes/runtime.scores'
 import { Route as RuntimeRulesRouteImport } from './routes/runtime.rules'
 import { Route as RuntimePatternsRouteImport } from './routes/runtime.patterns'
 import { Route as RuntimeObservationsRouteImport } from './routes/runtime.observations'
@@ -20,6 +22,7 @@ import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
+import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
 import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
 import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
@@ -28,7 +31,9 @@ import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals
 import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
 import { Route as InternalPatternsIdRouteImport } from './routes/internal.patterns.$id'
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
+import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
 import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
+import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
 import { Route as AssessmentIdRulesRouteImport } from './routes/assessment.$id.rules'
 import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
 import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.$id.processing'
@@ -51,9 +56,19 @@ const SignalIdRoute = SignalIdRouteImport.update({
   path: '/signal/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScoreIdRoute = ScoreIdRouteImport.update({
+  id: '/score/$id',
+  path: '/score/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RuntimeSignalsRoute = RuntimeSignalsRouteImport.update({
   id: '/runtime/signals',
   path: '/runtime/signals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeScoresRoute = RuntimeScoresRouteImport.update({
+  id: '/runtime/scores',
+  path: '/runtime/scores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RuntimeRulesRoute = RuntimeRulesRouteImport.update({
@@ -94,6 +109,11 @@ const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
 const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
   id: '/internal/signals/',
   path: '/internal/signals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalScoresIndexRoute = InternalScoresIndexRouteImport.update({
+  id: '/internal/scores/',
+  path: '/internal/scores/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalRulesIndexRoute = InternalRulesIndexRouteImport.update({
@@ -137,9 +157,19 @@ const InternalObservationsIdRoute = InternalObservationsIdRouteImport.update({
   path: '/internal/observations/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
+  id: '/assessment/$id/summary',
+  path: '/assessment/$id/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssessmentIdSignalsRoute = AssessmentIdSignalsRouteImport.update({
   id: '/assessment/$id/signals',
   path: '/assessment/$id/signals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdScoresRoute = AssessmentIdScoresRouteImport.update({
+  id: '/assessment/$id/scores',
+  path: '/assessment/$id/scores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessmentIdRulesRoute = AssessmentIdRulesRouteImport.update({
@@ -208,7 +238,9 @@ export interface FileRoutesByFullPath {
   '/runtime/observations': typeof RuntimeObservationsRoute
   '/runtime/patterns': typeof RuntimePatternsRoute
   '/runtime/rules': typeof RuntimeRulesRoute
+  '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
+  '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
@@ -216,7 +248,9 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
+  '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
+  '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
@@ -225,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -241,7 +276,9 @@ export interface FileRoutesByTo {
   '/runtime/observations': typeof RuntimeObservationsRoute
   '/runtime/patterns': typeof RuntimePatternsRoute
   '/runtime/rules': typeof RuntimeRulesRoute
+  '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
+  '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
@@ -249,7 +286,9 @@ export interface FileRoutesByTo {
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
+  '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
+  '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
@@ -258,6 +297,7 @@ export interface FileRoutesByTo {
   '/internal/observations': typeof InternalObservationsIndexRoute
   '/internal/patterns': typeof InternalPatternsIndexRoute
   '/internal/rules': typeof InternalRulesIndexRoute
+  '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -275,7 +315,9 @@ export interface FileRoutesById {
   '/runtime/observations': typeof RuntimeObservationsRoute
   '/runtime/patterns': typeof RuntimePatternsRoute
   '/runtime/rules': typeof RuntimeRulesRoute
+  '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
+  '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
@@ -283,7 +325,9 @@ export interface FileRoutesById {
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
+  '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
+  '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
@@ -292,6 +336,7 @@ export interface FileRoutesById {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -310,7 +355,9 @@ export interface FileRouteTypes {
     | '/runtime/observations'
     | '/runtime/patterns'
     | '/runtime/rules'
+    | '/runtime/scores'
     | '/runtime/signals'
+    | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
     | '/assessment/$id/observations'
@@ -318,7 +365,9 @@ export interface FileRouteTypes {
     | '/assessment/$id/processing'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
+    | '/assessment/$id/scores'
     | '/assessment/$id/signals'
+    | '/assessment/$id/summary'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
@@ -327,6 +376,7 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/scores/'
     | '/internal/signals/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
@@ -343,7 +393,9 @@ export interface FileRouteTypes {
     | '/runtime/observations'
     | '/runtime/patterns'
     | '/runtime/rules'
+    | '/runtime/scores'
     | '/runtime/signals'
+    | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
     | '/assessment/$id/observations'
@@ -351,7 +403,9 @@ export interface FileRouteTypes {
     | '/assessment/$id/processing'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
+    | '/assessment/$id/scores'
     | '/assessment/$id/signals'
+    | '/assessment/$id/summary'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
@@ -360,6 +414,7 @@ export interface FileRouteTypes {
     | '/internal/observations'
     | '/internal/patterns'
     | '/internal/rules'
+    | '/internal/scores'
     | '/internal/signals'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
@@ -376,7 +431,9 @@ export interface FileRouteTypes {
     | '/runtime/observations'
     | '/runtime/patterns'
     | '/runtime/rules'
+    | '/runtime/scores'
     | '/runtime/signals'
+    | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
     | '/assessment/$id/observations'
@@ -384,7 +441,9 @@ export interface FileRouteTypes {
     | '/assessment/$id/processing'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
+    | '/assessment/$id/scores'
     | '/assessment/$id/signals'
+    | '/assessment/$id/summary'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
@@ -393,6 +452,7 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/scores/'
     | '/internal/signals/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
@@ -410,14 +470,18 @@ export interface RootRouteChildren {
   RuntimeObservationsRoute: typeof RuntimeObservationsRoute
   RuntimePatternsRoute: typeof RuntimePatternsRoute
   RuntimeRulesRoute: typeof RuntimeRulesRoute
+  RuntimeScoresRoute: typeof RuntimeScoresRoute
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
+  ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
   AssessmentIdPatternsRoute: typeof AssessmentIdPatternsRoute
   AssessmentIdProcessingRoute: typeof AssessmentIdProcessingRoute
   AssessmentIdResultsRoute: typeof AssessmentIdResultsRoute
   AssessmentIdRulesRoute: typeof AssessmentIdRulesRoute
+  AssessmentIdScoresRoute: typeof AssessmentIdScoresRoute
   AssessmentIdSignalsRoute: typeof AssessmentIdSignalsRoute
+  AssessmentIdSummaryRoute: typeof AssessmentIdSummaryRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
   InternalPatternsIdRoute: typeof InternalPatternsIdRoute
   InternalRulesIdRoute: typeof InternalRulesIdRoute
@@ -426,6 +490,7 @@ export interface RootRouteChildren {
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
   InternalPatternsIndexRoute: typeof InternalPatternsIndexRoute
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
+  InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
 }
 
@@ -445,11 +510,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignalIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/score/$id': {
+      id: '/score/$id'
+      path: '/score/$id'
+      fullPath: '/score/$id'
+      preLoaderRoute: typeof ScoreIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/runtime/signals': {
       id: '/runtime/signals'
       path: '/runtime/signals'
       fullPath: '/runtime/signals'
       preLoaderRoute: typeof RuntimeSignalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/runtime/scores': {
+      id: '/runtime/scores'
+      path: '/runtime/scores'
+      fullPath: '/runtime/scores'
+      preLoaderRoute: typeof RuntimeScoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/runtime/rules': {
@@ -508,6 +587,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalSignalsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/scores/': {
+      id: '/internal/scores/'
+      path: '/internal/scores'
+      fullPath: '/internal/scores/'
+      preLoaderRoute: typeof InternalScoresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/internal/rules/': {
       id: '/internal/rules/'
       path: '/internal/rules'
@@ -564,11 +650,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalObservationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assessment/$id/summary': {
+      id: '/assessment/$id/summary'
+      path: '/assessment/$id/summary'
+      fullPath: '/assessment/$id/summary'
+      preLoaderRoute: typeof AssessmentIdSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assessment/$id/signals': {
       id: '/assessment/$id/signals'
       path: '/assessment/$id/signals'
       fullPath: '/assessment/$id/signals'
       preLoaderRoute: typeof AssessmentIdSignalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/scores': {
+      id: '/assessment/$id/scores'
+      path: '/assessment/$id/scores'
+      fullPath: '/assessment/$id/scores'
+      preLoaderRoute: typeof AssessmentIdScoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment/$id/rules': {
@@ -691,14 +791,18 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeObservationsRoute: RuntimeObservationsRoute,
   RuntimePatternsRoute: RuntimePatternsRoute,
   RuntimeRulesRoute: RuntimeRulesRoute,
+  RuntimeScoresRoute: RuntimeScoresRoute,
   RuntimeSignalsRoute: RuntimeSignalsRoute,
+  ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
   AssessmentIdPatternsRoute: AssessmentIdPatternsRoute,
   AssessmentIdProcessingRoute: AssessmentIdProcessingRoute,
   AssessmentIdResultsRoute: AssessmentIdResultsRoute,
   AssessmentIdRulesRoute: AssessmentIdRulesRoute,
+  AssessmentIdScoresRoute: AssessmentIdScoresRoute,
   AssessmentIdSignalsRoute: AssessmentIdSignalsRoute,
+  AssessmentIdSummaryRoute: AssessmentIdSummaryRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
   InternalPatternsIdRoute: InternalPatternsIdRoute,
   InternalRulesIdRoute: InternalRulesIdRoute,
@@ -707,6 +811,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
   InternalPatternsIndexRoute: InternalPatternsIndexRoute,
   InternalRulesIndexRoute: InternalRulesIndexRoute,
+  InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
 }
 export const routeTree = rootRouteImport
