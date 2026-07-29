@@ -1,0 +1,68 @@
+{
+  "patterns": [
+    {
+      "id": "pattern.delivery_theatre",
+      "name": "Delivery theatre",
+      "confidence": 0.8,
+      "description": "Governance activity is high while outcome evidence is low.",
+      "match": {
+        "all": [
+          {
+            "sectionId": "governance",
+            "operator": "gte",
+            "value": 3
+          },
+          {
+            "sectionId": "value",
+            "operator": "lte",
+            "value": 2.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "pattern.fragile_release",
+      "name": "Fragile release path",
+      "confidence": 0.85,
+      "description": "Engineering foundations cannot support the release cadence being sponsored.",
+      "match": {
+        "all": [
+          {
+            "sectionId": "engineering",
+            "operator": "lte",
+            "value": 2.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "pattern.absent_sponsor",
+      "name": "Absent sponsorship",
+      "confidence": 0.75,
+      "description": "Decisions, risk and prioritisation all lack an active sponsor.",
+      "match": {
+        "all": [
+          {
+            "sectionId": "governance",
+            "operator": "lte",
+            "value": 2.5
+          },
+          {
+            "sectionId": "value",
+            "operator": "lte",
+            "value": 2.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "pattern.balanced_maturity",
+      "name": "Balanced maturity",
+      "confidence": 0.7,
+      "description": "No section is materially behind the others.",
+      "match": {
+        "spreadBelow": 0.6
+      }
+    }
+  ]
+}

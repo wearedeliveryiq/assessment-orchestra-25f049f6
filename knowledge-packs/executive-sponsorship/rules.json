@@ -1,0 +1,59 @@
+{
+  "rules": [
+    {
+      "id": "rule.deploy_manual",
+      "severity": "critical",
+      "questionId": "eng.deploy",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Release process is a delivery bottleneck",
+      "detail": "Deployment automation is below the level required for safe, frequent release."
+    },
+    {
+      "id": "rule.no_tests",
+      "severity": "critical",
+      "questionId": "eng.tests",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Change confidence depends on manual verification",
+      "detail": "Without automated coverage, sponsored release decisions rest on opinion."
+    },
+    {
+      "id": "rule.no_outcomes",
+      "severity": "high",
+      "questionId": "value.outcomes",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsored work has no defined outcome",
+      "detail": "Investment cannot be defended without a named outcome and measure."
+    },
+    {
+      "id": "rule.manual_reporting",
+      "severity": "medium",
+      "questionId": "gov.reporting",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsor reporting is hand-assembled",
+      "detail": "Manual reporting delays and distorts the sponsor view."
+    },
+    {
+      "id": "rule.unmanaged_wip",
+      "severity": "high",
+      "questionId": "flow.wip",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Work in progress is unmanaged",
+      "detail": "Unlimited WIP hides true capacity from the sponsor."
+    }
+  ]
+}

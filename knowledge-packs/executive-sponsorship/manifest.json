@@ -1,0 +1,20 @@
+{
+  "id": "executive-sponsorship",
+  "name": "Executive Sponsorship",
+  "version": "1.0.0",
+  "schemaVersion": 1,
+  "status": "active",
+  "description": "Assesses whether executive sponsorship is translating intent into dependable delivery outcomes.",
+  "owner": "DeliveryIQ Intelligence",
+  "publishedAt": "2026-01-01",
+  "files": [
+    "questions.json",
+    "observations.json",
+    "signals.json",
+    "rules.json",
+    "patterns.json",
+    "recommendations.json",
+    "narratives.json",
+    "scoring.json"
+  ]
+}

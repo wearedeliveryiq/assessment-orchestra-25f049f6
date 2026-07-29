@@ -1,0 +1,52 @@
+{
+  "recommendations": [
+    {
+      "id": "rec.release_automation",
+      "horizon": "now",
+      "impact": "high",
+      "trigger": "rule.deploy_manual",
+      "title": "Automate the release path end to end",
+      "rationale": "Manual release is the single largest constraint on sponsored delivery."
+    },
+    {
+      "id": "rec.test_baseline",
+      "horizon": "now",
+      "impact": "high",
+      "trigger": "rule.no_tests",
+      "title": "Establish an automated regression baseline",
+      "rationale": "Release confidence must be evidence-backed before cadence increases."
+    },
+    {
+      "id": "rec.outcome_frame",
+      "horizon": "now",
+      "impact": "high",
+      "trigger": "rule.no_outcomes",
+      "title": "Attach a measurable outcome to every sponsored initiative",
+      "rationale": "Sponsorship without a measure cannot be defended or closed out."
+    },
+    {
+      "id": "rec.wip_limits",
+      "horizon": "next",
+      "impact": "medium",
+      "trigger": "rule.unmanaged_wip",
+      "title": "Introduce explicit WIP limits",
+      "rationale": "Limiting WIP exposes real capacity to the sponsor."
+    },
+    {
+      "id": "rec.system_reporting",
+      "horizon": "next",
+      "impact": "medium",
+      "trigger": "rule.manual_reporting",
+      "title": "Draw sponsor reporting from delivery systems",
+      "rationale": "System-sourced reporting removes debate about the numbers."
+    },
+    {
+      "id": "rec.benefits_review",
+      "horizon": "later",
+      "impact": "medium",
+      "trigger": "section.value",
+      "title": "Run post-release benefits reviews",
+      "rationale": "Closing the loop makes future sponsorship decisions evidence-led."
+    }
+  ]
+}
