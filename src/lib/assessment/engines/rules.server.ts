@@ -5,7 +5,7 @@ import { listSignals } from "../../signals/repository.server";
 import type { ObservationItem, RuleHit, SignalItem } from "../types";
 import { artifact, type EngineService } from "./contract.server";
 
-interface RuleDefinition {
+interface LegacyRuleDefinition {
   id: string;
   severity: RuleHit["severity"];
   title: string;
@@ -17,7 +17,7 @@ const value = (observations: ObservationItem[], id: string) =>
   observations.find((o) => o.id === id)?.value ?? 0;
 
 /** Rule base is data, not control flow — extend by adding entries. */
-const RULES: RuleDefinition[] = [
+const RULES: LegacyRuleDefinition[] = [
   {
     id: "rule.deploy_manual",
     severity: "critical",
