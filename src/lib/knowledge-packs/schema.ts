@@ -240,12 +240,87 @@ export const narrativesSchema = z.object({
   summaryTemplate: z.string().min(1),
   paragraphTemplates: z.array(z.string()).min(1),
 });
+/**
+ * Scoring model. A Score quantifies organisational capability for one
+ * assessment dimension and is derived from Patterns ONLY. Everything the
+ * Scoring Engine needs — dimensions, pattern weightings, impacts, maturity
+ * bands and the overall aggregation model — is declared here, so a future pack
+ * can ship a completely different scoring methodology with zero code changes.
+ */
+export const maturityBandSchema = z
+  .object({
+    name: z.string().min(1),
+    min: z.number(),
+    max: z.number(),
+    /** Optional severity surfaced with the score; defaults to informational. */
+    severity: severitySchema.default("info"),
+  })
+  .refine((band) => band.max >= band.min, {
+    message: "maturity band max must be greater than or equal to min",
+  });
+
+export type MaturityBand = z.infer<typeof maturityBandSchema>;
+
+/** How a dimension turns matched patterns into a score. */
+export const scoreDirectionSchema = z.enum(["deduct", "accrue"]);
+export type ScoreDirection = z.infer<typeof scoreDirectionSchema>;
+
+export const scoreDefinitionSchema = z.object({
+  scoreCode: z.string().min(1),
+  dimension: z.string().min(1),
+  description: z.string().default(""),
+  /** Pattern codes this dimension reasons over. */
+  patterns: z.array(z.string().min(1)).min(1),
+  /** Relative contribution to the overall assessment score. */
+  weight: z.number().min(0).default(1),
+  maximumScore: z.number().positive().default(100),
+  /** Starting score before pattern impacts are applied. */
+  baseScore: z.number().min(0).optional(),
+  direction: scoreDirectionSchema.default("deduct"),
+  /** Points applied when a pattern has no explicit impact configured. */
+  defaultImpact: z.number().default(0),
+  /** Per-pattern impact in points; negative values credit the dimension. */
+  patternImpacts: z.record(z.number()).default({}),
+  /** Multiplies a pattern's impact by the severity it was raised at. */
+  severityMultipliers: z.record(z.number()).optional(),
+  /** Pattern count considered complete evidence for this dimension. */
+  expectedEvidence: z.number().int().positive().default(1),
+  /** Dimension-specific bands; falls back to `defaults.maturityBands`. */
+  maturityBands: z.array(maturityBandSchema).optional(),
+});
+
+export type ScoreDefinition = z.infer<typeof scoreDefinitionSchema>;
+
+export const overallScoreSchema = z.object({
+  scoreCode: z.string().min(1).default("SCR-OVERALL"),
+  dimension: z.string().min(1).default("Overall Assessment"),
+  maximumScore: z.number().positive().default(100),
+  weightingModel: z.enum(["weighted-average", "simple-average"]).default("weighted-average"),
+  maturityBands: z.array(maturityBandSchema).optional(),
+});
+
+export type OverallScoreDefinition = z.infer<typeof overallScoreSchema>;
+
 export const scoringSchema = z.object({
+  /** Legacy section scoring consumed by the assessment runtime. */
   scale: z.object({ min: z.number(), max: z.number() }),
   sectionWeights: z.record(z.number()),
   bands: z.array(z.object({ min: z.number(), band: z.string() })).min(1),
   penalties: z.array(z.object({ severity: z.string(), points: z.number() })),
+
+  /** Pack-wide scoring defaults. */
+  defaults: z
+    .object({
+      severityMultipliers: z.record(z.number()).default({}),
+      maturityBands: z.array(maturityBandSchema).default([]),
+    })
+    .default({ severityMultipliers: {}, maturityBands: [] }),
+  /** Pattern-driven scoring dimensions used by the Scoring Engine. */
+  dimensions: z.array(scoreDefinitionSchema).default([]),
+  /** Overall assessment aggregation model. */
+  overall: overallScoreSchema.default({}),
 });
+
 
 /** Every file a pack must ship, mapped to the schema that validates it. */
 export const PACK_FILE_SCHEMAS = {
