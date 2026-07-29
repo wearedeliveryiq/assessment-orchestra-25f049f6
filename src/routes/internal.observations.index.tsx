@@ -29,7 +29,7 @@ export const Route = createFileRoute("/internal/observations/")({
 function ExplorerIndex() {
   const hydrated = useHydrated();
   const { data, isLoading } = useQuery({
-    queryKey: assessmentKeys.list(),
+    queryKey: assessmentKeys.list,
     queryFn: () => assessmentApi.list(),
     enabled: hydrated,
   });
