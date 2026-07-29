@@ -1,0 +1,479 @@
+{
+  "sections": [
+    {
+      "id": "flow",
+      "title": "Delivery Flow",
+      "intent": "How predictably work moves from intent to production.",
+      "weight": 1.2
+    },
+    {
+      "id": "engineering",
+      "title": "Engineering Practice",
+      "intent": "The technical foundations that make change safe and cheap.",
+      "weight": 1.3
+    },
+    {
+      "id": "governance",
+      "title": "Governance & Assurance",
+      "intent": "How decisions, risk and compliance are handled without stalling flow.",
+      "weight": 1.0
+    },
+    {
+      "id": "value",
+      "title": "Value & Outcomes",
+      "intent": "Whether delivery is connected to measurable business outcomes.",
+      "weight": 1.4
+    }
+  ],
+  "questions": [
+    {
+      "id": "flow.wip",
+      "sectionId": "flow",
+      "prompt": "Work in progress is explicitly limited and visible.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ],
+      "helper": "Boards, queues and hand-offs reflect real constraints."
+    },
+    {
+      "id": "flow.cycle_time",
+      "sectionId": "flow",
+      "prompt": "Cycle time is measured and actively managed.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "flow.dependencies",
+      "sectionId": "flow",
+      "prompt": "Cross-team dependencies are mapped and sequenced ahead of time.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "flow.unplanned",
+      "sectionId": "flow",
+      "prompt": "Unplanned work is tracked and kept within an agreed threshold.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "eng.ci",
+      "sectionId": "engineering",
+      "prompt": "Trunk-based development with automated CI is the norm.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "eng.tests",
+      "sectionId": "engineering",
+      "prompt": "Automated test coverage gives the team confidence to release.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "eng.deploy",
+      "sectionId": "engineering",
+      "prompt": "Deployments are automated, repeatable and reversible.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "eng.debt",
+      "sectionId": "engineering",
+      "prompt": "Technical debt is captured, prioritised and paid down deliberately.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "gov.decisions",
+      "sectionId": "governance",
+      "prompt": "Decision rights are clear and decisions are recorded.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "gov.risk",
+      "sectionId": "governance",
+      "prompt": "Delivery risk is reviewed on a regular, lightweight cadence.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "gov.reporting",
+      "sectionId": "governance",
+      "prompt": "Reporting is drawn from delivery systems rather than assembled by hand.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "gov.compliance",
+      "sectionId": "governance",
+      "prompt": "Compliance controls are embedded into the delivery pipeline.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "value.outcomes",
+      "sectionId": "value",
+      "prompt": "Every initiative has a named outcome and a measure of success.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "value.feedback",
+      "sectionId": "value",
+      "prompt": "Product feedback reaches delivery teams within days, not quarters.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "value.prioritisation",
+      "sectionId": "value",
+      "prompt": "Prioritisation is evidence-led and revisited on a fixed cadence.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    },
+    {
+      "id": "value.benefits",
+      "sectionId": "value",
+      "prompt": "Benefits realised after release are tracked against the original case.",
+      "type": "scale",
+      "options": [
+        {
+          "value": 1,
+          "label": "Absent"
+        },
+        {
+          "value": 2,
+          "label": "Emerging"
+        },
+        {
+          "value": 3,
+          "label": "Established"
+        },
+        {
+          "value": 4,
+          "label": "Managed"
+        },
+        {
+          "value": 5,
+          "label": "Optimising"
+        }
+      ]
+    }
+  ]
+}

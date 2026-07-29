@@ -1,0 +1,948 @@
+{
+  "definitions": [
+    {
+      "id": "obs.flow_wip.deficit",
+      "questionId": "flow.wip",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Work in progress is explicitly limited and visible",
+      "description": "Sponsors are absorbing delivery noise instead of protecting focus.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.2
+    },
+    {
+      "id": "obs.flow_wip.partial",
+      "questionId": "flow.wip",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Work in progress is explicitly limited and visible",
+      "description": "Sponsors are absorbing delivery noise instead of protecting focus. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.96
+    },
+    {
+      "id": "obs.flow_wip.strength",
+      "questionId": "flow.wip",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Work in progress is explicitly limited and visible",
+      "description": "Focus is actively protected at sponsor level.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.72
+    },
+    {
+      "id": "obs.flow_wip.unanswered",
+      "questionId": "flow.wip",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Work in progress is explicitly limited and visible",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.flow_cycle_time.deficit",
+      "questionId": "flow.cycle_time",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Cycle time is measured and actively managed",
+      "description": "Sponsors have no reliable measure of how quickly commitments become reality.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.2
+    },
+    {
+      "id": "obs.flow_cycle_time.partial",
+      "questionId": "flow.cycle_time",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Cycle time is measured and actively managed",
+      "description": "Sponsors have no reliable measure of how quickly commitments become reality. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.96
+    },
+    {
+      "id": "obs.flow_cycle_time.strength",
+      "questionId": "flow.cycle_time",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Cycle time is measured and actively managed",
+      "description": "Sponsors can hold delivery to a measured pace.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.72
+    },
+    {
+      "id": "obs.flow_cycle_time.unanswered",
+      "questionId": "flow.cycle_time",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Cycle time is measured and actively managed",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.flow_dependencies.deficit",
+      "questionId": "flow.dependencies",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Cross-team dependencies are mapped and sequenced ahead of time",
+      "description": "Cross-team dependencies are escalating to sponsors late and unresolved.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.2
+    },
+    {
+      "id": "obs.flow_dependencies.partial",
+      "questionId": "flow.dependencies",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Cross-team dependencies are mapped and sequenced ahead of time",
+      "description": "Cross-team dependencies are escalating to sponsors late and unresolved. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.96
+    },
+    {
+      "id": "obs.flow_dependencies.strength",
+      "questionId": "flow.dependencies",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Cross-team dependencies are mapped and sequenced ahead of time",
+      "description": "Dependency sequencing is handled before it reaches the sponsor.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.72
+    },
+    {
+      "id": "obs.flow_dependencies.unanswered",
+      "questionId": "flow.dependencies",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Cross-team dependencies are mapped and sequenced ahead of time",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.flow_unplanned.deficit",
+      "questionId": "flow.unplanned",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Unplanned work is tracked and kept within an agreed threshold",
+      "description": "Sponsor commitments are being displaced by unmanaged demand.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.2
+    },
+    {
+      "id": "obs.flow_unplanned.partial",
+      "questionId": "flow.unplanned",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Unplanned work is tracked and kept within an agreed threshold",
+      "description": "Sponsor commitments are being displaced by unmanaged demand. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.96
+    },
+    {
+      "id": "obs.flow_unplanned.strength",
+      "questionId": "flow.unplanned",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Unplanned work is tracked and kept within an agreed threshold",
+      "description": "Sponsored commitments are insulated from unmanaged demand.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.72
+    },
+    {
+      "id": "obs.flow_unplanned.unanswered",
+      "questionId": "flow.unplanned",
+      "category": "Delivery Flow",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Unplanned work is tracked and kept within an agreed threshold",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.eng_ci.deficit",
+      "questionId": "eng.ci",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Trunk-based development with automated CI is the norm",
+      "description": "Sponsored change carries avoidable integration risk.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.3
+    },
+    {
+      "id": "obs.eng_ci.partial",
+      "questionId": "eng.ci",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Trunk-based development with automated CI is the norm",
+      "description": "Sponsored change carries avoidable integration risk. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.04
+    },
+    {
+      "id": "obs.eng_ci.strength",
+      "questionId": "eng.ci",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Trunk-based development with automated CI is the norm",
+      "description": "Sponsored change integrates continuously and safely.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.78
+    },
+    {
+      "id": "obs.eng_ci.unanswered",
+      "questionId": "eng.ci",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Trunk-based development with automated CI is the norm",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.eng_tests.deficit",
+      "questionId": "eng.tests",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Automated test coverage gives the team confidence to release",
+      "description": "Sponsors are asked to accept release risk that evidence cannot support.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.3
+    },
+    {
+      "id": "obs.eng_tests.partial",
+      "questionId": "eng.tests",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Automated test coverage gives the team confidence to release",
+      "description": "Sponsors are asked to accept release risk that evidence cannot support. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.04
+    },
+    {
+      "id": "obs.eng_tests.strength",
+      "questionId": "eng.tests",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Automated test coverage gives the team confidence to release",
+      "description": "Release confidence is evidence-backed for the sponsor.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.78
+    },
+    {
+      "id": "obs.eng_tests.unanswered",
+      "questionId": "eng.tests",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Automated test coverage gives the team confidence to release",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.eng_deploy.deficit",
+      "questionId": "eng.deploy",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Deployments are automated, repeatable and reversible",
+      "description": "Release timing is a manual, sponsor-visible bottleneck.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.3
+    },
+    {
+      "id": "obs.eng_deploy.partial",
+      "questionId": "eng.deploy",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Deployments are automated, repeatable and reversible",
+      "description": "Release timing is a manual, sponsor-visible bottleneck. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.04
+    },
+    {
+      "id": "obs.eng_deploy.strength",
+      "questionId": "eng.deploy",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Deployments are automated, repeatable and reversible",
+      "description": "Release timing is a sponsor decision, not an engineering constraint.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.78
+    },
+    {
+      "id": "obs.eng_deploy.unanswered",
+      "questionId": "eng.deploy",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Deployments are automated, repeatable and reversible",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.eng_debt.deficit",
+      "questionId": "eng.debt",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Technical debt is captured, prioritised and paid down deliberately",
+      "description": "Debt is being deferred without a sponsored remediation position.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.3
+    },
+    {
+      "id": "obs.eng_debt.partial",
+      "questionId": "eng.debt",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Technical debt is captured, prioritised and paid down deliberately",
+      "description": "Debt is being deferred without a sponsored remediation position. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.04
+    },
+    {
+      "id": "obs.eng_debt.strength",
+      "questionId": "eng.debt",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Technical debt is captured, prioritised and paid down deliberately",
+      "description": "Debt is a managed, visible sponsor position.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.78
+    },
+    {
+      "id": "obs.eng_debt.unanswered",
+      "questionId": "eng.debt",
+      "category": "Engineering Practice",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Technical debt is captured, prioritised and paid down deliberately",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.gov_decisions.deficit",
+      "questionId": "gov.decisions",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Decision rights are clear and decisions are recorded",
+      "description": "Decisions return to the sponsor because ownership is unclear.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.0
+    },
+    {
+      "id": "obs.gov_decisions.partial",
+      "questionId": "gov.decisions",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Decision rights are clear and decisions are recorded",
+      "description": "Decisions return to the sponsor because ownership is unclear. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.8
+    },
+    {
+      "id": "obs.gov_decisions.strength",
+      "questionId": "gov.decisions",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Decision rights are clear and decisions are recorded",
+      "description": "Decision rights free the sponsor from operational escalation.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.6
+    },
+    {
+      "id": "obs.gov_decisions.unanswered",
+      "questionId": "gov.decisions",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Decision rights are clear and decisions are recorded",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.gov_risk.deficit",
+      "questionId": "gov.risk",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Delivery risk is reviewed on a regular, lightweight cadence",
+      "description": "Sponsors see risk only after it has already materialised.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.0
+    },
+    {
+      "id": "obs.gov_risk.partial",
+      "questionId": "gov.risk",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Delivery risk is reviewed on a regular, lightweight cadence",
+      "description": "Sponsors see risk only after it has already materialised. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.8
+    },
+    {
+      "id": "obs.gov_risk.strength",
+      "questionId": "gov.risk",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Delivery risk is reviewed on a regular, lightweight cadence",
+      "description": "Sponsors receive risk early enough to act.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.6
+    },
+    {
+      "id": "obs.gov_risk.unanswered",
+      "questionId": "gov.risk",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Delivery risk is reviewed on a regular, lightweight cadence",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.gov_reporting.deficit",
+      "questionId": "gov.reporting",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Reporting is drawn from delivery systems rather than assembled by hand",
+      "description": "Sponsor reporting is hand-assembled and therefore contestable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.0
+    },
+    {
+      "id": "obs.gov_reporting.partial",
+      "questionId": "gov.reporting",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Reporting is drawn from delivery systems rather than assembled by hand",
+      "description": "Sponsor reporting is hand-assembled and therefore contestable. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.8
+    },
+    {
+      "id": "obs.gov_reporting.strength",
+      "questionId": "gov.reporting",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Reporting is drawn from delivery systems rather than assembled by hand",
+      "description": "Sponsor reporting is drawn straight from delivery systems.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.6
+    },
+    {
+      "id": "obs.gov_reporting.unanswered",
+      "questionId": "gov.reporting",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Reporting is drawn from delivery systems rather than assembled by hand",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.gov_compliance.deficit",
+      "questionId": "gov.compliance",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Compliance controls are embedded into the delivery pipeline",
+      "description": "Compliance is a late gate rather than a sponsored control.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.0
+    },
+    {
+      "id": "obs.gov_compliance.partial",
+      "questionId": "gov.compliance",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Compliance controls are embedded into the delivery pipeline",
+      "description": "Compliance is a late gate rather than a sponsored control. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 0.8
+    },
+    {
+      "id": "obs.gov_compliance.strength",
+      "questionId": "gov.compliance",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Compliance controls are embedded into the delivery pipeline",
+      "description": "Compliance runs inside the pipeline the sponsor funds.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.6
+    },
+    {
+      "id": "obs.gov_compliance.unanswered",
+      "questionId": "gov.compliance",
+      "category": "Governance & Assurance",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Compliance controls are embedded into the delivery pipeline",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.value_outcomes.deficit",
+      "questionId": "value.outcomes",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Every initiative has a named outcome and a measure of success",
+      "description": "Sponsorship is attached to delivery activity rather than a defined outcome.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.4
+    },
+    {
+      "id": "obs.value_outcomes.partial",
+      "questionId": "value.outcomes",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Every initiative has a named outcome and a measure of success",
+      "description": "Sponsorship is attached to delivery activity rather than a defined outcome. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.12
+    },
+    {
+      "id": "obs.value_outcomes.strength",
+      "questionId": "value.outcomes",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Every initiative has a named outcome and a measure of success",
+      "description": "Every sponsored initiative carries a measurable outcome.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.84
+    },
+    {
+      "id": "obs.value_outcomes.unanswered",
+      "questionId": "value.outcomes",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Every initiative has a named outcome and a measure of success",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.value_feedback.deficit",
+      "questionId": "value.feedback",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Product feedback reaches delivery teams within days, not quarters",
+      "description": "Sponsors are steering with stale evidence.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.4
+    },
+    {
+      "id": "obs.value_feedback.partial",
+      "questionId": "value.feedback",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Product feedback reaches delivery teams within days, not quarters",
+      "description": "Sponsors are steering with stale evidence. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.12
+    },
+    {
+      "id": "obs.value_feedback.strength",
+      "questionId": "value.feedback",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Product feedback reaches delivery teams within days, not quarters",
+      "description": "Sponsors steer on current evidence.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.84
+    },
+    {
+      "id": "obs.value_feedback.unanswered",
+      "questionId": "value.feedback",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Product feedback reaches delivery teams within days, not quarters",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.value_prioritisation.deficit",
+      "questionId": "value.prioritisation",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Prioritisation is evidence-led and revisited on a fixed cadence",
+      "description": "Sponsor priorities are not being re-tested against evidence.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.4
+    },
+    {
+      "id": "obs.value_prioritisation.partial",
+      "questionId": "value.prioritisation",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Prioritisation is evidence-led and revisited on a fixed cadence",
+      "description": "Sponsor priorities are not being re-tested against evidence. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.12
+    },
+    {
+      "id": "obs.value_prioritisation.strength",
+      "questionId": "value.prioritisation",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Prioritisation is evidence-led and revisited on a fixed cadence",
+      "description": "Sponsor priorities are re-tested on a fixed cadence.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.84
+    },
+    {
+      "id": "obs.value_prioritisation.unanswered",
+      "questionId": "value.prioritisation",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Prioritisation is evidence-led and revisited on a fixed cadence",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    },
+    {
+      "id": "obs.value_benefits.deficit",
+      "questionId": "value.benefits",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "lte",
+        "value": 2
+      },
+      "title": "Sponsorship gap \u2014 Benefits realised after release are tracked against the original case",
+      "description": "The sponsored business case is never closed out.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), below the sponsorship threshold of 3.",
+      "severity": "high",
+      "confidence": 0.9,
+      "weight": 1.4
+    },
+    {
+      "id": "obs.value_benefits.partial",
+      "questionId": "value.benefits",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "eq",
+        "value": 3
+      },
+      "title": "Partially established \u2014 Benefits realised after release are tracked against the original case",
+      "description": "The sponsored business case is never closed out. The practice exists but is not yet dependable.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), at but not above the sponsorship threshold.",
+      "severity": "medium",
+      "confidence": 0.75,
+      "weight": 1.12
+    },
+    {
+      "id": "obs.value_benefits.strength",
+      "questionId": "value.benefits",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "gte",
+        "value": 4
+      },
+      "title": "Sponsorship strength \u2014 Benefits realised after release are tracked against the original case",
+      "description": "Benefits are tracked back to the sponsored case.",
+      "evidenceTemplate": "\"{prompt}\" was reported as \"{answerLabel}\" ({value}/5), above the sponsorship threshold of 3.",
+      "severity": "info",
+      "confidence": 0.85,
+      "weight": 0.84
+    },
+    {
+      "id": "obs.value_benefits.unanswered",
+      "questionId": "value.benefits",
+      "category": "Value & Outcomes",
+      "when": {
+        "operator": "unanswered"
+      },
+      "title": "No evidence captured \u2014 Benefits realised after release are tracked against the original case",
+      "description": "The sponsor position on this practice is unknown, so downstream reasoning is incomplete.",
+      "evidenceTemplate": "No response was captured for \"{prompt}\".",
+      "severity": "low",
+      "confidence": 0.5,
+      "weight": 0.4
+    }
+  ]
+}

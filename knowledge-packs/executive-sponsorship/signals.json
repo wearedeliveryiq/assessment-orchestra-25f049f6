@@ -1,0 +1,36 @@
+{
+  "signals": [
+    {
+      "id": "signal.flow",
+      "sectionId": "flow",
+      "title": "Delivery Flow sponsorship signal",
+      "benchmark": 3.1,
+      "positiveStatement": "Delivery Flow is ahead of the sponsorship benchmark.",
+      "negativeStatement": "Delivery Flow is behind the sponsorship benchmark."
+    },
+    {
+      "id": "signal.engineering",
+      "sectionId": "engineering",
+      "title": "Engineering Practice sponsorship signal",
+      "benchmark": 3.4,
+      "positiveStatement": "Engineering Practice is ahead of the sponsorship benchmark.",
+      "negativeStatement": "Engineering Practice is behind the sponsorship benchmark."
+    },
+    {
+      "id": "signal.governance",
+      "sectionId": "governance",
+      "title": "Governance & Assurance sponsorship signal",
+      "benchmark": 2.9,
+      "positiveStatement": "Governance & Assurance is ahead of the sponsorship benchmark.",
+      "negativeStatement": "Governance & Assurance is behind the sponsorship benchmark."
+    },
+    {
+      "id": "signal.value",
+      "sectionId": "value",
+      "title": "Value & Outcomes sponsorship signal",
+      "benchmark": 2.8,
+      "positiveStatement": "Value & Outcomes is ahead of the sponsorship benchmark.",
+      "negativeStatement": "Value & Outcomes is behind the sponsorship benchmark."
+    }
+  ]
+}

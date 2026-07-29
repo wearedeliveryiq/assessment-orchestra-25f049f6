@@ -1,0 +1,26 @@
+{
+  "headlines": [
+    {
+      "band": "leading",
+      "text": "Sponsorship is compounding delivery advantage"
+    },
+    {
+      "band": "performing",
+      "text": "Sponsorship is effective but unevenly applied"
+    },
+    {
+      "band": "developing",
+      "text": "Sponsorship is present but not yet dependable"
+    },
+    {
+      "band": "at-risk",
+      "text": "Sponsorship is not translating into delivery outcomes"
+    }
+  ],
+  "summaryTemplate": "{organisation} scores {overall} out of 5 for executive sponsorship maturity, placing it in the {band} band.",
+  "paragraphTemplates": [
+    "The strongest area is {strongestSection}, where practice is dependable enough to build on.",
+    "The weakest area is {weakestSection}, and it is where sponsor attention will return the most value.",
+    "{observationCount} observations and {ruleCount} rule findings were generated from this assessment."
+  ]
+}
