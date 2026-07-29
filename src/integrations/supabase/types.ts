@@ -271,6 +271,136 @@ export type Database = {
           },
         ]
       }
+      assessment_score_summaries: {
+        Row: {
+          breakdown: Json
+          confidence: number
+          created_at: string
+          dimension_count: number
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          maturity_level: string
+          maximum_score: number
+          overall_score: number
+          pattern_count: number
+          percentage: number
+          session_id: string
+        }
+        Insert: {
+          breakdown?: Json
+          confidence?: number
+          created_at?: string
+          dimension_count?: number
+          id?: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          maturity_level: string
+          maximum_score?: number
+          overall_score?: number
+          pattern_count?: number
+          percentage?: number
+          session_id: string
+        }
+        Update: {
+          breakdown?: Json
+          confidence?: number
+          created_at?: string
+          dimension_count?: number
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          maturity_level?: string
+          maximum_score?: number
+          overall_score?: number
+          pattern_count?: number
+          percentage?: number
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_score_summaries_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: true
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_scores: {
+        Row: {
+          breakdown: Json
+          calculation_reason: string
+          confidence: number
+          created_at: string
+          dimension: string
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          maturity_level: string
+          maximum_score: number
+          overall_score: number
+          percentage: number
+          score_code: string
+          score_expression: string
+          session_id: string
+          severity: string
+          supporting_pattern_codes: string[]
+          supporting_pattern_ids: string[]
+          weight: number
+        }
+        Insert: {
+          breakdown?: Json
+          calculation_reason?: string
+          confidence?: number
+          created_at?: string
+          dimension: string
+          id?: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          maturity_level: string
+          maximum_score?: number
+          overall_score?: number
+          percentage?: number
+          score_code: string
+          score_expression?: string
+          session_id: string
+          severity?: string
+          supporting_pattern_codes?: string[]
+          supporting_pattern_ids?: string[]
+          weight?: number
+        }
+        Update: {
+          breakdown?: Json
+          calculation_reason?: string
+          confidence?: number
+          created_at?: string
+          dimension?: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          maturity_level?: string
+          maximum_score?: number
+          overall_score?: number
+          percentage?: number
+          score_code?: string
+          score_expression?: string
+          session_id?: string
+          severity?: string
+          supporting_pattern_codes?: string[]
+          supporting_pattern_ids?: string[]
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_scores_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_sessions: {
         Row: {
           archived_at: string | null
