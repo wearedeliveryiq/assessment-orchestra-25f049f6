@@ -138,7 +138,47 @@ export const signalsSchema = z.object({
   /** Observation-driven signal definitions used by the Signal Engine. */
   definitions: z.array(signalDefinitionSchema).default([]),
 });
-export const rulesSchema = z.object({ rules: z.array(z.record(z.unknown())).min(1) });
+/**
+ * Rule definitions. A rule is a declarative business decision evaluated over
+ * Signals only. New logical operators can be added to this union without any
+ * change to the engine's public contract.
+ */
+export const ruleLogicSchema = z.enum(["ALL", "ANY", "NONE", "AT_LEAST", "EXACTLY"]);
+export const ruleStatusSchema = z.enum(["passed", "failed", "warning", "not_evaluated"]);
+
+export const ruleDefinitionSchema = z.object({
+  ruleCode: z.string().min(1),
+  name: z.string().min(1),
+  category: z.string().min(1),
+  description: z.string().min(1),
+  rationale: z.string().min(1),
+  logic: ruleLogicSchema,
+  /** Signal codes the rule reasons over. */
+  signals: z.array(z.string().min(1)).min(1),
+  /** Required count for AT_LEAST / EXACTLY. */
+  threshold: z.number().int().nonnegative().optional(),
+  /** Signals below this confidence are ignored as evidence. */
+  minimumConfidence: z.number().min(0).max(1),
+  severity: severitySchema,
+  weight: z.number().min(0).default(1),
+  /** Status recorded when the logical condition is not satisfied. */
+  statusOnFail: ruleStatusSchema.default("not_evaluated"),
+  /** Template for the human-readable explanation ({count}, {signals}, {confidence}, {name}). */
+  explanationTemplate: z.string().min(1),
+});
+
+export type RuleDefinition = z.infer<typeof ruleDefinitionSchema>;
+export type RuleLogic = z.infer<typeof ruleLogicSchema>;
+export type RuleStatus = z.infer<typeof ruleStatusSchema>;
+
+export const rulesSchema = z.object({
+  /** Legacy question-level rules consumed by the assessment runtime. */
+  rules: z.array(z.record(z.unknown())).min(1),
+  /** Categories exposed by the pack; the Rule Explorer reads these. */
+  categories: z.array(z.string().min(1)).default([]),
+  /** Signal-driven rule definitions used by the Rule Engine. */
+  definitions: z.array(ruleDefinitionSchema).default([]),
+});
 export const patternsSchema = z.object({ patterns: z.array(z.record(z.unknown())).min(1) });
 export const recommendationsSchema = z.object({
   recommendations: z.array(z.record(z.unknown())).min(1),
