@@ -24,6 +24,28 @@ export const scoresEngine: EngineService<ScoreSummary> = {
     const observations = artifact<ObservationItem[]>(context, "observations");
     const rules = artifact<RuleHit[]>(context, "rules");
 
+    // Pack-driven Scoring Engine: consumes persisted Patterns only. It is
+    // isolated from the legacy section scoring below so a scoring-model change
+    // never destabilises the runtime pipeline.
+    try {
+      const knowledgePack = knowledgePackLoader.loadActive();
+      const patterns = await listPatterns(context.session.id);
+      const { scores, summary, runSummary } = await scoringEngine.run({
+        session: context.session,
+        patterns,
+        pack: knowledgePack,
+      });
+      await replaceScores(context.session.id, scores);
+      await replaceSummary(context.session.id, summary);
+      if (runSummary.errored.length > 0) {
+        console.error("[scores-stage] dimensions failed", runSummary.errored);
+      }
+    } catch (error) {
+      console.error("[scores-stage] scoring engine failed", error);
+    }
+
+
+
     const sections = QUESTIONNAIRE.map<SectionScore>((section) => {
       const items = observations.filter((o) => o.sectionId === section.id);
       const raw = items.length ? items.reduce((sum, o) => sum + o.value, 0) / items.length : 0;
