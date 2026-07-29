@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_observations: {
+        Row: {
+          category: string
+          confidence: number
+          created_at: string
+          definition_id: string
+          description: string
+          evidence: string
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          question_id: string
+          rule_expression: string
+          session_id: string
+          severity: string
+          source_label: string | null
+          source_value: Json | null
+          title: string
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          category: string
+          confidence?: number
+          created_at?: string
+          definition_id: string
+          description: string
+          evidence: string
+          id?: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          question_id: string
+          rule_expression: string
+          session_id: string
+          severity: string
+          source_label?: string | null
+          source_value?: Json | null
+          title: string
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          category?: string
+          confidence?: number
+          created_at?: string
+          definition_id?: string
+          description?: string
+          evidence?: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          question_id?: string
+          rule_expression?: string
+          session_id?: string
+          severity?: string
+          source_label?: string | null
+          source_value?: Json | null
+          title?: string
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_observations_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_responses: {
         Row: {
           answered_at: string
