@@ -49,9 +49,8 @@ export class SignalEngine {
     const emitted = new Set<string>();
     const suppressed: { signalCode: string; reason: string }[] = issues.map((issue) => ({
       signalCode: issue.signalCode,
-      message: issue.message,
       reason: `invalid definition: ${issue.message}`,
-    })) as { signalCode: string; reason: string }[];
+    }));
     const failed: { signalCode: string; error: string }[] = [];
 
     // Definitions are independent: evaluate concurrently, but keep the output
