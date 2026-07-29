@@ -105,8 +105,6 @@ export const rulesEngine: EngineService<RuleHit[]> = {
 
     return RULES.filter((rule) => rule.when({ observations, signals })).map(
       ({ id, severity, title, detail }) => ({ id, severity, title, detail }),
-
-      ({ id, severity, title, detail }) => ({ id, severity, title, detail }),
     );
   },
 };
