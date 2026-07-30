@@ -36,6 +36,7 @@ import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
+import { Route as InternalRuntimeIndexRouteImport } from './routes/internal.runtime.index'
 import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
 import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
@@ -70,12 +71,19 @@ import { Route as AssessmentIdObservationsRouteImport } from './routes/assessmen
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
 import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
+import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
+import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
+import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
+import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
+import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
+import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
 import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
+import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
 
 const IndexRoute = IndexRouteImport.update({
@@ -211,6 +219,11 @@ const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
 const InternalScoresIndexRoute = InternalScoresIndexRouteImport.update({
   id: '/internal/scores/',
   path: '/internal/scores/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalRuntimeIndexRoute = InternalRuntimeIndexRouteImport.update({
+  id: '/internal/runtime/',
+  path: '/internal/runtime/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalRulesIndexRoute = InternalRulesIndexRouteImport.update({
@@ -390,6 +403,21 @@ const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
   path: '/assessment/$id/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
+  id: '/api/executions/monitor',
+  path: '/api/executions/monitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExecutionsHistoryRoute = ApiExecutionsHistoryRouteImport.update({
+  id: '/api/executions/history',
+  path: '/api/executions/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
+  id: '/api/executions/$id',
+  path: '/api/executions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -401,6 +429,21 @@ const AssessmentIdExportFormatRoute =
     path: '/assessment/$id/export/$format',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
+const ApiExecutionsIdRetryRoute = ApiExecutionsIdRetryRouteImport.update({
+  id: '/retry',
+  path: '/retry',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
+const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
+  id: '/cancel',
+  path: '/cancel',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -419,6 +462,11 @@ const ApiAssessmentsIdRetryRoute = ApiAssessmentsIdRetryRouteImport.update({
 const ApiAssessmentsIdResultsRoute = ApiAssessmentsIdResultsRouteImport.update({
   id: '/results',
   path: '/results',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
+  id: '/execute',
+  path: '/execute',
   getParentRoute: () => ApiAssessmentsIdRoute,
 } as any)
 const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
@@ -453,6 +501,9 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
+  '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -487,14 +538,19 @@ export interface FileRoutesByFullPath {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/runtime/': typeof InternalRuntimeIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
+  '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesByTo {
@@ -523,6 +579,9 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
+  '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -557,14 +616,19 @@ export interface FileRoutesByTo {
   '/internal/observations': typeof InternalObservationsIndexRoute
   '/internal/patterns': typeof InternalPatternsIndexRoute
   '/internal/rules': typeof InternalRulesIndexRoute
+  '/internal/runtime': typeof InternalRuntimeIndexRoute
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
+  '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesById {
@@ -594,6 +658,9 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
+  '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -628,14 +695,19 @@ export interface FileRoutesById {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/runtime/': typeof InternalRuntimeIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
+  '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRouteTypes {
@@ -666,6 +738,9 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
+    | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -700,14 +775,19 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/runtime/'
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
+    | '/api/executions/$id/retry'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -736,6 +816,9 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
+    | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -770,14 +853,19 @@ export interface FileRouteTypes {
     | '/internal/observations'
     | '/internal/patterns'
     | '/internal/rules'
+    | '/internal/runtime'
     | '/internal/scores'
     | '/internal/signals'
     | '/knowledge-pack/$id'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
+    | '/api/executions/$id/retry'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   id:
     | '__root__'
@@ -806,6 +894,9 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
+    | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -840,14 +931,19 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/runtime/'
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
+    | '/api/executions/$id/retry'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesById: FileRoutesById
 }
@@ -876,6 +972,9 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
+  ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
+  ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
@@ -909,6 +1008,7 @@ export interface RootRouteChildren {
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
   InternalPatternsIndexRoute: typeof InternalPatternsIndexRoute
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
+  InternalRuntimeIndexRoute: typeof InternalRuntimeIndexRoute
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
   KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
@@ -1104,6 +1204,13 @@ declare module '@tanstack/react-router' {
       path: '/internal/scores'
       fullPath: '/internal/scores/'
       preLoaderRoute: typeof InternalScoresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/runtime/': {
+      id: '/internal/runtime/'
+      path: '/internal/runtime'
+      fullPath: '/internal/runtime/'
+      preLoaderRoute: typeof InternalRuntimeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/rules/': {
@@ -1344,6 +1451,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/executions/monitor': {
+      id: '/api/executions/monitor'
+      path: '/api/executions/monitor'
+      fullPath: '/api/executions/monitor'
+      preLoaderRoute: typeof ApiExecutionsMonitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/history': {
+      id: '/api/executions/history'
+      path: '/api/executions/history'
+      fullPath: '/api/executions/history'
+      preLoaderRoute: typeof ApiExecutionsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/$id': {
+      id: '/api/executions/$id'
+      path: '/api/executions/$id'
+      fullPath: '/api/executions/$id'
+      preLoaderRoute: typeof ApiExecutionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id': {
       id: '/api/assessments/$id'
       path: '/$id'
@@ -1357,6 +1485,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/assessment/$id/export/$format'
       preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/$id/status': {
+      id: '/api/executions/$id/status'
+      path: '/status'
+      fullPath: '/api/executions/$id/status'
+      preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
+    }
+    '/api/executions/$id/retry': {
+      id: '/api/executions/$id/retry'
+      path: '/retry'
+      fullPath: '/api/executions/$id/retry'
+      preLoaderRoute: typeof ApiExecutionsIdRetryRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
+    }
+    '/api/executions/$id/cancel': {
+      id: '/api/executions/$id/cancel'
+      path: '/cancel'
+      fullPath: '/api/executions/$id/cancel'
+      preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
     }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
@@ -1386,6 +1535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsIdResultsRouteImport
       parentRoute: typeof ApiAssessmentsIdRoute
     }
+    '/api/assessments/$id/execute': {
+      id: '/api/assessments/$id/execute'
+      path: '/execute'
+      fullPath: '/api/assessments/$id/execute'
+      preLoaderRoute: typeof ApiAssessmentsIdExecuteRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
     '/api/assessments/$id/advance': {
       id: '/api/assessments/$id/advance'
       path: '/advance'
@@ -1398,6 +1554,7 @@ declare module '@tanstack/react-router' {
 
 interface ApiAssessmentsIdRouteChildren {
   ApiAssessmentsIdAdvanceRoute: typeof ApiAssessmentsIdAdvanceRoute
+  ApiAssessmentsIdExecuteRoute: typeof ApiAssessmentsIdExecuteRoute
   ApiAssessmentsIdResultsRoute: typeof ApiAssessmentsIdResultsRoute
   ApiAssessmentsIdRetryRoute: typeof ApiAssessmentsIdRetryRoute
   ApiAssessmentsIdStatusRoute: typeof ApiAssessmentsIdStatusRoute
@@ -1406,6 +1563,7 @@ interface ApiAssessmentsIdRouteChildren {
 
 const ApiAssessmentsIdRouteChildren: ApiAssessmentsIdRouteChildren = {
   ApiAssessmentsIdAdvanceRoute: ApiAssessmentsIdAdvanceRoute,
+  ApiAssessmentsIdExecuteRoute: ApiAssessmentsIdExecuteRoute,
   ApiAssessmentsIdResultsRoute: ApiAssessmentsIdResultsRoute,
   ApiAssessmentsIdRetryRoute: ApiAssessmentsIdRetryRoute,
   ApiAssessmentsIdStatusRoute: ApiAssessmentsIdStatusRoute,
@@ -1439,6 +1597,22 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
   ReportIdRouteChildren,
 )
 
+interface ApiExecutionsIdRouteChildren {
+  ApiExecutionsIdCancelRoute: typeof ApiExecutionsIdCancelRoute
+  ApiExecutionsIdRetryRoute: typeof ApiExecutionsIdRetryRoute
+  ApiExecutionsIdStatusRoute: typeof ApiExecutionsIdStatusRoute
+}
+
+const ApiExecutionsIdRouteChildren: ApiExecutionsIdRouteChildren = {
+  ApiExecutionsIdCancelRoute: ApiExecutionsIdCancelRoute,
+  ApiExecutionsIdRetryRoute: ApiExecutionsIdRetryRoute,
+  ApiExecutionsIdStatusRoute: ApiExecutionsIdStatusRoute,
+}
+
+const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
+  ApiExecutionsIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
@@ -1464,6 +1638,9 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
+  ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
+  ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
@@ -1497,6 +1674,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
   InternalPatternsIndexRoute: InternalPatternsIndexRoute,
   InternalRulesIndexRoute: InternalRulesIndexRoute,
+  InternalRuntimeIndexRoute: InternalRuntimeIndexRoute,
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
   KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
@@ -1505,13 +1683,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
