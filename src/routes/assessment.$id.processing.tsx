@@ -127,9 +127,7 @@ function ProcessingPage() {
 
   return (
     <AppShell
-      action={
-        <StatusPill status={isDone ? "completed" : isFailed ? "failed" : "processing"} />
-      }
+      action={<StatusPill status={isDone ? "completed" : "processing"} />}
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
