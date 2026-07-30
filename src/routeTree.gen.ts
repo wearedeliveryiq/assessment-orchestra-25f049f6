@@ -76,6 +76,7 @@ import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessm
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
 import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
+import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
 
 const IndexRoute = IndexRouteImport.update({
@@ -421,6 +422,11 @@ const ApiAssessmentsIdResultsRoute = ApiAssessmentsIdResultsRouteImport.update({
   path: '/results',
   getParentRoute: () => ApiAssessmentsIdRoute,
 } as any)
+const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
+  id: '/execute',
+  path: '/execute',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
 const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
   id: '/advance',
   path: '/advance',
@@ -491,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
@@ -561,6 +568,7 @@ export interface FileRoutesByTo {
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
@@ -632,6 +640,7 @@ export interface FileRoutesById {
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
@@ -704,6 +713,7 @@ export interface FileRouteTypes {
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
@@ -774,6 +784,7 @@ export interface FileRouteTypes {
     | '/internal/signals'
     | '/knowledge-pack/$id'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
@@ -844,6 +855,7 @@ export interface FileRouteTypes {
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
@@ -1386,6 +1398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsIdResultsRouteImport
       parentRoute: typeof ApiAssessmentsIdRoute
     }
+    '/api/assessments/$id/execute': {
+      id: '/api/assessments/$id/execute'
+      path: '/execute'
+      fullPath: '/api/assessments/$id/execute'
+      preLoaderRoute: typeof ApiAssessmentsIdExecuteRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
     '/api/assessments/$id/advance': {
       id: '/api/assessments/$id/advance'
       path: '/advance'
@@ -1398,6 +1417,7 @@ declare module '@tanstack/react-router' {
 
 interface ApiAssessmentsIdRouteChildren {
   ApiAssessmentsIdAdvanceRoute: typeof ApiAssessmentsIdAdvanceRoute
+  ApiAssessmentsIdExecuteRoute: typeof ApiAssessmentsIdExecuteRoute
   ApiAssessmentsIdResultsRoute: typeof ApiAssessmentsIdResultsRoute
   ApiAssessmentsIdRetryRoute: typeof ApiAssessmentsIdRetryRoute
   ApiAssessmentsIdStatusRoute: typeof ApiAssessmentsIdStatusRoute
@@ -1406,6 +1426,7 @@ interface ApiAssessmentsIdRouteChildren {
 
 const ApiAssessmentsIdRouteChildren: ApiAssessmentsIdRouteChildren = {
   ApiAssessmentsIdAdvanceRoute: ApiAssessmentsIdAdvanceRoute,
+  ApiAssessmentsIdExecuteRoute: ApiAssessmentsIdExecuteRoute,
   ApiAssessmentsIdResultsRoute: ApiAssessmentsIdResultsRoute,
   ApiAssessmentsIdRetryRoute: ApiAssessmentsIdRetryRoute,
   ApiAssessmentsIdStatusRoute: ApiAssessmentsIdStatusRoute,
