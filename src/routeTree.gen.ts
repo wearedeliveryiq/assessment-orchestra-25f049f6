@@ -84,6 +84,7 @@ import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessmen
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
+import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -474,6 +475,11 @@ const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
   path: '/cancel',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiAuthSessionsIdRoute = ApiAuthSessionsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAuthSessionsRoute,
+} as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -535,7 +541,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
-  '/api/auth/sessions': typeof ApiAuthSessionsRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -583,6 +589,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -618,7 +625,7 @@ export interface FileRoutesByTo {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
-  '/api/auth/sessions': typeof ApiAuthSessionsRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -666,6 +673,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -702,7 +710,7 @@ export interface FileRoutesById {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
-  '/api/auth/sessions': typeof ApiAuthSessionsRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -750,6 +758,7 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -835,6 +844,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -918,6 +928,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -1001,6 +1012,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -1036,7 +1048,7 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiAuthSessionRoute: typeof ApiAuthSessionRoute
-  ApiAuthSessionsRoute: typeof ApiAuthSessionsRoute
+  ApiAuthSessionsRoute: typeof ApiAuthSessionsRouteWithChildren
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
@@ -1607,6 +1619,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
     }
+    '/api/auth/sessions/$id': {
+      id: '/api/auth/sessions/$id'
+      path: '/$id'
+      fullPath: '/api/auth/sessions/$id'
+      preLoaderRoute: typeof ApiAuthSessionsIdRouteImport
+      parentRoute: typeof ApiAuthSessionsRoute
+    }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
       path: '/submit'
@@ -1697,6 +1716,18 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
   ReportIdRouteChildren,
 )
 
+interface ApiAuthSessionsRouteChildren {
+  ApiAuthSessionsIdRoute: typeof ApiAuthSessionsIdRoute
+}
+
+const ApiAuthSessionsRouteChildren: ApiAuthSessionsRouteChildren = {
+  ApiAuthSessionsIdRoute: ApiAuthSessionsIdRoute,
+}
+
+const ApiAuthSessionsRouteWithChildren = ApiAuthSessionsRoute._addFileChildren(
+  ApiAuthSessionsRouteChildren,
+)
+
 interface ApiExecutionsIdRouteChildren {
   ApiExecutionsIdCancelRoute: typeof ApiExecutionsIdCancelRoute
   ApiExecutionsIdRetryRoute: typeof ApiExecutionsIdRetryRoute
@@ -1742,7 +1773,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiAuthSessionRoute: ApiAuthSessionRoute,
-  ApiAuthSessionsRoute: ApiAuthSessionsRoute,
+  ApiAuthSessionsRoute: ApiAuthSessionsRouteWithChildren,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
