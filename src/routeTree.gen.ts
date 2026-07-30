@@ -22,6 +22,7 @@ import { Route as RuleIdRouteImport } from './routes/rule.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
+import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
@@ -117,6 +118,11 @@ const ObservationIdRoute = ObservationIdRouteImport.update({
 const NarrativeIdRoute = NarrativeIdRouteImport.update({
   id: '/narrative/$id',
   path: '/narrative/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIdRoute = DashboardIdRouteImport.update({
+  id: '/dashboard/$id',
+  path: '/dashboard/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
@@ -281,6 +287,7 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/dashboard/$id': typeof DashboardIdRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -327,6 +334,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/dashboard/$id': typeof DashboardIdRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -374,6 +382,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/dashboard/$id': typeof DashboardIdRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -422,6 +431,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/api/assessments'
+    | '/dashboard/$id'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -468,6 +478,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/assessments'
+    | '/dashboard/$id'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -514,6 +525,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/api/assessments'
+    | '/dashboard/$id'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -561,6 +573,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
+  DashboardIdRoute: typeof DashboardIdRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
   PatternIdRoute: typeof PatternIdRoute
@@ -690,6 +703,13 @@ declare module '@tanstack/react-router' {
       path: '/narrative/$id'
       fullPath: '/narrative/$id'
       preLoaderRoute: typeof NarrativeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/$id': {
+      id: '/dashboard/$id'
+      path: '/dashboard/$id'
+      fullPath: '/dashboard/$id'
+      preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/assessments': {
@@ -946,6 +966,7 @@ const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
+  DashboardIdRoute: DashboardIdRoute,
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
   PatternIdRoute: PatternIdRoute,
