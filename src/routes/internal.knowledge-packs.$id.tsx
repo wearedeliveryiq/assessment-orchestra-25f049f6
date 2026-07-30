@@ -123,10 +123,11 @@ function KnowledgePackDetail() {
                         v{entry.version}
                       </button>
                       <span className="ml-2 text-xs text-muted-foreground">
-                        {entry.status}
+                        status: {entry.status}
                         {entry.latest ? " · latest" : ""}
-                        {entry.active ? " · active" : ""} · {entry.path}
+                        {entry.active ? " · in use" : ""} · {entry.path}
                       </span>
+
                     </div>
                     <Button
                       size="sm"
