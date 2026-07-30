@@ -22,5 +22,144 @@
     "The strongest area is {strongestSection}, where practice is dependable enough to build on.",
     "The weakest area is {weakestSection}, and it is where sponsor attention will return the most value.",
     "{observationCount} observations and {ruleCount} rule findings were generated from this assessment."
-  ]
+  ],
+  "narrative": {
+    "generation": {
+      "mode": "hybrid",
+      "provider": "lovable",
+      "model": "google/gemini-3.6-flash",
+      "temperature": 0.3,
+      "maxOutputTokens": 900,
+      "fallbackToTemplate": true
+    },
+    "tone": {
+      "voice": "Direct, measured, consulting-grade British English",
+      "audience": "Executive sponsors and the board",
+      "register": "formal",
+      "perspective": "third-person"
+    },
+    "promptRules": {
+      "system": "You are a delivery consultant writing an evidence-based executive assessment narrative for a board audience. You may only assert findings that appear in the supplied evidence. Write in British English, plain prose, no bullet points unless the section asks for them, no headings, no markdown.",
+      "must": [
+        "Ground every claim in the supplied dimension scores, patterns and evidence statements",
+        "Name the organisation at least once in the executive summary",
+        "Quantify with the supplied percentages and maturity levels rather than vague adjectives",
+        "Stay within the requested word range"
+      ],
+      "mustNot": [
+        "Invent metrics, dates, names, teams or systems that are not supplied",
+        "Recommend actions that are not derived from a supplied pattern or dimension",
+        "Use hype, marketing language or exclamation marks",
+        "Refer to yourself, the model, or the process of generation"
+      ]
+    },
+    "headline": {
+      "template": "{organisation}: sponsorship maturity is {maturityLevel} at {overallPercentage}%",
+      "aiEnabled": false
+    },
+    "sections": [
+      {
+        "key": "executive-summary",
+        "title": "Executive Summary",
+        "order": 1,
+        "evidence": ["summary", "scores", "patterns"],
+        "aiEnabled": true,
+        "minWords": 60,
+        "maxWords": 170,
+        "guidance": "State the overall position, the single biggest constraint and the single biggest strength. Close with what changes if nothing is done.",
+        "template": "{organisation} achieves an overall sponsorship maturity of {overallPercentage}% ({maturityLevel}) across {dimensionCount} assessed dimensions, at {confidencePercentage}% evidential confidence. {strongestDimension} is the strongest dimension at {strongestPercentage}%, while {weakestDimension} is the binding constraint at {weakestPercentage}%. {patternCount} organisational patterns were detected from the assessment evidence, led by {leadPattern}. Without intervention in {weakestDimension}, sponsorship intent will continue to dissipate before it reaches delivery."
+      },
+      {
+        "key": "assessment-overview",
+        "title": "Assessment Overview",
+        "order": 2,
+        "evidence": ["summary", "scores", "counts"],
+        "aiEnabled": true,
+        "minWords": 45,
+        "maxWords": 150,
+        "guidance": "Explain what was assessed, the volume of evidence behind it, and how confident the result is.",
+        "template": "The assessment was run against the {packName} knowledge pack (v{packVersion}). {responseCount} responses produced {observationCount} observations, {signalCount} signals, {ruleCount} rule findings and {patternCount} organisational patterns, which were scored across {dimensionCount} dimensions. Overall confidence in the result is {confidencePercentage}%, reflecting both the completeness of the responses and the strength of corroborating evidence."
+      },
+      {
+        "key": "key-strengths",
+        "title": "Key Strengths",
+        "order": 3,
+        "evidence": ["scores"],
+        "aiEnabled": true,
+        "minWords": 35,
+        "maxWords": 150,
+        "guidance": "Describe the highest-scoring dimensions and what they make possible. Do not manufacture strengths where scores are low.",
+        "template": "The most dependable capability is {strongestDimension} at {strongestPercentage}% ({strongestMaturity}). {strengthList} These are the areas on which further sponsorship investment can safely compound.",
+        "emptyTemplate": "No dimension currently scores at a level that can be relied upon as a strength; every assessed dimension requires attention before it can support further delivery load."
+      },
+      {
+        "key": "key-findings",
+        "title": "Key Findings",
+        "order": 4,
+        "evidence": ["patterns", "scores"],
+        "aiEnabled": true,
+        "minWords": 45,
+        "maxWords": 200,
+        "guidance": "Report the detected patterns as findings, strongest evidence first, each with its confidence.",
+        "template": "{findingList} The weakest dimension, {weakestDimension} at {weakestPercentage}%, is where these findings converge.",
+        "emptyTemplate": "No organisational anti-patterns met the evidence threshold in this assessment. The findings are therefore limited to dimension-level scoring, led by {weakestDimension} at {weakestPercentage}%."
+      },
+      {
+        "key": "business-impacts",
+        "title": "Business Impacts",
+        "order": 5,
+        "evidence": ["patterns"],
+        "aiEnabled": true,
+        "minWords": 40,
+        "maxWords": 180,
+        "guidance": "Translate each significant pattern into a commercial or delivery consequence. No new facts.",
+        "template": "{impactList} Left unaddressed, these impacts accumulate as delivery cost, slower feedback and reduced confidence in sponsored commitments.",
+        "emptyTemplate": "No material adverse business impacts were evidenced by the detected patterns in this assessment."
+      },
+      {
+        "key": "priority-recommendations",
+        "title": "Priority Recommendations",
+        "order": 6,
+        "evidence": ["patterns", "scores", "recommendations"],
+        "aiEnabled": true,
+        "minWords": 40,
+        "maxWords": 200,
+        "guidance": "Give the highest-value interventions in priority order, each tied to the finding it resolves.",
+        "template": "{recommendationList} Priority is set by dimension weight and the confidence of the supporting evidence.",
+        "emptyTemplate": "No priority interventions are required. Sustain current practice and re-baseline the assessment in ninety days."
+      },
+      {
+        "key": "next-steps",
+        "title": "Suggested Next Steps",
+        "order": 7,
+        "evidence": ["summary", "scores"],
+        "aiEnabled": false,
+        "minWords": 30,
+        "maxWords": 140,
+        "guidance": "Practical sequencing for the next ninety days.",
+        "template": "Within thirty days, agree named executive ownership for {weakestDimension} and publish a single measure of progress for it. Within sixty days, stand up the highest-priority intervention above and report against it in the existing sponsor forum. Within ninety days, re-run this assessment to confirm that {weakestDimension} has moved and that {strongestDimension} has not regressed."
+      }
+    ],
+    "validation": {
+      "requiredSections": [
+        "executive-summary",
+        "assessment-overview",
+        "key-strengths",
+        "key-findings",
+        "business-impacts",
+        "priority-recommendations",
+        "next-steps"
+      ],
+      "bannedPhrases": [
+        "as an ai",
+        "language model",
+        "lorem ipsum",
+        "world-class",
+        "game-changing",
+        "revolutionary"
+      ],
+      "requireEvidence": true,
+      "minConfidence": 0.2
+    }
+  }
 }

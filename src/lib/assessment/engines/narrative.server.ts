@@ -1,3 +1,12 @@
+import { knowledgePackLoader } from "../../knowledge-packs/loader.server";
+import { narrativeEngine as packNarrativeEngine } from "../../narrative/engine.server";
+import { replaceNarrative } from "../../narrative/repository.server";
+import type { NarrativeEvidence } from "../../narrative/types";
+import { listPatterns } from "../../patterns/repository.server";
+import { listRuleResults } from "../../rules/repository.server";
+import { getSummary, listScores } from "../../scores/repository.server";
+import { listSignals } from "../../signals/repository.server";
+import { listObservations } from "../../observations/repository.server";
 import type { NarrativeOutput, PatternItem, RecommendationItem, ScoreSummary } from "../types";
 import { artifact, type EngineService } from "./contract.server";
 
@@ -15,6 +24,62 @@ export const narrativeEngine: EngineService<NarrativeOutput> = {
     const patterns = artifact<PatternItem[]>(context, "patterns");
     const recommendations = artifact<RecommendationItem[]>(context, "recommendations");
     const org = context.session.organisationName;
+
+    // Pack-driven Narrative Engine: consumes persisted Scores and Patterns
+    // only. Isolated from the legacy narrative below so a narrative model
+    // change never destabilises the runtime pipeline.
+    try {
+      const pack = knowledgePackLoader.loadActive();
+      const [packScores, summary, packPatterns, rules, signals, observations] = await Promise.all([
+        listScores(context.session.id),
+        getSummary(context.session.id),
+        listPatterns(context.session.id),
+        listRuleResults(context.session.id),
+        listSignals(context.session.id),
+        listObservations(context.session.id),
+      ]);
+
+      const weakest = [...packScores].sort((a, b) => a.percentage - b.percentage)[0] ?? null;
+      const evidence: NarrativeEvidence = {
+        organisationName: org,
+        packId: pack.manifest.id,
+        packName: pack.manifest.name,
+        packVersion: pack.manifest.version,
+        summary,
+        scores: packScores,
+        patterns: packPatterns,
+        rules,
+        signals,
+        counts: {
+          responses: context.responses.length,
+          observations: observations.length,
+          signals: signals.length,
+          rules: rules.length,
+          patterns: packPatterns.length,
+        },
+        recommendations: weakest
+          ? [
+              {
+                code: "rec.weakest-dimension",
+                title: `Establish named executive ownership for ${weakest.dimension}`,
+                rationale: `${weakest.dimension} is the lowest scoring dimension in this assessment.`,
+              },
+            ]
+          : [],
+      };
+
+      const { narrative, runSummary } = await packNarrativeEngine.run({
+        session: context.session,
+        pack,
+        evidence,
+      });
+      await replaceNarrative(context.session.id, narrative);
+      if (runSummary.fallbacks.length > 0) {
+        console.warn("[narrative-stage] section fallbacks", runSummary.fallbacks);
+      }
+    } catch (error) {
+      console.error("[narrative-stage] narrative engine failed", error);
+    }
 
     const strongest = [...scores.sections].sort((a, b) => b.score - a.score)[0];
     const weakest = [...scores.sections].sort((a, b) => a.score - b.score)[0];

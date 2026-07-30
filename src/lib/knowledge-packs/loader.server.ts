@@ -178,7 +178,10 @@ export class KnowledgePackLoader {
     return this.load(packId).scoring.defaults;
   }
 
-
+  /** Declarative narrative configuration consumed by the Narrative Engine. */
+  narrativeConfig(packId: string = this.activePackId) {
+    return this.load(packId).narratives.narrative;
+  }
 
 
   clearCache(): void {

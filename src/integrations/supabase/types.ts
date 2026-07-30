@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_narratives: {
+        Row: {
+          audience: string
+          confidence: number
+          created_at: string
+          evidence: Json
+          generation_ms: number
+          headline: string
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          mode: string
+          model: string
+          provider: string
+          sections: Json
+          session_id: string
+          summary: string
+          tone: string
+          validation: Json
+        }
+        Insert: {
+          audience?: string
+          confidence?: number
+          created_at?: string
+          evidence?: Json
+          generation_ms?: number
+          headline?: string
+          id?: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          mode?: string
+          model?: string
+          provider?: string
+          sections?: Json
+          session_id: string
+          summary?: string
+          tone?: string
+          validation?: Json
+        }
+        Update: {
+          audience?: string
+          confidence?: number
+          created_at?: string
+          evidence?: Json
+          generation_ms?: number
+          headline?: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          mode?: string
+          model?: string
+          provider?: string
+          sections?: Json
+          session_id?: string
+          summary?: string
+          tone?: string
+          validation?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_narratives_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: true
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_observations: {
         Row: {
           category: string
