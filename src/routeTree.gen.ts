@@ -47,6 +47,7 @@ import { Route as AssessmentIdObservationsRouteImport } from './routes/assessmen
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
+import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -245,6 +246,12 @@ const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiAssessmentsRoute,
 } as any)
+const AssessmentIdExportFormatRoute =
+  AssessmentIdExportFormatRouteImport.update({
+    id: '/assessment/$id/export/$format',
+    path: '/assessment/$id/export/$format',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -315,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -360,6 +368,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -406,6 +415,7 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -453,6 +463,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/assessment/$id/export/$format'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/assessment/$id/export/$format'
   id:
     | '__root__'
     | '/'
@@ -543,6 +555,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/assessment/$id/export/$format'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -583,6 +596,7 @@ export interface RootRouteChildren {
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
+  AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -853,6 +867,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsIdRouteImport
       parentRoute: typeof ApiAssessmentsRoute
     }
+    '/assessment/$id/export/$format': {
+      id: '/assessment/$id/export/$format'
+      path: '/assessment/$id/export/$format'
+      fullPath: '/assessment/$id/export/$format'
+      preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
       path: '/submit'
@@ -960,6 +981,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalRulesIndexRoute: InternalRulesIndexRoute,
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
+  AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
