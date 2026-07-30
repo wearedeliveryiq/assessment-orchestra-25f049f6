@@ -74,6 +74,7 @@ import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
+import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify-email'
 import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
 import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
@@ -426,6 +427,11 @@ const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
   path: '/api/executions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
+  id: '/api/auth/verify-email',
+  path: '/api/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSessionsRoute = ApiAuthSessionsRouteImport.update({
   id: '/api/auth/sessions',
   path: '/api/auth/sessions',
@@ -554,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -640,6 +647,7 @@ export interface FileRoutesByTo {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -727,6 +735,7 @@ export interface FileRoutesById {
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -815,6 +824,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -901,6 +911,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -987,6 +998,7 @@ export interface FileRouteTypes {
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -1073,6 +1085,7 @@ export interface RootRouteChildren {
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiAuthSessionRoute: typeof ApiAuthSessionRoute
   ApiAuthSessionsRoute: typeof ApiAuthSessionsRouteWithChildren
+  ApiAuthVerifyEmailRoute: typeof ApiAuthVerifyEmailRoute
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
@@ -1575,6 +1588,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/verify-email': {
+      id: '/api/auth/verify-email'
+      path: '/api/auth/verify-email'
+      fullPath: '/api/auth/verify-email'
+      preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/sessions': {
       id: '/api/auth/sessions'
       path: '/api/auth/sessions'
@@ -1814,6 +1834,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiAuthSessionRoute: ApiAuthSessionRoute,
   ApiAuthSessionsRoute: ApiAuthSessionsRouteWithChildren,
+  ApiAuthVerifyEmailRoute: ApiAuthVerifyEmailRoute,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
