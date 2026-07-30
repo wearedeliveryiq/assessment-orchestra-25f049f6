@@ -36,6 +36,7 @@ import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
+import { Route as InternalRuntimeIndexRouteImport } from './routes/internal.runtime.index'
 import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
 import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
@@ -218,6 +219,11 @@ const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
 const InternalScoresIndexRoute = InternalScoresIndexRouteImport.update({
   id: '/internal/scores/',
   path: '/internal/scores/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalRuntimeIndexRoute = InternalRuntimeIndexRouteImport.update({
+  id: '/internal/runtime/',
+  path: '/internal/runtime/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalRulesIndexRoute = InternalRulesIndexRouteImport.update({
@@ -532,6 +538,7 @@ export interface FileRoutesByFullPath {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/runtime/': typeof InternalRuntimeIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
@@ -609,6 +616,7 @@ export interface FileRoutesByTo {
   '/internal/observations': typeof InternalObservationsIndexRoute
   '/internal/patterns': typeof InternalPatternsIndexRoute
   '/internal/rules': typeof InternalRulesIndexRoute
+  '/internal/runtime': typeof InternalRuntimeIndexRoute
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
@@ -687,6 +695,7 @@ export interface FileRoutesById {
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
+  '/internal/runtime/': typeof InternalRuntimeIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
@@ -766,6 +775,7 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/runtime/'
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
@@ -843,6 +853,7 @@ export interface FileRouteTypes {
     | '/internal/observations'
     | '/internal/patterns'
     | '/internal/rules'
+    | '/internal/runtime'
     | '/internal/scores'
     | '/internal/signals'
     | '/knowledge-pack/$id'
@@ -920,6 +931,7 @@ export interface FileRouteTypes {
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
+    | '/internal/runtime/'
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
@@ -996,6 +1008,7 @@ export interface RootRouteChildren {
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
   InternalPatternsIndexRoute: typeof InternalPatternsIndexRoute
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
+  InternalRuntimeIndexRoute: typeof InternalRuntimeIndexRoute
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
   KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
@@ -1191,6 +1204,13 @@ declare module '@tanstack/react-router' {
       path: '/internal/scores'
       fullPath: '/internal/scores/'
       preLoaderRoute: typeof InternalScoresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/runtime/': {
+      id: '/internal/runtime/'
+      path: '/internal/runtime'
+      fullPath: '/internal/runtime/'
+      preLoaderRoute: typeof InternalRuntimeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/rules/': {
@@ -1654,6 +1674,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
   InternalPatternsIndexRoute: InternalPatternsIndexRoute,
   InternalRulesIndexRoute: InternalRulesIndexRoute,
+  InternalRuntimeIndexRoute: InternalRuntimeIndexRoute,
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
   KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
