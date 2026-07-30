@@ -24,6 +24,7 @@ import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
+import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
@@ -132,6 +133,11 @@ const ObservationIdRoute = ObservationIdRouteImport.update({
 const NarrativeIdRoute = NarrativeIdRouteImport.update({
   id: '/narrative/$id',
   path: '/narrative/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
+  id: '/knowledge-packs/reload',
+  path: '/knowledge-packs/reload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIdRoute = DashboardIdRouteImport.update({
@@ -312,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -415,6 +423,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -468,6 +477,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -519,6 +529,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -570,6 +581,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -622,6 +634,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   DashboardIdRoute: typeof DashboardIdRoute
+  KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
   PatternIdRoute: typeof PatternIdRoute
@@ -768,6 +781,13 @@ declare module '@tanstack/react-router' {
       path: '/narrative/$id'
       fullPath: '/narrative/$id'
       preLoaderRoute: typeof NarrativeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/reload': {
+      id: '/knowledge-packs/reload'
+      path: '/knowledge-packs/reload'
+      fullPath: '/knowledge-packs/reload'
+      preLoaderRoute: typeof KnowledgePacksReloadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/$id': {
@@ -1058,6 +1078,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   DashboardIdRoute: DashboardIdRoute,
+  KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
   PatternIdRoute: PatternIdRoute,
