@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
@@ -106,6 +107,11 @@ import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assess
 import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
 
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -599,6 +605,7 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
@@ -697,6 +704,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
@@ -796,6 +804,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
@@ -896,6 +905,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
@@ -994,6 +1004,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
@@ -1092,6 +1103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
@@ -1191,6 +1203,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
   AuditDashboardRoute: typeof AuditDashboardRoute
@@ -1276,6 +1289,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -2048,6 +2068,7 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   AuditAssessmentIdRoute: AuditAssessmentIdRoute,
   AuditDashboardRoute: AuditDashboardRoute,
