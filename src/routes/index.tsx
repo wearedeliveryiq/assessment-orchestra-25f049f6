@@ -66,7 +66,7 @@ function LandingPage() {
   });
 
   return (
-    <AppShell>
+    <AppShell action={<IdentityMenu />}>
       <section className="ribbon-panel rounded-xl px-6 py-10 sm:px-10 sm:py-14">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
           Delivery maturity intelligence
