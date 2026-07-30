@@ -28,6 +28,7 @@ import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-p
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
 import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
@@ -154,6 +155,11 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   id: '/api/assessments',
   path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
+  id: '/knowledge-pack/$id/',
+  path: '/knowledge-pack/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/internal/rules/': typeof InternalRulesIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/internal/rules': typeof InternalRulesIndexRoute
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -473,6 +481,7 @@ export interface FileRoutesById {
   '/internal/rules/': typeof InternalRulesIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -528,6 +537,7 @@ export interface FileRouteTypes {
     | '/internal/rules/'
     | '/internal/scores/'
     | '/internal/signals/'
+    | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -581,6 +591,7 @@ export interface FileRouteTypes {
     | '/internal/rules'
     | '/internal/scores'
     | '/internal/signals'
+    | '/knowledge-pack/$id'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/internal/rules/'
     | '/internal/scores/'
     | '/internal/signals/'
+    | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -686,6 +698,7 @@ export interface RootRouteChildren {
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
+  KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
 
@@ -822,6 +835,13 @@ declare module '@tanstack/react-router' {
       path: '/api/assessments'
       fullPath: '/api/assessments'
       preLoaderRoute: typeof ApiAssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-pack/$id/': {
+      id: '/knowledge-pack/$id/'
+      path: '/knowledge-pack/$id'
+      fullPath: '/knowledge-pack/$id/'
+      preLoaderRoute: typeof KnowledgePackIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/signals/': {
@@ -1138,6 +1158,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalRulesIndexRoute: InternalRulesIndexRoute,
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
+  KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
 export const routeTree = rootRouteImport
