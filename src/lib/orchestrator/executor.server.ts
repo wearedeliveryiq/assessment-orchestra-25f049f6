@@ -81,10 +81,13 @@ async function runExecution(executionId: string): Promise<void> {
   let execution = await repo.getExecution(executionId);
   if (!execution) return;
 
-  const session = await assessmentRepo.getSession(execution.assessmentSessionId);
+  const session = await assessmentRepo.getSession(
+    execution.assessmentSessionId,
+    execution.ownerKey,
+  );
   if (!session) return;
 
-  const pipeline = resolvePipeline(execution.pipelineId);
+  const pipeline = resolvePipeline();
 
   if (execution.status === "queued") {
     assertTransition(execution.status, "starting");
