@@ -75,6 +75,7 @@ import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/execution
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
@@ -424,6 +425,11 @@ const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
   path: '/api/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -507,6 +513,7 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -586,6 +593,7 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -666,6 +674,7 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -747,6 +756,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/login'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -826,6 +836,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs'
     | '/api/assessments/$id'
+    | '/api/auth/login'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -905,6 +916,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/login'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -984,6 +996,7 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
@@ -1492,6 +1505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id': {
       id: '/api/assessments/$id'
       path: '/$id'
@@ -1658,6 +1678,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
