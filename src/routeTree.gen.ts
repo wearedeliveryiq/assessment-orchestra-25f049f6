@@ -24,6 +24,7 @@ import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
+import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
@@ -133,6 +134,11 @@ const ObservationIdRoute = ObservationIdRouteImport.update({
 const NarrativeIdRoute = NarrativeIdRouteImport.update({
   id: '/narrative/$id',
   path: '/narrative/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
+  id: '/knowledge-packs/validate',
+  path: '/knowledge-packs/validate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
@@ -319,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -371,6 +378,7 @@ export interface FileRoutesByTo {
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -424,6 +432,7 @@ export interface FileRoutesById {
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -478,6 +487,7 @@ export interface FileRouteTypes {
     | '/api/assessments'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -530,6 +540,7 @@ export interface FileRouteTypes {
     | '/api/assessments'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -582,6 +593,7 @@ export interface FileRouteTypes {
     | '/api/assessments'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -635,6 +647,7 @@ export interface RootRouteChildren {
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   DashboardIdRoute: typeof DashboardIdRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
+  KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
   PatternIdRoute: typeof PatternIdRoute
@@ -781,6 +794,13 @@ declare module '@tanstack/react-router' {
       path: '/narrative/$id'
       fullPath: '/narrative/$id'
       preLoaderRoute: typeof NarrativeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/validate': {
+      id: '/knowledge-packs/validate'
+      path: '/knowledge-packs/validate'
+      fullPath: '/knowledge-packs/validate'
+      preLoaderRoute: typeof KnowledgePacksValidateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge-packs/reload': {
@@ -1079,6 +1099,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   DashboardIdRoute: DashboardIdRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
+  KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
   PatternIdRoute: PatternIdRoute,
