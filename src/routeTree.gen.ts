@@ -70,6 +70,7 @@ import { Route as AssessmentIdObservationsRouteImport } from './routes/assessmen
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
 import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
+import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
@@ -391,6 +392,11 @@ const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
   path: '/assessment/$id/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
+  id: '/api/executions/$id',
+  path: '/api/executions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -459,6 +465,7 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -530,6 +537,7 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -602,6 +610,7 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/executions/$id': typeof ApiExecutionsIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -675,6 +684,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -746,6 +756,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -817,6 +828,7 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/executions/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -888,6 +900,7 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  ApiExecutionsIdRoute: typeof ApiExecutionsIdRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
@@ -1356,6 +1369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/executions/$id': {
+      id: '/api/executions/$id'
+      path: '/api/executions/$id'
+      fullPath: '/api/executions/$id'
+      preLoaderRoute: typeof ApiExecutionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id': {
       id: '/api/assessments/$id'
       path: '/$id'
@@ -1485,6 +1505,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  ApiExecutionsIdRoute: ApiExecutionsIdRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
