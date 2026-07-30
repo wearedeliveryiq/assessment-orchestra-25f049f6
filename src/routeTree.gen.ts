@@ -86,6 +86,7 @@ import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/execution
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
 import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
 import { Route as ApiAuthPasswordForgotRouteImport } from './routes/api/auth.password.forgot'
+import { Route as ApiAuthPasswordChangeRouteImport } from './routes/api/auth.password.change'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -486,6 +487,11 @@ const ApiAuthPasswordForgotRoute = ApiAuthPasswordForgotRouteImport.update({
   path: '/api/auth/password/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthPasswordChangeRoute = ApiAuthPasswordChangeRouteImport.update({
+  id: '/api/auth/password/change',
+  path: '/api/auth/password/change',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -595,6 +601,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
@@ -680,6 +687,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
@@ -766,6 +774,7 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
@@ -853,6 +862,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
@@ -938,6 +948,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
@@ -1023,6 +1034,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
     | '/api/executions/$id/cancel'
@@ -1101,6 +1113,7 @@ export interface RootRouteChildren {
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
   KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
+  ApiAuthPasswordChangeRoute: typeof ApiAuthPasswordChangeRoute
   ApiAuthPasswordForgotRoute: typeof ApiAuthPasswordForgotRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
@@ -1646,6 +1659,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthPasswordForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/password/change': {
+      id: '/api/auth/password/change'
+      path: '/api/auth/password/change'
+      fullPath: '/api/auth/password/change'
+      preLoaderRoute: typeof ApiAuthPasswordChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
       path: '/submit'
@@ -1834,6 +1854,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
   KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
+  ApiAuthPasswordChangeRoute: ApiAuthPasswordChangeRoute,
   ApiAuthPasswordForgotRoute: ApiAuthPasswordForgotRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
