@@ -75,6 +75,7 @@ import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/execution
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
@@ -425,6 +426,11 @@ const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
   path: '/api/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
   id: '/api/auth/login',
   path: '/api/auth/login',
@@ -514,6 +520,7 @@ export interface FileRoutesByFullPath {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -594,6 +601,7 @@ export interface FileRoutesByTo {
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -675,6 +683,7 @@ export interface FileRoutesById {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
@@ -757,6 +766,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/api/auth/login'
+    | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -837,6 +847,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs'
     | '/api/assessments/$id'
     | '/api/auth/login'
+    | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -917,6 +928,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/api/auth/login'
+    | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/executions/$id'
     | '/api/executions/history'
@@ -997,6 +1009,7 @@ export interface RootRouteChildren {
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
@@ -1505,6 +1518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/login': {
       id: '/api/auth/login'
       path: '/api/auth/login'
@@ -1679,6 +1699,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
