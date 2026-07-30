@@ -895,6 +895,325 @@ export type Database = {
         }
         Relationships: []
       }
+      identity_audit_events: {
+        Row: {
+          created_at: string
+          email: string
+          event_type: string
+          id: string
+          ip_address: string
+          metadata: Json
+          organisation_id: string | null
+          outcome: string
+          severity: string
+          user_agent: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          event_type: string
+          id?: string
+          ip_address?: string
+          metadata?: Json
+          organisation_id?: string | null
+          outcome?: string
+          severity?: string
+          user_agent?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event_type?: string
+          id?: string
+          ip_address?: string
+          metadata?: Json
+          organisation_id?: string | null
+          outcome?: string
+          severity?: string
+          user_agent?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      identity_profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          email: string
+          email_verified: boolean
+          failed_login_count: number
+          first_name: string
+          id: string
+          last_login_at: string | null
+          last_name: string
+          locked_until: string | null
+          mfa_enabled: boolean
+          password_changed_at: string
+          preferred_language: string
+          profile_image: string | null
+          status: Database["public"]["Enums"]["identity_user_status"]
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          email: string
+          email_verified?: boolean
+          failed_login_count?: number
+          first_name?: string
+          id: string
+          last_login_at?: string | null
+          last_name?: string
+          locked_until?: string | null
+          mfa_enabled?: boolean
+          password_changed_at?: string
+          preferred_language?: string
+          profile_image?: string | null
+          status?: Database["public"]["Enums"]["identity_user_status"]
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          email?: string
+          email_verified?: boolean
+          failed_login_count?: number
+          first_name?: string
+          id?: string
+          last_login_at?: string | null
+          last_name?: string
+          locked_until?: string | null
+          mfa_enabled?: boolean
+          password_changed_at?: string
+          preferred_language?: string
+          profile_image?: string | null
+          status?: Database["public"]["Enums"]["identity_user_status"]
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      identity_sessions: {
+        Row: {
+          browser: string
+          created_at: string
+          device: string
+          expires_at: string
+          id: string
+          ip_address: string
+          last_activity: string
+          remember_me: boolean
+          revoked: boolean
+          revoked_at: string | null
+          session_key: string
+          user_id: string
+        }
+        Insert: {
+          browser?: string
+          created_at?: string
+          device?: string
+          expires_at?: string
+          id?: string
+          ip_address?: string
+          last_activity?: string
+          remember_me?: boolean
+          revoked?: boolean
+          revoked_at?: string | null
+          session_key: string
+          user_id: string
+        }
+        Update: {
+          browser?: string
+          created_at?: string
+          device?: string
+          expires_at?: string
+          id?: string
+          ip_address?: string
+          last_activity?: string
+          remember_me?: boolean
+          revoked?: boolean
+          revoked_at?: string | null
+          session_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      login_attempts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          ip_address: string
+          reason: string
+          successful: boolean
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          ip_address?: string
+          reason?: string
+          successful?: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          ip_address?: string
+          reason?: string
+          successful?: boolean
+        }
+        Relationships: []
+      }
+      organisation_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          organisation_id: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status: Database["public"]["Enums"]["invitation_status"]
+          token_hash: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          invited_by?: string | null
+          organisation_id: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["invitation_status"]
+          token_hash: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          organisation_id?: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["invitation_status"]
+          token_hash?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_invitations_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organisation_memberships: {
+        Row: {
+          created_at: string
+          id: string
+          invited_by: string | null
+          joined_at: string
+          organisation_id: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status: Database["public"]["Enums"]["membership_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          organisation_id: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          organisation_id?: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_memberships_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organisations: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      password_history: {
+        Row: {
+          created_at: string
+          id: string
+          password_fingerprint: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          password_fingerprint: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          password_fingerprint?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       runtime_execution_stages: {
         Row: {
           assessment_session_id: string
@@ -1047,12 +1366,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          granted_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["platform_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["platform_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_org_role: {
+        Args: {
+          _org_id: string
+          _role: Database["public"]["Enums"]["platform_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["platform_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_org_member: {
+        Args: { _org_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       assessment_status:
@@ -1062,6 +1423,21 @@ export type Database = {
         | "processing"
         | "completed"
         | "archived"
+      identity_user_status:
+        | "pending_verification"
+        | "active"
+        | "locked"
+        | "suspended"
+        | "disabled"
+      invitation_status: "pending" | "accepted" | "revoked" | "expired"
+      membership_status: "invited" | "active" | "removed"
+      platform_role:
+        | "platform_admin"
+        | "org_admin"
+        | "assessment_manager"
+        | "contributor"
+        | "reviewer"
+        | "read_only"
       stage_status: "pending" | "running" | "completed" | "failed" | "skipped"
     }
     CompositeTypes: {
@@ -1197,6 +1573,23 @@ export const Constants = {
         "processing",
         "completed",
         "archived",
+      ],
+      identity_user_status: [
+        "pending_verification",
+        "active",
+        "locked",
+        "suspended",
+        "disabled",
+      ],
+      invitation_status: ["pending", "accepted", "revoked", "expired"],
+      membership_status: ["invited", "active", "removed"],
+      platform_role: [
+        "platform_admin",
+        "org_admin",
+        "assessment_manager",
+        "contributor",
+        "reviewer",
+        "read_only",
       ],
       stage_status: ["pending", "running", "completed", "failed", "skipped"],
     },

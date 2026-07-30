@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
@@ -27,6 +28,12 @@ import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as AuthRegisterRouteImport } from './routes/auth.register'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthInvitationRouteImport } from './routes/auth.invitation'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
 import { Route as AuditHealthRouteImport } from './routes/audit.health'
 import { Route as AuditEventsRouteImport } from './routes/audit.events'
@@ -74,11 +81,25 @@ import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
+import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify-email'
+import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
+import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
+import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
+import { Route as ApiAuthProfileRouteImport } from './routes/api/auth.profile'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
+import { Route as ApiAuthInvitationsRouteImport } from './routes/api/auth.invitations'
+import { Route as ApiAuthActivityRouteImport } from './routes/api/auth.activity'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
+import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.verify-email.resend'
+import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
+import { Route as ApiAuthPasswordForgotRouteImport } from './routes/api/auth.password.forgot'
+import { Route as ApiAuthPasswordChangeRouteImport } from './routes/api/auth.password.change'
+import { Route as ApiAuthInvitationsAcceptRouteImport } from './routes/api/auth.invitations.accept'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -86,6 +107,11 @@ import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assess
 import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
 
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -174,6 +200,36 @@ const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
 const DashboardIdRoute = DashboardIdRouteImport.update({
   id: '/dashboard/$id',
   path: '/dashboard/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
+  id: '/auth/verify-email',
+  path: '/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthInvitationRoute = AuthInvitationRouteImport.update({
+  id: '/auth/invitation',
+  path: '/auth/invitation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditRetentionRoute = AuditRetentionRouteImport.update({
@@ -418,6 +474,51 @@ const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
   path: '/api/executions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
+  id: '/api/auth/verify-email',
+  path: '/api/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSessionsRoute = ApiAuthSessionsRouteImport.update({
+  id: '/api/auth/sessions',
+  path: '/api/auth/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSessionRoute = ApiAuthSessionRouteImport.update({
+  id: '/api/auth/session',
+  path: '/api/auth/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
+  id: '/api/auth/register',
+  path: '/api/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthProfileRoute = ApiAuthProfileRouteImport.update({
+  id: '/api/auth/profile',
+  path: '/api/auth/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthInvitationsRoute = ApiAuthInvitationsRouteImport.update({
+  id: '/api/auth/invitations',
+  path: '/api/auth/invitations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthActivityRoute = ApiAuthActivityRouteImport.update({
+  id: '/api/auth/activity',
+  path: '/api/auth/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -444,6 +545,33 @@ const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
   path: '/cancel',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiAuthVerifyEmailResendRoute =
+  ApiAuthVerifyEmailResendRouteImport.update({
+    id: '/resend',
+    path: '/resend',
+    getParentRoute: () => ApiAuthVerifyEmailRoute,
+  } as any)
+const ApiAuthSessionsIdRoute = ApiAuthSessionsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAuthSessionsRoute,
+} as any)
+const ApiAuthPasswordForgotRoute = ApiAuthPasswordForgotRouteImport.update({
+  id: '/api/auth/password/forgot',
+  path: '/api/auth/password/forgot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthPasswordChangeRoute = ApiAuthPasswordChangeRouteImport.update({
+  id: '/api/auth/password/change',
+  path: '/api/auth/password/change',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthInvitationsAcceptRoute =
+  ApiAuthInvitationsAcceptRouteImport.update({
+    id: '/accept',
+    path: '/accept',
+    getParentRoute: () => ApiAuthInvitationsRoute,
+  } as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -477,12 +605,19 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -501,6 +636,15 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -548,6 +692,11 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
+  '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -555,12 +704,19 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -579,6 +735,15 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -626,6 +791,11 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
+  '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -634,12 +804,19 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -658,6 +835,15 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -705,6 +891,11 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
+  '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
+  '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
+  '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -714,12 +905,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/invitation'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -738,6 +936,15 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/profile'
+    | '/api/auth/register'
+    | '/api/auth/session'
+    | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -785,6 +992,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
+    | '/api/auth/password/change'
+    | '/api/auth/password/forgot'
+    | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -792,12 +1004,19 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/invitation'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -816,6 +1035,15 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/profile'
+    | '/api/auth/register'
+    | '/api/auth/session'
+    | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -863,6 +1091,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
+    | '/api/auth/password/change'
+    | '/api/auth/password/forgot'
+    | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -870,12 +1103,19 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/api/assessments'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/invitation'
+    | '/auth/login'
+    | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -894,6 +1134,15 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/profile'
+    | '/api/auth/register'
+    | '/api/auth/session'
+    | '/api/auth/sessions'
+    | '/api/auth/verify-email'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -941,6 +1190,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
+    | '/api/auth/password/change'
+    | '/api/auth/password/forgot'
+    | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -949,12 +1203,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
   AuditDashboardRoute: typeof AuditDashboardRoute
   AuditEventsRoute: typeof AuditEventsRoute
   AuditHealthRoute: typeof AuditHealthRoute
   AuditRetentionRoute: typeof AuditRetentionRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthInvitationRoute: typeof AuthInvitationRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   DashboardIdRoute: typeof DashboardIdRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
@@ -972,6 +1233,15 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  ApiAuthActivityRoute: typeof ApiAuthActivityRoute
+  ApiAuthInvitationsRoute: typeof ApiAuthInvitationsRouteWithChildren
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
+  ApiAuthProfileRoute: typeof ApiAuthProfileRoute
+  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
+  ApiAuthSessionRoute: typeof ApiAuthSessionRoute
+  ApiAuthSessionsRoute: typeof ApiAuthSessionsRouteWithChildren
+  ApiAuthVerifyEmailRoute: typeof ApiAuthVerifyEmailRouteWithChildren
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
@@ -1012,11 +1282,20 @@ export interface RootRouteChildren {
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
   KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
+  ApiAuthPasswordChangeRoute: typeof ApiAuthPasswordChangeRoute
+  ApiAuthPasswordForgotRoute: typeof ApiAuthPasswordForgotRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -1141,6 +1420,48 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/$id'
       fullPath: '/dashboard/$id'
       preLoaderRoute: typeof DashboardIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/invitation': {
+      id: '/auth/invitation'
+      path: '/auth/invitation'
+      fullPath: '/auth/invitation'
+      preLoaderRoute: typeof AuthInvitationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit/retention': {
@@ -1472,6 +1793,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/verify-email': {
+      id: '/api/auth/verify-email'
+      path: '/api/auth/verify-email'
+      fullPath: '/api/auth/verify-email'
+      preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/sessions': {
+      id: '/api/auth/sessions'
+      path: '/api/auth/sessions'
+      fullPath: '/api/auth/sessions'
+      preLoaderRoute: typeof ApiAuthSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/session': {
+      id: '/api/auth/session'
+      path: '/api/auth/session'
+      fullPath: '/api/auth/session'
+      preLoaderRoute: typeof ApiAuthSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/register': {
+      id: '/api/auth/register'
+      path: '/api/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiAuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/profile': {
+      id: '/api/auth/profile'
+      path: '/api/auth/profile'
+      fullPath: '/api/auth/profile'
+      preLoaderRoute: typeof ApiAuthProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations': {
+      id: '/api/auth/invitations'
+      path: '/api/auth/invitations'
+      fullPath: '/api/auth/invitations'
+      preLoaderRoute: typeof ApiAuthInvitationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/activity': {
+      id: '/api/auth/activity'
+      path: '/api/auth/activity'
+      fullPath: '/api/auth/activity'
+      preLoaderRoute: typeof ApiAuthActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id': {
       id: '/api/assessments/$id'
       path: '/$id'
@@ -1506,6 +1890,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/executions/$id/cancel'
       preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
+    }
+    '/api/auth/verify-email/resend': {
+      id: '/api/auth/verify-email/resend'
+      path: '/resend'
+      fullPath: '/api/auth/verify-email/resend'
+      preLoaderRoute: typeof ApiAuthVerifyEmailResendRouteImport
+      parentRoute: typeof ApiAuthVerifyEmailRoute
+    }
+    '/api/auth/sessions/$id': {
+      id: '/api/auth/sessions/$id'
+      path: '/$id'
+      fullPath: '/api/auth/sessions/$id'
+      preLoaderRoute: typeof ApiAuthSessionsIdRouteImport
+      parentRoute: typeof ApiAuthSessionsRoute
+    }
+    '/api/auth/password/forgot': {
+      id: '/api/auth/password/forgot'
+      path: '/api/auth/password/forgot'
+      fullPath: '/api/auth/password/forgot'
+      preLoaderRoute: typeof ApiAuthPasswordForgotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/password/change': {
+      id: '/api/auth/password/change'
+      path: '/api/auth/password/change'
+      fullPath: '/api/auth/password/change'
+      preLoaderRoute: typeof ApiAuthPasswordChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations/accept': {
+      id: '/api/auth/invitations/accept'
+      path: '/accept'
+      fullPath: '/api/auth/invitations/accept'
+      preLoaderRoute: typeof ApiAuthInvitationsAcceptRouteImport
+      parentRoute: typeof ApiAuthInvitationsRoute
     }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
@@ -1597,6 +2016,40 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
   ReportIdRouteChildren,
 )
 
+interface ApiAuthInvitationsRouteChildren {
+  ApiAuthInvitationsAcceptRoute: typeof ApiAuthInvitationsAcceptRoute
+}
+
+const ApiAuthInvitationsRouteChildren: ApiAuthInvitationsRouteChildren = {
+  ApiAuthInvitationsAcceptRoute: ApiAuthInvitationsAcceptRoute,
+}
+
+const ApiAuthInvitationsRouteWithChildren =
+  ApiAuthInvitationsRoute._addFileChildren(ApiAuthInvitationsRouteChildren)
+
+interface ApiAuthSessionsRouteChildren {
+  ApiAuthSessionsIdRoute: typeof ApiAuthSessionsIdRoute
+}
+
+const ApiAuthSessionsRouteChildren: ApiAuthSessionsRouteChildren = {
+  ApiAuthSessionsIdRoute: ApiAuthSessionsIdRoute,
+}
+
+const ApiAuthSessionsRouteWithChildren = ApiAuthSessionsRoute._addFileChildren(
+  ApiAuthSessionsRouteChildren,
+)
+
+interface ApiAuthVerifyEmailRouteChildren {
+  ApiAuthVerifyEmailResendRoute: typeof ApiAuthVerifyEmailResendRoute
+}
+
+const ApiAuthVerifyEmailRouteChildren: ApiAuthVerifyEmailRouteChildren = {
+  ApiAuthVerifyEmailResendRoute: ApiAuthVerifyEmailResendRoute,
+}
+
+const ApiAuthVerifyEmailRouteWithChildren =
+  ApiAuthVerifyEmailRoute._addFileChildren(ApiAuthVerifyEmailRouteChildren)
+
 interface ApiExecutionsIdRouteChildren {
   ApiExecutionsIdCancelRoute: typeof ApiExecutionsIdCancelRoute
   ApiExecutionsIdRetryRoute: typeof ApiExecutionsIdRetryRoute
@@ -1615,12 +2068,19 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   AuditAssessmentIdRoute: AuditAssessmentIdRoute,
   AuditDashboardRoute: AuditDashboardRoute,
   AuditEventsRoute: AuditEventsRoute,
   AuditHealthRoute: AuditHealthRoute,
   AuditRetentionRoute: AuditRetentionRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthInvitationRoute: AuthInvitationRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   DashboardIdRoute: DashboardIdRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
@@ -1638,6 +2098,15 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  ApiAuthActivityRoute: ApiAuthActivityRoute,
+  ApiAuthInvitationsRoute: ApiAuthInvitationsRouteWithChildren,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiAuthLogoutRoute: ApiAuthLogoutRoute,
+  ApiAuthProfileRoute: ApiAuthProfileRoute,
+  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
+  ApiAuthSessionRoute: ApiAuthSessionRoute,
+  ApiAuthSessionsRoute: ApiAuthSessionsRouteWithChildren,
+  ApiAuthVerifyEmailRoute: ApiAuthVerifyEmailRouteWithChildren,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
@@ -1678,6 +2147,8 @@ const rootRouteChildren: RootRouteChildren = {
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
   KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
+  ApiAuthPasswordChangeRoute: ApiAuthPasswordChangeRoute,
+  ApiAuthPasswordForgotRoute: ApiAuthPasswordForgotRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
 export const routeTree = rootRouteImport
