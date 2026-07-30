@@ -895,6 +895,158 @@ export type Database = {
         }
         Relationships: []
       }
+      runtime_execution_stages: {
+        Row: {
+          assessment_session_id: string
+          attempt: number
+          completed_at: string | null
+          created_at: string
+          depends_on: string[]
+          duration_ms: number
+          engine: string
+          error_message: string | null
+          execution_id: string
+          failure_class: string | null
+          id: string
+          max_attempts: number
+          retry_history: Json
+          sequence: number
+          stage_id: string
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_session_id: string
+          attempt?: number
+          completed_at?: string | null
+          created_at?: string
+          depends_on?: string[]
+          duration_ms?: number
+          engine: string
+          error_message?: string | null
+          execution_id: string
+          failure_class?: string | null
+          id?: string
+          max_attempts?: number
+          retry_history?: Json
+          sequence: number
+          stage_id: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_session_id?: string
+          attempt?: number
+          completed_at?: string | null
+          created_at?: string
+          depends_on?: string[]
+          duration_ms?: number
+          engine?: string
+          error_message?: string | null
+          execution_id?: string
+          failure_class?: string | null
+          id?: string
+          max_attempts?: number
+          retry_history?: Json
+          sequence?: number
+          stage_id?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "runtime_execution_stages_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "runtime_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      runtime_executions: {
+        Row: {
+          assessment_session_id: string
+          cancel_requested: boolean
+          completed_at: string | null
+          correlation_id: string
+          created_at: string
+          current_stage: string | null
+          duration_ms: number
+          error_message: string | null
+          execution_mode: string
+          failure_class: string | null
+          heartbeat_at: string | null
+          id: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          metadata: Json
+          organisation_name: string
+          owner_key: string
+          pipeline_id: string
+          pipeline_version: string
+          progress: number
+          retry_count: number
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_session_id: string
+          cancel_requested?: boolean
+          completed_at?: string | null
+          correlation_id?: string
+          created_at?: string
+          current_stage?: string | null
+          duration_ms?: number
+          error_message?: string | null
+          execution_mode?: string
+          failure_class?: string | null
+          heartbeat_at?: string | null
+          id?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          organisation_name?: string
+          owner_key: string
+          pipeline_id?: string
+          pipeline_version?: string
+          progress?: number
+          retry_count?: number
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_session_id?: string
+          cancel_requested?: boolean
+          completed_at?: string | null
+          correlation_id?: string
+          created_at?: string
+          current_stage?: string | null
+          duration_ms?: number
+          error_message?: string | null
+          execution_mode?: string
+          failure_class?: string | null
+          heartbeat_at?: string | null
+          id?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          organisation_name?: string
+          owner_key?: string
+          pipeline_id?: string
+          pipeline_version?: string
+          progress?: number
+          retry_count?: number
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
