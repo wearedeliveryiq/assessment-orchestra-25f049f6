@@ -74,6 +74,7 @@ import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
+import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
 import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
@@ -422,6 +423,11 @@ const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
   path: '/api/executions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSessionsRoute = ApiAuthSessionsRouteImport.update({
+  id: '/api/auth/sessions',
+  path: '/api/auth/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSessionRoute = ApiAuthSessionRouteImport.update({
   id: '/api/auth/session',
   path: '/api/auth/session',
@@ -529,6 +535,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -611,6 +618,7 @@ export interface FileRoutesByTo {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -694,6 +702,7 @@ export interface FileRoutesById {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
+  '/api/auth/sessions': typeof ApiAuthSessionsRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -778,6 +787,7 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/auth/session'
+    | '/api/auth/sessions'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -860,6 +870,7 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/auth/session'
+    | '/api/auth/sessions'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -942,6 +953,7 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/register'
     | '/api/auth/session'
+    | '/api/auth/sessions'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -1024,6 +1036,7 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiAuthSessionRoute: typeof ApiAuthSessionRoute
+  ApiAuthSessionsRoute: typeof ApiAuthSessionsRoute
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
@@ -1524,6 +1537,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/sessions': {
+      id: '/api/auth/sessions'
+      path: '/api/auth/sessions'
+      fullPath: '/api/auth/sessions'
+      preLoaderRoute: typeof ApiAuthSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/session': {
       id: '/api/auth/session'
       path: '/api/auth/session'
@@ -1722,6 +1742,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiAuthSessionRoute: ApiAuthSessionRoute,
+  ApiAuthSessionsRoute: ApiAuthSessionsRoute,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
