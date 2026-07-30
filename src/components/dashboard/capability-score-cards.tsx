@@ -26,7 +26,7 @@ export function CapabilityScoreCards() {
                 className="ribbon-edge h-full w-full rounded-lg border border-border bg-surface/50 p-4 text-left transition-all duration-300 hover:border-primary/50 hover:bg-surface"
               >
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
-                  <p className="min-w-0 truncate text-sm font-semibold">{card.dimension}</p>
+                  <p className="min-w-0 text-sm font-semibold leading-snug">{card.dimension}</p>
                   <SeverityPill severity={card.severity} />
                 </div>
                 <p className="mt-3 font-display text-3xl font-bold tabular-nums">
