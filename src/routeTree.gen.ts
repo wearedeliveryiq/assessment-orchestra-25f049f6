@@ -54,6 +54,7 @@ import { Route as InternalPatternsIdRouteImport } from './routes/internal.patter
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
 import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
 import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
+import { Route as InternalAuditIdRouteImport } from './routes/internal.audit.$id'
 import { Route as ExplainEntityTypeEntityIdRouteImport } from './routes/explain.$entityType.$entityId'
 import { Route as EvidenceEntityTypeEntityIdRouteImport } from './routes/evidence.$entityType.$entityId'
 import { Route as AuditEventIdRouteImport } from './routes/audit.event.$id'
@@ -305,6 +306,11 @@ const InternalKnowledgePacksIdRoute =
     path: '/internal/knowledge-packs/$id',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InternalAuditIdRoute = InternalAuditIdRouteImport.update({
+  id: '/internal/audit/$id',
+  path: '/internal/audit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExplainEntityTypeEntityIdRoute =
   ExplainEntityTypeEntityIdRouteImport.update({
     id: '/explain/$entityType/$entityId',
@@ -462,6 +468,7 @@ export interface FileRoutesByFullPath {
   '/audit/event/$id': typeof AuditEventIdRoute
   '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
   '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -531,6 +538,7 @@ export interface FileRoutesByTo {
   '/audit/event/$id': typeof AuditEventIdRoute
   '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
   '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -601,6 +609,7 @@ export interface FileRoutesById {
   '/audit/event/$id': typeof AuditEventIdRoute
   '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
   '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -672,6 +681,7 @@ export interface FileRouteTypes {
     | '/audit/event/$id'
     | '/evidence/$entityType/$entityId'
     | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -741,6 +751,7 @@ export interface FileRouteTypes {
     | '/audit/event/$id'
     | '/evidence/$entityType/$entityId'
     | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -810,6 +821,7 @@ export interface FileRouteTypes {
     | '/audit/event/$id'
     | '/evidence/$entityType/$entityId'
     | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -879,6 +891,7 @@ export interface RootRouteChildren {
   AuditEventIdRoute: typeof AuditEventIdRoute
   EvidenceEntityTypeEntityIdRoute: typeof EvidenceEntityTypeEntityIdRoute
   ExplainEntityTypeEntityIdRoute: typeof ExplainEntityTypeEntityIdRoute
+  InternalAuditIdRoute: typeof InternalAuditIdRoute
   InternalKnowledgePacksIdRoute: typeof InternalKnowledgePacksIdRoute
   InternalNarrativesIdRoute: typeof InternalNarrativesIdRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
@@ -1219,6 +1232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/audit/$id': {
+      id: '/internal/audit/$id'
+      path: '/internal/audit/$id'
+      fullPath: '/internal/audit/$id'
+      preLoaderRoute: typeof InternalAuditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explain/$entityType/$entityId': {
       id: '/explain/$entityType/$entityId'
       path: '/explain/$entityType/$entityId'
@@ -1459,6 +1479,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditEventIdRoute: AuditEventIdRoute,
   EvidenceEntityTypeEntityIdRoute: EvidenceEntityTypeEntityIdRoute,
   ExplainEntityTypeEntityIdRoute: ExplainEntityTypeEntityIdRoute,
+  InternalAuditIdRoute: InternalAuditIdRoute,
   InternalKnowledgePacksIdRoute: InternalKnowledgePacksIdRoute,
   InternalNarrativesIdRoute: InternalNarrativesIdRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
