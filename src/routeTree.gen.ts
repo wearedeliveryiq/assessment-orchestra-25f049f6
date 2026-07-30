@@ -70,6 +70,7 @@ import { Route as AssessmentIdObservationsRouteImport } from './routes/assessmen
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
 import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
+import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
@@ -396,6 +397,11 @@ const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
   path: '/assessment/$id/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
+  id: '/api/executions/monitor',
+  path: '/api/executions/monitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiExecutionsHistoryRoute = ApiExecutionsHistoryRouteImport.update({
   id: '/api/executions/history',
   path: '/api/executions/history',
@@ -491,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -567,6 +574,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -644,6 +652,7 @@ export interface FileRoutesById {
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
+  '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -722,6 +731,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id'
     | '/api/executions/$id'
     | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -798,6 +808,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id'
     | '/api/executions/$id'
     | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -874,6 +885,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id'
     | '/api/executions/$id'
     | '/api/executions/history'
+    | '/api/executions/monitor'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -950,6 +962,7 @@ export interface RootRouteChildren {
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
+  ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
@@ -1418,6 +1431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/executions/monitor': {
+      id: '/api/executions/monitor'
+      path: '/api/executions/monitor'
+      fullPath: '/api/executions/monitor'
+      preLoaderRoute: typeof ApiExecutionsMonitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/executions/history': {
       id: '/api/executions/history'
       path: '/api/executions/history'
@@ -1600,6 +1620,7 @@ const rootRouteChildren: RootRouteChildren = {
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
+  ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
