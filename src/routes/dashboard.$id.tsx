@@ -12,6 +12,7 @@ import { ExecutiveSummary } from "@/components/dashboard/executive-summary";
 import { MaturityWidget } from "@/components/dashboard/maturity-widget";
 import { PatternsWidget } from "@/components/dashboard/patterns-widget";
 import { RecommendationsWidget } from "@/components/dashboard/recommendations-widget";
+import { ReportCenter } from "@/components/dashboard/report-center";
 import { WidgetSkeleton } from "@/components/dashboard/widget";
 import { DashboardProvider, useDashboard } from "@/lib/dashboard/dashboard-provider";
 
@@ -87,6 +88,7 @@ function DashboardBody() {
             <PatternsWidget />
             <RecommendationsWidget />
           </div>
+          <ReportCenter />
           <AssessmentHealthWidget />
         </div>
         <EvidenceExplorer />
