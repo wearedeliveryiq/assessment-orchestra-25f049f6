@@ -45,6 +45,7 @@ import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.
 import { Route as AssessmentIdPatternsRouteImport } from './routes/assessment.$id.patterns'
 import { Route as AssessmentIdObservationsRouteImport } from './routes/assessment.$id.observations'
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
+import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
@@ -234,6 +235,11 @@ const AssessmentIdNarrativeRoute = AssessmentIdNarrativeRouteImport.update({
   path: '/assessment/$id/narrative',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
+  id: '/assessment/$id/dashboard',
+  path: '/assessment/$id/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -281,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -325,6 +332,7 @@ export interface FileRoutesByTo {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -416,6 +425,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
+    | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -460,6 +470,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
+    | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -504,6 +515,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/api/assessments/$id'
+    | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -548,6 +560,7 @@ export interface RootRouteChildren {
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
+  AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
   AssessmentIdPatternsRoute: typeof AssessmentIdPatternsRoute
@@ -826,6 +839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdNarrativeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assessment/$id/dashboard': {
+      id: '/assessment/$id/dashboard'
+      path: '/assessment/$id/dashboard'
+      fullPath: '/assessment/$id/dashboard'
+      preLoaderRoute: typeof AssessmentIdDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments/$id': {
       id: '/api/assessments/$id'
       path: '/$id'
@@ -917,6 +937,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeSignalsRoute: RuntimeSignalsRoute,
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
+  AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
   AssessmentIdPatternsRoute: AssessmentIdPatternsRoute,
