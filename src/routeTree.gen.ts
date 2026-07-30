@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
 import { Route as ScoreIdRouteImport } from './routes/score.$id'
 import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
@@ -61,6 +62,11 @@ import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assess
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
+  id: '/knowledge-packs/',
+  path: '/knowledge-packs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignalIdRoute = SignalIdRouteImport.update({
@@ -319,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -369,6 +376,7 @@ export interface FileRoutesByTo {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -472,6 +481,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -572,6 +583,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -623,6 +635,7 @@ export interface RootRouteChildren {
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
+  KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
@@ -657,6 +670,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/': {
+      id: '/knowledge-packs/'
+      path: '/knowledge-packs'
+      fullPath: '/knowledge-packs/'
+      preLoaderRoute: typeof KnowledgePacksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signal/$id': {
@@ -1051,6 +1071,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeSignalsRoute: RuntimeSignalsRoute,
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
+  KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
