@@ -221,6 +221,101 @@ export type Database = {
           },
         ]
       }
+      assessment_reports: {
+        Row: {
+          branding: Json
+          checksum: string
+          completed_at: string | null
+          content_type: string
+          created_at: string
+          duration_ms: number
+          error: string | null
+          file_size: number
+          filename: string
+          format: string
+          id: string
+          knowledge_pack: string
+          knowledge_pack_version: string
+          metadata: Json
+          owner_key: string
+          report_type: string
+          requested_at: string
+          session_id: string
+          started_at: string | null
+          status: string
+          storage_path: string | null
+          template_id: string
+          title: string
+          updated_at: string
+          validation: Json
+          version: number
+        }
+        Insert: {
+          branding?: Json
+          checksum?: string
+          completed_at?: string | null
+          content_type?: string
+          created_at?: string
+          duration_ms?: number
+          error?: string | null
+          file_size?: number
+          filename?: string
+          format: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          owner_key: string
+          report_type: string
+          requested_at?: string
+          session_id: string
+          started_at?: string | null
+          status?: string
+          storage_path?: string | null
+          template_id?: string
+          title?: string
+          updated_at?: string
+          validation?: Json
+          version?: number
+        }
+        Update: {
+          branding?: Json
+          checksum?: string
+          completed_at?: string | null
+          content_type?: string
+          created_at?: string
+          duration_ms?: number
+          error?: string | null
+          file_size?: number
+          filename?: string
+          format?: string
+          id?: string
+          knowledge_pack?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          owner_key?: string
+          report_type?: string
+          requested_at?: string
+          session_id?: string
+          started_at?: string | null
+          status?: string
+          storage_path?: string | null
+          template_id?: string
+          title?: string
+          updated_at?: string
+          validation?: Json
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_reports_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_responses: {
         Row: {
           answered_at: string

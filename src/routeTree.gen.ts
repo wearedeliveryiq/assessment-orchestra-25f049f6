@@ -19,6 +19,7 @@ import { Route as RuntimePatternsRouteImport } from './routes/runtime.patterns'
 import { Route as RuntimeObservationsRouteImport } from './routes/runtime.observations'
 import { Route as RuntimeNarrativeRouteImport } from './routes/runtime.narrative'
 import { Route as RuleIdRouteImport } from './routes/rule.$id'
+import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
@@ -31,6 +32,7 @@ import { Route as InternalPatternsIndexRouteImport } from './routes/internal.pat
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
 import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.narratives.index'
 import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
+import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
 import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
 import { Route as InternalScoresIdRouteImport } from './routes/internal.scores.$id'
 import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
@@ -42,6 +44,7 @@ import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id
 import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
 import { Route as AssessmentIdRulesRouteImport } from './routes/assessment.$id.rules'
 import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
+import { Route as AssessmentIdReportsRouteImport } from './routes/assessment.$id.reports'
 import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.$id.processing'
 import { Route as AssessmentIdPatternsRouteImport } from './routes/assessment.$id.patterns'
 import { Route as AssessmentIdObservationsRouteImport } from './routes/assessment.$id.observations'
@@ -105,6 +108,11 @@ const RuleIdRoute = RuleIdRouteImport.update({
   path: '/rule/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportIdRoute = ReportIdRouteImport.update({
+  id: '/report/$id',
+  path: '/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PatternIdRoute = PatternIdRouteImport.update({
   id: '/pattern/$id',
   path: '/pattern/$id',
@@ -166,6 +174,11 @@ const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
   path: '/assessment/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
+  getParentRoute: () => ReportIdRoute,
+} as any)
 const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
   id: '/internal/signals/$id',
   path: '/internal/signals/$id',
@@ -219,6 +232,11 @@ const AssessmentIdRulesRoute = AssessmentIdRulesRouteImport.update({
 const AssessmentIdResultsRoute = AssessmentIdResultsRouteImport.update({
   id: '/assessment/$id/results',
   path: '/assessment/$id/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdReportsRoute = AssessmentIdReportsRouteImport.update({
+  id: '/assessment/$id/reports',
+  path: '/assessment/$id/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessmentIdProcessingRoute = AssessmentIdProcessingRouteImport.update({
@@ -291,6 +309,7 @@ export interface FileRoutesByFullPath {
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
+  '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
   '/runtime/narrative': typeof RuntimeNarrativeRoute
   '/runtime/observations': typeof RuntimeObservationsRoute
@@ -306,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/reports': typeof AssessmentIdReportsRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
@@ -317,6 +337,7 @@ export interface FileRoutesByFullPath {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
@@ -338,6 +359,7 @@ export interface FileRoutesByTo {
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
+  '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
   '/runtime/narrative': typeof RuntimeNarrativeRoute
   '/runtime/observations': typeof RuntimeObservationsRoute
@@ -353,6 +375,7 @@ export interface FileRoutesByTo {
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/reports': typeof AssessmentIdReportsRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
@@ -364,6 +387,7 @@ export interface FileRoutesByTo {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
   '/internal/narratives': typeof InternalNarrativesIndexRoute
   '/internal/observations': typeof InternalObservationsIndexRoute
@@ -386,6 +410,7 @@ export interface FileRoutesById {
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
+  '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
   '/runtime/narrative': typeof RuntimeNarrativeRoute
   '/runtime/observations': typeof RuntimeObservationsRoute
@@ -401,6 +426,7 @@ export interface FileRoutesById {
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
   '/assessment/$id/processing': typeof AssessmentIdProcessingRoute
+  '/assessment/$id/reports': typeof AssessmentIdReportsRoute
   '/assessment/$id/results': typeof AssessmentIdResultsRoute
   '/assessment/$id/rules': typeof AssessmentIdRulesRoute
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
@@ -412,6 +438,7 @@ export interface FileRoutesById {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
@@ -435,6 +462,7 @@ export interface FileRouteTypes {
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
+    | '/report/$id'
     | '/rule/$id'
     | '/runtime/narrative'
     | '/runtime/observations'
@@ -450,6 +478,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
     | '/assessment/$id/processing'
+    | '/assessment/$id/reports'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
     | '/assessment/$id/scores'
@@ -461,6 +490,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/report/$id/download'
     | '/assessment/$id/'
     | '/internal/narratives/'
     | '/internal/observations/'
@@ -482,6 +512,7 @@ export interface FileRouteTypes {
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
+    | '/report/$id'
     | '/rule/$id'
     | '/runtime/narrative'
     | '/runtime/observations'
@@ -497,6 +528,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
     | '/assessment/$id/processing'
+    | '/assessment/$id/reports'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
     | '/assessment/$id/scores'
@@ -508,6 +540,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/report/$id/download'
     | '/assessment/$id'
     | '/internal/narratives'
     | '/internal/observations'
@@ -529,6 +562,7 @@ export interface FileRouteTypes {
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
+    | '/report/$id'
     | '/rule/$id'
     | '/runtime/narrative'
     | '/runtime/observations'
@@ -544,6 +578,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
     | '/assessment/$id/processing'
+    | '/assessment/$id/reports'
     | '/assessment/$id/results'
     | '/assessment/$id/rules'
     | '/assessment/$id/scores'
@@ -555,6 +590,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/report/$id/download'
     | '/assessment/$id/'
     | '/internal/narratives/'
     | '/internal/observations/'
@@ -577,6 +613,7 @@ export interface RootRouteChildren {
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
   PatternIdRoute: typeof PatternIdRoute
+  ReportIdRoute: typeof ReportIdRouteWithChildren
   RuleIdRoute: typeof RuleIdRoute
   RuntimeNarrativeRoute: typeof RuntimeNarrativeRoute
   RuntimeObservationsRoute: typeof RuntimeObservationsRoute
@@ -591,6 +628,7 @@ export interface RootRouteChildren {
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
   AssessmentIdPatternsRoute: typeof AssessmentIdPatternsRoute
   AssessmentIdProcessingRoute: typeof AssessmentIdProcessingRoute
+  AssessmentIdReportsRoute: typeof AssessmentIdReportsRoute
   AssessmentIdResultsRoute: typeof AssessmentIdResultsRoute
   AssessmentIdRulesRoute: typeof AssessmentIdRulesRoute
   AssessmentIdScoresRoute: typeof AssessmentIdScoresRoute
@@ -684,6 +722,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report/$id': {
+      id: '/report/$id'
+      path: '/report/$id'
+      fullPath: '/report/$id'
+      preLoaderRoute: typeof ReportIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pattern/$id': {
       id: '/pattern/$id'
       path: '/pattern/$id'
@@ -768,6 +813,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report/$id/download': {
+      id: '/report/$id/download'
+      path: '/download'
+      fullPath: '/report/$id/download'
+      preLoaderRoute: typeof ReportIdDownloadRouteImport
+      parentRoute: typeof ReportIdRoute
+    }
     '/internal/signals/$id': {
       id: '/internal/signals/$id'
       path: '/internal/signals/$id'
@@ -843,6 +895,13 @@ declare module '@tanstack/react-router' {
       path: '/assessment/$id/results'
       fullPath: '/assessment/$id/results'
       preLoaderRoute: typeof AssessmentIdResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/reports': {
+      id: '/assessment/$id/reports'
+      path: '/assessment/$id/reports'
+      fullPath: '/assessment/$id/reports'
+      preLoaderRoute: typeof AssessmentIdReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment/$id/processing': {
@@ -963,6 +1022,18 @@ const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
   ApiAssessmentsRouteChildren,
 )
 
+interface ReportIdRouteChildren {
+  ReportIdDownloadRoute: typeof ReportIdDownloadRoute
+}
+
+const ReportIdRouteChildren: ReportIdRouteChildren = {
+  ReportIdDownloadRoute: ReportIdDownloadRoute,
+}
+
+const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
+  ReportIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
@@ -970,6 +1041,7 @@ const rootRouteChildren: RootRouteChildren = {
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
   PatternIdRoute: PatternIdRoute,
+  ReportIdRoute: ReportIdRouteWithChildren,
   RuleIdRoute: RuleIdRoute,
   RuntimeNarrativeRoute: RuntimeNarrativeRoute,
   RuntimeObservationsRoute: RuntimeObservationsRoute,
@@ -984,6 +1056,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
   AssessmentIdPatternsRoute: AssessmentIdPatternsRoute,
   AssessmentIdProcessingRoute: AssessmentIdProcessingRoute,
+  AssessmentIdReportsRoute: AssessmentIdReportsRoute,
   AssessmentIdResultsRoute: AssessmentIdResultsRoute,
   AssessmentIdRulesRoute: AssessmentIdRulesRoute,
   AssessmentIdScoresRoute: AssessmentIdScoresRoute,

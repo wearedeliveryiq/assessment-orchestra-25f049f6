@@ -26,12 +26,14 @@ function crc32(bytes: Uint8Array): number {
   return (crc ^ 0xffffffff) >>> 0;
 }
 
-interface ZipEntry {
+export interface ZipEntry {
   name: string;
   data: Uint8Array;
 }
 
-function zip(entries: ZipEntry[]): Uint8Array {
+/** Store-only ZIP writer, shared by every OOXML renderer in the app. */
+export function zip(entries: ZipEntry[]): Uint8Array {
+
   const chunks: Uint8Array[] = [];
   const central: Uint8Array[] = [];
   let offset = 0;
