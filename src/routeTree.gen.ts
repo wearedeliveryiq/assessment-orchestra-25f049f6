@@ -46,6 +46,7 @@ import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id
 import { Route as InternalPatternsIdRouteImport } from './routes/internal.patterns.$id'
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
 import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
+import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
 import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
 import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
 import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
@@ -252,6 +253,12 @@ const InternalNarrativesIdRoute = InternalNarrativesIdRouteImport.update({
   path: '/internal/narratives/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternalKnowledgePacksIdRoute =
+  InternalKnowledgePacksIdRouteImport.update({
+    id: '/internal/knowledge-packs/$id',
+    path: '/internal/knowledge-packs/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
   id: '/assessment/$id/summary',
   path: '/assessment/$id/summary',
@@ -377,6 +384,7 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
@@ -434,6 +442,7 @@ export interface FileRoutesByTo {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
@@ -492,6 +501,7 @@ export interface FileRoutesById {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
@@ -551,6 +561,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
@@ -608,6 +619,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
@@ -665,6 +677,7 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
@@ -722,6 +735,7 @@ export interface RootRouteChildren {
   AssessmentIdScoresRoute: typeof AssessmentIdScoresRoute
   AssessmentIdSignalsRoute: typeof AssessmentIdSignalsRoute
   AssessmentIdSummaryRoute: typeof AssessmentIdSummaryRoute
+  InternalKnowledgePacksIdRoute: typeof InternalKnowledgePacksIdRoute
   InternalNarrativesIdRoute: typeof InternalNarrativesIdRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
   InternalPatternsIdRoute: typeof InternalPatternsIdRoute
@@ -1003,6 +1017,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalNarrativesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/knowledge-packs/$id': {
+      id: '/internal/knowledge-packs/$id'
+      path: '/internal/knowledge-packs/$id'
+      fullPath: '/internal/knowledge-packs/$id'
+      preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assessment/$id/summary': {
       id: '/assessment/$id/summary'
       path: '/assessment/$id/summary'
@@ -1206,6 +1227,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssessmentIdScoresRoute: AssessmentIdScoresRoute,
   AssessmentIdSignalsRoute: AssessmentIdSignalsRoute,
   AssessmentIdSummaryRoute: AssessmentIdSummaryRoute,
+  InternalKnowledgePacksIdRoute: InternalKnowledgePacksIdRoute,
   InternalNarrativesIdRoute: InternalNarrativesIdRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
   InternalPatternsIdRoute: InternalPatternsIdRoute,
