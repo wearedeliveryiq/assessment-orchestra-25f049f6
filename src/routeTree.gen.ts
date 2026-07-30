@@ -73,6 +73,7 @@ import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
+import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -408,6 +409,11 @@ const AssessmentIdExportFormatRoute =
     path: '/assessment/$id/export/$format',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -465,7 +471,7 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
-  '/api/executions/$id': typeof ApiExecutionsIdRoute
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -509,6 +515,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesByTo {
@@ -537,7 +544,7 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
-  '/api/executions/$id': typeof ApiExecutionsIdRoute
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -581,6 +588,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRoutesById {
@@ -610,7 +618,7 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
-  '/api/executions/$id': typeof ApiExecutionsIdRoute
+  '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -654,6 +662,7 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
 export interface FileRouteTypes {
@@ -728,6 +737,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -800,6 +810,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   id:
     | '__root__'
@@ -872,6 +883,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesById: FileRoutesById
 }
@@ -900,7 +912,7 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
-  ApiExecutionsIdRoute: typeof ApiExecutionsIdRoute
+  ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
@@ -1390,6 +1402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/executions/$id/status': {
+      id: '/api/executions/$id/status'
+      path: '/status'
+      fullPath: '/api/executions/$id/status'
+      preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
+    }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
       path: '/submit'
@@ -1480,6 +1499,18 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
   ReportIdRouteChildren,
 )
 
+interface ApiExecutionsIdRouteChildren {
+  ApiExecutionsIdStatusRoute: typeof ApiExecutionsIdStatusRoute
+}
+
+const ApiExecutionsIdRouteChildren: ApiExecutionsIdRouteChildren = {
+  ApiExecutionsIdStatusRoute: ApiExecutionsIdStatusRoute,
+}
+
+const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
+  ApiExecutionsIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
@@ -1505,7 +1536,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
-  ApiExecutionsIdRoute: ApiExecutionsIdRoute,
+  ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
