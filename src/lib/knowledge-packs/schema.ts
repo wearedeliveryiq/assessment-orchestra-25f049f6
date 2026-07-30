@@ -36,17 +36,52 @@ export type PackCondition = z.infer<typeof conditionSchema>;
 export const severitySchema = z.enum(["critical", "high", "medium", "low", "info"]);
 export type ObservationSeverity = z.infer<typeof severitySchema>;
 
+/** Lifecycle states a pack may declare. `active` is retained for compatibility. */
+export const packStatusSchema = z.enum([
+  "active",
+  "draft",
+  "published",
+  "deprecated",
+  "retired",
+  "archived",
+]);
+
+export type PackStatus = z.infer<typeof packStatusSchema>;
+
+/** A dependency on another knowledge pack, expressed with a semver range. */
+export const packDependencySchema = z.object({
+  packId: z.string().min(1),
+  /** Semver range: exact ("1.2.0"), caret ("^1.2.0"), tilde ("~1.2.0"), or ">=1.2.0". */
+  version: z.string().min(1),
+  optional: z.boolean().default(false),
+});
+
+export type PackDependency = z.infer<typeof packDependencySchema>;
+
 export const manifestSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   version: z.string().min(1),
   schemaVersion: z.number().int().positive(),
-  status: z.enum(["active", "draft", "retired"]),
+  status: packStatusSchema,
   description: z.string().min(1),
   owner: z.string().min(1),
   publishedAt: z.string().min(1),
   files: z.array(z.string().min(1)).min(1),
+  /** Optional runtime metadata — additive, so existing packs stay valid. */
+  assessmentType: z.string().min(1).optional(),
+  author: z.string().min(1).optional(),
+  license: z.string().min(1).optional(),
+  tags: z.array(z.string().min(1)).default([]),
+  /** Engines this pack is authored for; the runtime warns on unknown engines. */
+  engines: z.array(z.string().min(1)).default([]),
+  dependencies: z.array(packDependencySchema).default([]),
+  /** Minimum runtime schema version this pack requires. */
+  minSchemaVersion: z.number().int().positive().optional(),
 });
+
+export type PackManifest = z.infer<typeof manifestSchema>;
+
 
 export const questionsSchema = z.object({
   sections: z

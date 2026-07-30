@@ -16,5 +16,24 @@
     "recommendations.json",
     "narratives.json",
     "scoring.json"
-  ]
+  ],
+  "assessmentType": "executive-sponsorship",
+  "author": "DeliveryIQ Intelligence",
+  "license": "proprietary",
+  "tags": [
+    "sponsorship",
+    "governance",
+    "delivery"
+  ],
+  "engines": [
+    "observations",
+    "signals",
+    "rules",
+    "patterns",
+    "scores",
+    "recommendations",
+    "narrative"
+  ],
+  "dependencies": [],
+  "minSchemaVersion": 1
 }

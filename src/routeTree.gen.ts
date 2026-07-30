@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
 import { Route as ScoreIdRouteImport } from './routes/score.$id'
 import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
@@ -23,22 +24,29 @@ import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
+import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
+import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
 import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
 import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
 import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.narratives.index'
+import { Route as InternalKnowledgePacksIndexRouteImport } from './routes/internal.knowledge-packs.index'
 import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
 import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
+import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
+import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
 import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
 import { Route as InternalScoresIdRouteImport } from './routes/internal.scores.$id'
 import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
 import { Route as InternalPatternsIdRouteImport } from './routes/internal.patterns.$id'
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
 import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
+import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
 import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
 import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
 import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
@@ -61,6 +69,11 @@ import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assess
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
+  id: '/knowledge-packs/',
+  path: '/knowledge-packs/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignalIdRoute = SignalIdRouteImport.update({
@@ -128,6 +141,16 @@ const NarrativeIdRoute = NarrativeIdRouteImport.update({
   path: '/narrative/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
+  id: '/knowledge-packs/validate',
+  path: '/knowledge-packs/validate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
+  id: '/knowledge-packs/reload',
+  path: '/knowledge-packs/reload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIdRoute = DashboardIdRouteImport.update({
   id: '/dashboard/$id',
   path: '/dashboard/$id',
@@ -136,6 +159,11 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   id: '/api/assessments',
   path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
+  id: '/knowledge-pack/$id/',
+  path: '/knowledge-pack/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
@@ -169,6 +197,12 @@ const InternalNarrativesIndexRoute = InternalNarrativesIndexRouteImport.update({
   path: '/internal/narratives/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternalKnowledgePacksIndexRoute =
+  InternalKnowledgePacksIndexRouteImport.update({
+    id: '/internal/knowledge-packs/',
+    path: '/internal/knowledge-packs/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
   id: '/assessment/$id/',
   path: '/assessment/$id/',
@@ -178,6 +212,16 @@ const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
   id: '/download',
   path: '/download',
   getParentRoute: () => ReportIdRoute,
+} as any)
+const KnowledgePackIdVersionsRoute = KnowledgePackIdVersionsRouteImport.update({
+  id: '/knowledge-pack/$id/versions',
+  path: '/knowledge-pack/$id/versions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePackIdActivateRoute = KnowledgePackIdActivateRouteImport.update({
+  id: '/knowledge-pack/$id/activate',
+  path: '/knowledge-pack/$id/activate',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
   id: '/internal/signals/$id',
@@ -209,6 +253,12 @@ const InternalNarrativesIdRoute = InternalNarrativesIdRouteImport.update({
   path: '/internal/narratives/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternalKnowledgePacksIdRoute =
+  InternalKnowledgePacksIdRouteImport.update({
+    id: '/internal/knowledge-packs/$id',
+    path: '/internal/knowledge-packs/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
   id: '/assessment/$id/summary',
   path: '/assessment/$id/summary',
@@ -306,6 +356,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -319,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -331,20 +384,25 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
+  '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/internal/knowledge-packs/': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -356,6 +414,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -369,6 +429,7 @@ export interface FileRoutesByTo {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -381,20 +442,25 @@ export interface FileRoutesByTo {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
+  '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
+  '/internal/knowledge-packs': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives': typeof InternalNarrativesIndexRoute
   '/internal/observations': typeof InternalObservationsIndexRoute
   '/internal/patterns': typeof InternalPatternsIndexRoute
   '/internal/rules': typeof InternalRulesIndexRoute
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -407,6 +473,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/dashboard/$id': typeof DashboardIdRoute
+  '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
+  '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
   '/pattern/$id': typeof PatternIdRoute
@@ -420,6 +488,7 @@ export interface FileRoutesById {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -432,20 +501,25 @@ export interface FileRoutesById {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
   '/internal/patterns/$id': typeof InternalPatternsIdRoute
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
+  '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/internal/knowledge-packs/': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
   '/internal/patterns/': typeof InternalPatternsIndexRoute
   '/internal/rules/': typeof InternalRulesIndexRoute
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
+  '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -459,6 +533,8 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -472,6 +548,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -484,20 +561,25 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
+    | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id/'
+    | '/internal/knowledge-packs/'
     | '/internal/narratives/'
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
     | '/internal/scores/'
     | '/internal/signals/'
+    | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -509,6 +591,8 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -522,6 +606,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -534,20 +619,25 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
+    | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id'
+    | '/internal/knowledge-packs'
     | '/internal/narratives'
     | '/internal/observations'
     | '/internal/patterns'
     | '/internal/rules'
     | '/internal/scores'
     | '/internal/signals'
+    | '/knowledge-pack/$id'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -559,6 +649,8 @@ export interface FileRouteTypes {
     | '/'
     | '/api/assessments'
     | '/dashboard/$id'
+    | '/knowledge-packs/reload'
+    | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
     | '/pattern/$id'
@@ -572,6 +664,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/narrative'
@@ -584,20 +677,25 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
     | '/internal/patterns/$id'
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
+    | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id/'
+    | '/internal/knowledge-packs/'
     | '/internal/narratives/'
     | '/internal/observations/'
     | '/internal/patterns/'
     | '/internal/rules/'
     | '/internal/scores/'
     | '/internal/signals/'
+    | '/knowledge-pack/$id/'
     | '/api/assessments/$id/advance'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -610,6 +708,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   DashboardIdRoute: typeof DashboardIdRoute
+  KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
+  KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
   PatternIdRoute: typeof PatternIdRoute
@@ -623,6 +723,7 @@ export interface RootRouteChildren {
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
+  KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
@@ -634,19 +735,24 @@ export interface RootRouteChildren {
   AssessmentIdScoresRoute: typeof AssessmentIdScoresRoute
   AssessmentIdSignalsRoute: typeof AssessmentIdSignalsRoute
   AssessmentIdSummaryRoute: typeof AssessmentIdSummaryRoute
+  InternalKnowledgePacksIdRoute: typeof InternalKnowledgePacksIdRoute
   InternalNarrativesIdRoute: typeof InternalNarrativesIdRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
   InternalPatternsIdRoute: typeof InternalPatternsIdRoute
   InternalRulesIdRoute: typeof InternalRulesIdRoute
   InternalScoresIdRoute: typeof InternalScoresIdRoute
   InternalSignalsIdRoute: typeof InternalSignalsIdRoute
+  KnowledgePackIdActivateRoute: typeof KnowledgePackIdActivateRoute
+  KnowledgePackIdVersionsRoute: typeof KnowledgePackIdVersionsRoute
   AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
+  InternalKnowledgePacksIndexRoute: typeof InternalKnowledgePacksIndexRoute
   InternalNarrativesIndexRoute: typeof InternalNarrativesIndexRoute
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
   InternalPatternsIndexRoute: typeof InternalPatternsIndexRoute
   InternalRulesIndexRoute: typeof InternalRulesIndexRoute
   InternalScoresIndexRoute: typeof InternalScoresIndexRoute
   InternalSignalsIndexRoute: typeof InternalSignalsIndexRoute
+  KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
 
@@ -657,6 +763,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/': {
+      id: '/knowledge-packs/'
+      path: '/knowledge-packs'
+      fullPath: '/knowledge-packs/'
+      preLoaderRoute: typeof KnowledgePacksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signal/$id': {
@@ -750,6 +863,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NarrativeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/knowledge-packs/validate': {
+      id: '/knowledge-packs/validate'
+      path: '/knowledge-packs/validate'
+      fullPath: '/knowledge-packs/validate'
+      preLoaderRoute: typeof KnowledgePacksValidateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/reload': {
+      id: '/knowledge-packs/reload'
+      path: '/knowledge-packs/reload'
+      fullPath: '/knowledge-packs/reload'
+      preLoaderRoute: typeof KnowledgePacksReloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/$id': {
       id: '/dashboard/$id'
       path: '/dashboard/$id'
@@ -762,6 +889,13 @@ declare module '@tanstack/react-router' {
       path: '/api/assessments'
       fullPath: '/api/assessments'
       preLoaderRoute: typeof ApiAssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-pack/$id/': {
+      id: '/knowledge-pack/$id/'
+      path: '/knowledge-pack/$id'
+      fullPath: '/knowledge-pack/$id/'
+      preLoaderRoute: typeof KnowledgePackIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/signals/': {
@@ -806,6 +940,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalNarrativesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/knowledge-packs/': {
+      id: '/internal/knowledge-packs/'
+      path: '/internal/knowledge-packs'
+      fullPath: '/internal/knowledge-packs/'
+      preLoaderRoute: typeof InternalKnowledgePacksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assessment/$id/': {
       id: '/assessment/$id/'
       path: '/assessment/$id'
@@ -819,6 +960,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/report/$id/download'
       preLoaderRoute: typeof ReportIdDownloadRouteImport
       parentRoute: typeof ReportIdRoute
+    }
+    '/knowledge-pack/$id/versions': {
+      id: '/knowledge-pack/$id/versions'
+      path: '/knowledge-pack/$id/versions'
+      fullPath: '/knowledge-pack/$id/versions'
+      preLoaderRoute: typeof KnowledgePackIdVersionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-pack/$id/activate': {
+      id: '/knowledge-pack/$id/activate'
+      path: '/knowledge-pack/$id/activate'
+      fullPath: '/knowledge-pack/$id/activate'
+      preLoaderRoute: typeof KnowledgePackIdActivateRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/internal/signals/$id': {
       id: '/internal/signals/$id'
@@ -860,6 +1015,13 @@ declare module '@tanstack/react-router' {
       path: '/internal/narratives/$id'
       fullPath: '/internal/narratives/$id'
       preLoaderRoute: typeof InternalNarrativesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/knowledge-packs/$id': {
+      id: '/internal/knowledge-packs/$id'
+      path: '/internal/knowledge-packs/$id'
+      fullPath: '/internal/knowledge-packs/$id'
+      preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment/$id/summary': {
@@ -1038,6 +1200,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   DashboardIdRoute: DashboardIdRoute,
+  KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
+  KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
   PatternIdRoute: PatternIdRoute,
@@ -1051,6 +1215,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeSignalsRoute: RuntimeSignalsRoute,
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
+  KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
@@ -1062,19 +1227,24 @@ const rootRouteChildren: RootRouteChildren = {
   AssessmentIdScoresRoute: AssessmentIdScoresRoute,
   AssessmentIdSignalsRoute: AssessmentIdSignalsRoute,
   AssessmentIdSummaryRoute: AssessmentIdSummaryRoute,
+  InternalKnowledgePacksIdRoute: InternalKnowledgePacksIdRoute,
   InternalNarrativesIdRoute: InternalNarrativesIdRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
   InternalPatternsIdRoute: InternalPatternsIdRoute,
   InternalRulesIdRoute: InternalRulesIdRoute,
   InternalScoresIdRoute: InternalScoresIdRoute,
   InternalSignalsIdRoute: InternalSignalsIdRoute,
+  KnowledgePackIdActivateRoute: KnowledgePackIdActivateRoute,
+  KnowledgePackIdVersionsRoute: KnowledgePackIdVersionsRoute,
   AssessmentIdIndexRoute: AssessmentIdIndexRoute,
+  InternalKnowledgePacksIndexRoute: InternalKnowledgePacksIndexRoute,
   InternalNarrativesIndexRoute: InternalNarrativesIndexRoute,
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
   InternalPatternsIndexRoute: InternalPatternsIndexRoute,
   InternalRulesIndexRoute: InternalRulesIndexRoute,
   InternalScoresIndexRoute: InternalScoresIndexRoute,
   InternalSignalsIndexRoute: InternalSignalsIndexRoute,
+  KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
 export const routeTree = rootRouteImport
