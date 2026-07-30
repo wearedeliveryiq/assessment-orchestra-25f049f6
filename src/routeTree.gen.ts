@@ -27,6 +27,9 @@ import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as AuthRegisterRouteImport } from './routes/auth.register'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
 import { Route as AuditHealthRouteImport } from './routes/audit.health'
 import { Route as AuditEventsRouteImport } from './routes/audit.events'
@@ -188,6 +191,21 @@ const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
 const DashboardIdRoute = DashboardIdRouteImport.update({
   id: '/dashboard/$id',
   path: '/dashboard/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditRetentionRoute = AuditRetentionRouteImport.update({
@@ -569,6 +587,9 @@ export interface FileRoutesByFullPath {
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -661,6 +682,9 @@ export interface FileRoutesByTo {
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -754,6 +778,9 @@ export interface FileRoutesById {
   '/audit/events': typeof AuditEventsRoute
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -848,6 +875,9 @@ export interface FileRouteTypes {
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/auth/register'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -940,6 +970,9 @@ export interface FileRouteTypes {
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/auth/register'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -1032,6 +1065,9 @@ export interface FileRouteTypes {
     | '/audit/events'
     | '/audit/health'
     | '/audit/retention'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/auth/register'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -1125,6 +1161,9 @@ export interface RootRouteChildren {
   AuditEventsRoute: typeof AuditEventsRoute
   AuditHealthRoute: typeof AuditHealthRoute
   AuditRetentionRoute: typeof AuditRetentionRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   DashboardIdRoute: typeof DashboardIdRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
@@ -1322,6 +1361,27 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/$id'
       fullPath: '/dashboard/$id'
       preLoaderRoute: typeof DashboardIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit/retention': {
@@ -1934,6 +1994,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuditEventsRoute: AuditEventsRoute,
   AuditHealthRoute: AuditHealthRoute,
   AuditRetentionRoute: AuditRetentionRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   DashboardIdRoute: DashboardIdRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
