@@ -21,6 +21,7 @@ export const Route = createFileRoute("/api/auth/invitations")({
             return failure("validation_failed", "An organisation and email are required.", 400);
           }
           const { invitation, token } = await inviteMember(
+            identity,
             { organisationId: body.organisationId, email: body.email, role: body.role },
             ctx,
           );

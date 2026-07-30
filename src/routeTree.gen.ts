@@ -78,16 +78,21 @@ import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify
 import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
 import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
 import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
+import { Route as ApiAuthProfileRouteImport } from './routes/api/auth.profile'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
+import { Route as ApiAuthInvitationsRouteImport } from './routes/api/auth.invitations'
+import { Route as ApiAuthActivityRouteImport } from './routes/api/auth.activity'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
+import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.verify-email.resend'
 import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
 import { Route as ApiAuthPasswordForgotRouteImport } from './routes/api/auth.password.forgot'
 import { Route as ApiAuthPasswordChangeRouteImport } from './routes/api/auth.password.change'
+import { Route as ApiAuthInvitationsAcceptRouteImport } from './routes/api/auth.invitations.accept'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -447,6 +452,11 @@ const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
   path: '/api/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthProfileRoute = ApiAuthProfileRouteImport.update({
+  id: '/api/auth/profile',
+  path: '/api/auth/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
   id: '/api/auth/logout',
   path: '/api/auth/logout',
@@ -455,6 +465,16 @@ const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
 const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
   id: '/api/auth/login',
   path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthInvitationsRoute = ApiAuthInvitationsRouteImport.update({
+  id: '/api/auth/invitations',
+  path: '/api/auth/invitations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthActivityRoute = ApiAuthActivityRouteImport.update({
+  id: '/api/auth/activity',
+  path: '/api/auth/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
@@ -483,6 +503,12 @@ const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
   path: '/cancel',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiAuthVerifyEmailResendRoute =
+  ApiAuthVerifyEmailResendRouteImport.update({
+    id: '/resend',
+    path: '/resend',
+    getParentRoute: () => ApiAuthVerifyEmailRoute,
+  } as any)
 const ApiAuthSessionsIdRoute = ApiAuthSessionsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -498,6 +524,12 @@ const ApiAuthPasswordChangeRoute = ApiAuthPasswordChangeRouteImport.update({
   path: '/api/auth/password/change',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthInvitationsAcceptRoute =
+  ApiAuthInvitationsAcceptRouteImport.update({
+    id: '/accept',
+    path: '/accept',
+    getParentRoute: () => ApiAuthInvitationsRoute,
+  } as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -555,12 +587,15 @@ export interface FileRoutesByFullPath {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
-  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -608,9 +643,11 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
   '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -642,12 +679,15 @@ export interface FileRoutesByTo {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
-  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -695,9 +735,11 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
   '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -730,12 +772,15 @@ export interface FileRoutesById {
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
+  '/api/auth/activity': typeof ApiAuthActivityRoute
+  '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/profile': typeof ApiAuthProfileRoute
   '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
-  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -783,9 +828,11 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/auth/invitations/accept': typeof ApiAuthInvitationsAcceptRoute
   '/api/auth/password/change': typeof ApiAuthPasswordChangeRoute
   '/api/auth/password/forgot': typeof ApiAuthPasswordForgotRoute
   '/api/auth/sessions/$id': typeof ApiAuthSessionsIdRoute
+  '/api/auth/verify-email/resend': typeof ApiAuthVerifyEmailResendRoute
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
@@ -819,8 +866,11 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
     | '/api/auth/login'
     | '/api/auth/logout'
+    | '/api/auth/profile'
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
@@ -872,9 +922,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
     | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -906,8 +958,11 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
     | '/api/auth/login'
     | '/api/auth/logout'
+    | '/api/auth/profile'
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
@@ -959,9 +1014,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
     | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -993,8 +1050,11 @@ export interface FileRouteTypes {
     | '/signal/$id'
     | '/knowledge-packs/'
     | '/api/assessments/$id'
+    | '/api/auth/activity'
+    | '/api/auth/invitations'
     | '/api/auth/login'
     | '/api/auth/logout'
+    | '/api/auth/profile'
     | '/api/auth/register'
     | '/api/auth/session'
     | '/api/auth/sessions'
@@ -1046,9 +1106,11 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/auth/invitations/accept'
     | '/api/auth/password/change'
     | '/api/auth/password/forgot'
     | '/api/auth/sessions/$id'
+    | '/api/auth/verify-email/resend'
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
@@ -1080,12 +1142,15 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  ApiAuthActivityRoute: typeof ApiAuthActivityRoute
+  ApiAuthInvitationsRoute: typeof ApiAuthInvitationsRouteWithChildren
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
+  ApiAuthProfileRoute: typeof ApiAuthProfileRoute
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiAuthSessionRoute: typeof ApiAuthSessionRoute
   ApiAuthSessionsRoute: typeof ApiAuthSessionsRouteWithChildren
-  ApiAuthVerifyEmailRoute: typeof ApiAuthVerifyEmailRoute
+  ApiAuthVerifyEmailRoute: typeof ApiAuthVerifyEmailRouteWithChildren
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
@@ -1616,6 +1681,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/profile': {
+      id: '/api/auth/profile'
+      path: '/api/auth/profile'
+      fullPath: '/api/auth/profile'
+      preLoaderRoute: typeof ApiAuthProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/logout': {
       id: '/api/auth/logout'
       path: '/api/auth/logout'
@@ -1628,6 +1700,20 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/login'
       fullPath: '/api/auth/login'
       preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations': {
+      id: '/api/auth/invitations'
+      path: '/api/auth/invitations'
+      fullPath: '/api/auth/invitations'
+      preLoaderRoute: typeof ApiAuthInvitationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/activity': {
+      id: '/api/auth/activity'
+      path: '/api/auth/activity'
+      fullPath: '/api/auth/activity'
+      preLoaderRoute: typeof ApiAuthActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/assessments/$id': {
@@ -1665,6 +1751,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
     }
+    '/api/auth/verify-email/resend': {
+      id: '/api/auth/verify-email/resend'
+      path: '/resend'
+      fullPath: '/api/auth/verify-email/resend'
+      preLoaderRoute: typeof ApiAuthVerifyEmailResendRouteImport
+      parentRoute: typeof ApiAuthVerifyEmailRoute
+    }
     '/api/auth/sessions/$id': {
       id: '/api/auth/sessions/$id'
       path: '/$id'
@@ -1685,6 +1778,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/password/change'
       preLoaderRoute: typeof ApiAuthPasswordChangeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations/accept': {
+      id: '/api/auth/invitations/accept'
+      path: '/accept'
+      fullPath: '/api/auth/invitations/accept'
+      preLoaderRoute: typeof ApiAuthInvitationsAcceptRouteImport
+      parentRoute: typeof ApiAuthInvitationsRoute
     }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
@@ -1776,6 +1876,17 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
   ReportIdRouteChildren,
 )
 
+interface ApiAuthInvitationsRouteChildren {
+  ApiAuthInvitationsAcceptRoute: typeof ApiAuthInvitationsAcceptRoute
+}
+
+const ApiAuthInvitationsRouteChildren: ApiAuthInvitationsRouteChildren = {
+  ApiAuthInvitationsAcceptRoute: ApiAuthInvitationsAcceptRoute,
+}
+
+const ApiAuthInvitationsRouteWithChildren =
+  ApiAuthInvitationsRoute._addFileChildren(ApiAuthInvitationsRouteChildren)
+
 interface ApiAuthSessionsRouteChildren {
   ApiAuthSessionsIdRoute: typeof ApiAuthSessionsIdRoute
 }
@@ -1787,6 +1898,17 @@ const ApiAuthSessionsRouteChildren: ApiAuthSessionsRouteChildren = {
 const ApiAuthSessionsRouteWithChildren = ApiAuthSessionsRoute._addFileChildren(
   ApiAuthSessionsRouteChildren,
 )
+
+interface ApiAuthVerifyEmailRouteChildren {
+  ApiAuthVerifyEmailResendRoute: typeof ApiAuthVerifyEmailResendRoute
+}
+
+const ApiAuthVerifyEmailRouteChildren: ApiAuthVerifyEmailRouteChildren = {
+  ApiAuthVerifyEmailResendRoute: ApiAuthVerifyEmailResendRoute,
+}
+
+const ApiAuthVerifyEmailRouteWithChildren =
+  ApiAuthVerifyEmailRoute._addFileChildren(ApiAuthVerifyEmailRouteChildren)
 
 interface ApiExecutionsIdRouteChildren {
   ApiExecutionsIdCancelRoute: typeof ApiExecutionsIdCancelRoute
@@ -1829,12 +1951,15 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  ApiAuthActivityRoute: ApiAuthActivityRoute,
+  ApiAuthInvitationsRoute: ApiAuthInvitationsRouteWithChildren,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
+  ApiAuthProfileRoute: ApiAuthProfileRoute,
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiAuthSessionRoute: ApiAuthSessionRoute,
   ApiAuthSessionsRoute: ApiAuthSessionsRouteWithChildren,
-  ApiAuthVerifyEmailRoute: ApiAuthVerifyEmailRoute,
+  ApiAuthVerifyEmailRoute: ApiAuthVerifyEmailRouteWithChildren,
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
