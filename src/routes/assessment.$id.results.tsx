@@ -82,12 +82,22 @@ function ResultsPage() {
 
   return (
     <AppShell action={<StatusPill status={session.status} />}>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" /> All assessments
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> All assessments
+        </Link>
+        <Link
+          to="/dashboard/$id"
+          params={{ id }}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:border-primary/50 hover:text-foreground"
+        >
+          Executive dashboard
+        </Link>
+      </div>
+
 
       <section className="ribbon-panel mt-4 rounded-xl p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-6">

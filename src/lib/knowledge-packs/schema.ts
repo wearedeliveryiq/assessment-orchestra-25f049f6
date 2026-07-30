@@ -232,9 +232,35 @@ export const patternsSchema = z.object({
   /** Rule-driven pattern definitions used by the Pattern Engine. */
   definitions: z.array(patternDefinitionSchema).default([]),
 });
-export const recommendationsSchema = z.object({
-  recommendations: z.array(z.record(z.unknown())).min(1),
+/**
+ * Recommendation model. Interventions are declared by the pack and selected
+ * (never invented) by the Recommendation resolver from matched Patterns.
+ */
+export const recommendationDefinitionSchema = z.object({
+  code: z.string().min(1),
+  title: z.string().min(1),
+  rationale: z.string().min(1),
+  category: z.string().min(1),
+  /** Score code of the capability dimension the intervention improves. */
+  dimension: z.string().min(1),
+  /** Pattern codes that make this intervention relevant. */
+  triggers: z.array(z.string().min(1)).min(1),
+  priority: z.enum(["critical", "high", "medium", "low"]),
+  horizon: z.enum(["now", "next", "later"]),
+  impact: z.enum(["high", "medium", "low"]),
+  effort: z.enum(["high", "medium", "low"]),
+  expectedBenefit: z.string().min(1),
 });
+
+export type RecommendationDefinition = z.infer<typeof recommendationDefinitionSchema>;
+
+export const recommendationsSchema = z.object({
+  /** Legacy trigger-based recommendations consumed by the assessment runtime. */
+  recommendations: z.array(z.record(z.unknown())).min(1),
+  /** Pattern-driven definitions consumed by the Recommendation resolver. */
+  definitions: z.array(recommendationDefinitionSchema).default([]),
+});
+
 /**
  * Narrative model. Everything the Narrative Engine needs — generation mode,
  * provider, tone, prompt rules, per-section templates and validation policy —

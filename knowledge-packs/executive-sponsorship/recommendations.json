@@ -48,5 +48,137 @@
       "title": "Run post-release benefits reviews",
       "rationale": "Closing the loop makes future sponsorship decisions evidence-led."
     }
+  ],
+  "definitions": [
+    {
+      "code": "REC-001",
+      "title": "Appoint an accountable executive sponsor for every funded initiative",
+      "rationale": "Leadership Vacuum shows sponsorship is nominal rather than active, so decisions queue behind an absent decision maker.",
+      "category": "Executive Leadership",
+      "dimension": "SCR-001",
+      "triggers": ["PAT-001"],
+      "priority": "critical",
+      "horizon": "now",
+      "impact": "high",
+      "effort": "low",
+      "expectedBenefit": "Named accountability and a standing decision forum that removes the largest source of delivery latency."
+    },
+    {
+      "code": "REC-002",
+      "title": "Publish a sponsor decision log with service levels",
+      "rationale": "Sponsorship only becomes dependable when decisions are visible, dated and time-bounded.",
+      "category": "Executive Leadership",
+      "dimension": "SCR-001",
+      "triggers": ["PAT-001", "PAT-002"],
+      "priority": "high",
+      "horizon": "now",
+      "impact": "high",
+      "effort": "low",
+      "expectedBenefit": "Decision latency becomes measurable and can be managed down deliberately."
+    },
+    {
+      "code": "REC-003",
+      "title": "Replace status reporting with outcome-based governance",
+      "rationale": "Governance Theatre indicates governance activity is high while decision quality and evidence are low.",
+      "category": "Governance",
+      "dimension": "SCR-002",
+      "triggers": ["PAT-002"],
+      "priority": "high",
+      "horizon": "next",
+      "impact": "high",
+      "effort": "medium",
+      "expectedBenefit": "Governance time converts into decisions rather than reporting overhead."
+    },
+    {
+      "code": "REC-004",
+      "title": "Source governance packs directly from delivery tooling",
+      "rationale": "Evidence Poor Assessment shows reporting is hand-assembled, so the numbers are debated rather than acted upon.",
+      "category": "Governance",
+      "dimension": "SCR-002",
+      "triggers": ["PAT-007"],
+      "priority": "medium",
+      "horizon": "next",
+      "impact": "medium",
+      "effort": "medium",
+      "expectedBenefit": "A single, uncontested view of delivery state for every forum."
+    },
+    {
+      "code": "REC-005",
+      "title": "Stabilise the delivery system before adding new commitments",
+      "rationale": "Firefighting Culture shows unplanned work is displacing committed work, so new commitments will not land.",
+      "category": "Delivery Execution",
+      "dimension": "SCR-003",
+      "triggers": ["PAT-003"],
+      "priority": "critical",
+      "horizon": "now",
+      "impact": "high",
+      "effort": "medium",
+      "expectedBenefit": "Predictable throughput and a credible forward commitment line."
+    },
+    {
+      "code": "REC-006",
+      "title": "Set explicit work-in-progress limits and sequence change centrally",
+      "rationale": "Change Absorption Overload shows the organisation is being asked to absorb more change than it can metabolise.",
+      "category": "Delivery Execution",
+      "dimension": "SCR-003",
+      "triggers": ["PAT-006"],
+      "priority": "medium",
+      "horizon": "next",
+      "impact": "medium",
+      "effort": "low",
+      "expectedBenefit": "Shorter cycle times and visible real capacity for the sponsor."
+    },
+    {
+      "code": "REC-007",
+      "title": "Attach a named measure and benefits owner to every initiative",
+      "rationale": "Benefits Drift shows value is asserted at approval and never verified after release.",
+      "category": "Value Realisation",
+      "dimension": "SCR-004",
+      "triggers": ["PAT-004"],
+      "priority": "high",
+      "horizon": "now",
+      "impact": "high",
+      "effort": "low",
+      "expectedBenefit": "Investment decisions become defensible and closeable on evidence."
+    },
+    {
+      "code": "REC-008",
+      "title": "Run post-implementation benefits reviews at 90 days",
+      "rationale": "Closing the value loop is what converts a delivery record into a sponsorship track record.",
+      "category": "Value Realisation",
+      "dimension": "SCR-004",
+      "triggers": ["PAT-004"],
+      "priority": "medium",
+      "horizon": "later",
+      "impact": "medium",
+      "effort": "medium",
+      "expectedBenefit": "Evidence-led prioritisation of the next investment cycle."
+    },
+    {
+      "code": "REC-009",
+      "title": "Establish an automated regression and deployment baseline",
+      "rationale": "Fragile Engineering Base shows release confidence rests on manual effort rather than automated assurance.",
+      "category": "Engineering Assurance",
+      "dimension": "SCR-005",
+      "triggers": ["PAT-005"],
+      "priority": "high",
+      "horizon": "now",
+      "impact": "high",
+      "effort": "high",
+      "expectedBenefit": "Release risk falls and cadence can increase without adding governance."
+    },
+    {
+      "code": "REC-010",
+      "title": "Protect the current sponsorship operating model",
+      "rationale": "Healthy Sponsorship System shows the model is working; the risk is erosion rather than absence.",
+      "category": "Executive Leadership",
+      "dimension": "SCR-001",
+      "triggers": ["PAT-008"],
+      "priority": "low",
+      "horizon": "later",
+      "impact": "medium",
+      "effort": "low",
+      "expectedBenefit": "Sustained delivery advantage through leadership transitions."
+    }
   ]
 }
