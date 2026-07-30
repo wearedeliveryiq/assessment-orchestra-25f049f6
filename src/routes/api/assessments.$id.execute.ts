@@ -5,7 +5,7 @@ export const Route = createFileRoute("/api/assessments/$id/execute")({
     handlers: {
       // POST — queues an Intelligence Runtime execution for the assessment
       POST: async ({ request, params }) => {
-        const { handleRoute, readJson, parseMode } = await import(
+        const { handleRoute, readJson, parseMode, requireUuid } = await import(
           "@/lib/orchestrator/http.server"
         );
         const body = await readJson<{ mode?: string; metadata?: Record<string, unknown> }>(
