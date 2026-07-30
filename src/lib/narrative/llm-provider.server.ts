@@ -94,12 +94,16 @@ export const lovableProvider: NarrativeLlmProvider = {
   generate: (request) => {
     const key = process.env.LOVABLE_API_KEY;
     if (!key) throw new NarrativeLlmError("LOVABLE_API_KEY is not configured");
+    // Reasoning tokens are billed against the output budget and truncate the
+    // prose, so narrative generation runs with reasoning disabled.
     return chatCompletion(
       "lovable",
       "https://ai.gateway.lovable.dev/v1",
       { "Lovable-API-Key": key },
       request,
+      { reasoning: { enabled: false } },
     );
+
   },
 };
 
