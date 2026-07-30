@@ -38,6 +38,7 @@ import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.n
 import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
 import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
 import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
+import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
 import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
 import { Route as InternalScoresIdRouteImport } from './routes/internal.scores.$id'
 import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
@@ -209,6 +210,11 @@ const KnowledgePackIdVersionsRoute = KnowledgePackIdVersionsRouteImport.update({
   path: '/knowledge-pack/$id/versions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KnowledgePackIdActivateRoute = KnowledgePackIdActivateRouteImport.update({
+  id: '/knowledge-pack/$id/activate',
+  path: '/knowledge-pack/$id/activate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
   id: '/internal/signals/$id',
   path: '/internal/signals/$id',
@@ -370,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
@@ -425,6 +432,7 @@ export interface FileRoutesByTo {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
@@ -481,6 +489,7 @@ export interface FileRoutesById {
   '/internal/rules/$id': typeof InternalRulesIdRoute
   '/internal/scores/$id': typeof InternalScoresIdRoute
   '/internal/signals/$id': typeof InternalSignalsIdRoute
+  '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
@@ -538,6 +547,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id/'
@@ -593,6 +603,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id'
@@ -648,6 +659,7 @@ export interface FileRouteTypes {
     | '/internal/rules/$id'
     | '/internal/scores/$id'
     | '/internal/signals/$id'
+    | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
     | '/assessment/$id/'
@@ -703,6 +715,7 @@ export interface RootRouteChildren {
   InternalRulesIdRoute: typeof InternalRulesIdRoute
   InternalScoresIdRoute: typeof InternalScoresIdRoute
   InternalSignalsIdRoute: typeof InternalSignalsIdRoute
+  KnowledgePackIdActivateRoute: typeof KnowledgePackIdActivateRoute
   KnowledgePackIdVersionsRoute: typeof KnowledgePackIdVersionsRoute
   AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
   InternalNarrativesIndexRoute: typeof InternalNarrativesIndexRoute
@@ -918,6 +931,13 @@ declare module '@tanstack/react-router' {
       path: '/knowledge-pack/$id/versions'
       fullPath: '/knowledge-pack/$id/versions'
       preLoaderRoute: typeof KnowledgePackIdVersionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-pack/$id/activate': {
+      id: '/knowledge-pack/$id/activate'
+      path: '/knowledge-pack/$id/activate'
+      fullPath: '/knowledge-pack/$id/activate'
+      preLoaderRoute: typeof KnowledgePackIdActivateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/internal/signals/$id': {
@@ -1171,6 +1191,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalRulesIdRoute: InternalRulesIdRoute,
   InternalScoresIdRoute: InternalScoresIdRoute,
   InternalSignalsIdRoute: InternalSignalsIdRoute,
+  KnowledgePackIdActivateRoute: KnowledgePackIdActivateRoute,
   KnowledgePackIdVersionsRoute: KnowledgePackIdVersionsRoute,
   AssessmentIdIndexRoute: AssessmentIdIndexRoute,
   InternalNarrativesIndexRoute: InternalNarrativesIndexRoute,
