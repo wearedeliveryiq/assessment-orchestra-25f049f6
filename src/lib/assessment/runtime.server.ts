@@ -10,6 +10,13 @@ import { ALL_QUESTIONS, TOTAL_QUESTIONS, sectionOf } from "./questionnaire";
 import { resolveEngine } from "./engines/registry.server";
 import type { EngineContext } from "./engines/contract.server";
 import * as repo from "./repository.server";
+import {
+  engineCompleted,
+  engineFailed,
+  engineStarted,
+  lifecycleEvent,
+  scheduleGraphRefresh,
+} from "../audit/runtime-audit.server";
 
 export class RuntimeError extends Error {
   constructor(
@@ -117,6 +124,7 @@ export async function submitAssessment(id: string, ownerKey: string): Promise<Ru
     results: null,
     completed_at: null,
   });
+  lifecycleEvent(session, ownerKey, "assessment.submitted", { responses: answered });
 
   return getStatus(id, ownerKey);
 }
@@ -141,12 +149,20 @@ export async function retryProcessing(id: string, ownerKey: string): Promise<Run
       ),
   );
   await repo.updateSession(id, { status: "processing", failure_reason: null });
+  lifecycleEvent(session, ownerKey, "assessment.retried", {
+    reset: rows.filter((row) => row.status === "failed" || row.status === "running").length,
+  });
   return getStatus(id, ownerKey);
 }
 
 export async function archiveAssessment(id: string, ownerKey: string): Promise<AssessmentSession> {
-  await requireSession(id, ownerKey);
-  return repo.updateSession(id, { status: "archived", archived_at: new Date().toISOString() });
+  const session = await requireSession(id, ownerKey);
+  const archived = await repo.updateSession(id, {
+    status: "archived",
+    archived_at: new Date().toISOString(),
+  });
+  lifecycleEvent(session, ownerKey, "assessment.archived");
+  return archived;
 }
 
 /* ------------------------ orchestration ------------------------ */
@@ -197,6 +213,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
     started_at: new Date().toISOString(),
     error: null,
   });
+  engineStarted(session, ownerKey, pending.stage, pending.attempt + 1);
 
   try {
     const context: EngineContext = {
@@ -215,6 +232,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
       completed_at: new Date().toISOString(),
       duration_ms: Date.now() - startedAt,
     });
+    engineCompleted(session, ownerKey, pending.stage, Date.now() - startedAt, output);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown engine failure";
     await repo.updateStageRun(id, pending.stage, {
@@ -224,6 +242,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
       duration_ms: Date.now() - startedAt,
     });
     await repo.updateSession(id, { failure_reason: `${pending.stage}: ${message}` });
+    engineFailed(session, ownerKey, pending.stage, Date.now() - startedAt, error);
     return getStatus(id, ownerKey);
   }
 
@@ -234,6 +253,10 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
       results: assembleResults(after),
       completed_at: new Date().toISOString(),
     });
+    lifecycleEvent(session, ownerKey, "assessment.completed", {
+      stages: after.length,
+    });
+    scheduleGraphRefresh(id);
   }
 
   return getStatus(id, ownerKey);

@@ -739,6 +739,162 @@ export type Database = {
           },
         ]
       }
+      audit_events: {
+        Row: {
+          archived_at: string | null
+          assessment_session_id: string | null
+          correlation_id: string
+          created_at: string
+          duration_ms: number | null
+          engine: string
+          entity_id: string | null
+          entity_type: string
+          event_type: string
+          execution_id: string
+          expires_at: string | null
+          id: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          metadata: Json
+          organisation_id: string
+          payload: Json
+          severity: string
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          assessment_session_id?: string | null
+          correlation_id?: string
+          created_at?: string
+          duration_ms?: number | null
+          engine?: string
+          entity_id?: string | null
+          entity_type?: string
+          event_type: string
+          execution_id?: string
+          expires_at?: string | null
+          id?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          organisation_id?: string
+          payload?: Json
+          severity?: string
+          timestamp?: string
+          user_id?: string
+        }
+        Update: {
+          archived_at?: string | null
+          assessment_session_id?: string | null
+          correlation_id?: string
+          created_at?: string
+          duration_ms?: number | null
+          engine?: string
+          entity_id?: string | null
+          entity_type?: string
+          event_type?: string
+          execution_id?: string
+          expires_at?: string | null
+          id?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          metadata?: Json
+          organisation_id?: string
+          payload?: Json
+          severity?: string
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      audit_explainability_edges: {
+        Row: {
+          assessment_session_id: string
+          confidence: number
+          created_at: string
+          id: string
+          metadata: Json
+          relationship_type: string
+          source_id: string
+          source_label: string
+          source_type: string
+          target_id: string
+          target_label: string
+          target_type: string
+        }
+        Insert: {
+          assessment_session_id: string
+          confidence?: number
+          created_at?: string
+          id?: string
+          metadata?: Json
+          relationship_type?: string
+          source_id: string
+          source_label?: string
+          source_type: string
+          target_id: string
+          target_label?: string
+          target_type: string
+        }
+        Update: {
+          assessment_session_id?: string
+          confidence?: number
+          created_at?: string
+          id?: string
+          metadata?: Json
+          relationship_type?: string
+          source_id?: string
+          source_label?: string
+          source_type?: string
+          target_id?: string
+          target_label?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
+      audit_retention_policies: {
+        Row: {
+          created_at: string
+          description: string
+          enabled: boolean
+          id: string
+          last_applied_at: string | null
+          mode: string
+          name: string
+          retain_days: number | null
+          scope: string
+          scope_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          last_applied_at?: string | null
+          mode?: string
+          name: string
+          retain_days?: number | null
+          scope?: string
+          scope_value?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          last_applied_at?: string | null
+          mode?: string
+          name?: string
+          retain_days?: number | null
+          scope?: string
+          scope_value?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -27,6 +27,11 @@ import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
+import { Route as AuditHealthRouteImport } from './routes/audit.health'
+import { Route as AuditEventsRouteImport } from './routes/audit.events'
+import { Route as AuditDashboardRouteImport } from './routes/audit.dashboard'
+import { Route as AuditAssessmentIdRouteImport } from './routes/audit.$assessmentId'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
@@ -36,7 +41,9 @@ import { Route as InternalPatternsIndexRouteImport } from './routes/internal.pat
 import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
 import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.narratives.index'
 import { Route as InternalKnowledgePacksIndexRouteImport } from './routes/internal.knowledge-packs.index'
+import { Route as InternalAuditIndexRouteImport } from './routes/internal.audit.index'
 import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
+import { Route as TraceEntityTypeEntityIdRouteImport } from './routes/trace.$entityType.$entityId'
 import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
 import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
 import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
@@ -47,6 +54,10 @@ import { Route as InternalPatternsIdRouteImport } from './routes/internal.patter
 import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
 import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
 import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
+import { Route as InternalAuditIdRouteImport } from './routes/internal.audit.$id'
+import { Route as ExplainEntityTypeEntityIdRouteImport } from './routes/explain.$entityType.$entityId'
+import { Route as EvidenceEntityTypeEntityIdRouteImport } from './routes/evidence.$entityType.$entityId'
+import { Route as AuditEventIdRouteImport } from './routes/audit.event.$id'
 import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
 import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
 import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
@@ -57,6 +68,7 @@ import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.
 import { Route as AssessmentIdPatternsRouteImport } from './routes/assessment.$id.patterns'
 import { Route as AssessmentIdObservationsRouteImport } from './routes/assessment.$id.observations'
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
+import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
@@ -156,6 +168,31 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
   path: '/dashboard/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditRetentionRoute = AuditRetentionRouteImport.update({
+  id: '/audit/retention',
+  path: '/audit/retention',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditHealthRoute = AuditHealthRouteImport.update({
+  id: '/audit/health',
+  path: '/audit/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditEventsRoute = AuditEventsRouteImport.update({
+  id: '/audit/events',
+  path: '/audit/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditDashboardRoute = AuditDashboardRouteImport.update({
+  id: '/audit/dashboard',
+  path: '/audit/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditAssessmentIdRoute = AuditAssessmentIdRouteImport.update({
+  id: '/audit/$assessmentId',
+  path: '/audit/$assessmentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   id: '/api/assessments',
   path: '/api/assessments',
@@ -203,9 +240,19 @@ const InternalKnowledgePacksIndexRoute =
     path: '/internal/knowledge-packs/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InternalAuditIndexRoute = InternalAuditIndexRouteImport.update({
+  id: '/internal/audit/',
+  path: '/internal/audit/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
   id: '/assessment/$id/',
   path: '/assessment/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TraceEntityTypeEntityIdRoute = TraceEntityTypeEntityIdRouteImport.update({
+  id: '/trace/$entityType/$entityId',
+  path: '/trace/$entityType/$entityId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
@@ -259,6 +306,28 @@ const InternalKnowledgePacksIdRoute =
     path: '/internal/knowledge-packs/$id',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InternalAuditIdRoute = InternalAuditIdRouteImport.update({
+  id: '/internal/audit/$id',
+  path: '/internal/audit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExplainEntityTypeEntityIdRoute =
+  ExplainEntityTypeEntityIdRouteImport.update({
+    id: '/explain/$entityType/$entityId',
+    path: '/explain/$entityType/$entityId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EvidenceEntityTypeEntityIdRoute =
+  EvidenceEntityTypeEntityIdRouteImport.update({
+    id: '/evidence/$entityType/$entityId',
+    path: '/evidence/$entityType/$entityId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuditEventIdRoute = AuditEventIdRouteImport.update({
+  id: '/audit/event/$id',
+  path: '/audit/event/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
   id: '/assessment/$id/summary',
   path: '/assessment/$id/summary',
@@ -310,6 +379,12 @@ const AssessmentIdNarrativeRoute = AssessmentIdNarrativeRouteImport.update({
   path: '/assessment/$id/narrative',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssessmentIdEvidenceGraphRoute =
+  AssessmentIdEvidenceGraphRouteImport.update({
+    id: '/assessment/$id/evidence-graph',
+    path: '/assessment/$id/evidence-graph',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
   id: '/assessment/$id/dashboard',
   path: '/assessment/$id/dashboard',
@@ -355,6 +430,11 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/audit/$assessmentId': typeof AuditAssessmentIdRoute
+  '/audit/dashboard': typeof AuditDashboardRoute
+  '/audit/events': typeof AuditEventsRoute
+  '/audit/health': typeof AuditHealthRoute
+  '/audit/retention': typeof AuditRetentionRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -374,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
+  '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -384,6 +465,10 @@ export interface FileRoutesByFullPath {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/audit/event/$id': typeof AuditEventIdRoute
+  '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
+  '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -394,7 +479,9 @@ export interface FileRoutesByFullPath {
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
+  '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/internal/audit/': typeof InternalAuditIndexRoute
   '/internal/knowledge-packs/': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
@@ -413,6 +500,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/audit/$assessmentId': typeof AuditAssessmentIdRoute
+  '/audit/dashboard': typeof AuditDashboardRoute
+  '/audit/events': typeof AuditEventsRoute
+  '/audit/health': typeof AuditHealthRoute
+  '/audit/retention': typeof AuditRetentionRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -432,6 +524,7 @@ export interface FileRoutesByTo {
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
+  '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -442,6 +535,10 @@ export interface FileRoutesByTo {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/audit/event/$id': typeof AuditEventIdRoute
+  '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
+  '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -452,7 +549,9 @@ export interface FileRoutesByTo {
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
+  '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
+  '/internal/audit': typeof InternalAuditIndexRoute
   '/internal/knowledge-packs': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives': typeof InternalNarrativesIndexRoute
   '/internal/observations': typeof InternalObservationsIndexRoute
@@ -472,6 +571,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/audit/$assessmentId': typeof AuditAssessmentIdRoute
+  '/audit/dashboard': typeof AuditDashboardRoute
+  '/audit/events': typeof AuditEventsRoute
+  '/audit/health': typeof AuditHealthRoute
+  '/audit/retention': typeof AuditRetentionRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -491,6 +595,7 @@ export interface FileRoutesById {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
+  '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
   '/assessment/$id/observations': typeof AssessmentIdObservationsRoute
   '/assessment/$id/patterns': typeof AssessmentIdPatternsRoute
@@ -501,6 +606,10 @@ export interface FileRoutesById {
   '/assessment/$id/scores': typeof AssessmentIdScoresRoute
   '/assessment/$id/signals': typeof AssessmentIdSignalsRoute
   '/assessment/$id/summary': typeof AssessmentIdSummaryRoute
+  '/audit/event/$id': typeof AuditEventIdRoute
+  '/evidence/$entityType/$entityId': typeof EvidenceEntityTypeEntityIdRoute
+  '/explain/$entityType/$entityId': typeof ExplainEntityTypeEntityIdRoute
+  '/internal/audit/$id': typeof InternalAuditIdRoute
   '/internal/knowledge-packs/$id': typeof InternalKnowledgePacksIdRoute
   '/internal/narratives/$id': typeof InternalNarrativesIdRoute
   '/internal/observations/$id': typeof InternalObservationsIdRoute
@@ -511,7 +620,9 @@ export interface FileRoutesById {
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
+  '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
+  '/internal/audit/': typeof InternalAuditIndexRoute
   '/internal/knowledge-packs/': typeof InternalKnowledgePacksIndexRoute
   '/internal/narratives/': typeof InternalNarrativesIndexRoute
   '/internal/observations/': typeof InternalObservationsIndexRoute
@@ -532,6 +643,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/api/assessments'
+    | '/audit/$assessmentId'
+    | '/audit/dashboard'
+    | '/audit/events'
+    | '/audit/health'
+    | '/audit/retention'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -551,6 +667,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
+    | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -561,6 +678,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/audit/event/$id'
+    | '/evidence/$entityType/$entityId'
+    | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -571,7 +692,9 @@ export interface FileRouteTypes {
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
+    | '/trace/$entityType/$entityId'
     | '/assessment/$id/'
+    | '/internal/audit/'
     | '/internal/knowledge-packs/'
     | '/internal/narratives/'
     | '/internal/observations/'
@@ -590,6 +713,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/assessments'
+    | '/audit/$assessmentId'
+    | '/audit/dashboard'
+    | '/audit/events'
+    | '/audit/health'
+    | '/audit/retention'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -609,6 +737,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
+    | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -619,6 +748,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/audit/event/$id'
+    | '/evidence/$entityType/$entityId'
+    | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -629,7 +762,9 @@ export interface FileRouteTypes {
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
+    | '/trace/$entityType/$entityId'
     | '/assessment/$id'
+    | '/internal/audit'
     | '/internal/knowledge-packs'
     | '/internal/narratives'
     | '/internal/observations'
@@ -648,6 +783,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/api/assessments'
+    | '/audit/$assessmentId'
+    | '/audit/dashboard'
+    | '/audit/events'
+    | '/audit/health'
+    | '/audit/retention'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -667,6 +807,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/api/assessments/$id'
     | '/assessment/$id/dashboard'
+    | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
     | '/assessment/$id/observations'
     | '/assessment/$id/patterns'
@@ -677,6 +818,10 @@ export interface FileRouteTypes {
     | '/assessment/$id/scores'
     | '/assessment/$id/signals'
     | '/assessment/$id/summary'
+    | '/audit/event/$id'
+    | '/evidence/$entityType/$entityId'
+    | '/explain/$entityType/$entityId'
+    | '/internal/audit/$id'
     | '/internal/knowledge-packs/$id'
     | '/internal/narratives/$id'
     | '/internal/observations/$id'
@@ -687,7 +832,9 @@ export interface FileRouteTypes {
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
     | '/report/$id/download'
+    | '/trace/$entityType/$entityId'
     | '/assessment/$id/'
+    | '/internal/audit/'
     | '/internal/knowledge-packs/'
     | '/internal/narratives/'
     | '/internal/observations/'
@@ -707,6 +854,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
+  AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
+  AuditDashboardRoute: typeof AuditDashboardRoute
+  AuditEventsRoute: typeof AuditEventsRoute
+  AuditHealthRoute: typeof AuditHealthRoute
+  AuditRetentionRoute: typeof AuditRetentionRoute
   DashboardIdRoute: typeof DashboardIdRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
@@ -725,6 +877,7 @@ export interface RootRouteChildren {
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
+  AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
   AssessmentIdObservationsRoute: typeof AssessmentIdObservationsRoute
   AssessmentIdPatternsRoute: typeof AssessmentIdPatternsRoute
@@ -735,6 +888,10 @@ export interface RootRouteChildren {
   AssessmentIdScoresRoute: typeof AssessmentIdScoresRoute
   AssessmentIdSignalsRoute: typeof AssessmentIdSignalsRoute
   AssessmentIdSummaryRoute: typeof AssessmentIdSummaryRoute
+  AuditEventIdRoute: typeof AuditEventIdRoute
+  EvidenceEntityTypeEntityIdRoute: typeof EvidenceEntityTypeEntityIdRoute
+  ExplainEntityTypeEntityIdRoute: typeof ExplainEntityTypeEntityIdRoute
+  InternalAuditIdRoute: typeof InternalAuditIdRoute
   InternalKnowledgePacksIdRoute: typeof InternalKnowledgePacksIdRoute
   InternalNarrativesIdRoute: typeof InternalNarrativesIdRoute
   InternalObservationsIdRoute: typeof InternalObservationsIdRoute
@@ -744,7 +901,9 @@ export interface RootRouteChildren {
   InternalSignalsIdRoute: typeof InternalSignalsIdRoute
   KnowledgePackIdActivateRoute: typeof KnowledgePackIdActivateRoute
   KnowledgePackIdVersionsRoute: typeof KnowledgePackIdVersionsRoute
+  TraceEntityTypeEntityIdRoute: typeof TraceEntityTypeEntityIdRoute
   AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
+  InternalAuditIndexRoute: typeof InternalAuditIndexRoute
   InternalKnowledgePacksIndexRoute: typeof InternalKnowledgePacksIndexRoute
   InternalNarrativesIndexRoute: typeof InternalNarrativesIndexRoute
   InternalObservationsIndexRoute: typeof InternalObservationsIndexRoute
@@ -884,6 +1043,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/audit/retention': {
+      id: '/audit/retention'
+      path: '/audit/retention'
+      fullPath: '/audit/retention'
+      preLoaderRoute: typeof AuditRetentionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/health': {
+      id: '/audit/health'
+      path: '/audit/health'
+      fullPath: '/audit/health'
+      preLoaderRoute: typeof AuditHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/events': {
+      id: '/audit/events'
+      path: '/audit/events'
+      fullPath: '/audit/events'
+      preLoaderRoute: typeof AuditEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/dashboard': {
+      id: '/audit/dashboard'
+      path: '/audit/dashboard'
+      fullPath: '/audit/dashboard'
+      preLoaderRoute: typeof AuditDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/$assessmentId': {
+      id: '/audit/$assessmentId'
+      path: '/audit/$assessmentId'
+      fullPath: '/audit/$assessmentId'
+      preLoaderRoute: typeof AuditAssessmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assessments': {
       id: '/api/assessments'
       path: '/api/assessments'
@@ -947,11 +1141,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalKnowledgePacksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/audit/': {
+      id: '/internal/audit/'
+      path: '/internal/audit'
+      fullPath: '/internal/audit/'
+      preLoaderRoute: typeof InternalAuditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assessment/$id/': {
       id: '/assessment/$id/'
       path: '/assessment/$id'
       fullPath: '/assessment/$id/'
       preLoaderRoute: typeof AssessmentIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trace/$entityType/$entityId': {
+      id: '/trace/$entityType/$entityId'
+      path: '/trace/$entityType/$entityId'
+      fullPath: '/trace/$entityType/$entityId'
+      preLoaderRoute: typeof TraceEntityTypeEntityIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report/$id/download': {
@@ -1024,6 +1232,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/internal/audit/$id': {
+      id: '/internal/audit/$id'
+      path: '/internal/audit/$id'
+      fullPath: '/internal/audit/$id'
+      preLoaderRoute: typeof InternalAuditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explain/$entityType/$entityId': {
+      id: '/explain/$entityType/$entityId'
+      path: '/explain/$entityType/$entityId'
+      fullPath: '/explain/$entityType/$entityId'
+      preLoaderRoute: typeof ExplainEntityTypeEntityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evidence/$entityType/$entityId': {
+      id: '/evidence/$entityType/$entityId'
+      path: '/evidence/$entityType/$entityId'
+      fullPath: '/evidence/$entityType/$entityId'
+      preLoaderRoute: typeof EvidenceEntityTypeEntityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/event/$id': {
+      id: '/audit/event/$id'
+      path: '/audit/event/$id'
+      fullPath: '/audit/event/$id'
+      preLoaderRoute: typeof AuditEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assessment/$id/summary': {
       id: '/assessment/$id/summary'
       path: '/assessment/$id/summary'
@@ -1092,6 +1328,13 @@ declare module '@tanstack/react-router' {
       path: '/assessment/$id/narrative'
       fullPath: '/assessment/$id/narrative'
       preLoaderRoute: typeof AssessmentIdNarrativeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/evidence-graph': {
+      id: '/assessment/$id/evidence-graph'
+      path: '/assessment/$id/evidence-graph'
+      fullPath: '/assessment/$id/evidence-graph'
+      preLoaderRoute: typeof AssessmentIdEvidenceGraphRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment/$id/dashboard': {
@@ -1199,6 +1442,11 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
+  AuditAssessmentIdRoute: AuditAssessmentIdRoute,
+  AuditDashboardRoute: AuditDashboardRoute,
+  AuditEventsRoute: AuditEventsRoute,
+  AuditHealthRoute: AuditHealthRoute,
+  AuditRetentionRoute: AuditRetentionRoute,
   DashboardIdRoute: DashboardIdRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
@@ -1217,6 +1465,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
+  AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
   AssessmentIdObservationsRoute: AssessmentIdObservationsRoute,
   AssessmentIdPatternsRoute: AssessmentIdPatternsRoute,
@@ -1227,6 +1476,10 @@ const rootRouteChildren: RootRouteChildren = {
   AssessmentIdScoresRoute: AssessmentIdScoresRoute,
   AssessmentIdSignalsRoute: AssessmentIdSignalsRoute,
   AssessmentIdSummaryRoute: AssessmentIdSummaryRoute,
+  AuditEventIdRoute: AuditEventIdRoute,
+  EvidenceEntityTypeEntityIdRoute: EvidenceEntityTypeEntityIdRoute,
+  ExplainEntityTypeEntityIdRoute: ExplainEntityTypeEntityIdRoute,
+  InternalAuditIdRoute: InternalAuditIdRoute,
   InternalKnowledgePacksIdRoute: InternalKnowledgePacksIdRoute,
   InternalNarrativesIdRoute: InternalNarrativesIdRoute,
   InternalObservationsIdRoute: InternalObservationsIdRoute,
@@ -1236,7 +1489,9 @@ const rootRouteChildren: RootRouteChildren = {
   InternalSignalsIdRoute: InternalSignalsIdRoute,
   KnowledgePackIdActivateRoute: KnowledgePackIdActivateRoute,
   KnowledgePackIdVersionsRoute: KnowledgePackIdVersionsRoute,
+  TraceEntityTypeEntityIdRoute: TraceEntityTypeEntityIdRoute,
   AssessmentIdIndexRoute: AssessmentIdIndexRoute,
+  InternalAuditIndexRoute: InternalAuditIndexRoute,
   InternalKnowledgePacksIndexRoute: InternalKnowledgePacksIndexRoute,
   InternalNarrativesIndexRoute: InternalNarrativesIndexRoute,
   InternalObservationsIndexRoute: InternalObservationsIndexRoute,
