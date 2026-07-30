@@ -45,6 +45,7 @@ async function chatCompletion(
   baseUrl: string,
   headers: Record<string, string>,
   request: NarrativeLlmRequest,
+  extraBody: Record<string, unknown> = {},
 ): Promise<NarrativeLlmResult> {
   const response = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
@@ -57,8 +58,11 @@ async function chatCompletion(
         { role: "system", content: request.system },
         { role: "user", content: request.prompt },
       ],
+      ...extraBody,
     }),
   });
+
+
 
   if (response.status === 429) {
     throw new NarrativeLlmError("Narrative model rate limit exceeded", 429);
