@@ -12,7 +12,7 @@ export const Route = createFileRoute("/api/assessments/$id/execute")({
           request,
         );
         return handleRoute(request, (api, ownerKey) =>
-          api.execute(params.id, ownerKey, {
+          api.execute(id, ownerKey, {
             mode: parseMode(body.mode),
             metadata: body.metadata,
           }),
@@ -20,9 +20,10 @@ export const Route = createFileRoute("/api/assessments/$id/execute")({
       },
       // GET — latest execution for this assessment
       GET: async ({ request, params }) => {
-        const { handleRoute } = await import("@/lib/orchestrator/http.server");
+        const { handleRoute , requireUuid } = await import("@/lib/orchestrator/http.server");
+        const id = requireUuid(id);
         return handleRoute(request, (api, ownerKey) =>
-          api.latestForSession(params.id, ownerKey),
+          api.latestForSession(id, ownerKey),
         );
       },
     },

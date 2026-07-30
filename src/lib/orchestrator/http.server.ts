@@ -65,3 +65,13 @@ export function parseHistoryFilters(request: Request, ownerKey: string): Executi
     limit: Number.isFinite(limit) ? Math.min(Math.max(limit, 1), 500) : 100,
   };
 }
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Validates a path id before it reaches the database (avoids 500s on `undefined`). */
+export function requireUuid(value: string | undefined, label = "id"): string {
+  if (!value || !UUID_RE.test(value)) {
+    throw new OrchestratorError(`Invalid ${label}`, 400, "invalid_id");
+  }
+  return value;
+}
