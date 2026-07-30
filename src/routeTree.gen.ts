@@ -74,6 +74,7 @@ import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id
 import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
+import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
 import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
 import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -414,6 +415,11 @@ const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
   path: '/status',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
+  id: '/cancel',
+  path: '/cancel',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
 const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -515,6 +521,7 @@ export interface FileRoutesByFullPath {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
@@ -588,6 +595,7 @@ export interface FileRoutesByTo {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
@@ -662,6 +670,7 @@ export interface FileRoutesById {
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
   '/api/assessments/$id/status': typeof ApiAssessmentsIdStatusRoute
   '/api/assessments/$id/submit': typeof ApiAssessmentsIdSubmitRoute
+  '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
 }
@@ -737,6 +746,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
     | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesByTo: FileRoutesByTo
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
     | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   id:
@@ -883,6 +894,7 @@ export interface FileRouteTypes {
     | '/api/assessments/$id/retry'
     | '/api/assessments/$id/status'
     | '/api/assessments/$id/submit'
+    | '/api/executions/$id/cancel'
     | '/api/executions/$id/status'
     | '/assessment/$id/export/$format'
   fileRoutesById: FileRoutesById
@@ -1409,6 +1421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
     }
+    '/api/executions/$id/cancel': {
+      id: '/api/executions/$id/cancel'
+      path: '/cancel'
+      fullPath: '/api/executions/$id/cancel'
+      preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
+    }
     '/api/assessments/$id/submit': {
       id: '/api/assessments/$id/submit'
       path: '/submit'
@@ -1500,10 +1519,12 @@ const ReportIdRouteWithChildren = ReportIdRoute._addFileChildren(
 )
 
 interface ApiExecutionsIdRouteChildren {
+  ApiExecutionsIdCancelRoute: typeof ApiExecutionsIdCancelRoute
   ApiExecutionsIdStatusRoute: typeof ApiExecutionsIdStatusRoute
 }
 
 const ApiExecutionsIdRouteChildren: ApiExecutionsIdRouteChildren = {
+  ApiExecutionsIdCancelRoute: ApiExecutionsIdCancelRoute,
   ApiExecutionsIdStatusRoute: ApiExecutionsIdStatusRoute,
 }
 
