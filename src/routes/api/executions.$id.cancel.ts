@@ -6,7 +6,7 @@ export const Route = createFileRoute("/api/executions/$id/cancel")({
       // POST — requests cooperative cancellation of a running execution
       POST: async ({ request, params }) => {
         const { handleRoute , requireUuid } = await import("@/lib/orchestrator/http.server");
-        const id = requireUuid(id);
+        const id = requireUuid(params.id);
         return handleRoute(request, (api, ownerKey) => api.cancel(id, ownerKey));
       },
     },

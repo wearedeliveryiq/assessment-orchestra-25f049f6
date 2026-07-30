@@ -21,7 +21,7 @@ export const Route = createFileRoute("/api/assessments/$id/execute")({
       // GET — latest execution for this assessment
       GET: async ({ request, params }) => {
         const { handleRoute , requireUuid } = await import("@/lib/orchestrator/http.server");
-        const id = requireUuid(id);
+        const id = requireUuid(params.id);
         return handleRoute(request, (api, ownerKey) =>
           api.latestForSession(id, ownerKey),
         );
