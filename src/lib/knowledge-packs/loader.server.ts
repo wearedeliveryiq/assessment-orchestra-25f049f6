@@ -1,191 +1,100 @@
 import {
-  PACK_FILE_SCHEMAS,
-  REQUIRED_PACK_FILES,
-  type KnowledgePackDocument,
-} from "./schema";
+  DEFAULT_ACTIVE_PACK_ID,
+  KnowledgePackError,
+  knowledgePackRegistry,
+} from "./registry.server";
+import type { KnowledgePackDocument } from "./schema";
+
+export { KnowledgePackError, DEFAULT_ACTIVE_PACK_ID };
 
 /**
  * KnowledgePackLoader
  *
- * Loads, validates, caches and versions Knowledge Packs. Packs live in
- * /knowledge-packs/<pack-id>/*.json and are bundled at build time, so no
- * runtime filesystem access is required in the worker environment.
+ * Thin, engine-facing facade over the Knowledge Pack Runtime. Engines keep
+ * asking for definitions exactly as before; discovery, validation, versioning,
+ * caching and activation are owned by the registry, so supporting a new
+ * framework (P3M3, Governance, Benefits) is a configuration change only.
  */
-
-export class KnowledgePackError extends Error {
-  constructor(
-    message: string,
-    readonly packId: string,
-    readonly cause?: unknown,
-  ) {
-    super(message);
-    this.name = "KnowledgePackError";
-  }
-}
-
-/** Raw pack sources: packId -> fileName -> parsed JSON. */
-export type PackSources = Record<string, Record<string, unknown>>;
-
-const globbed = import.meta.glob("../../../knowledge-packs/*/*.json", {
-  eager: true,
-}) as Record<string, { default: unknown }>;
-
-function sourcesFromGlob(): PackSources {
-  const sources: PackSources = {};
-  for (const [path, mod] of Object.entries(globbed)) {
-    const match = /knowledge-packs\/([^/]+)\/([^/]+\.json)$/.exec(path);
-    if (!match) continue;
-    const [, packId, fileName] = match;
-    sources[packId] ??= {};
-    sources[packId][fileName] = mod.default;
-  }
-  return sources;
-}
-
-export const DEFAULT_ACTIVE_PACK_ID = "executive-sponsorship";
-
 export class KnowledgePackLoader {
-  private readonly cache = new Map<string, KnowledgePackDocument>();
-
-  constructor(
-    private readonly sources: PackSources = sourcesFromGlob(),
-    private readonly activePackId: string = DEFAULT_ACTIVE_PACK_ID,
-  ) {}
+  constructor(private readonly registry = knowledgePackRegistry) {}
 
   /** Every pack id discovered on disk, regardless of status. */
   listPackIds(): string[] {
-    return Object.keys(this.sources).sort();
+    return this.registry.list().map((pack) => pack.packId);
+  }
+
+  /** The pack id the runtime currently reasons with. */
+  activePackId(): string {
+    return this.registry.activePackId();
   }
 
   /** The pack the platform currently reasons with. */
   loadActive(): KnowledgePackDocument {
-    return this.load(this.activePackId);
+    return this.registry.loadActive().document;
   }
 
-  /**
-   * Loads a pack by id (optionally pinned to a version), validating every
-   * required file. Results are cached per pack id + version.
-   */
+  /** Loads a pack by id, optionally pinned to a version or semver range. */
   load(packId: string, expectedVersion?: string): KnowledgePackDocument {
-    const cacheKey = `${packId}@${expectedVersion ?? "active"}`;
-    const cached = this.cache.get(cacheKey);
-    if (cached) return cached;
-
-    const files = this.sources[packId];
-    if (!files) {
-      throw new KnowledgePackError(`Knowledge pack "${packId}" was not found`, packId);
-    }
-
-    const missing = REQUIRED_PACK_FILES.filter((file) => files[file] === undefined);
-    if (missing.length > 0) {
-      throw new KnowledgePackError(
-        `Knowledge pack "${packId}" is missing required file(s): ${missing.join(", ")}`,
-        packId,
-      );
-    }
-
-    const parsed: Record<string, unknown> = {};
-    for (const file of REQUIRED_PACK_FILES) {
-      const result = PACK_FILE_SCHEMAS[file].safeParse(files[file]);
-      if (!result.success) {
-        const issue = result.error.issues[0];
-        throw new KnowledgePackError(
-          `Knowledge pack "${packId}" failed validation in ${file}: ${issue.path.join(".")} ${issue.message}`,
-          packId,
-          result.error,
-        );
-      }
-      parsed[file.replace(".json", "")] = result.data;
-    }
-
-    const document = {
-      manifest: parsed.manifest,
-      questions: parsed.questions,
-      observations: parsed.observations,
-      signals: parsed.signals,
-      rules: parsed.rules,
-      patterns: parsed.patterns,
-      recommendations: parsed.recommendations,
-      narratives: parsed.narratives,
-      scoring: parsed.scoring,
-    } as KnowledgePackDocument;
-
-    if (expectedVersion && document.manifest.version !== expectedVersion) {
-      throw new KnowledgePackError(
-        `Knowledge pack "${packId}" version ${document.manifest.version} does not match requested ${expectedVersion}`,
-        packId,
-      );
-    }
-
-    if (document.manifest.id !== packId) {
-      throw new KnowledgePackError(
-        `Knowledge pack "${packId}" declares mismatched id "${document.manifest.id}"`,
-        packId,
-      );
-    }
-
-    this.cache.set(cacheKey, document);
-    return document;
+    return this.registry.load(packId, expectedVersion).document;
   }
 
   /** Observation definitions exposed to the Observation Engine. */
-  observationDefinitions(packId: string = this.activePackId) {
+  observationDefinitions(packId: string = this.activePackId()) {
     return this.load(packId).observations.definitions;
   }
 
   /** Signal definitions exposed to the Signal Engine. */
-  signalDefinitions(packId: string = this.activePackId) {
+  signalDefinitions(packId: string = this.activePackId()) {
     return this.load(packId).signals.definitions;
   }
 
   /** Signal categories declared by the pack, used by the Signal Explorer. */
-  signalCategories(packId: string = this.activePackId) {
+  signalCategories(packId: string = this.activePackId()) {
     return this.load(packId).signals.categories;
   }
 
   /** Rule definitions exposed to the Rule Engine. */
-  ruleDefinitions(packId: string = this.activePackId) {
+  ruleDefinitions(packId: string = this.activePackId()) {
     return this.load(packId).rules.definitions;
   }
 
   /** Rule categories declared by the pack, used by the Rule Explorer. */
-  ruleCategories(packId: string = this.activePackId) {
+  ruleCategories(packId: string = this.activePackId()) {
     return this.load(packId).rules.categories;
   }
 
   /** Pattern definitions exposed to the Pattern Engine. */
-  patternDefinitions(packId: string = this.activePackId) {
+  patternDefinitions(packId: string = this.activePackId()) {
     return this.load(packId).patterns.definitions;
   }
 
   /** Pattern categories declared by the pack, used by the Pattern Explorer. */
-  patternCategories(packId: string = this.activePackId) {
+  patternCategories(packId: string = this.activePackId()) {
     return this.load(packId).patterns.categories;
   }
 
   /** Scoring dimensions exposed to the Scoring Engine. */
-  scoreDefinitions(packId: string = this.activePackId) {
+  scoreDefinitions(packId: string = this.activePackId()) {
     return this.load(packId).scoring.dimensions;
   }
 
   /** Overall aggregation model declared by the pack. */
-  overallScoreDefinition(packId: string = this.activePackId) {
+  overallScoreDefinition(packId: string = this.activePackId()) {
     return this.load(packId).scoring.overall;
   }
 
   /** Pack-wide scoring defaults (maturity bands, severity multipliers). */
-  scoringDefaults(packId: string = this.activePackId) {
+  scoringDefaults(packId: string = this.activePackId()) {
     return this.load(packId).scoring.defaults;
   }
 
   /** Declarative narrative configuration consumed by the Narrative Engine. */
-  narrativeConfig(packId: string = this.activePackId) {
+  narrativeConfig(packId: string = this.activePackId()) {
     return this.load(packId).narratives.narrative;
   }
 
-
   clearCache(): void {
-    this.cache.clear();
+    this.registry.reload("loader");
   }
 }
 
