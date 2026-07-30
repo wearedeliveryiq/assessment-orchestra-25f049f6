@@ -27,8 +27,11 @@ import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/auth.register'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthInvitationRouteImport } from './routes/auth.invitation'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
 import { Route as AuditHealthRouteImport } from './routes/audit.health'
@@ -193,6 +196,16 @@ const DashboardIdRoute = DashboardIdRouteImport.update({
   path: '/dashboard/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
+  id: '/auth/verify-email',
+  path: '/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/auth/register',
   path: '/auth/register',
@@ -201,6 +214,11 @@ const AuthRegisterRoute = AuthRegisterRouteImport.update({
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthInvitationRoute = AuthInvitationRouteImport.update({
+  id: '/auth/invitation',
+  path: '/auth/invitation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
@@ -588,8 +606,11 @@ export interface FileRoutesByFullPath {
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -683,8 +704,11 @@ export interface FileRoutesByTo {
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -779,8 +803,11 @@ export interface FileRoutesById {
   '/audit/health': typeof AuditHealthRoute
   '/audit/retention': typeof AuditRetentionRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/invitation': typeof AuthInvitationRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
@@ -876,8 +903,11 @@ export interface FileRouteTypes {
     | '/audit/health'
     | '/audit/retention'
     | '/auth/forgot-password'
+    | '/auth/invitation'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -971,8 +1001,11 @@ export interface FileRouteTypes {
     | '/audit/health'
     | '/audit/retention'
     | '/auth/forgot-password'
+    | '/auth/invitation'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -1066,8 +1099,11 @@ export interface FileRouteTypes {
     | '/audit/health'
     | '/audit/retention'
     | '/auth/forgot-password'
+    | '/auth/invitation'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/verify-email'
     | '/dashboard/$id'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
@@ -1162,8 +1198,11 @@ export interface RootRouteChildren {
   AuditHealthRoute: typeof AuditHealthRoute
   AuditRetentionRoute: typeof AuditRetentionRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthInvitationRoute: typeof AuthInvitationRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   DashboardIdRoute: typeof DashboardIdRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
@@ -1363,6 +1402,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/register': {
       id: '/auth/register'
       path: '/auth/register'
@@ -1375,6 +1428,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/invitation': {
+      id: '/auth/invitation'
+      path: '/auth/invitation'
+      fullPath: '/auth/invitation'
+      preLoaderRoute: typeof AuthInvitationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/forgot-password': {
@@ -1995,8 +2055,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuditHealthRoute: AuditHealthRoute,
   AuditRetentionRoute: AuditRetentionRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthInvitationRoute: AuthInvitationRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   DashboardIdRoute: DashboardIdRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
