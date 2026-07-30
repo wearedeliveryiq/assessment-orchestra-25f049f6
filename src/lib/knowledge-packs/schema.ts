@@ -235,11 +235,95 @@ export const patternsSchema = z.object({
 export const recommendationsSchema = z.object({
   recommendations: z.array(z.record(z.unknown())).min(1),
 });
+/**
+ * Narrative model. Everything the Narrative Engine needs — generation mode,
+ * provider, tone, prompt rules, per-section templates and validation policy —
+ * is declared by the pack so narrative behaviour is configuration, not code.
+ */
+export const narrativeGenerationSchema = z.object({
+  /** template = deterministic only, ai = model only, hybrid = ai with template fallback. */
+  mode: z.enum(["template", "ai", "hybrid"]).default("template"),
+  /** Provider id resolved by the LLM provider registry. */
+  provider: z.string().min(1).default("lovable"),
+  model: z.string().min(1).default("google/gemini-3.6-flash"),
+  temperature: z.number().min(0).max(2).default(0.3),
+  maxOutputTokens: z.number().int().positive().default(900),
+  /** When AI generation fails or is unavailable, fall back to the template. */
+  fallbackToTemplate: z.boolean().default(true),
+});
+
+export type NarrativeGenerationConfig = z.infer<typeof narrativeGenerationSchema>;
+
+export const narrativeToneSchema = z.object({
+  voice: z.string().min(1).default("Direct, measured, consulting-grade"),
+  audience: z.string().min(1).default("Executive leadership"),
+  register: z.string().min(1).default("formal"),
+  perspective: z.string().min(1).default("third-person"),
+});
+
+export const narrativePromptRulesSchema = z.object({
+  system: z.string().min(1),
+  must: z.array(z.string().min(1)).default([]),
+  mustNot: z.array(z.string().min(1)).default([]),
+});
+
+/** Evidence families a section is permitted to reason over. */
+export const narrativeEvidenceKindSchema = z.enum([
+  "summary",
+  "scores",
+  "patterns",
+  "recommendations",
+  "counts",
+]);
+
+export type NarrativeEvidenceKind = z.infer<typeof narrativeEvidenceKindSchema>;
+
+export const narrativeSectionSchema = z.object({
+  key: z.string().min(1),
+  title: z.string().min(1),
+  order: z.number().int().nonnegative(),
+  evidence: z.array(narrativeEvidenceKindSchema).min(1),
+  aiEnabled: z.boolean().default(true),
+  minWords: z.number().int().nonnegative().default(0),
+  maxWords: z.number().int().positive().default(250),
+  guidance: z.string().default(""),
+  /** Deterministic template with {placeholder} tokens. */
+  template: z.string().min(1),
+  /** Used when the section has no supporting evidence at all. */
+  emptyTemplate: z.string().optional(),
+});
+
+export type NarrativeSectionDefinition = z.infer<typeof narrativeSectionSchema>;
+
+export const narrativeValidationSchema = z.object({
+  requiredSections: z.array(z.string().min(1)).default([]),
+  bannedPhrases: z.array(z.string().min(1)).default([]),
+  requireEvidence: z.boolean().default(true),
+  minConfidence: z.number().min(0).max(1).default(0),
+});
+
+export const narrativeConfigSchema = z.object({
+  generation: narrativeGenerationSchema.default({}),
+  tone: narrativeToneSchema.default({}),
+  promptRules: narrativePromptRulesSchema,
+  headline: z
+    .object({ template: z.string().min(1), aiEnabled: z.boolean().default(false) })
+    .default({ template: "{organisation}: {maturityLevel}", aiEnabled: false }),
+  sections: z.array(narrativeSectionSchema).min(1),
+  validation: narrativeValidationSchema.default({}),
+});
+
+export type NarrativeConfig = z.infer<typeof narrativeConfigSchema>;
+
 export const narrativesSchema = z.object({
+  /** Legacy runtime narrative fields consumed by the assessment pipeline. */
   headlines: z.array(z.record(z.unknown())).min(1),
   summaryTemplate: z.string().min(1),
   paragraphTemplates: z.array(z.string()).min(1),
+  /** Declarative configuration for the Narrative Engine. */
+  narrative: narrativeConfigSchema.optional(),
 });
+
 /**
  * Scoring model. A Score quantifies organisational capability for one
  * assessment dimension and is derived from Patterns ONLY. Everything the
