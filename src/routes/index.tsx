@@ -5,6 +5,7 @@ import { ArrowRight, ClipboardList, FileCheck2, Loader2, PlusCircle } from "luci
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/deliveryiq/app-shell";
+import { IdentityMenu } from "@/components/identity/identity-menu";
 import { StatusPill } from "@/components/deliveryiq/status-pill";
 import { assessmentApi, assessmentKeys } from "@/lib/assessment/client";
 import { useHydrated } from "@/hooks/use-hydrated";
