@@ -41,6 +41,7 @@ import { Route as AuditDashboardRouteImport } from './routes/audit.dashboard'
 import { Route as AuditAssessmentIdRouteImport } from './routes/audit.$assessmentId'
 import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
 import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
+import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
@@ -276,6 +277,11 @@ const ApiWorkspacesRoute = ApiWorkspacesRouteImport.update({
 const ApiOrganisationsRoute = ApiOrganisationsRouteImport.update({
   id: '/api/organisations',
   path: '/api/organisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
+  id: '/api/notifications',
+  path: '/api/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMembersRoute = ApiMembersRouteImport.update({
@@ -674,6 +680,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRoute
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -784,6 +791,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRoute
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -895,6 +903,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRoute
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -1007,6 +1016,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api/assessments'
     | '/api/members'
+    | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
     | '/audit/$assessmentId'
@@ -1117,6 +1127,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api/assessments'
     | '/api/members'
+    | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
     | '/audit/$assessmentId'
@@ -1227,6 +1238,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/api/assessments'
     | '/api/members'
+    | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
     | '/audit/$assessmentId'
@@ -1338,6 +1350,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
+  ApiNotificationsRoute: typeof ApiNotificationsRoute
   ApiOrganisationsRoute: typeof ApiOrganisationsRouteWithChildren
   ApiWorkspacesRoute: typeof ApiWorkspacesRouteWithChildren
   AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
@@ -1650,6 +1663,13 @@ declare module '@tanstack/react-router' {
       path: '/api/organisations'
       fullPath: '/api/organisations'
       preLoaderRoute: typeof ApiOrganisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notifications': {
+      id: '/api/notifications'
+      path: '/api/notifications'
+      fullPath: '/api/notifications'
+      preLoaderRoute: typeof ApiNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/members': {
@@ -2324,6 +2344,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
+  ApiNotificationsRoute: ApiNotificationsRoute,
   ApiOrganisationsRoute: ApiOrganisationsRouteWithChildren,
   ApiWorkspacesRoute: ApiWorkspacesRouteWithChildren,
   AuditAssessmentIdRoute: AuditAssessmentIdRoute,
