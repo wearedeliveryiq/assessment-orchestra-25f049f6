@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
 import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as AssessIndexRouteImport } from './routes/assess.index'
@@ -158,6 +159,11 @@ const AccountRoute = AccountRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsIndexRoute = SessionsIndexRouteImport.update({
+  id: '/sessions/',
+  path: '/sessions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
@@ -916,6 +922,7 @@ export interface FileRoutesByFullPath {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
+  '/sessions/': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1058,6 +1065,7 @@ export interface FileRoutesByTo {
   '/assess': typeof AssessIndexRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/organisations': typeof OrganisationsIndexRoute
+  '/sessions': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1201,6 +1209,7 @@ export interface FileRoutesById {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
+  '/sessions/': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1345,6 +1354,7 @@ export interface FileRouteTypes {
     | '/assess/'
     | '/knowledge-packs/'
     | '/organisations/'
+    | '/sessions/'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1487,6 +1497,7 @@ export interface FileRouteTypes {
     | '/assess'
     | '/knowledge-packs'
     | '/organisations'
+    | '/sessions'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1629,6 +1640,7 @@ export interface FileRouteTypes {
     | '/assess/'
     | '/knowledge-packs/'
     | '/organisations/'
+    | '/sessions/'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1772,6 +1784,7 @@ export interface RootRouteChildren {
   AssessIndexRoute: typeof AssessIndexRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   OrganisationsIndexRoute: typeof OrganisationsIndexRoute
+  SessionsIndexRoute: typeof SessionsIndexRoute
   ApiAssessmentIdRoute: typeof ApiAssessmentIdRouteWithChildren
   ApiAssessmentCatalogueRoute: typeof ApiAssessmentCatalogueRoute
   ApiAssessmentStartRoute: typeof ApiAssessmentStartRoute
@@ -1847,6 +1860,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/': {
+      id: '/sessions/'
+      path: '/sessions'
+      fullPath: '/sessions/'
+      preLoaderRoute: typeof SessionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organisations/': {
@@ -3070,6 +3090,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssessIndexRoute: AssessIndexRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   OrganisationsIndexRoute: OrganisationsIndexRoute,
+  SessionsIndexRoute: SessionsIndexRoute,
   ApiAssessmentIdRoute: ApiAssessmentIdRouteWithChildren,
   ApiAssessmentCatalogueRoute: ApiAssessmentCatalogueRoute,
   ApiAssessmentStartRoute: ApiAssessmentStartRoute,
