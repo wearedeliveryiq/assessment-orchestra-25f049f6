@@ -83,6 +83,7 @@ import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessme
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
 import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
+import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
 import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
@@ -493,6 +494,11 @@ const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
   path: '/api/workspace/switch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSettingsWorkspaceRoute = ApiSettingsWorkspaceRouteImport.update({
+  id: '/api/settings/workspace',
+  path: '/api/settings/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSettingsOrganisationRoute = ApiSettingsOrganisationRouteImport.update({
   id: '/api/settings/organisation',
   path: '/api/settings/organisation',
@@ -709,6 +715,7 @@ export interface FileRoutesByFullPath {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
+  '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -817,6 +824,7 @@ export interface FileRoutesByTo {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
+  '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -926,6 +934,7 @@ export interface FileRoutesById {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
+  '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -1036,6 +1045,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
+    | '/api/settings/workspace'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1144,6 +1154,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
+    | '/api/settings/workspace'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1252,6 +1263,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
+    | '/api/settings/workspace'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1357,6 +1369,7 @@ export interface RootRouteChildren {
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   ApiSettingsOrganisationRoute: typeof ApiSettingsOrganisationRoute
+  ApiSettingsWorkspaceRoute: typeof ApiSettingsWorkspaceRoute
   ApiWorkspaceSwitchRoute: typeof ApiWorkspaceSwitchRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
@@ -1920,6 +1933,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/settings/workspace': {
+      id: '/api/settings/workspace'
+      path: '/api/settings/workspace'
+      fullPath: '/api/settings/workspace'
+      preLoaderRoute: typeof ApiSettingsWorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/settings/organisation': {
       id: '/api/settings/organisation'
       path: '/api/settings/organisation'
@@ -2327,6 +2347,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   ApiSettingsOrganisationRoute: ApiSettingsOrganisationRoute,
+  ApiSettingsWorkspaceRoute: ApiSettingsWorkspaceRoute,
   ApiWorkspaceSwitchRoute: ApiWorkspaceSwitchRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
