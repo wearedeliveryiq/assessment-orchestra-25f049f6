@@ -1415,6 +1415,148 @@ export type Database = {
           },
         ]
       }
+      runtime_assessment_events: {
+        Row: {
+          created_at: string
+          id: string
+          owner_key: string
+          payload: Json
+          session_id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          owner_key: string
+          payload?: Json
+          session_id: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          owner_key?: string
+          payload?: Json
+          session_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "runtime_assessment_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "runtime_assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      runtime_assessment_responses: {
+        Row: {
+          page_id: string
+          question_id: string
+          section_id: string
+          session_id: string
+          updated_at: string
+          valid: boolean
+          value: Json | null
+        }
+        Insert: {
+          page_id: string
+          question_id: string
+          section_id: string
+          session_id: string
+          updated_at?: string
+          valid?: boolean
+          value?: Json | null
+        }
+        Update: {
+          page_id?: string
+          question_id?: string
+          section_id?: string
+          session_id?: string
+          updated_at?: string
+          valid?: boolean
+          value?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "runtime_assessment_responses_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "runtime_assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      runtime_assessment_sessions: {
+        Row: {
+          answered_count: number
+          assessment_id: string
+          completed_at: string | null
+          created_at: string
+          current_page_id: string | null
+          current_section_id: string | null
+          id: string
+          last_saved_at: string | null
+          locked: boolean
+          metadata: Json
+          name: string
+          owner_key: string
+          pack_id: string
+          pack_version: string
+          payload: Json | null
+          progress: number
+          started_at: string
+          status: string
+          total_questions: number
+          updated_at: string
+        }
+        Insert: {
+          answered_count?: number
+          assessment_id: string
+          completed_at?: string | null
+          created_at?: string
+          current_page_id?: string | null
+          current_section_id?: string | null
+          id?: string
+          last_saved_at?: string | null
+          locked?: boolean
+          metadata?: Json
+          name: string
+          owner_key: string
+          pack_id: string
+          pack_version: string
+          payload?: Json | null
+          progress?: number
+          started_at?: string
+          status?: string
+          total_questions?: number
+          updated_at?: string
+        }
+        Update: {
+          answered_count?: number
+          assessment_id?: string
+          completed_at?: string | null
+          created_at?: string
+          current_page_id?: string | null
+          current_section_id?: string | null
+          id?: string
+          last_saved_at?: string | null
+          locked?: boolean
+          metadata?: Json
+          name?: string
+          owner_key?: string
+          pack_id?: string
+          pack_version?: string
+          payload?: Json | null
+          progress?: number
+          started_at?: string
+          status?: string
+          total_questions?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       runtime_execution_stages: {
         Row: {
           assessment_session_id: string
