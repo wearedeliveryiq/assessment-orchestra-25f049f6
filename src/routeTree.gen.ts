@@ -13,6 +13,7 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
+import { Route as WorkspacesIdRouteImport } from './routes/workspaces.$id'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
 import { Route as ScoreIdRouteImport } from './routes/score.$id'
 import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
@@ -139,6 +140,11 @@ const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
 const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
   id: '/knowledge-packs/',
   path: '/knowledge-packs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkspacesIdRoute = WorkspacesIdRouteImport.update({
+  id: '/workspaces/$id',
+  path: '/workspaces/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignalIdRoute = SignalIdRouteImport.update({
@@ -723,6 +729,7 @@ export interface FileRoutesByFullPath {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/workspaces/$id': typeof WorkspacesIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
@@ -836,6 +843,7 @@ export interface FileRoutesByTo {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/workspaces/$id': typeof WorkspacesIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/organisations': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
@@ -950,6 +958,7 @@ export interface FileRoutesById {
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
+  '/workspaces/$id': typeof WorkspacesIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
@@ -1065,6 +1074,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/workspaces/$id'
     | '/knowledge-packs/'
     | '/organisations/'
     | '/api/assessments/$id'
@@ -1178,6 +1188,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/workspaces/$id'
     | '/knowledge-packs'
     | '/organisations'
     | '/api/assessments/$id'
@@ -1291,6 +1302,7 @@ export interface FileRouteTypes {
     | '/runtime/signals'
     | '/score/$id'
     | '/signal/$id'
+    | '/workspaces/$id'
     | '/knowledge-packs/'
     | '/organisations/'
     | '/api/assessments/$id'
@@ -1405,6 +1417,7 @@ export interface RootRouteChildren {
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
+  WorkspacesIdRoute: typeof WorkspacesIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   OrganisationsIndexRoute: typeof OrganisationsIndexRoute
   ApiAuthActivityRoute: typeof ApiAuthActivityRoute
@@ -1493,6 +1506,13 @@ declare module '@tanstack/react-router' {
       path: '/knowledge-packs'
       fullPath: '/knowledge-packs/'
       preLoaderRoute: typeof KnowledgePacksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workspaces/$id': {
+      id: '/workspaces/$id'
+      path: '/workspaces/$id'
+      fullPath: '/workspaces/$id'
+      preLoaderRoute: typeof WorkspacesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signal/$id': {
@@ -2415,6 +2435,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeSignalsRoute: RuntimeSignalsRoute,
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
+  WorkspacesIdRoute: WorkspacesIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   OrganisationsIndexRoute: OrganisationsIndexRoute,
   ApiAuthActivityRoute: ApiAuthActivityRoute,

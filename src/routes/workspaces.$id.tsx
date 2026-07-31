@@ -137,7 +137,7 @@ function WorkspaceDetailPage() {
         <TabsContent value="settings" className="mt-5">
           <dl className="ribbon-panel grid gap-4 rounded-lg p-5 sm:grid-cols-2">
             <Detail label="Visibility" value={settings.visibility} />
-            <Detail label="Default knowledge pack" value={settings.defaultKnowledgePack || "—"} />
+            <Detail label="Default knowledge pack" value={settings.defaultKnowledgePacks.join(", ") || "—"} />
             <Detail label="Workspace type" value={workspace.type} />
             <Detail label="Status" value={workspace.status} />
           </dl>
