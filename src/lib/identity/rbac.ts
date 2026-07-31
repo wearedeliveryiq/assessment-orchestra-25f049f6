@@ -20,30 +20,59 @@ const READ_ONLY = ["assessment:read", "dashboard:read", "report:read"];
 const REVIEWER = [...READ_ONLY, "assessment:comment"];
 const CONTRIBUTOR = [...REVIEWER, "assessment:respond"];
 const MANAGER = [...CONTRIBUTOR, "assessment:create", "assessment:submit", "report:generate"];
-const ORG_ADMIN = [
+const WORKSPACE_MANAGER = [
   ...MANAGER,
+  "workspace:read",
+  "workspace:manage",
+  "workspace:member_manage",
+];
+const ORG_ADMIN = [
+  ...WORKSPACE_MANAGER,
   "organisation:read",
   "organisation:manage",
+  "workspace:create",
+  "workspace:archive",
   "member:invite",
   "member:remove",
   "member:role_change",
 ];
-const PLATFORM_ADMIN = [...ORG_ADMIN, "platform:manage", "audit:read", "user:manage"];
+const ORG_OWNER = [...ORG_ADMIN, "organisation:delete", "organisation:billing"];
+const PLATFORM_ADMIN = [
+  ...ORG_OWNER,
+  "platform:manage",
+  "organisation:create",
+  "audit:read",
+  "user:manage",
+];
 
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     role: "platform_admin",
     label: "Platform Administrator",
     description: "Full control of the platform, tenants and identity administration.",
-    rank: 60,
+    rank: 70,
     permissions: PLATFORM_ADMIN,
+  },
+  {
+    role: "organisation_owner",
+    label: "Organisation Owner",
+    description: "Owns an organisation, its subscription and its administrators.",
+    rank: 60,
+    permissions: ORG_OWNER,
   },
   {
     role: "org_admin",
     label: "Organisation Administrator",
-    description: "Administers a single organisation, its members and invitations.",
+    description: "Administers a single organisation, its workspaces, members and invitations.",
     rank: 50,
     permissions: ORG_ADMIN,
+  },
+  {
+    role: "workspace_manager",
+    label: "Workspace Manager",
+    description: "Manages a workspace and the people working inside it.",
+    rank: 45,
+    permissions: WORKSPACE_MANAGER,
   },
   {
     role: "assessment_manager",
@@ -52,6 +81,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     rank: 40,
     permissions: MANAGER,
   },
+
   {
     role: "contributor",
     label: "Contributor",
