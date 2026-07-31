@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
 import { Route as ScoreIdRouteImport } from './routes/score.$id'
@@ -127,6 +128,11 @@ const AccountRoute = AccountRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
+  id: '/organisations/',
+  path: '/organisations/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
@@ -711,6 +717,7 @@ export interface FileRoutesByFullPath {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
+  '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/activity': typeof ApiAuthActivityRoute
   '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
@@ -822,6 +829,7 @@ export interface FileRoutesByTo {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
+  '/organisations': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/activity': typeof ApiAuthActivityRoute
   '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
@@ -934,6 +942,7 @@ export interface FileRoutesById {
   '/score/$id': typeof ScoreIdRoute
   '/signal/$id': typeof SignalIdRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
+  '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessments/$id': typeof ApiAssessmentsIdRouteWithChildren
   '/api/auth/activity': typeof ApiAuthActivityRoute
   '/api/auth/invitations': typeof ApiAuthInvitationsRouteWithChildren
@@ -1047,6 +1056,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/knowledge-packs/'
+    | '/organisations/'
     | '/api/assessments/$id'
     | '/api/auth/activity'
     | '/api/auth/invitations'
@@ -1158,6 +1168,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/knowledge-packs'
+    | '/organisations'
     | '/api/assessments/$id'
     | '/api/auth/activity'
     | '/api/auth/invitations'
@@ -1269,6 +1280,7 @@ export interface FileRouteTypes {
     | '/score/$id'
     | '/signal/$id'
     | '/knowledge-packs/'
+    | '/organisations/'
     | '/api/assessments/$id'
     | '/api/auth/activity'
     | '/api/auth/invitations'
@@ -1381,6 +1393,7 @@ export interface RootRouteChildren {
   ScoreIdRoute: typeof ScoreIdRoute
   SignalIdRoute: typeof SignalIdRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
+  OrganisationsIndexRoute: typeof OrganisationsIndexRoute
   ApiAuthActivityRoute: typeof ApiAuthActivityRoute
   ApiAuthInvitationsRoute: typeof ApiAuthInvitationsRouteWithChildren
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
@@ -1453,6 +1466,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organisations/': {
+      id: '/organisations/'
+      path: '/organisations'
+      fullPath: '/organisations/'
+      preLoaderRoute: typeof OrganisationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge-packs/': {
@@ -2375,6 +2395,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScoreIdRoute: ScoreIdRoute,
   SignalIdRoute: SignalIdRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
+  OrganisationsIndexRoute: OrganisationsIndexRoute,
   ApiAuthActivityRoute: ApiAuthActivityRoute,
   ApiAuthInvitationsRoute: ApiAuthInvitationsRouteWithChildren,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
