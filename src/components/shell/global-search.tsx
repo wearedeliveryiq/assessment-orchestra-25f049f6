@@ -30,17 +30,13 @@ export function GlobalSearchDialog({ open, onOpenChange }: GlobalSearchProps) {
   const groups = groupResultsByKind(results);
 
   return (
-    <CommandDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Search DeliveryIQ"
-      description="Search workspaces, people, knowledge packs and assessments"
-    >
+    <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput
         value={term}
         onValueChange={setTerm}
         placeholder="Search workspaces, people, knowledge packs…"
       />
+
       <CommandList>
         {isSearching ? (
           <div className="flex items-center gap-2 px-4 py-6 text-caption text-muted-foreground">
