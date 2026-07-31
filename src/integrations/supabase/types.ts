@@ -429,38 +429,56 @@ export type Database = {
         Row: {
           answered_at: string
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
+          is_deleted: boolean
           notes: string | null
           question_id: string
           score: number | null
           section_id: string
           session_id: string
           updated_at: string
+          updated_by: string | null
           value: Json
+          version: number
         }
         Insert: {
           answered_at?: string
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          is_deleted?: boolean
           notes?: string | null
           question_id: string
           score?: number | null
           section_id: string
           session_id: string
           updated_at?: string
+          updated_by?: string | null
           value?: Json
+          version?: number
         }
         Update: {
           answered_at?: string
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          is_deleted?: boolean
           notes?: string | null
           question_id?: string
           score?: number | null
           section_id?: string
           session_id?: string
           updated_at?: string
+          updated_by?: string | null
           value?: Json
+          version?: number
         }
         Relationships: [
           {
@@ -806,10 +824,15 @@ export type Database = {
           completed_at: string | null
           contact_name: string | null
           created_at: string
+          created_by: string | null
           current_section: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           failure_reason: string | null
           id: string
+          is_deleted: boolean
           metadata: Json
+          organisation_id: string | null
           organisation_name: string
           owner_key: string
           progress: number
@@ -817,6 +840,9 @@ export type Database = {
           status: Database["public"]["Enums"]["assessment_status"]
           submitted_at: string | null
           updated_at: string
+          updated_by: string | null
+          version: number
+          workspace_id: string | null
         }
         Insert: {
           archived_at?: string | null
@@ -824,10 +850,15 @@ export type Database = {
           completed_at?: string | null
           contact_name?: string | null
           created_at?: string
+          created_by?: string | null
           current_section?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           failure_reason?: string | null
           id?: string
+          is_deleted?: boolean
           metadata?: Json
+          organisation_id?: string | null
           organisation_name?: string
           owner_key: string
           progress?: number
@@ -835,6 +866,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["assessment_status"]
           submitted_at?: string | null
           updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
         }
         Update: {
           archived_at?: string | null
@@ -842,10 +876,15 @@ export type Database = {
           completed_at?: string | null
           contact_name?: string | null
           created_at?: string
+          created_by?: string | null
           current_section?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           failure_reason?: string | null
           id?: string
+          is_deleted?: boolean
           metadata?: Json
+          organisation_id?: string | null
           organisation_name?: string
           owner_key?: string
           progress?: number
@@ -853,8 +892,26 @@ export type Database = {
           status?: Database["public"]["Enums"]["assessment_status"]
           submitted_at?: string | null
           updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "assessment_sessions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_sessions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       assessment_signals: {
         Row: {
@@ -1175,12 +1232,16 @@ export type Database = {
       identity_profiles: {
         Row: {
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           display_name: string
           email: string
           email_verified: boolean
           failed_login_count: number
           first_name: string
           id: string
+          is_deleted: boolean
           last_login_at: string | null
           last_name: string
           locked_until: string | null
@@ -1191,15 +1252,21 @@ export type Database = {
           status: Database["public"]["Enums"]["identity_user_status"]
           timezone: string
           updated_at: string
+          updated_by: string | null
+          version: number
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           display_name?: string
           email: string
           email_verified?: boolean
           failed_login_count?: number
           first_name?: string
           id: string
+          is_deleted?: boolean
           last_login_at?: string | null
           last_name?: string
           locked_until?: string | null
@@ -1210,15 +1277,21 @@ export type Database = {
           status?: Database["public"]["Enums"]["identity_user_status"]
           timezone?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
         }
         Update: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           display_name?: string
           email?: string
           email_verified?: boolean
           failed_login_count?: number
           first_name?: string
           id?: string
+          is_deleted?: boolean
           last_login_at?: string | null
           last_name?: string
           locked_until?: string | null
@@ -1229,6 +1302,8 @@ export type Database = {
           status?: Database["public"]["Enums"]["identity_user_status"]
           timezone?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
         }
         Relationships: []
       }
@@ -1276,6 +1351,96 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      knowledge_packs: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          definition: Json
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string
+          id: string
+          is_deleted: boolean
+          metadata: Json
+          name: string
+          organisation_id: string | null
+          pack_id: string
+          pack_version: string
+          published_at: string | null
+          source: string
+          status: string
+          tags: string[]
+          updated_at: string
+          updated_by: string | null
+          version: number
+          workspace_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          definition?: Json
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          id?: string
+          is_deleted?: boolean
+          metadata?: Json
+          name?: string
+          organisation_id?: string | null
+          pack_id: string
+          pack_version: string
+          published_at?: string | null
+          source?: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          definition?: Json
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          id?: string
+          is_deleted?: boolean
+          metadata?: Json
+          name?: string
+          organisation_id?: string | null
+          pack_id?: string
+          pack_version?: string
+          published_at?: string | null
+          source?: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_packs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_packs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       login_attempts: {
         Row: {
@@ -1369,16 +1534,22 @@ export type Database = {
           accepted_at: string | null
           accepted_by: string | null
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           email: string
           expires_at: string
           id: string
           invited_by: string | null
+          is_deleted: boolean
           message: string
           organisation_id: string
           role: Database["public"]["Enums"]["platform_role"]
           status: Database["public"]["Enums"]["invitation_status"]
           token_hash: string
           updated_at: string
+          updated_by: string | null
+          version: number
           workspace_id: string | null
           workspace_role: Database["public"]["Enums"]["platform_role"] | null
         }
@@ -1386,16 +1557,22 @@ export type Database = {
           accepted_at?: string | null
           accepted_by?: string | null
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           email: string
           expires_at: string
           id?: string
           invited_by?: string | null
+          is_deleted?: boolean
           message?: string
           organisation_id: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["invitation_status"]
           token_hash: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           workspace_id?: string | null
           workspace_role?: Database["public"]["Enums"]["platform_role"] | null
         }
@@ -1403,16 +1580,22 @@ export type Database = {
           accepted_at?: string | null
           accepted_by?: string | null
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           email?: string
           expires_at?: string
           id?: string
           invited_by?: string | null
+          is_deleted?: boolean
           message?: string
           organisation_id?: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["invitation_status"]
           token_hash?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           workspace_id?: string | null
           workspace_role?: Database["public"]["Enums"]["platform_role"] | null
         }
@@ -1436,36 +1619,54 @@ export type Database = {
       organisation_memberships: {
         Row: {
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
           invited_by: string | null
+          is_deleted: boolean
           joined_at: string
           organisation_id: string
           role: Database["public"]["Enums"]["platform_role"]
           status: Database["public"]["Enums"]["membership_status"]
           updated_at: string
+          updated_by: string | null
           user_id: string
+          version: number
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           invited_by?: string | null
+          is_deleted?: boolean
           joined_at?: string
           organisation_id: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id: string
+          version?: number
         }
         Update: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
           invited_by?: string | null
+          is_deleted?: boolean
           joined_at?: string
           organisation_id?: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id?: string
+          version?: number
         }
         Relationships: [
           {
@@ -1520,9 +1721,12 @@ export type Database = {
           country: string
           created_at: string
           created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           description: string
           id: string
           industry: string
+          is_deleted: boolean
           logo: string | null
           name: string
           organisation_size: string
@@ -1531,15 +1735,20 @@ export type Database = {
           subscription_plan: string
           timezone: string
           updated_at: string
+          updated_by: string | null
+          version: number
           website: string
         }
         Insert: {
           country?: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string
           id?: string
           industry?: string
+          is_deleted?: boolean
           logo?: string | null
           name: string
           organisation_size?: string
@@ -1548,15 +1757,20 @@ export type Database = {
           subscription_plan?: string
           timezone?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           website?: string
         }
         Update: {
           country?: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string
           id?: string
           industry?: string
+          is_deleted?: boolean
           logo?: string | null
           name?: string
           organisation_size?: string
@@ -1565,6 +1779,8 @@ export type Database = {
           subscription_plan?: string
           timezone?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           website?: string
         }
         Relationships: []
@@ -1594,43 +1810,64 @@ export type Database = {
         Row: {
           body: string
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           event_type: string
           id: string
+          is_deleted: boolean
           metadata: Json
           module: string
           organisation_id: string | null
           read_at: string | null
           severity: string
           title: string
+          updated_at: string
+          updated_by: string | null
           user_id: string
+          version: number
           workspace_id: string | null
         }
         Insert: {
           body?: string
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           event_type: string
           id?: string
+          is_deleted?: boolean
           metadata?: Json
           module?: string
           organisation_id?: string | null
           read_at?: string | null
           severity?: string
           title: string
+          updated_at?: string
+          updated_by?: string | null
           user_id: string
+          version?: number
           workspace_id?: string | null
         }
         Update: {
           body?: string
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           event_type?: string
           id?: string
+          is_deleted?: boolean
           metadata?: Json
           module?: string
           organisation_id?: string | null
           read_at?: string | null
           severity?: string
           title?: string
+          updated_at?: string
+          updated_by?: string | null
           user_id?: string
+          version?: number
           workspace_id?: string | null
         }
         Relationships: [
@@ -1643,6 +1880,143 @@ export type Database = {
           },
           {
             foreignKeyName: "platform_notifications_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_retention_policies: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string
+          enabled: boolean
+          entity: string
+          id: string
+          is_deleted: boolean
+          last_applied_at: string | null
+          mode: string
+          organisation_id: string | null
+          retain_days: number | null
+          updated_at: string
+          updated_by: string | null
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          enabled?: boolean
+          entity: string
+          id?: string
+          is_deleted?: boolean
+          last_applied_at?: string | null
+          mode?: string
+          organisation_id?: string | null
+          retain_days?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          enabled?: boolean
+          entity?: string
+          id?: string
+          is_deleted?: boolean
+          last_applied_at?: string | null
+          mode?: string
+          organisation_id?: string | null
+          retain_days?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_retention_policies_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_settings: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string
+          id: string
+          is_deleted: boolean
+          key: string
+          organisation_id: string | null
+          scope: string
+          scope_id: string | null
+          updated_at: string
+          updated_by: string | null
+          value: Json
+          version: number
+          workspace_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          id?: string
+          is_deleted?: boolean
+          key: string
+          organisation_id?: string | null
+          scope?: string
+          scope_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+          version?: number
+          workspace_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          id?: string
+          is_deleted?: boolean
+          key?: string
+          organisation_id?: string | null
+          scope?: string
+          scope_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+          version?: number
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_settings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "platform_settings_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -1729,13 +2103,18 @@ export type Database = {
           assessment_id: string
           completed_at: string | null
           created_at: string
+          created_by: string | null
           current_page_id: string | null
           current_section_id: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           id: string
+          is_deleted: boolean
           last_saved_at: string | null
           locked: boolean
           metadata: Json
           name: string
+          organisation_id: string | null
           owner_key: string
           pack_id: string
           pack_version: string
@@ -1745,19 +2124,27 @@ export type Database = {
           status: string
           total_questions: number
           updated_at: string
+          updated_by: string | null
+          version: number
+          workspace_id: string | null
         }
         Insert: {
           answered_count?: number
           assessment_id: string
           completed_at?: string | null
           created_at?: string
+          created_by?: string | null
           current_page_id?: string | null
           current_section_id?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          is_deleted?: boolean
           last_saved_at?: string | null
           locked?: boolean
           metadata?: Json
           name: string
+          organisation_id?: string | null
           owner_key: string
           pack_id: string
           pack_version: string
@@ -1767,19 +2154,27 @@ export type Database = {
           status?: string
           total_questions?: number
           updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
         }
         Update: {
           answered_count?: number
           assessment_id?: string
           completed_at?: string | null
           created_at?: string
+          created_by?: string | null
           current_page_id?: string | null
           current_section_id?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           id?: string
+          is_deleted?: boolean
           last_saved_at?: string | null
           locked?: boolean
           metadata?: Json
           name?: string
+          organisation_id?: string | null
           owner_key?: string
           pack_id?: string
           pack_version?: string
@@ -1789,8 +2184,26 @@ export type Database = {
           status?: string
           total_questions?: number
           updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "runtime_assessment_sessions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "runtime_assessment_sessions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       runtime_execution_stages: {
         Row: {
@@ -1971,35 +2384,53 @@ export type Database = {
       workspace_memberships: {
         Row: {
           created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           favourite: boolean
           id: string
+          is_deleted: boolean
           joined_at: string
           role: Database["public"]["Enums"]["platform_role"]
           status: Database["public"]["Enums"]["membership_status"]
           updated_at: string
+          updated_by: string | null
           user_id: string
+          version: number
           workspace_id: string
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           favourite?: boolean
           id?: string
+          is_deleted?: boolean
           joined_at?: string
           role: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id: string
+          version?: number
           workspace_id: string
         }
         Update: {
           created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           favourite?: boolean
           id?: string
+          is_deleted?: boolean
           joined_at?: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["membership_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id?: string
+          version?: number
           workspace_id?: string
         }
         Relationships: [
@@ -2155,45 +2586,60 @@ export type Database = {
           colour: string
           created_at: string
           created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
           description: string
           icon: string
           id: string
+          is_deleted: boolean
           name: string
           organisation_id: string
           slug: string
           status: Database["public"]["Enums"]["workspace_status"]
           type: string
           updated_at: string
+          updated_by: string | null
+          version: number
           visibility: string
         }
         Insert: {
           colour?: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string
           icon?: string
           id?: string
+          is_deleted?: boolean
           name: string
           organisation_id: string
           slug: string
           status?: Database["public"]["Enums"]["workspace_status"]
           type?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           visibility?: string
         }
         Update: {
           colour?: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
           description?: string
           icon?: string
           id?: string
+          is_deleted?: boolean
           name?: string
           organisation_id?: string
           slug?: string
           status?: Database["public"]["Enums"]["workspace_status"]
           type?: string
           updated_at?: string
+          updated_by?: string | null
+          version?: number
           visibility?: string
         }
         Relationships: [
