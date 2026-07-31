@@ -89,10 +89,9 @@ function OrganisationsPage() {
           >
             <div className="flex items-center gap-3">
               <span
-                className="flex h-9 w-9 items-center justify-center rounded-md"
-                style={{ backgroundColor: `${organisation.primaryColour}22` }}
+                className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/15"
               >
-                <Building2 className="h-4 w-4" style={{ color: organisation.primaryColour }} />
+                <Building2 className="h-4 w-4 text-primary" />
               </span>
               <div className="min-w-0">
                 <p className="truncate font-medium">{organisation.name}</p>
@@ -104,7 +103,7 @@ function OrganisationsPage() {
             <dl className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-muted-foreground">
               <Stat label="Workspaces" value={organisation.workspaceCount} />
               <Stat label="Members" value={organisation.memberCount} />
-              <Stat label="Pending" value={organisation.pendingInvitations} />
+              <Stat label="Pending" value={organisation.pendingInvitationCount} />
             </dl>
           </Link>
         ))}
