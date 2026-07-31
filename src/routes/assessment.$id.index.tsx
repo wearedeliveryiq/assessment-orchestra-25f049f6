@@ -42,9 +42,14 @@ function AssessmentPage() {
 
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [sectionIndex, setSectionIndex] = useState(0);
+  const seededRef = useRef<string | null>(null);
 
+  // Seed local state from the server exactly once per assessment. Re-seeding on
+  // every refetch would clobber in-flight edits and snap the user back to the
+  // last persisted section.
   useEffect(() => {
-    if (!data) return;
+    if (!data || seededRef.current === id) return;
+    seededRef.current = id;
     const next: Record<string, number> = {};
     for (const response of data.responses) {
       if (typeof response.value === "number") next[response.questionId] = response.value;
@@ -52,20 +57,20 @@ function AssessmentPage() {
     setAnswers(next);
     const index = QUESTIONNAIRE.findIndex((s) => s.id === data.session.currentSection);
     if (index >= 0) setSectionIndex(index);
-  }, [data]);
+  }, [data, id]);
 
   const section = QUESTIONNAIRE[sectionIndex];
   const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
   const progress = Math.round((answeredCount / TOTAL_QUESTIONS) * 100);
 
   const save = useMutation({
-    mutationFn: (silent?: boolean) =>
+    mutationFn: (options?: { silent?: boolean; sectionId?: string }) =>
       assessmentApi
         .save(id, {
-          currentSection: section.id,
+          currentSection: options?.sectionId ?? section.id,
           answers: Object.entries(answers).map(([questionId, value]) => ({ questionId, value })),
         })
-        .then((result) => ({ result, silent })),
+        .then((result) => ({ result, silent: options?.silent })),
     onSuccess: ({ silent }) => {
       queryClient.invalidateQueries({ queryKey: assessmentKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: assessmentKeys.list });
@@ -73,6 +78,7 @@ function AssessmentPage() {
     },
     onError: (err: Error) => toast.error(err.message),
   });
+
 
   const submit = useMutation({
     mutationFn: async () => {
