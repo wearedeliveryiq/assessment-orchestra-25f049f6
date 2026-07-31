@@ -101,6 +101,8 @@ export class InMemoryDataSource implements DataSource {
   async insert(table: string, incoming: Row[]) {
     const config = this.config.get(table) ?? {};
     const rows = this.rows(table);
+    // Mirrors the database default: identifiers are assigned by storage.
+    incoming = incoming.map((row) => (row.id ? row : { ...row, id: crypto.randomUUID() }));
 
     for (const row of incoming) {
       for (const key of config.unique ?? []) {
