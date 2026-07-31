@@ -54,7 +54,7 @@ const tenancyProvider: SearchProvider = {
         href: `/organisations/${organisation.id}`,
       })),
       ...results.members.map((member) => ({
-        id: member.id,
+        id: member.membershipId,
         kind: "user" as const,
         title: member.displayName || member.email,
         subtitle: member.email,
