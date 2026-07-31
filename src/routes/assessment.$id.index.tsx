@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Check, Loader2, Save, Send } from "lucide-react";
 import { toast } from "sonner";
 
@@ -223,8 +223,9 @@ function AssessmentPage() {
                 type="button"
                 disabled={sectionIndex === QUESTIONNAIRE.length - 1}
                 onClick={() => {
-                  save.mutate(true);
-                  setSectionIndex((i) => Math.min(QUESTIONNAIRE.length - 1, i + 1));
+                  const nextIndex = Math.min(QUESTIONNAIRE.length - 1, sectionIndex + 1);
+                  setSectionIndex(nextIndex);
+                  save.mutate({ silent: true, sectionId: QUESTIONNAIRE[nextIndex].id });
                 }}
                 className="rounded-md border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
               >
@@ -236,7 +237,7 @@ function AssessmentPage() {
               <button
                 type="button"
                 disabled={locked || save.isPending}
-                onClick={() => save.mutate(false)}
+                onClick={() => save.mutate({ silent: false })}
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-primary/50 disabled:opacity-50"
               >
                 {save.isPending ? (
