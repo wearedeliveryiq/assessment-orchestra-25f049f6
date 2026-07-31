@@ -59,7 +59,7 @@ export interface TemplateCatalogue {
 export const listTemplates = () => call<TemplateCatalogue>("/templates");
 
 export const listReports = (filter: ReportFilter & { organisationId: string }) =>
-  call<Report[]>(`/reports${queryString(filter)}`);
+  call<Report[]>(`/reports${queryString({ ...filter })}`);
 
 export const createReport = (request: CreateReportRequest) =>
   send<Report>("POST", "/reports", request);
@@ -83,7 +83,9 @@ export const deleteReport = (id: string, organisationId: string) =>
   send<{ deleted: boolean }>("DELETE", `/reports/${id}${queryString({ organisationId })}`);
 
 export const downloadCentre = (organisationId: string, filter: Omit<ReportFilter, "organisationId"> = {}) =>
-  call<DownloadCentrePayload>(`/download-centre${queryString({ organisationId, ...filter })}`);
+  call<DownloadCentrePayload>(
+    `/download-centre${queryString({ organisationId, ...filter })}`,
+  );
 
 export const reportHistory = (organisationId: string, options: { reportId?: string; lineageId?: string } = {}) =>
   call<ReportEvent[]>(`/history${queryString({ organisationId, ...options })}`);
