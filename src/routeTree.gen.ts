@@ -9,6 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
@@ -34,6 +37,7 @@ import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
+import { Route as ErrorCodeRouteImport } from './routes/error.$code'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
@@ -157,6 +161,21 @@ import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/ap
 import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
 import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -280,6 +299,11 @@ const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
 const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
   id: '/knowledge-packs/reload',
   path: '/knowledge-packs/reload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorCodeRoute = ErrorCodeRouteImport.update({
+  id: '/error/$code',
+  path: '/error/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIdRoute = DashboardIdRouteImport.update({
@@ -919,6 +943,9 @@ const ApiAssessmentSessionsIdArchiveRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/home': typeof HomeRoute
+  '/notifications': typeof NotificationsRoute
+  '/settings': typeof SettingsRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -939,6 +966,7 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
+  '/error/$code': typeof ErrorCodeRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1068,6 +1096,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/home': typeof HomeRoute
+  '/notifications': typeof NotificationsRoute
+  '/settings': typeof SettingsRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1088,6 +1119,7 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
+  '/error/$code': typeof ErrorCodeRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1218,6 +1250,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/home': typeof HomeRoute
+  '/notifications': typeof NotificationsRoute
+  '/settings': typeof SettingsRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1238,6 +1273,7 @@ export interface FileRoutesById {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
+  '/error/$code': typeof ErrorCodeRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1369,6 +1405,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/home'
+    | '/notifications'
+    | '/settings'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1389,6 +1428,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify-email'
     | '/dashboard/$id'
+    | '/error/$code'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -1518,6 +1558,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/home'
+    | '/notifications'
+    | '/settings'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1538,6 +1581,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify-email'
     | '/dashboard/$id'
+    | '/error/$code'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -1667,6 +1711,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/home'
+    | '/notifications'
+    | '/settings'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1687,6 +1734,7 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify-email'
     | '/dashboard/$id'
+    | '/error/$code'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -1817,6 +1865,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  HomeRoute: typeof HomeRoute
+  NotificationsRoute: typeof NotificationsRoute
+  SettingsRoute: typeof SettingsRoute
   ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRouteWithChildren
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
@@ -1837,6 +1888,7 @@ export interface RootRouteChildren {
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   DashboardIdRoute: typeof DashboardIdRoute
+  ErrorCodeRoute: typeof ErrorCodeRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
@@ -1925,6 +1977,27 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
@@ -2098,6 +2171,13 @@ declare module '@tanstack/react-router' {
       path: '/knowledge-packs/reload'
       fullPath: '/knowledge-packs/reload'
       preLoaderRoute: typeof KnowledgePacksReloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/error/$code': {
+      id: '/error/$code'
+      path: '/error/$code'
+      fullPath: '/error/$code'
+      preLoaderRoute: typeof ErrorCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/$id': {
@@ -3181,6 +3261,9 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  HomeRoute: HomeRoute,
+  NotificationsRoute: NotificationsRoute,
+  SettingsRoute: SettingsRoute,
   ApiAssessmentSessionsRoute: ApiAssessmentSessionsRouteWithChildren,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
@@ -3201,6 +3284,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   DashboardIdRoute: DashboardIdRoute,
+  ErrorCodeRoute: ErrorCodeRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
   NarrativeIdRoute: NarrativeIdRoute,
