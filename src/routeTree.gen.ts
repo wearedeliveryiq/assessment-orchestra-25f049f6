@@ -112,6 +112,7 @@ import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$
 import { Route as ApiAssessmentStartRouteImport } from './routes/api/assessment.start'
 import { Route as ApiAssessmentCatalogueRouteImport } from './routes/api/assessment.catalogue'
 import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id'
+import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
 import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
@@ -136,7 +137,18 @@ import { Route as ApiAssessmentIdProgressRouteImport } from './routes/api/assess
 import { Route as ApiAssessmentIdPauseRouteImport } from './routes/api/assessment.$id.pause'
 import { Route as ApiAssessmentIdNavigateRouteImport } from './routes/api/assessment.$id.navigate'
 import { Route as ApiAssessmentIdCompleteRouteImport } from './routes/api/assessment.$id.complete'
+import { Route as ApiAssessmentSessionsIdTimelineRouteImport } from './routes/api/assessment-sessions.$id.timeline'
+import { Route as ApiAssessmentSessionsIdStartRouteImport } from './routes/api/assessment-sessions.$id.start'
+import { Route as ApiAssessmentSessionsIdReviewRouteImport } from './routes/api/assessment-sessions.$id.review'
+import { Route as ApiAssessmentSessionsIdResumeRouteImport } from './routes/api/assessment-sessions.$id.resume'
+import { Route as ApiAssessmentSessionsIdReassessRouteImport } from './routes/api/assessment-sessions.$id.reassess'
+import { Route as ApiAssessmentSessionsIdPauseRouteImport } from './routes/api/assessment-sessions.$id.pause'
+import { Route as ApiAssessmentSessionsIdParticipantsRouteImport } from './routes/api/assessment-sessions.$id.participants'
+import { Route as ApiAssessmentSessionsIdOwnerRouteImport } from './routes/api/assessment-sessions.$id.owner'
+import { Route as ApiAssessmentSessionsIdHistoryRouteImport } from './routes/api/assessment-sessions.$id.history'
+import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/api/assessment-sessions.$id.complete'
 import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
+import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
 
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
@@ -660,6 +672,12 @@ const ApiAssessmentIdRoute = ApiAssessmentIdRouteImport.update({
   path: '/api/assessment/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAssessmentSessionsDashboardRoute =
+  ApiAssessmentSessionsDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => ApiAssessmentSessionsRoute,
+  } as any)
 const ApiAssessmentSessionsIdRoute = ApiAssessmentSessionsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -783,10 +801,76 @@ const ApiAssessmentIdCompleteRoute = ApiAssessmentIdCompleteRouteImport.update({
   path: '/complete',
   getParentRoute: () => ApiAssessmentIdRoute,
 } as any)
+const ApiAssessmentSessionsIdTimelineRoute =
+  ApiAssessmentSessionsIdTimelineRouteImport.update({
+    id: '/timeline',
+    path: '/timeline',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdStartRoute =
+  ApiAssessmentSessionsIdStartRouteImport.update({
+    id: '/start',
+    path: '/start',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdReviewRoute =
+  ApiAssessmentSessionsIdReviewRouteImport.update({
+    id: '/review',
+    path: '/review',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdResumeRoute =
+  ApiAssessmentSessionsIdResumeRouteImport.update({
+    id: '/resume',
+    path: '/resume',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdReassessRoute =
+  ApiAssessmentSessionsIdReassessRouteImport.update({
+    id: '/reassess',
+    path: '/reassess',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdPauseRoute =
+  ApiAssessmentSessionsIdPauseRouteImport.update({
+    id: '/pause',
+    path: '/pause',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdParticipantsRoute =
+  ApiAssessmentSessionsIdParticipantsRouteImport.update({
+    id: '/participants',
+    path: '/participants',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdOwnerRoute =
+  ApiAssessmentSessionsIdOwnerRouteImport.update({
+    id: '/owner',
+    path: '/owner',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdHistoryRoute =
+  ApiAssessmentSessionsIdHistoryRouteImport.update({
+    id: '/history',
+    path: '/history',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdCompleteRoute =
+  ApiAssessmentSessionsIdCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
 const ApiAssessmentSessionsIdAssignRoute =
   ApiAssessmentSessionsIdAssignRouteImport.update({
     id: '/assign',
     path: '/assign',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdArchiveRoute =
+  ApiAssessmentSessionsIdArchiveRouteImport.update({
+    id: '/archive',
+    path: '/archive',
     getParentRoute: () => ApiAssessmentSessionsIdRoute,
   } as any)
 
@@ -833,6 +917,7 @@ export interface FileRoutesByFullPath {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
+  '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -895,7 +980,18 @@ export interface FileRoutesByFullPath {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
+  '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
+  '/api/assessment-sessions/$id/history': typeof ApiAssessmentSessionsIdHistoryRoute
+  '/api/assessment-sessions/$id/owner': typeof ApiAssessmentSessionsIdOwnerRoute
+  '/api/assessment-sessions/$id/participants': typeof ApiAssessmentSessionsIdParticipantsRoute
+  '/api/assessment-sessions/$id/pause': typeof ApiAssessmentSessionsIdPauseRoute
+  '/api/assessment-sessions/$id/reassess': typeof ApiAssessmentSessionsIdReassessRoute
+  '/api/assessment-sessions/$id/resume': typeof ApiAssessmentSessionsIdResumeRoute
+  '/api/assessment-sessions/$id/review': typeof ApiAssessmentSessionsIdReviewRoute
+  '/api/assessment-sessions/$id/start': typeof ApiAssessmentSessionsIdStartRoute
+  '/api/assessment-sessions/$id/timeline': typeof ApiAssessmentSessionsIdTimelineRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -963,6 +1059,7 @@ export interface FileRoutesByTo {
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/organisations': typeof OrganisationsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
+  '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -1025,7 +1122,18 @@ export interface FileRoutesByTo {
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
+  '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
+  '/api/assessment-sessions/$id/history': typeof ApiAssessmentSessionsIdHistoryRoute
+  '/api/assessment-sessions/$id/owner': typeof ApiAssessmentSessionsIdOwnerRoute
+  '/api/assessment-sessions/$id/participants': typeof ApiAssessmentSessionsIdParticipantsRoute
+  '/api/assessment-sessions/$id/pause': typeof ApiAssessmentSessionsIdPauseRoute
+  '/api/assessment-sessions/$id/reassess': typeof ApiAssessmentSessionsIdReassessRoute
+  '/api/assessment-sessions/$id/resume': typeof ApiAssessmentSessionsIdResumeRoute
+  '/api/assessment-sessions/$id/review': typeof ApiAssessmentSessionsIdReviewRoute
+  '/api/assessment-sessions/$id/start': typeof ApiAssessmentSessionsIdStartRoute
+  '/api/assessment-sessions/$id/timeline': typeof ApiAssessmentSessionsIdTimelineRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -1094,6 +1202,7 @@ export interface FileRoutesById {
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
+  '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -1156,7 +1265,18 @@ export interface FileRoutesById {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
+  '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
+  '/api/assessment-sessions/$id/history': typeof ApiAssessmentSessionsIdHistoryRoute
+  '/api/assessment-sessions/$id/owner': typeof ApiAssessmentSessionsIdOwnerRoute
+  '/api/assessment-sessions/$id/participants': typeof ApiAssessmentSessionsIdParticipantsRoute
+  '/api/assessment-sessions/$id/pause': typeof ApiAssessmentSessionsIdPauseRoute
+  '/api/assessment-sessions/$id/reassess': typeof ApiAssessmentSessionsIdReassessRoute
+  '/api/assessment-sessions/$id/resume': typeof ApiAssessmentSessionsIdResumeRoute
+  '/api/assessment-sessions/$id/review': typeof ApiAssessmentSessionsIdReviewRoute
+  '/api/assessment-sessions/$id/start': typeof ApiAssessmentSessionsIdStartRoute
+  '/api/assessment-sessions/$id/timeline': typeof ApiAssessmentSessionsIdTimelineRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -1226,6 +1346,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/organisations/'
     | '/api/assessment-sessions/$id'
+    | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
     | '/api/assessment/catalogue'
     | '/api/assessment/start'
@@ -1288,7 +1409,18 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
+    | '/api/assessment-sessions/$id/complete'
+    | '/api/assessment-sessions/$id/history'
+    | '/api/assessment-sessions/$id/owner'
+    | '/api/assessment-sessions/$id/participants'
+    | '/api/assessment-sessions/$id/pause'
+    | '/api/assessment-sessions/$id/reassess'
+    | '/api/assessment-sessions/$id/resume'
+    | '/api/assessment-sessions/$id/review'
+    | '/api/assessment-sessions/$id/start'
+    | '/api/assessment-sessions/$id/timeline'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -1356,6 +1488,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs'
     | '/organisations'
     | '/api/assessment-sessions/$id'
+    | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
     | '/api/assessment/catalogue'
     | '/api/assessment/start'
@@ -1418,7 +1551,18 @@ export interface FileRouteTypes {
     | '/internal/scores'
     | '/internal/signals'
     | '/knowledge-pack/$id'
+    | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
+    | '/api/assessment-sessions/$id/complete'
+    | '/api/assessment-sessions/$id/history'
+    | '/api/assessment-sessions/$id/owner'
+    | '/api/assessment-sessions/$id/participants'
+    | '/api/assessment-sessions/$id/pause'
+    | '/api/assessment-sessions/$id/reassess'
+    | '/api/assessment-sessions/$id/resume'
+    | '/api/assessment-sessions/$id/review'
+    | '/api/assessment-sessions/$id/start'
+    | '/api/assessment-sessions/$id/timeline'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -1486,6 +1630,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/'
     | '/organisations/'
     | '/api/assessment-sessions/$id'
+    | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
     | '/api/assessment/catalogue'
     | '/api/assessment/start'
@@ -1548,7 +1693,18 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
+    | '/api/assessment-sessions/$id/complete'
+    | '/api/assessment-sessions/$id/history'
+    | '/api/assessment-sessions/$id/owner'
+    | '/api/assessment-sessions/$id/participants'
+    | '/api/assessment-sessions/$id/pause'
+    | '/api/assessment-sessions/$id/reassess'
+    | '/api/assessment-sessions/$id/resume'
+    | '/api/assessment-sessions/$id/review'
+    | '/api/assessment-sessions/$id/start'
+    | '/api/assessment-sessions/$id/timeline'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -2400,6 +2556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/assessment-sessions/dashboard': {
+      id: '/api/assessment-sessions/dashboard'
+      path: '/dashboard'
+      fullPath: '/api/assessment-sessions/dashboard'
+      preLoaderRoute: typeof ApiAssessmentSessionsDashboardRouteImport
+      parentRoute: typeof ApiAssessmentSessionsRoute
+    }
     '/api/assessment-sessions/$id': {
       id: '/api/assessment-sessions/$id'
       path: '/$id'
@@ -2568,6 +2731,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentIdCompleteRouteImport
       parentRoute: typeof ApiAssessmentIdRoute
     }
+    '/api/assessment-sessions/$id/timeline': {
+      id: '/api/assessment-sessions/$id/timeline'
+      path: '/timeline'
+      fullPath: '/api/assessment-sessions/$id/timeline'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdTimelineRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/start': {
+      id: '/api/assessment-sessions/$id/start'
+      path: '/start'
+      fullPath: '/api/assessment-sessions/$id/start'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdStartRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/review': {
+      id: '/api/assessment-sessions/$id/review'
+      path: '/review'
+      fullPath: '/api/assessment-sessions/$id/review'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdReviewRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/resume': {
+      id: '/api/assessment-sessions/$id/resume'
+      path: '/resume'
+      fullPath: '/api/assessment-sessions/$id/resume'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdResumeRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/reassess': {
+      id: '/api/assessment-sessions/$id/reassess'
+      path: '/reassess'
+      fullPath: '/api/assessment-sessions/$id/reassess'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdReassessRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/pause': {
+      id: '/api/assessment-sessions/$id/pause'
+      path: '/pause'
+      fullPath: '/api/assessment-sessions/$id/pause'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdPauseRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/participants': {
+      id: '/api/assessment-sessions/$id/participants'
+      path: '/participants'
+      fullPath: '/api/assessment-sessions/$id/participants'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdParticipantsRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/owner': {
+      id: '/api/assessment-sessions/$id/owner'
+      path: '/owner'
+      fullPath: '/api/assessment-sessions/$id/owner'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdOwnerRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/history': {
+      id: '/api/assessment-sessions/$id/history'
+      path: '/history'
+      fullPath: '/api/assessment-sessions/$id/history'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdHistoryRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/complete': {
+      id: '/api/assessment-sessions/$id/complete'
+      path: '/complete'
+      fullPath: '/api/assessment-sessions/$id/complete'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdCompleteRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
     '/api/assessment-sessions/$id/assign': {
       id: '/api/assessment-sessions/$id/assign'
       path: '/assign'
@@ -2575,16 +2808,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentSessionsIdAssignRouteImport
       parentRoute: typeof ApiAssessmentSessionsIdRoute
     }
+    '/api/assessment-sessions/$id/archive': {
+      id: '/api/assessment-sessions/$id/archive'
+      path: '/archive'
+      fullPath: '/api/assessment-sessions/$id/archive'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdArchiveRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
   }
 }
 
 interface ApiAssessmentSessionsIdRouteChildren {
+  ApiAssessmentSessionsIdArchiveRoute: typeof ApiAssessmentSessionsIdArchiveRoute
   ApiAssessmentSessionsIdAssignRoute: typeof ApiAssessmentSessionsIdAssignRoute
+  ApiAssessmentSessionsIdCompleteRoute: typeof ApiAssessmentSessionsIdCompleteRoute
+  ApiAssessmentSessionsIdHistoryRoute: typeof ApiAssessmentSessionsIdHistoryRoute
+  ApiAssessmentSessionsIdOwnerRoute: typeof ApiAssessmentSessionsIdOwnerRoute
+  ApiAssessmentSessionsIdParticipantsRoute: typeof ApiAssessmentSessionsIdParticipantsRoute
+  ApiAssessmentSessionsIdPauseRoute: typeof ApiAssessmentSessionsIdPauseRoute
+  ApiAssessmentSessionsIdReassessRoute: typeof ApiAssessmentSessionsIdReassessRoute
+  ApiAssessmentSessionsIdResumeRoute: typeof ApiAssessmentSessionsIdResumeRoute
+  ApiAssessmentSessionsIdReviewRoute: typeof ApiAssessmentSessionsIdReviewRoute
+  ApiAssessmentSessionsIdStartRoute: typeof ApiAssessmentSessionsIdStartRoute
+  ApiAssessmentSessionsIdTimelineRoute: typeof ApiAssessmentSessionsIdTimelineRoute
 }
 
 const ApiAssessmentSessionsIdRouteChildren: ApiAssessmentSessionsIdRouteChildren =
   {
+    ApiAssessmentSessionsIdArchiveRoute: ApiAssessmentSessionsIdArchiveRoute,
     ApiAssessmentSessionsIdAssignRoute: ApiAssessmentSessionsIdAssignRoute,
+    ApiAssessmentSessionsIdCompleteRoute: ApiAssessmentSessionsIdCompleteRoute,
+    ApiAssessmentSessionsIdHistoryRoute: ApiAssessmentSessionsIdHistoryRoute,
+    ApiAssessmentSessionsIdOwnerRoute: ApiAssessmentSessionsIdOwnerRoute,
+    ApiAssessmentSessionsIdParticipantsRoute:
+      ApiAssessmentSessionsIdParticipantsRoute,
+    ApiAssessmentSessionsIdPauseRoute: ApiAssessmentSessionsIdPauseRoute,
+    ApiAssessmentSessionsIdReassessRoute: ApiAssessmentSessionsIdReassessRoute,
+    ApiAssessmentSessionsIdResumeRoute: ApiAssessmentSessionsIdResumeRoute,
+    ApiAssessmentSessionsIdReviewRoute: ApiAssessmentSessionsIdReviewRoute,
+    ApiAssessmentSessionsIdStartRoute: ApiAssessmentSessionsIdStartRoute,
+    ApiAssessmentSessionsIdTimelineRoute: ApiAssessmentSessionsIdTimelineRoute,
   }
 
 const ApiAssessmentSessionsIdRouteWithChildren =
@@ -2594,10 +2857,12 @@ const ApiAssessmentSessionsIdRouteWithChildren =
 
 interface ApiAssessmentSessionsRouteChildren {
   ApiAssessmentSessionsIdRoute: typeof ApiAssessmentSessionsIdRouteWithChildren
+  ApiAssessmentSessionsDashboardRoute: typeof ApiAssessmentSessionsDashboardRoute
 }
 
 const ApiAssessmentSessionsRouteChildren: ApiAssessmentSessionsRouteChildren = {
   ApiAssessmentSessionsIdRoute: ApiAssessmentSessionsIdRouteWithChildren,
+  ApiAssessmentSessionsDashboardRoute: ApiAssessmentSessionsDashboardRoute,
 }
 
 const ApiAssessmentSessionsRouteWithChildren =
