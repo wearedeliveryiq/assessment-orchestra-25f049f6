@@ -14,6 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_lifecycle_sessions: {
+        Row: {
+          archived_at: string | null
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          description: string
+          due_date: string | null
+          id: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          last_activity: string
+          metadata: Json
+          name: string
+          organisation_id: string
+          owner_id: string
+          parent_session_id: string | null
+          paused_at: string | null
+          priority: string
+          progress: number
+          root_session_id: string | null
+          runtime_session_id: string | null
+          started_at: string | null
+          status: string
+          tags: string[]
+          updated_at: string
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string
+          due_date?: string | null
+          id?: string
+          knowledge_pack_id: string
+          knowledge_pack_version?: string
+          last_activity?: string
+          metadata?: Json
+          name: string
+          organisation_id: string
+          owner_id: string
+          parent_session_id?: string | null
+          paused_at?: string | null
+          priority?: string
+          progress?: number
+          root_session_id?: string | null
+          runtime_session_id?: string | null
+          started_at?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          version?: number
+          workspace_id: string
+        }
+        Update: {
+          archived_at?: string | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string
+          due_date?: string | null
+          id?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          last_activity?: string
+          metadata?: Json
+          name?: string
+          organisation_id?: string
+          owner_id?: string
+          parent_session_id?: string | null
+          paused_at?: string | null
+          priority?: string
+          progress?: number
+          root_session_id?: string | null
+          runtime_session_id?: string | null
+          started_at?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_lifecycle_sessions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_lifecycle_sessions_parent_session_id_fkey"
+            columns: ["parent_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_lifecycle_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_lifecycle_sessions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_narratives: {
         Row: {
           audience: string
@@ -560,6 +669,132 @@ export type Database = {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_session_history: {
+        Row: {
+          actor_email: string
+          actor_id: string | null
+          change_type: string
+          created_at: string
+          field: string
+          id: string
+          metadata: Json
+          next_value: Json | null
+          previous_value: Json | null
+          session_id: string
+          version: number
+        }
+        Insert: {
+          actor_email?: string
+          actor_id?: string | null
+          change_type: string
+          created_at?: string
+          field?: string
+          id?: string
+          metadata?: Json
+          next_value?: Json | null
+          previous_value?: Json | null
+          session_id: string
+          version?: number
+        }
+        Update: {
+          actor_email?: string
+          actor_id?: string | null
+          change_type?: string
+          created_at?: string
+          field?: string
+          id?: string
+          metadata?: Json
+          next_value?: Json | null
+          previous_value?: Json | null
+          session_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_session_history_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_lifecycle_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_session_participants: {
+        Row: {
+          added_by: string | null
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          role?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_lifecycle_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_session_timeline: {
+        Row: {
+          actor_email: string
+          actor_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          session_id: string
+          summary: string
+        }
+        Insert: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          session_id: string
+          summary: string
+        }
+        Update: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          session_id?: string
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_session_timeline_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_lifecycle_sessions"
             referencedColumns: ["id"]
           },
         ]
