@@ -50,6 +50,8 @@ function matches(row: Row, filter: Filter): boolean {
 
 export class InMemoryDataSource implements DataSource {
   readonly tables = new Map<string, Row[]>();
+  /** Counts reads so tests can assert batch loading avoids N+1 queries. */
+  queryCount = 0;
   private readonly config = new Map<string, TableConfig>();
 
   configure(table: string, config: TableConfig): void {
