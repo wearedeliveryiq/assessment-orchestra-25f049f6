@@ -1806,6 +1806,81 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_branding_profiles: {
+        Row: {
+          body_font: string
+          confidentiality_statement: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string
+          created_at: string
+          footer_text: string
+          header_text: string
+          heading_font: string
+          ink_colour: string
+          logo_text: string
+          logo_url: string | null
+          metadata: Json
+          muted_colour: string
+          organisation_id: string
+          primary_colour: string
+          product_name: string
+          secondary_colour: string
+          surface_colour: string
+          updated_at: string
+          updated_by: string | null
+          website: string
+        }
+        Insert: {
+          body_font?: string
+          confidentiality_statement?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          footer_text?: string
+          header_text?: string
+          heading_font?: string
+          ink_colour?: string
+          logo_text?: string
+          logo_url?: string | null
+          metadata?: Json
+          muted_colour?: string
+          organisation_id: string
+          primary_colour?: string
+          product_name?: string
+          secondary_colour?: string
+          surface_colour?: string
+          updated_at?: string
+          updated_by?: string | null
+          website?: string
+        }
+        Update: {
+          body_font?: string
+          confidentiality_statement?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          footer_text?: string
+          header_text?: string
+          heading_font?: string
+          ink_colour?: string
+          logo_text?: string
+          logo_url?: string | null
+          metadata?: Json
+          muted_colour?: string
+          organisation_id?: string
+          primary_colour?: string
+          product_name?: string
+          secondary_colour?: string
+          surface_colour?: string
+          updated_at?: string
+          updated_by?: string | null
+          website?: string
+        }
+        Relationships: []
+      }
       platform_notifications: {
         Row: {
           body: string
@@ -1886,6 +1961,203 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      platform_report_events: {
+        Row: {
+          actor_email: string
+          actor_id: string | null
+          created_at: string
+          event_type: string
+          id: string
+          lineage_id: string | null
+          metadata: Json
+          organisation_id: string
+          report_id: string | null
+          severity: string
+          summary: string
+          workspace_id: string | null
+        }
+        Insert: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          lineage_id?: string | null
+          metadata?: Json
+          organisation_id: string
+          report_id?: string | null
+          severity?: string
+          summary?: string
+          workspace_id?: string | null
+        }
+        Update: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          lineage_id?: string | null
+          metadata?: Json
+          organisation_id?: string
+          report_id?: string | null
+          severity?: string
+          summary?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_report_events_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "platform_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_reports: {
+        Row: {
+          assessment_session_id: string | null
+          attempts: number
+          branding: Json
+          checksum: string
+          content_type: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          deleted_by: string | null
+          description: string
+          distribution: Json
+          download_count: number
+          duration_ms: number
+          error: string | null
+          error_code: string | null
+          expires_at: string | null
+          file_size: number
+          filename: string
+          format: string
+          generated_at: string | null
+          generated_by: string | null
+          generated_by_email: string
+          id: string
+          is_deleted: boolean
+          last_downloaded_at: string | null
+          lineage_id: string
+          max_attempts: number
+          metadata: Json
+          organisation_id: string
+          parameters: Json
+          queued_at: string
+          report_type: string
+          schedule: Json
+          source_id: string | null
+          source_module: string
+          started_at: string | null
+          status: string
+          storage_path: string | null
+          template_id: string
+          template_version: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+          version: number
+          workspace_id: string | null
+        }
+        Insert: {
+          assessment_session_id?: string | null
+          attempts?: number
+          branding?: Json
+          checksum?: string
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          distribution?: Json
+          download_count?: number
+          duration_ms?: number
+          error?: string | null
+          error_code?: string | null
+          expires_at?: string | null
+          file_size?: number
+          filename?: string
+          format: string
+          generated_at?: string | null
+          generated_by?: string | null
+          generated_by_email?: string
+          id?: string
+          is_deleted?: boolean
+          last_downloaded_at?: string | null
+          lineage_id: string
+          max_attempts?: number
+          metadata?: Json
+          organisation_id: string
+          parameters?: Json
+          queued_at?: string
+          report_type: string
+          schedule?: Json
+          source_id?: string | null
+          source_module?: string
+          started_at?: string | null
+          status?: string
+          storage_path?: string | null
+          template_id: string
+          template_version?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
+        }
+        Update: {
+          assessment_session_id?: string | null
+          attempts?: number
+          branding?: Json
+          checksum?: string
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          description?: string
+          distribution?: Json
+          download_count?: number
+          duration_ms?: number
+          error?: string | null
+          error_code?: string | null
+          expires_at?: string | null
+          file_size?: number
+          filename?: string
+          format?: string
+          generated_at?: string | null
+          generated_by?: string | null
+          generated_by_email?: string
+          id?: string
+          is_deleted?: boolean
+          last_downloaded_at?: string | null
+          lineage_id?: string
+          max_attempts?: number
+          metadata?: Json
+          organisation_id?: string
+          parameters?: Json
+          queued_at?: string
+          report_type?: string
+          schedule?: Json
+          source_id?: string | null
+          source_module?: string
+          started_at?: string | null
+          status?: string
+          storage_path?: string | null
+          template_id?: string
+          template_version?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: number
+          workspace_id?: string | null
+        }
+        Relationships: []
       }
       platform_retention_policies: {
         Row: {
