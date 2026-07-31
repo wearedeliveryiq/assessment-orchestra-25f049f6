@@ -214,7 +214,11 @@ function AssessmentPage() {
               <button
                 type="button"
                 disabled={sectionIndex === 0}
-                onClick={() => setSectionIndex((i) => Math.max(0, i - 1))}
+                onClick={() => {
+                  const prevIndex = Math.max(0, sectionIndex - 1);
+                  setSectionIndex(prevIndex);
+                  save.mutate({ silent: true, sectionId: QUESTIONNAIRE[prevIndex].id });
+                }}
                 className="rounded-md border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
               >
                 Previous
