@@ -1,6 +1,6 @@
 import type { PlatformRepositories } from "./repositories";
 import type { TenantContext } from "./types";
-import { withTransaction } from "./unit-of-work";
+import { withTransaction, type UnitOfWork } from "./unit-of-work";
 
 /**
  * Transactional platform flows.
@@ -12,6 +12,15 @@ import { withTransaction } from "./unit-of-work";
  * Business rules (who may do this, which role is granted) stay in the domain
  * services — these functions only sequence the writes.
  */
+
+/** Runs a Unit of Work and unwraps its result for callers. */
+async function runTransaction<T>(
+  label: string,
+  work: (uow: UnitOfWork) => Promise<T>,
+): Promise<T> {
+  const { value } = await withTransaction(label, work);
+  return value;
+}
 
 export interface RegisterUserInput {
   userId: string;
@@ -27,7 +36,7 @@ export async function registerUserTransaction(
   context: TenantContext,
   input: RegisterUserInput,
 ) {
-  return withTransaction("register-user", async (uow) => {
+  return runTransaction("register-user", async (uow) => {
     const user = await uow.step({
       name: "create-user-profile",
       run: () =>
@@ -134,7 +143,7 @@ export function createOrganisationTransaction(
   context: TenantContext,
   input: CreateOrganisationInput,
 ) {
-  return withTransaction("create-organisation", (uow) =>
+  return runTransaction("create-organisation", (uow) =>
     createOrganisationSteps(repos, context, uow, input),
   );
 }
@@ -144,7 +153,7 @@ export function createWorkspaceTransaction(
   context: TenantContext,
   input: { organisationId: string; name: string; ownerId: string; type?: string },
 ) {
-  return withTransaction("create-workspace", async (uow) => {
+  return runTransaction("create-workspace", async (uow) => {
     const workspace = await uow.step({
       name: "create-workspace",
       run: () =>
@@ -192,7 +201,7 @@ export function launchAssessmentTransaction(
     notifyUserId?: string;
   },
 ) {
-  return withTransaction("launch-assessment", async (uow) => {
+  return runTransaction("launch-assessment", async (uow) => {
     const session = await uow.step({
       name: "create-assessment-session",
       run: () =>
@@ -238,7 +247,7 @@ export function acceptInvitationTransaction(
   context: TenantContext,
   input: { organisationId: string; userId: string; role: string; workspaceId?: string | null },
 ) {
-  return withTransaction("accept-invitation", async (uow) => {
+  return runTransaction("accept-invitation", async (uow) => {
     const membership = await uow.step({
       name: "create-organisation-membership",
       run: () =>
