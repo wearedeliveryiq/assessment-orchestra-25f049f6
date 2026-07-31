@@ -74,7 +74,6 @@ export async function restore(
 
   const previous = (session.metadata.statusBeforeArchive as string) ?? "draft";
   const target = previous === "archived" ? "draft" : previous;
-  assertTransition("archived", target as never);
 
   const updated = await repo.updateSession(
     sessionId,
