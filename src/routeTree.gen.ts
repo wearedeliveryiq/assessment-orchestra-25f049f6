@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
@@ -174,6 +175,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -943,6 +949,7 @@ const ApiAssessmentSessionsIdArchiveRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
@@ -1096,6 +1103,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
@@ -1250,6 +1258,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
@@ -1405,6 +1414,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/design-system'
     | '/home'
     | '/notifications'
     | '/settings'
@@ -1558,6 +1568,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/design-system'
     | '/home'
     | '/notifications'
     | '/settings'
@@ -1711,6 +1722,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/design-system'
     | '/home'
     | '/notifications'
     | '/settings'
@@ -1865,6 +1877,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  DesignSystemRoute: typeof DesignSystemRoute
   HomeRoute: typeof HomeRoute
   NotificationsRoute: typeof NotificationsRoute
   SettingsRoute: typeof SettingsRoute
@@ -1996,6 +2009,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -3261,6 +3281,7 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  DesignSystemRoute: DesignSystemRoute,
   HomeRoute: HomeRoute,
   NotificationsRoute: NotificationsRoute,
   SettingsRoute: SettingsRoute,
