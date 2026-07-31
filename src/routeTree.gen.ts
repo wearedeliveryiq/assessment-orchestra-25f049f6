@@ -49,6 +49,7 @@ import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
@@ -333,6 +334,11 @@ const ApiMembersRoute = ApiMembersRouteImport.update({
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   id: '/api/assessments',
   path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
+  id: '/api/assessment-sessions',
+  path: '/api/assessment-sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
@@ -774,6 +780,7 @@ const ApiAssessmentIdCompleteRoute = ApiAssessmentIdCompleteRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/api/assessment-sessions': typeof ApiAssessmentSessionsRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRoute
@@ -901,6 +908,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/api/assessment-sessions': typeof ApiAssessmentSessionsRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRoute
@@ -1029,6 +1037,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/api/assessment-sessions': typeof ApiAssessmentSessionsRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRoute
@@ -1158,6 +1167,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
     | '/api/notifications'
@@ -1285,6 +1295,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
     | '/api/notifications'
@@ -1412,6 +1423,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
     | '/api/notifications'
@@ -1540,6 +1552,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
   ApiNotificationsRoute: typeof ApiNotificationsRoute
@@ -1919,6 +1932,13 @@ declare module '@tanstack/react-router' {
       path: '/api/assessments'
       fullPath: '/api/assessments'
       preLoaderRoute: typeof ApiAssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessment-sessions': {
+      id: '/api/assessment-sessions'
+      path: '/api/assessment-sessions'
+      fullPath: '/api/assessment-sessions'
+      preLoaderRoute: typeof ApiAssessmentSessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge-pack/$id/': {
@@ -2680,6 +2700,7 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  ApiAssessmentSessionsRoute: ApiAssessmentSessionsRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
   ApiNotificationsRoute: ApiNotificationsRoute,
