@@ -180,7 +180,7 @@ describe("assessment runtime engine", () => {
 
   it("creates a session positioned on the first page", async () => {
     const snapshot = await engine.start({ ownerKey: OWNER });
-    expect(snapshot.session.status).toBe("in_progress");
+    expect(snapshot.session.status).toBe("created");
     expect(snapshot.session.totalQuestions).toBe(4);
     expect(snapshot.navigation.currentPage?.id).toBe("s1.p1");
     expect(snapshot.navigation.canGoPrevious).toBe(false);
