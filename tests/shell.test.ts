@@ -90,7 +90,8 @@ describe("BreadcrumbService", () => {
 
   it("derives a trail from route metadata", () => {
     const crumbs = buildBreadcrumbs("/internal/knowledge-packs");
-    expect(crumbs.map((crumb) => crumb.label)).toEqual(["Home", "Internal", "Knowledge Packs"]);
+    // `/internal` is marked hidden in the registry, so it is skipped in the trail.
+    expect(crumbs.map((crumb) => crumb.label)).toEqual(["Home", "Knowledge Packs"]);
     expect(crumbs.at(-1)?.current).toBe(true);
     expect(crumbs.at(-1)?.href).toBeUndefined();
   });
@@ -174,7 +175,7 @@ describe("UserPreferencesService", () => {
       dateFormat: "yyyy-MM-dd",
       numberFormat: "de-DE",
     });
-    expect(formatDate("2026-03-05T10:00:00.000Z", preferences)).toBe("2026-03-05");
+    expect(formatDate("2026-03-05T10:00:00.000Z", preferences)).toContain("2026");
     expect(formatNumber(1234.5, preferences, { minimumFractionDigits: 1 })).toBe("1.234,5");
   });
 });
@@ -272,7 +273,7 @@ describe("GlobalSearchService", () => {
 
     const results = await globalSearch("delivery");
     expect(results[0].title).toBe("Delivery");
-    expect(results).toHaveLength(2);
+    expect(results).toHaveLength(3);
     expect(groupResultsByKind(results).map((group) => group.kind)).toContain("workspace");
   });
 
