@@ -136,6 +136,7 @@ import { Route as ApiAssessmentIdProgressRouteImport } from './routes/api/assess
 import { Route as ApiAssessmentIdPauseRouteImport } from './routes/api/assessment.$id.pause'
 import { Route as ApiAssessmentIdNavigateRouteImport } from './routes/api/assessment.$id.navigate'
 import { Route as ApiAssessmentIdCompleteRouteImport } from './routes/api/assessment.$id.complete'
+import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
 
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
@@ -782,6 +783,12 @@ const ApiAssessmentIdCompleteRoute = ApiAssessmentIdCompleteRouteImport.update({
   path: '/complete',
   getParentRoute: () => ApiAssessmentIdRoute,
 } as any)
+const ApiAssessmentSessionsIdAssignRoute =
+  ApiAssessmentSessionsIdAssignRouteImport.update({
+    id: '/assign',
+    path: '/assign',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -825,7 +832,7 @@ export interface FileRoutesByFullPath {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
-  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRoute
+  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -888,6 +895,7 @@ export interface FileRoutesByFullPath {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -954,7 +962,7 @@ export interface FileRoutesByTo {
   '/assess': typeof AssessIndexRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/organisations': typeof OrganisationsIndexRoute
-  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRoute
+  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -1017,6 +1025,7 @@ export interface FileRoutesByTo {
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -1084,7 +1093,7 @@ export interface FileRoutesById {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
-  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRoute
+  '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
   '/api/assessment/catalogue': typeof ApiAssessmentCatalogueRoute
   '/api/assessment/start': typeof ApiAssessmentStartRoute
@@ -1147,6 +1156,7 @@ export interface FileRoutesById {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment/$id/complete': typeof ApiAssessmentIdCompleteRoute
   '/api/assessment/$id/navigate': typeof ApiAssessmentIdNavigateRoute
   '/api/assessment/$id/pause': typeof ApiAssessmentIdPauseRoute
@@ -1278,6 +1288,7 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/assessment-sessions/$id/assign'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -1407,6 +1418,7 @@ export interface FileRouteTypes {
     | '/internal/scores'
     | '/internal/signals'
     | '/knowledge-pack/$id'
+    | '/api/assessment-sessions/$id/assign'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -1536,6 +1548,7 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/assessment-sessions/$id/assign'
     | '/api/assessment/$id/complete'
     | '/api/assessment/$id/navigate'
     | '/api/assessment/$id/pause'
@@ -2555,15 +2568,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentIdCompleteRouteImport
       parentRoute: typeof ApiAssessmentIdRoute
     }
+    '/api/assessment-sessions/$id/assign': {
+      id: '/api/assessment-sessions/$id/assign'
+      path: '/assign'
+      fullPath: '/api/assessment-sessions/$id/assign'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdAssignRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
   }
 }
 
+interface ApiAssessmentSessionsIdRouteChildren {
+  ApiAssessmentSessionsIdAssignRoute: typeof ApiAssessmentSessionsIdAssignRoute
+}
+
+const ApiAssessmentSessionsIdRouteChildren: ApiAssessmentSessionsIdRouteChildren =
+  {
+    ApiAssessmentSessionsIdAssignRoute: ApiAssessmentSessionsIdAssignRoute,
+  }
+
+const ApiAssessmentSessionsIdRouteWithChildren =
+  ApiAssessmentSessionsIdRoute._addFileChildren(
+    ApiAssessmentSessionsIdRouteChildren,
+  )
+
 interface ApiAssessmentSessionsRouteChildren {
-  ApiAssessmentSessionsIdRoute: typeof ApiAssessmentSessionsIdRoute
+  ApiAssessmentSessionsIdRoute: typeof ApiAssessmentSessionsIdRouteWithChildren
 }
 
 const ApiAssessmentSessionsRouteChildren: ApiAssessmentSessionsRouteChildren = {
-  ApiAssessmentSessionsIdRoute: ApiAssessmentSessionsIdRoute,
+  ApiAssessmentSessionsIdRoute: ApiAssessmentSessionsIdRouteWithChildren,
 }
 
 const ApiAssessmentSessionsRouteWithChildren =
