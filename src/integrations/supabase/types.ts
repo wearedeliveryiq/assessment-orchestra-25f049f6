@@ -1069,6 +1069,66 @@ export type Database = {
         }
         Relationships: []
       }
+      organisation_audit_events: {
+        Row: {
+          actor_email: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          event_type: string
+          id: string
+          ip_address: string
+          metadata: Json
+          organisation_id: string | null
+          summary: string
+          workspace_id: string | null
+        }
+        Insert: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          event_type: string
+          id?: string
+          ip_address?: string
+          metadata?: Json
+          organisation_id?: string | null
+          summary?: string
+          workspace_id?: string | null
+        }
+        Update: {
+          actor_email?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          event_type?: string
+          id?: string
+          ip_address?: string
+          metadata?: Json
+          organisation_id?: string | null
+          summary?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_audit_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_audit_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organisation_invitations: {
         Row: {
           accepted_at: string | null
@@ -1078,11 +1138,14 @@ export type Database = {
           expires_at: string
           id: string
           invited_by: string | null
+          message: string
           organisation_id: string
           role: Database["public"]["Enums"]["platform_role"]
           status: Database["public"]["Enums"]["invitation_status"]
           token_hash: string
           updated_at: string
+          workspace_id: string | null
+          workspace_role: Database["public"]["Enums"]["platform_role"] | null
         }
         Insert: {
           accepted_at?: string | null
@@ -1092,11 +1155,14 @@ export type Database = {
           expires_at: string
           id?: string
           invited_by?: string | null
+          message?: string
           organisation_id: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["invitation_status"]
           token_hash: string
           updated_at?: string
+          workspace_id?: string | null
+          workspace_role?: Database["public"]["Enums"]["platform_role"] | null
         }
         Update: {
           accepted_at?: string | null
@@ -1106,11 +1172,14 @@ export type Database = {
           expires_at?: string
           id?: string
           invited_by?: string | null
+          message?: string
           organisation_id?: string
           role?: Database["public"]["Enums"]["platform_role"]
           status?: Database["public"]["Enums"]["invitation_status"]
           token_hash?: string
           updated_at?: string
+          workspace_id?: string | null
+          workspace_role?: Database["public"]["Enums"]["platform_role"] | null
         }
         Relationships: [
           {
@@ -1118,6 +1187,13 @@ export type Database = {
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_invitations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -1166,30 +1242,95 @@ export type Database = {
           },
         ]
       }
-      organisations: {
+      organisation_settings: {
         Row: {
+          branding: Json
           created_at: string
-          created_by: string | null
-          id: string
-          name: string
-          slug: string
+          general: Json
+          notifications: Json
+          organisation_id: string
+          security: Json
           updated_at: string
         }
         Insert: {
+          branding?: Json
           created_at?: string
-          created_by?: string | null
-          id?: string
-          name: string
-          slug: string
+          general?: Json
+          notifications?: Json
+          organisation_id: string
+          security?: Json
           updated_at?: string
         }
         Update: {
+          branding?: Json
+          created_at?: string
+          general?: Json
+          notifications?: Json
+          organisation_id?: string
+          security?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_settings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: true
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organisations: {
+        Row: {
+          country: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          industry: string
+          logo: string | null
+          name: string
+          organisation_size: string
+          slug: string
+          status: Database["public"]["Enums"]["organisation_status"]
+          subscription_plan: string
+          timezone: string
+          updated_at: string
+          website: string
+        }
+        Insert: {
+          country?: string
           created_at?: string
           created_by?: string | null
+          description?: string
           id?: string
-          name?: string
-          slug?: string
+          industry?: string
+          logo?: string | null
+          name: string
+          organisation_size?: string
+          slug: string
+          status?: Database["public"]["Enums"]["organisation_status"]
+          subscription_plan?: string
+          timezone?: string
           updated_at?: string
+          website?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          industry?: string
+          logo?: string | null
+          name?: string
+          organisation_size?: string
+          slug?: string
+          status?: Database["public"]["Enums"]["organisation_status"]
+          subscription_plan?: string
+          timezone?: string
+          updated_at?: string
+          website?: string
         }
         Relationships: []
       }
@@ -1213,6 +1354,66 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      platform_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          module: string
+          organisation_id: string | null
+          read_at: string | null
+          severity: string
+          title: string
+          user_id: string
+          workspace_id: string | null
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          module?: string
+          organisation_id?: string | null
+          read_at?: string | null
+          severity?: string
+          title: string
+          user_id: string
+          workspace_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          module?: string
+          organisation_id?: string | null
+          read_at?: string | null
+          severity?: string
+          title?: string
+          user_id?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_notifications_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "platform_notifications_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       runtime_execution_stages: {
         Row: {
@@ -1390,6 +1591,251 @@ export type Database = {
         }
         Relationships: []
       }
+      workspace_memberships: {
+        Row: {
+          created_at: string
+          favourite: boolean
+          id: string
+          joined_at: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status: Database["public"]["Enums"]["membership_status"]
+          updated_at: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          favourite?: boolean
+          id?: string
+          joined_at?: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          favourite?: boolean
+          id?: string
+          joined_at?: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          updated_at?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_memberships_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_settings: {
+        Row: {
+          archive_rules: Json
+          colour: string
+          created_at: string
+          default_knowledge_packs: string[]
+          description: string
+          display_name: string
+          icon: string
+          organisation_id: string
+          updated_at: string
+          visibility: string
+          workspace_id: string
+        }
+        Insert: {
+          archive_rules?: Json
+          colour?: string
+          created_at?: string
+          default_knowledge_packs?: string[]
+          description?: string
+          display_name?: string
+          icon?: string
+          organisation_id: string
+          updated_at?: string
+          visibility?: string
+          workspace_id: string
+        }
+        Update: {
+          archive_rules?: Json
+          colour?: string
+          created_at?: string
+          default_knowledge_packs?: string[]
+          description?: string
+          display_name?: string
+          icon?: string
+          organisation_id?: string
+          updated_at?: string
+          visibility?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_settings_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_settings_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: true
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspace_types: {
+        Row: {
+          code: string
+          created_at: string
+          description: string
+          enabled: boolean
+          id: string
+          label: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      workspace_visits: {
+        Row: {
+          created_at: string
+          id: string
+          last_visited_at: string
+          organisation_id: string
+          updated_at: string
+          user_id: string
+          visit_count: number
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_visited_at?: string
+          organisation_id: string
+          updated_at?: string
+          user_id: string
+          visit_count?: number
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_visited_at?: string
+          organisation_id?: string
+          updated_at?: string
+          user_id?: string
+          visit_count?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_visits_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_visits_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workspaces: {
+        Row: {
+          colour: string
+          created_at: string
+          created_by: string | null
+          description: string
+          icon: string
+          id: string
+          name: string
+          organisation_id: string
+          slug: string
+          status: Database["public"]["Enums"]["workspace_status"]
+          type: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          colour?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          name: string
+          organisation_id: string
+          slug: string
+          status?: Database["public"]["Enums"]["workspace_status"]
+          type?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          colour?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          organisation_id?: string
+          slug?: string
+          status?: Database["public"]["Enums"]["workspace_status"]
+          type?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspaces_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspaces_type_fkey"
+            columns: ["type"]
+            isOneToOne: false
+            referencedRelation: "workspace_types"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1430,7 +1876,8 @@ export type Database = {
         | "suspended"
         | "disabled"
       invitation_status: "pending" | "accepted" | "revoked" | "expired"
-      membership_status: "invited" | "active" | "removed"
+      membership_status: "invited" | "active" | "removed" | "suspended"
+      organisation_status: "active" | "suspended" | "archived"
       platform_role:
         | "platform_admin"
         | "org_admin"
@@ -1438,7 +1885,10 @@ export type Database = {
         | "contributor"
         | "reviewer"
         | "read_only"
+        | "organisation_owner"
+        | "workspace_manager"
       stage_status: "pending" | "running" | "completed" | "failed" | "skipped"
+      workspace_status: "active" | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1582,7 +2032,8 @@ export const Constants = {
         "disabled",
       ],
       invitation_status: ["pending", "accepted", "revoked", "expired"],
-      membership_status: ["invited", "active", "removed"],
+      membership_status: ["invited", "active", "removed", "suspended"],
+      organisation_status: ["active", "suspended", "archived"],
       platform_role: [
         "platform_admin",
         "org_admin",
@@ -1590,8 +2041,11 @@ export const Constants = {
         "contributor",
         "reviewer",
         "read_only",
+        "organisation_owner",
+        "workspace_manager",
       ],
       stage_status: ["pending", "running", "completed", "failed", "skipped"],
+      workspace_status: ["active", "archived"],
     },
   },
 } as const

@@ -8,7 +8,9 @@
 
 export type PlatformRole =
   | "platform_admin"
+  | "organisation_owner"
   | "org_admin"
+  | "workspace_manager"
   | "assessment_manager"
   | "contributor"
   | "reviewer"

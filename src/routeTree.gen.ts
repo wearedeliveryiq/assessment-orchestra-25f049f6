@@ -39,6 +39,9 @@ import { Route as AuditHealthRouteImport } from './routes/audit.health'
 import { Route as AuditEventsRouteImport } from './routes/audit.events'
 import { Route as AuditDashboardRouteImport } from './routes/audit.dashboard'
 import { Route as AuditAssessmentIdRouteImport } from './routes/audit.$assessmentId'
+import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
+import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
+import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
@@ -78,6 +81,11 @@ import { Route as AssessmentIdObservationsRouteImport } from './routes/assessmen
 import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
 import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
+import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
+import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
+import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
+import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
+import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
@@ -255,6 +263,21 @@ const AuditDashboardRoute = AuditDashboardRouteImport.update({
 const AuditAssessmentIdRoute = AuditAssessmentIdRouteImport.update({
   id: '/audit/$assessmentId',
   path: '/audit/$assessmentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkspacesRoute = ApiWorkspacesRouteImport.update({
+  id: '/api/workspaces',
+  path: '/api/workspaces',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOrganisationsRoute = ApiOrganisationsRouteImport.update({
+  id: '/api/organisations',
+  path: '/api/organisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMembersRoute = ApiMembersRouteImport.update({
+  id: '/api/members',
+  path: '/api/members',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
@@ -459,6 +482,31 @@ const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
   path: '/assessment/$id/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkspacesIdRoute = ApiWorkspacesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiWorkspacesRoute,
+} as any)
+const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
+  id: '/api/workspace/switch',
+  path: '/api/workspace/switch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiOrganisationsRoute,
+} as any)
+const ApiMembersInviteRoute = ApiMembersInviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
+  getParentRoute: () => ApiMembersRoute,
+} as any)
+const ApiMembersIdRoute = ApiMembersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiMembersRoute,
+} as any)
 const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
   id: '/api/executions/monitor',
   path: '/api/executions/monitor',
@@ -607,6 +655,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
@@ -648,6 +699,11 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/members/$id': typeof ApiMembersIdRoute
+  '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
+  '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -706,6 +762,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
@@ -747,6 +806,11 @@ export interface FileRoutesByTo {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/members/$id': typeof ApiMembersIdRoute
+  '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
+  '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -806,6 +870,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/members': typeof ApiMembersRouteWithChildren
+  '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
   '/audit/dashboard': typeof AuditDashboardRoute
   '/audit/events': typeof AuditEventsRoute
@@ -847,6 +914,11 @@ export interface FileRoutesById {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/members/$id': typeof ApiMembersIdRoute
+  '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
+  '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
   '/assessment/$id/evidence-graph': typeof AssessmentIdEvidenceGraphRoute
   '/assessment/$id/narrative': typeof AssessmentIdNarrativeRoute
@@ -907,6 +979,9 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/api/assessments'
+    | '/api/members'
+    | '/api/organisations'
+    | '/api/workspaces'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
@@ -948,6 +1023,11 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/members/$id'
+    | '/api/members/invite'
+    | '/api/organisations/$id'
+    | '/api/workspace/switch'
+    | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -1006,6 +1086,9 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/api/assessments'
+    | '/api/members'
+    | '/api/organisations'
+    | '/api/workspaces'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
@@ -1047,6 +1130,11 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/members/$id'
+    | '/api/members/invite'
+    | '/api/organisations/$id'
+    | '/api/workspace/switch'
+    | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -1105,6 +1193,9 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/api/assessments'
+    | '/api/members'
+    | '/api/organisations'
+    | '/api/workspaces'
     | '/audit/$assessmentId'
     | '/audit/dashboard'
     | '/audit/events'
@@ -1146,6 +1237,11 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/members/$id'
+    | '/api/members/invite'
+    | '/api/organisations/$id'
+    | '/api/workspace/switch'
+    | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
     | '/assessment/$id/evidence-graph'
     | '/assessment/$id/narrative'
@@ -1205,6 +1301,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
+  ApiMembersRoute: typeof ApiMembersRouteWithChildren
+  ApiOrganisationsRoute: typeof ApiOrganisationsRouteWithChildren
+  ApiWorkspacesRoute: typeof ApiWorkspacesRouteWithChildren
   AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
   AuditDashboardRoute: typeof AuditDashboardRoute
   AuditEventsRoute: typeof AuditEventsRoute
@@ -1245,6 +1344,7 @@ export interface RootRouteChildren {
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
+  ApiWorkspaceSwitchRoute: typeof ApiWorkspaceSwitchRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
   AssessmentIdNarrativeRoute: typeof AssessmentIdNarrativeRoute
@@ -1497,6 +1597,27 @@ declare module '@tanstack/react-router' {
       path: '/audit/$assessmentId'
       fullPath: '/audit/$assessmentId'
       preLoaderRoute: typeof AuditAssessmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspaces': {
+      id: '/api/workspaces'
+      path: '/api/workspaces'
+      fullPath: '/api/workspaces'
+      preLoaderRoute: typeof ApiWorkspacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/organisations': {
+      id: '/api/organisations'
+      path: '/api/organisations'
+      fullPath: '/api/organisations'
+      preLoaderRoute: typeof ApiOrganisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/members': {
+      id: '/api/members'
+      path: '/api/members'
+      fullPath: '/api/members'
+      preLoaderRoute: typeof ApiMembersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/assessments': {
@@ -1772,6 +1893,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workspaces/$id': {
+      id: '/api/workspaces/$id'
+      path: '/$id'
+      fullPath: '/api/workspaces/$id'
+      preLoaderRoute: typeof ApiWorkspacesIdRouteImport
+      parentRoute: typeof ApiWorkspacesRoute
+    }
+    '/api/workspace/switch': {
+      id: '/api/workspace/switch'
+      path: '/api/workspace/switch'
+      fullPath: '/api/workspace/switch'
+      preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/organisations/$id': {
+      id: '/api/organisations/$id'
+      path: '/$id'
+      fullPath: '/api/organisations/$id'
+      preLoaderRoute: typeof ApiOrganisationsIdRouteImport
+      parentRoute: typeof ApiOrganisationsRoute
+    }
+    '/api/members/invite': {
+      id: '/api/members/invite'
+      path: '/invite'
+      fullPath: '/api/members/invite'
+      preLoaderRoute: typeof ApiMembersInviteRouteImport
+      parentRoute: typeof ApiMembersRoute
+    }
+    '/api/members/$id': {
+      id: '/api/members/$id'
+      path: '/$id'
+      fullPath: '/api/members/$id'
+      preLoaderRoute: typeof ApiMembersIdRouteImport
+      parentRoute: typeof ApiMembersRoute
+    }
     '/api/executions/monitor': {
       id: '/api/executions/monitor'
       path: '/api/executions/monitor'
@@ -2004,6 +2160,43 @@ const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
   ApiAssessmentsRouteChildren,
 )
 
+interface ApiMembersRouteChildren {
+  ApiMembersIdRoute: typeof ApiMembersIdRoute
+  ApiMembersInviteRoute: typeof ApiMembersInviteRoute
+}
+
+const ApiMembersRouteChildren: ApiMembersRouteChildren = {
+  ApiMembersIdRoute: ApiMembersIdRoute,
+  ApiMembersInviteRoute: ApiMembersInviteRoute,
+}
+
+const ApiMembersRouteWithChildren = ApiMembersRoute._addFileChildren(
+  ApiMembersRouteChildren,
+)
+
+interface ApiOrganisationsRouteChildren {
+  ApiOrganisationsIdRoute: typeof ApiOrganisationsIdRoute
+}
+
+const ApiOrganisationsRouteChildren: ApiOrganisationsRouteChildren = {
+  ApiOrganisationsIdRoute: ApiOrganisationsIdRoute,
+}
+
+const ApiOrganisationsRouteWithChildren =
+  ApiOrganisationsRoute._addFileChildren(ApiOrganisationsRouteChildren)
+
+interface ApiWorkspacesRouteChildren {
+  ApiWorkspacesIdRoute: typeof ApiWorkspacesIdRoute
+}
+
+const ApiWorkspacesRouteChildren: ApiWorkspacesRouteChildren = {
+  ApiWorkspacesIdRoute: ApiWorkspacesIdRoute,
+}
+
+const ApiWorkspacesRouteWithChildren = ApiWorkspacesRoute._addFileChildren(
+  ApiWorkspacesRouteChildren,
+)
+
 interface ReportIdRouteChildren {
   ReportIdDownloadRoute: typeof ReportIdDownloadRoute
 }
@@ -2070,6 +2263,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
+  ApiMembersRoute: ApiMembersRouteWithChildren,
+  ApiOrganisationsRoute: ApiOrganisationsRouteWithChildren,
+  ApiWorkspacesRoute: ApiWorkspacesRouteWithChildren,
   AuditAssessmentIdRoute: AuditAssessmentIdRoute,
   AuditDashboardRoute: AuditDashboardRoute,
   AuditEventsRoute: AuditEventsRoute,
@@ -2110,6 +2306,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
+  ApiWorkspaceSwitchRoute: ApiWorkspaceSwitchRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
   AssessmentIdNarrativeRoute: AssessmentIdNarrativeRoute,
