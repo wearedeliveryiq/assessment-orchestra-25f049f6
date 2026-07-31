@@ -236,7 +236,7 @@ export async function listParticipantSessionIds(userId: string): Promise<string[
     .select("session_id")
     .eq("user_id", userId);
   if (error) fail("listParticipantSessionIds", error);
-  return [...new Set((data ?? []).map((row: Row) => row.session_id as string))];
+  return [...new Set<string>((data ?? []).map((row: Row) => row.session_id as string))];
 }
 
 export async function addParticipant(values: {
