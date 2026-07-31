@@ -46,8 +46,8 @@ const governancePack = {
           title: "Escalation notes",
           type: "long_text",
           required: false,
-          validationRules: [{ type: "max_length", value: 20 }],
-          displayConditions: [{ questionId: "q1", operator: "equals", value: true }],
+          validationRules: [{ type: "maxLength", value: 20 }],
+          displayConditions: [{ mode: "when", questionId: "q2", operator: "eq", value: 4 }],
         },
       ],
     },
@@ -146,14 +146,14 @@ describe("validation service", () => {
   });
 
   it("applies metadata-driven rules", () => {
-    expect(validateQuestion(byId("q3"), "x".repeat(30))[0]?.rule).toBe("max_length");
+    expect(validateQuestion(byId("q3"), "x".repeat(30))[0]?.rule).toBe("maxLength");
     expect(validateQuestion(byId("q4"), -5)[0]?.rule).toBe("min");
     expect(validateQuestion(byId("q4"), 100)).toHaveLength(0);
   });
 
   it("evaluates display conditions", () => {
-    expect(isVisible(byId("q3"), { q1: false })).toBe(false);
-    expect(isVisible(byId("q3"), { q1: true })).toBe(true);
+    expect(isVisible(byId("q3"), { q2: 1 })).toBe(false);
+    expect(isVisible(byId("q3"), { q2: 4 })).toBe(true);
     expect(isVisible(byId("q1"), {})).toBe(true);
   });
 });
