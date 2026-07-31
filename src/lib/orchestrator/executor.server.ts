@@ -89,6 +89,19 @@ async function runExecution(executionId: string): Promise<void> {
 
   const pipeline = resolvePipeline();
 
+  // Resume support: a stage left `running` by a worker that was torn down mid
+  // flight is reclaimed as pending so the loop can pick it up again.
+  for (const stage of await repo.getStages(executionId)) {
+    if (stage.status === "running") {
+      await repo.updateStage(executionId, stage.stageId, {
+        status: "pending",
+        started_at: null,
+      } as never);
+    }
+  }
+
+
+
   if (execution.status === "queued") {
     assertTransition(execution.status, "starting");
     execution = await repo.updateExecution(executionId, {

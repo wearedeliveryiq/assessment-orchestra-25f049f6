@@ -1,6 +1,13 @@
 import * as assessmentRepo from "../assessment/repository.server";
 import type { AssessmentSession } from "../assessment/types";
-import { awaitExecution, launchExecution, resetStagesForRetry } from "./executor.server";
+import {
+  awaitExecution,
+  isExecutionRunningLocally,
+  launchExecution,
+  resetStagesForRetry,
+} from "./executor.server";
+import { delay } from "./retry";
+
 import { publishExecutionEvent } from "./events.server";
 import { DEFAULT_PIPELINE, resolvePipeline, stageById } from "./pipeline";
 import { computeProgress } from "./progress";
@@ -114,9 +121,19 @@ export async function getExecution(id: string, ownerKey: string): Promise<Execut
 
 /** GET /execution/{id}/status — lightweight polling payload. */
 export async function getStatus(id: string, ownerKey: string) {
-  const execution = await requireExecution(id, ownerKey);
+  let execution = await requireExecution(id, ownerKey);
+
+  // Serverless workers can be torn down between requests, stranding the
+  // background loop. Polling re-attaches (and resumes) the run when needed.
+  if (isActive(execution.status) && !isExecutionRunningLocally(execution.id)) {
+    launchExecution(execution.id);
+    await Promise.race([awaitExecution(execution.id), delay(2_000)]);
+    execution = await requireExecution(id, ownerKey);
+  }
+
   const stages = await repo.getStages(execution.id);
   const progress = computeProgress(stages);
+
   return {
     executionId: execution.id,
     assessmentSessionId: execution.assessmentSessionId,
