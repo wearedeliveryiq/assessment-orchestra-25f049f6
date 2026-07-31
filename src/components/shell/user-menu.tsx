@@ -45,7 +45,7 @@ export function UserMenu() {
     );
   }
 
-  const displayName = identity?.profile?.displayName ?? identity?.user?.email ?? "Account";
+  const displayName = identity?.user?.displayName || identity?.user?.email || "Account";
 
   return (
     <DropdownMenu>
