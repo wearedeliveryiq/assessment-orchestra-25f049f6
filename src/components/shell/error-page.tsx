@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { BrandMark } from "@/components/deliveryiq/app-shell";
+import { BrandMark } from "@/components/shell/brand-mark";
 import { Button } from "@/components/ui/button";
 
 export type ErrorKind = "401" | "403" | "404" | "500" | "offline" | "session-expired";

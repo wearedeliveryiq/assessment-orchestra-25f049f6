@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Bell, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { BrandMark } from "@/components/deliveryiq/app-shell";
+import { BrandMark } from "@/components/shell/brand-mark";
 import { GlobalSearchDialog } from "@/components/shell/global-search";
 import { NotificationCentre } from "@/components/shell/notification-centre";
 import { UserMenu } from "@/components/shell/user-menu";
