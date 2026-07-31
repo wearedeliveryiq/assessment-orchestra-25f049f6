@@ -16,6 +16,7 @@ import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
 import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
 import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
 import { Route as AssessIndexRouteImport } from './routes/assess.index'
@@ -104,6 +105,13 @@ import { Route as ApiTenancySearchRouteImport } from './routes/api/tenancy.searc
 import { Route as ApiShellAuditRouteImport } from './routes/api/shell.audit'
 import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
 import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
+import { Route as ApiReportingTemplatesRouteImport } from './routes/api/reporting.templates'
+import { Route as ApiReportingReportsRouteImport } from './routes/api/reporting.reports'
+import { Route as ApiReportingQueueRouteImport } from './routes/api/reporting.queue'
+import { Route as ApiReportingPreviewRouteImport } from './routes/api/reporting.preview'
+import { Route as ApiReportingHistoryRouteImport } from './routes/api/reporting.history'
+import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
+import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
 import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
@@ -127,6 +135,7 @@ import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id
 import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
 import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
+import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
@@ -161,6 +170,10 @@ import { Route as ApiAssessmentSessionsIdHistoryRouteImport } from './routes/api
 import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/api/assessment-sessions.$id.complete'
 import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
 import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
+import { Route as ApiReportingReportsIdRetryRouteImport } from './routes/api/reporting.reports.$id.retry'
+import { Route as ApiReportingReportsIdRegenerateRouteImport } from './routes/api/reporting.reports.$id.regenerate'
+import { Route as ApiReportingReportsIdDownloadRouteImport } from './routes/api/reporting.reports.$id.download'
+import { Route as ApiReportingReportsIdArchiveRouteImport } from './routes/api/reporting.reports.$id.archive'
 
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
@@ -195,6 +208,11 @@ const IndexRoute = IndexRouteImport.update({
 const SessionsIndexRoute = SessionsIndexRouteImport.update({
   id: '/sessions/',
   path: '/sessions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
@@ -644,6 +662,42 @@ const ApiSettingsOrganisationRoute = ApiSettingsOrganisationRouteImport.update({
   path: '/api/settings/organisation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiReportingTemplatesRoute = ApiReportingTemplatesRouteImport.update({
+  id: '/api/reporting/templates',
+  path: '/api/reporting/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingReportsRoute = ApiReportingReportsRouteImport.update({
+  id: '/api/reporting/reports',
+  path: '/api/reporting/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingQueueRoute = ApiReportingQueueRouteImport.update({
+  id: '/api/reporting/queue',
+  path: '/api/reporting/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingPreviewRoute = ApiReportingPreviewRouteImport.update({
+  id: '/api/reporting/preview',
+  path: '/api/reporting/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingHistoryRoute = ApiReportingHistoryRouteImport.update({
+  id: '/api/reporting/history',
+  path: '/api/reporting/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingDownloadCentreRoute =
+  ApiReportingDownloadCentreRouteImport.update({
+    id: '/api/reporting/download-centre',
+    path: '/api/reporting/download-centre',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiReportingBrandingRoute = ApiReportingBrandingRouteImport.update({
+  id: '/api/reporting/branding',
+  path: '/api/reporting/branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -761,6 +815,11 @@ const AssessmentIdExportFormatRoute =
     path: '/assessment/$id/export/$format',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiReportingReportsIdRoute = ApiReportingReportsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiReportingReportsRoute,
+} as any)
 const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
   id: '/status',
   path: '/status',
@@ -945,6 +1004,30 @@ const ApiAssessmentSessionsIdArchiveRoute =
     path: '/archive',
     getParentRoute: () => ApiAssessmentSessionsIdRoute,
   } as any)
+const ApiReportingReportsIdRetryRoute =
+  ApiReportingReportsIdRetryRouteImport.update({
+    id: '/retry',
+    path: '/retry',
+    getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
+const ApiReportingReportsIdRegenerateRoute =
+  ApiReportingReportsIdRegenerateRouteImport.update({
+    id: '/regenerate',
+    path: '/regenerate',
+    getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
+const ApiReportingReportsIdDownloadRoute =
+  ApiReportingReportsIdDownloadRouteImport.update({
+    id: '/download',
+    path: '/download',
+    getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
+const ApiReportingReportsIdArchiveRoute =
+  ApiReportingReportsIdArchiveRouteImport.update({
+    id: '/archive',
+    path: '/archive',
+    getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -996,6 +1079,7 @@ export interface FileRoutesByFullPath {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
+  '/reports/': typeof ReportsIndexRoute
   '/sessions/': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
@@ -1019,6 +1103,13 @@ export interface FileRoutesByFullPath {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/reporting/branding': typeof ApiReportingBrandingRoute
+  '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
+  '/api/reporting/history': typeof ApiReportingHistoryRoute
+  '/api/reporting/preview': typeof ApiReportingPreviewRoute
+  '/api/reporting/queue': typeof ApiReportingQueueRoute
+  '/api/reporting/reports': typeof ApiReportingReportsRouteWithChildren
+  '/api/reporting/templates': typeof ApiReportingTemplatesRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/shell/audit': typeof ApiShellAuditRoute
@@ -1098,7 +1189,12 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
+  '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
+  '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
+  '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1150,6 +1246,7 @@ export interface FileRoutesByTo {
   '/assess': typeof AssessIndexRoute
   '/knowledge-packs': typeof KnowledgePacksIndexRoute
   '/organisations': typeof OrganisationsIndexRoute
+  '/reports': typeof ReportsIndexRoute
   '/sessions': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
@@ -1173,6 +1270,13 @@ export interface FileRoutesByTo {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/reporting/branding': typeof ApiReportingBrandingRoute
+  '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
+  '/api/reporting/history': typeof ApiReportingHistoryRoute
+  '/api/reporting/preview': typeof ApiReportingPreviewRoute
+  '/api/reporting/queue': typeof ApiReportingQueueRoute
+  '/api/reporting/reports': typeof ApiReportingReportsRouteWithChildren
+  '/api/reporting/templates': typeof ApiReportingTemplatesRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/shell/audit': typeof ApiShellAuditRoute
@@ -1252,7 +1356,12 @@ export interface FileRoutesByTo {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
+  '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
+  '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
+  '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1305,6 +1414,7 @@ export interface FileRoutesById {
   '/assess/': typeof AssessIndexRoute
   '/knowledge-packs/': typeof KnowledgePacksIndexRoute
   '/organisations/': typeof OrganisationsIndexRoute
+  '/reports/': typeof ReportsIndexRoute
   '/sessions/': typeof SessionsIndexRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
@@ -1328,6 +1438,13 @@ export interface FileRoutesById {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/reporting/branding': typeof ApiReportingBrandingRoute
+  '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
+  '/api/reporting/history': typeof ApiReportingHistoryRoute
+  '/api/reporting/preview': typeof ApiReportingPreviewRoute
+  '/api/reporting/queue': typeof ApiReportingQueueRoute
+  '/api/reporting/reports': typeof ApiReportingReportsRouteWithChildren
+  '/api/reporting/templates': typeof ApiReportingTemplatesRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
   '/api/shell/audit': typeof ApiShellAuditRoute
@@ -1407,7 +1524,12 @@ export interface FileRoutesById {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
+  '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
+  '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
+  '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1461,6 +1583,7 @@ export interface FileRouteTypes {
     | '/assess/'
     | '/knowledge-packs/'
     | '/organisations/'
+    | '/reports/'
     | '/sessions/'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
@@ -1484,6 +1607,13 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/reporting/branding'
+    | '/api/reporting/download-centre'
+    | '/api/reporting/history'
+    | '/api/reporting/preview'
+    | '/api/reporting/queue'
+    | '/api/reporting/reports'
+    | '/api/reporting/templates'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
     | '/api/shell/audit'
@@ -1563,7 +1693,12 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/reporting/reports/$id/archive'
+    | '/api/reporting/reports/$id/download'
+    | '/api/reporting/reports/$id/regenerate'
+    | '/api/reporting/reports/$id/retry'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1615,6 +1750,7 @@ export interface FileRouteTypes {
     | '/assess'
     | '/knowledge-packs'
     | '/organisations'
+    | '/reports'
     | '/sessions'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
@@ -1638,6 +1774,13 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/reporting/branding'
+    | '/api/reporting/download-centre'
+    | '/api/reporting/history'
+    | '/api/reporting/preview'
+    | '/api/reporting/queue'
+    | '/api/reporting/reports'
+    | '/api/reporting/templates'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
     | '/api/shell/audit'
@@ -1717,7 +1860,12 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/reporting/reports/$id/archive'
+    | '/api/reporting/reports/$id/download'
+    | '/api/reporting/reports/$id/regenerate'
+    | '/api/reporting/reports/$id/retry'
   id:
     | '__root__'
     | '/'
@@ -1769,6 +1917,7 @@ export interface FileRouteTypes {
     | '/assess/'
     | '/knowledge-packs/'
     | '/organisations/'
+    | '/reports/'
     | '/sessions/'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
@@ -1792,6 +1941,13 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/reporting/branding'
+    | '/api/reporting/download-centre'
+    | '/api/reporting/history'
+    | '/api/reporting/preview'
+    | '/api/reporting/queue'
+    | '/api/reporting/reports'
+    | '/api/reporting/templates'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
     | '/api/shell/audit'
@@ -1871,7 +2027,12 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/reporting/reports/$id/archive'
+    | '/api/reporting/reports/$id/download'
+    | '/api/reporting/reports/$id/regenerate'
+    | '/api/reporting/reports/$id/retry'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1924,6 +2085,7 @@ export interface RootRouteChildren {
   AssessIndexRoute: typeof AssessIndexRoute
   KnowledgePacksIndexRoute: typeof KnowledgePacksIndexRoute
   OrganisationsIndexRoute: typeof OrganisationsIndexRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
   SessionsIndexRoute: typeof SessionsIndexRoute
   ApiAssessmentIdRoute: typeof ApiAssessmentIdRouteWithChildren
   ApiAssessmentCatalogueRoute: typeof ApiAssessmentCatalogueRoute
@@ -1940,6 +2102,13 @@ export interface RootRouteChildren {
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
+  ApiReportingBrandingRoute: typeof ApiReportingBrandingRoute
+  ApiReportingDownloadCentreRoute: typeof ApiReportingDownloadCentreRoute
+  ApiReportingHistoryRoute: typeof ApiReportingHistoryRoute
+  ApiReportingPreviewRoute: typeof ApiReportingPreviewRoute
+  ApiReportingQueueRoute: typeof ApiReportingQueueRoute
+  ApiReportingReportsRoute: typeof ApiReportingReportsRouteWithChildren
+  ApiReportingTemplatesRoute: typeof ApiReportingTemplatesRoute
   ApiSettingsOrganisationRoute: typeof ApiSettingsOrganisationRoute
   ApiSettingsWorkspaceRoute: typeof ApiSettingsWorkspaceRoute
   ApiShellAuditRoute: typeof ApiShellAuditRoute
@@ -2037,6 +2206,13 @@ declare module '@tanstack/react-router' {
       path: '/sessions'
       fullPath: '/sessions/'
       preLoaderRoute: typeof SessionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organisations/': {
@@ -2655,6 +2831,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSettingsOrganisationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/reporting/templates': {
+      id: '/api/reporting/templates'
+      path: '/api/reporting/templates'
+      fullPath: '/api/reporting/templates'
+      preLoaderRoute: typeof ApiReportingTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/reports': {
+      id: '/api/reporting/reports'
+      path: '/api/reporting/reports'
+      fullPath: '/api/reporting/reports'
+      preLoaderRoute: typeof ApiReportingReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/queue': {
+      id: '/api/reporting/queue'
+      path: '/api/reporting/queue'
+      fullPath: '/api/reporting/queue'
+      preLoaderRoute: typeof ApiReportingQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/preview': {
+      id: '/api/reporting/preview'
+      path: '/api/reporting/preview'
+      fullPath: '/api/reporting/preview'
+      preLoaderRoute: typeof ApiReportingPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/history': {
+      id: '/api/reporting/history'
+      path: '/api/reporting/history'
+      fullPath: '/api/reporting/history'
+      preLoaderRoute: typeof ApiReportingHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/download-centre': {
+      id: '/api/reporting/download-centre'
+      path: '/api/reporting/download-centre'
+      fullPath: '/api/reporting/download-centre'
+      preLoaderRoute: typeof ApiReportingDownloadCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/branding': {
+      id: '/api/reporting/branding'
+      path: '/api/reporting/branding'
+      fullPath: '/api/reporting/branding'
+      preLoaderRoute: typeof ApiReportingBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/organisations/$id': {
       id: '/api/organisations/$id'
       path: '/$id'
@@ -2815,6 +3040,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/assessment/$id/export/$format'
       preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/reports/$id': {
+      id: '/api/reporting/reports/$id'
+      path: '/$id'
+      fullPath: '/api/reporting/reports/$id'
+      preLoaderRoute: typeof ApiReportingReportsIdRouteImport
+      parentRoute: typeof ApiReportingReportsRoute
     }
     '/api/executions/$id/status': {
       id: '/api/executions/$id/status'
@@ -3054,6 +3286,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentSessionsIdArchiveRouteImport
       parentRoute: typeof ApiAssessmentSessionsIdRoute
     }
+    '/api/reporting/reports/$id/retry': {
+      id: '/api/reporting/reports/$id/retry'
+      path: '/retry'
+      fullPath: '/api/reporting/reports/$id/retry'
+      preLoaderRoute: typeof ApiReportingReportsIdRetryRouteImport
+      parentRoute: typeof ApiReportingReportsIdRoute
+    }
+    '/api/reporting/reports/$id/regenerate': {
+      id: '/api/reporting/reports/$id/regenerate'
+      path: '/regenerate'
+      fullPath: '/api/reporting/reports/$id/regenerate'
+      preLoaderRoute: typeof ApiReportingReportsIdRegenerateRouteImport
+      parentRoute: typeof ApiReportingReportsIdRoute
+    }
+    '/api/reporting/reports/$id/download': {
+      id: '/api/reporting/reports/$id/download'
+      path: '/download'
+      fullPath: '/api/reporting/reports/$id/download'
+      preLoaderRoute: typeof ApiReportingReportsIdDownloadRouteImport
+      parentRoute: typeof ApiReportingReportsIdRoute
+    }
+    '/api/reporting/reports/$id/archive': {
+      id: '/api/reporting/reports/$id/archive'
+      path: '/archive'
+      fullPath: '/api/reporting/reports/$id/archive'
+      preLoaderRoute: typeof ApiReportingReportsIdArchiveRouteImport
+      parentRoute: typeof ApiReportingReportsIdRoute
+    }
   }
 }
 
@@ -3278,6 +3538,36 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
   ApiExecutionsIdRouteChildren,
 )
 
+interface ApiReportingReportsIdRouteChildren {
+  ApiReportingReportsIdArchiveRoute: typeof ApiReportingReportsIdArchiveRoute
+  ApiReportingReportsIdDownloadRoute: typeof ApiReportingReportsIdDownloadRoute
+  ApiReportingReportsIdRegenerateRoute: typeof ApiReportingReportsIdRegenerateRoute
+  ApiReportingReportsIdRetryRoute: typeof ApiReportingReportsIdRetryRoute
+}
+
+const ApiReportingReportsIdRouteChildren: ApiReportingReportsIdRouteChildren = {
+  ApiReportingReportsIdArchiveRoute: ApiReportingReportsIdArchiveRoute,
+  ApiReportingReportsIdDownloadRoute: ApiReportingReportsIdDownloadRoute,
+  ApiReportingReportsIdRegenerateRoute: ApiReportingReportsIdRegenerateRoute,
+  ApiReportingReportsIdRetryRoute: ApiReportingReportsIdRetryRoute,
+}
+
+const ApiReportingReportsIdRouteWithChildren =
+  ApiReportingReportsIdRoute._addFileChildren(
+    ApiReportingReportsIdRouteChildren,
+  )
+
+interface ApiReportingReportsRouteChildren {
+  ApiReportingReportsIdRoute: typeof ApiReportingReportsIdRouteWithChildren
+}
+
+const ApiReportingReportsRouteChildren: ApiReportingReportsRouteChildren = {
+  ApiReportingReportsIdRoute: ApiReportingReportsIdRouteWithChildren,
+}
+
+const ApiReportingReportsRouteWithChildren =
+  ApiReportingReportsRoute._addFileChildren(ApiReportingReportsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
@@ -3328,6 +3618,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssessIndexRoute: AssessIndexRoute,
   KnowledgePacksIndexRoute: KnowledgePacksIndexRoute,
   OrganisationsIndexRoute: OrganisationsIndexRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
   SessionsIndexRoute: SessionsIndexRoute,
   ApiAssessmentIdRoute: ApiAssessmentIdRouteWithChildren,
   ApiAssessmentCatalogueRoute: ApiAssessmentCatalogueRoute,
@@ -3344,6 +3635,13 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
+  ApiReportingBrandingRoute: ApiReportingBrandingRoute,
+  ApiReportingDownloadCentreRoute: ApiReportingDownloadCentreRoute,
+  ApiReportingHistoryRoute: ApiReportingHistoryRoute,
+  ApiReportingPreviewRoute: ApiReportingPreviewRoute,
+  ApiReportingQueueRoute: ApiReportingQueueRoute,
+  ApiReportingReportsRoute: ApiReportingReportsRouteWithChildren,
+  ApiReportingTemplatesRoute: ApiReportingTemplatesRoute,
   ApiSettingsOrganisationRoute: ApiSettingsOrganisationRoute,
   ApiSettingsWorkspaceRoute: ApiSettingsWorkspaceRoute,
   ApiShellAuditRoute: ApiShellAuditRoute,
