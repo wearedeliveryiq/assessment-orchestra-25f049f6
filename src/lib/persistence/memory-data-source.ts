@@ -79,6 +79,7 @@ export class InMemoryDataSource implements DataSource {
   }
 
   async find(spec: QuerySpec) {
+    this.queryCount += 1;
     let rows = this.rows(spec.table).filter((row) => spec.filters.every((f) => matches(row, f)));
 
     for (const sort of [...(spec.sort ?? [])].reverse()) {
