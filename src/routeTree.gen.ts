@@ -50,6 +50,7 @@ import { Route as AssessIdRouteImport } from './routes/assess.$id'
 import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
 import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
+import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
@@ -93,10 +94,13 @@ import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessme
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
 import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
+import { Route as ApiUserPreferencesRouteImport } from './routes/api/user.preferences'
 import { Route as ApiTenancySearchRouteImport } from './routes/api/tenancy.search'
+import { Route as ApiShellAuditRouteImport } from './routes/api/shell.audit'
 import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
 import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
+import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
 import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
@@ -358,6 +362,11 @@ const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
   path: '/api/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNavigationRoute = ApiNavigationRouteImport.update({
+  id: '/api/navigation',
+  path: '/api/navigation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMembersRoute = ApiMembersRouteImport.update({
   id: '/api/members',
   path: '/api/members',
@@ -580,9 +589,19 @@ const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
   path: '/api/workspace/switch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUserPreferencesRoute = ApiUserPreferencesRouteImport.update({
+  id: '/api/user/preferences',
+  path: '/api/user/preferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTenancySearchRoute = ApiTenancySearchRouteImport.update({
   id: '/api/tenancy/search',
   path: '/api/tenancy/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiShellAuditRoute = ApiShellAuditRouteImport.update({
+  id: '/api/shell/audit',
+  path: '/api/shell/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSettingsWorkspaceRoute = ApiSettingsWorkspaceRouteImport.update({
@@ -599,6 +618,11 @@ const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => ApiOrganisationsRoute,
+} as any)
+const ApiNotificationsReadRoute = ApiNotificationsReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => ApiNotificationsRoute,
 } as any)
 const ApiMembersInviteRoute = ApiMembersInviteRouteImport.update({
   id: '/invite',
@@ -898,7 +922,8 @@ export interface FileRoutesByFullPath {
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
-  '/api/notifications': typeof ApiNotificationsRoute
+  '/api/navigation': typeof ApiNavigationRoute
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
@@ -957,10 +982,13 @@ export interface FileRoutesByFullPath {
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/shell/audit': typeof ApiShellAuditRoute
   '/api/tenancy/search': typeof ApiTenancySearchRoute
+  '/api/user/preferences': typeof ApiUserPreferencesRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -1043,7 +1071,8 @@ export interface FileRoutesByTo {
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
-  '/api/notifications': typeof ApiNotificationsRoute
+  '/api/navigation': typeof ApiNavigationRoute
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
@@ -1102,10 +1131,13 @@ export interface FileRoutesByTo {
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/shell/audit': typeof ApiShellAuditRoute
   '/api/tenancy/search': typeof ApiTenancySearchRoute
+  '/api/user/preferences': typeof ApiUserPreferencesRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -1189,7 +1221,8 @@ export interface FileRoutesById {
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
-  '/api/notifications': typeof ApiNotificationsRoute
+  '/api/navigation': typeof ApiNavigationRoute
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
@@ -1248,10 +1281,13 @@ export interface FileRoutesById {
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
+  '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/shell/audit': typeof ApiShellAuditRoute
   '/api/tenancy/search': typeof ApiTenancySearchRoute
+  '/api/user/preferences': typeof ApiUserPreferencesRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -1336,6 +1372,7 @@ export interface FileRouteTypes {
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
+    | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
@@ -1395,10 +1432,13 @@ export interface FileRouteTypes {
     | '/api/executions/monitor'
     | '/api/members/$id'
     | '/api/members/invite'
+    | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/shell/audit'
     | '/api/tenancy/search'
+    | '/api/user/preferences'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1481,6 +1521,7 @@ export interface FileRouteTypes {
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
+    | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
@@ -1540,10 +1581,13 @@ export interface FileRouteTypes {
     | '/api/executions/monitor'
     | '/api/members/$id'
     | '/api/members/invite'
+    | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/shell/audit'
     | '/api/tenancy/search'
+    | '/api/user/preferences'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1626,6 +1670,7 @@ export interface FileRouteTypes {
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
+    | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
     | '/api/workspaces'
@@ -1685,10 +1730,13 @@ export interface FileRouteTypes {
     | '/api/executions/monitor'
     | '/api/members/$id'
     | '/api/members/invite'
+    | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/shell/audit'
     | '/api/tenancy/search'
+    | '/api/user/preferences'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1772,7 +1820,8 @@ export interface RootRouteChildren {
   ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRouteWithChildren
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
-  ApiNotificationsRoute: typeof ApiNotificationsRoute
+  ApiNavigationRoute: typeof ApiNavigationRoute
+  ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
   ApiOrganisationsRoute: typeof ApiOrganisationsRouteWithChildren
   ApiWorkspacesRoute: typeof ApiWorkspacesRouteWithChildren
   AssessIdRoute: typeof AssessIdRoute
@@ -1828,7 +1877,9 @@ export interface RootRouteChildren {
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   ApiSettingsOrganisationRoute: typeof ApiSettingsOrganisationRoute
   ApiSettingsWorkspaceRoute: typeof ApiSettingsWorkspaceRoute
+  ApiShellAuditRoute: typeof ApiShellAuditRoute
   ApiTenancySearchRoute: typeof ApiTenancySearchRoute
+  ApiUserPreferencesRoute: typeof ApiUserPreferencesRoute
   ApiWorkspaceSwitchRoute: typeof ApiWorkspaceSwitchRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
@@ -2161,6 +2212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/navigation': {
+      id: '/api/navigation'
+      path: '/api/navigation'
+      fullPath: '/api/navigation'
+      preLoaderRoute: typeof ApiNavigationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/members': {
       id: '/api/members'
       path: '/api/members'
@@ -2462,11 +2520,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/user/preferences': {
+      id: '/api/user/preferences'
+      path: '/api/user/preferences'
+      fullPath: '/api/user/preferences'
+      preLoaderRoute: typeof ApiUserPreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/tenancy/search': {
       id: '/api/tenancy/search'
       path: '/api/tenancy/search'
       fullPath: '/api/tenancy/search'
       preLoaderRoute: typeof ApiTenancySearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/shell/audit': {
+      id: '/api/shell/audit'
+      path: '/api/shell/audit'
+      fullPath: '/api/shell/audit'
+      preLoaderRoute: typeof ApiShellAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/settings/workspace': {
@@ -2489,6 +2561,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/organisations/$id'
       preLoaderRoute: typeof ApiOrganisationsIdRouteImport
       parentRoute: typeof ApiOrganisationsRoute
+    }
+    '/api/notifications/read': {
+      id: '/api/notifications/read'
+      path: '/read'
+      fullPath: '/api/notifications/read'
+      preLoaderRoute: typeof ApiNotificationsReadRouteImport
+      parentRoute: typeof ApiNotificationsRoute
     }
     '/api/members/invite': {
       id: '/api/members/invite'
@@ -2977,6 +3056,17 @@ const ApiMembersRouteWithChildren = ApiMembersRoute._addFileChildren(
   ApiMembersRouteChildren,
 )
 
+interface ApiNotificationsRouteChildren {
+  ApiNotificationsReadRoute: typeof ApiNotificationsReadRoute
+}
+
+const ApiNotificationsRouteChildren: ApiNotificationsRouteChildren = {
+  ApiNotificationsReadRoute: ApiNotificationsReadRoute,
+}
+
+const ApiNotificationsRouteWithChildren =
+  ApiNotificationsRoute._addFileChildren(ApiNotificationsRouteChildren)
+
 interface ApiOrganisationsRouteChildren {
   ApiOrganisationsIdRoute: typeof ApiOrganisationsIdRoute
 }
@@ -3094,7 +3184,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAssessmentSessionsRoute: ApiAssessmentSessionsRouteWithChildren,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
-  ApiNotificationsRoute: ApiNotificationsRoute,
+  ApiNavigationRoute: ApiNavigationRoute,
+  ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
   ApiOrganisationsRoute: ApiOrganisationsRouteWithChildren,
   ApiWorkspacesRoute: ApiWorkspacesRouteWithChildren,
   AssessIdRoute: AssessIdRoute,
@@ -3150,7 +3241,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   ApiSettingsOrganisationRoute: ApiSettingsOrganisationRoute,
   ApiSettingsWorkspaceRoute: ApiSettingsWorkspaceRoute,
+  ApiShellAuditRoute: ApiShellAuditRoute,
   ApiTenancySearchRoute: ApiTenancySearchRoute,
+  ApiUserPreferencesRoute: ApiUserPreferencesRoute,
   ApiWorkspaceSwitchRoute: ApiWorkspaceSwitchRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
