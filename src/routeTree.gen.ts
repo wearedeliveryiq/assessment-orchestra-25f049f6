@@ -24,6 +24,7 @@ import { Route as RuntimeNarrativeRouteImport } from './routes/runtime.narrative
 import { Route as RuleIdRouteImport } from './routes/rule.$id'
 import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as PatternIdRouteImport } from './routes/pattern.$id'
+import { Route as OrganisationsIdRouteImport } from './routes/organisations.$id'
 import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
@@ -193,6 +194,11 @@ const ReportIdRoute = ReportIdRouteImport.update({
 const PatternIdRoute = PatternIdRouteImport.update({
   id: '/pattern/$id',
   path: '/pattern/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganisationsIdRoute = OrganisationsIdRouteImport.update({
+  id: '/organisations/$id',
+  path: '/organisations/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ObservationIdRoute = ObservationIdRouteImport.update({
@@ -705,6 +711,7 @@ export interface FileRoutesByFullPath {
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
+  '/organisations/$id': typeof OrganisationsIdRoute
   '/pattern/$id': typeof PatternIdRoute
   '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
@@ -817,6 +824,7 @@ export interface FileRoutesByTo {
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
+  '/organisations/$id': typeof OrganisationsIdRoute
   '/pattern/$id': typeof PatternIdRoute
   '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
@@ -930,6 +938,7 @@ export interface FileRoutesById {
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
   '/observation/$id': typeof ObservationIdRoute
+  '/organisations/$id': typeof OrganisationsIdRoute
   '/pattern/$id': typeof PatternIdRoute
   '/report/$id': typeof ReportIdRouteWithChildren
   '/rule/$id': typeof RuleIdRoute
@@ -1044,6 +1053,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
+    | '/organisations/$id'
     | '/pattern/$id'
     | '/report/$id'
     | '/rule/$id'
@@ -1156,6 +1166,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
+    | '/organisations/$id'
     | '/pattern/$id'
     | '/report/$id'
     | '/rule/$id'
@@ -1268,6 +1279,7 @@ export interface FileRouteTypes {
     | '/knowledge-packs/validate'
     | '/narrative/$id'
     | '/observation/$id'
+    | '/organisations/$id'
     | '/pattern/$id'
     | '/report/$id'
     | '/rule/$id'
@@ -1381,6 +1393,7 @@ export interface RootRouteChildren {
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
   ObservationIdRoute: typeof ObservationIdRoute
+  OrganisationsIdRoute: typeof OrganisationsIdRoute
   PatternIdRoute: typeof PatternIdRoute
   ReportIdRoute: typeof ReportIdRouteWithChildren
   RuleIdRoute: typeof RuleIdRoute
@@ -1557,6 +1570,13 @@ declare module '@tanstack/react-router' {
       path: '/pattern/$id'
       fullPath: '/pattern/$id'
       preLoaderRoute: typeof PatternIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organisations/$id': {
+      id: '/organisations/$id'
+      path: '/organisations/$id'
+      fullPath: '/organisations/$id'
+      preLoaderRoute: typeof OrganisationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/observation/$id': {
@@ -2383,6 +2403,7 @@ const rootRouteChildren: RootRouteChildren = {
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
   NarrativeIdRoute: NarrativeIdRoute,
   ObservationIdRoute: ObservationIdRoute,
+  OrganisationsIdRoute: OrganisationsIdRoute,
   PatternIdRoute: PatternIdRoute,
   ReportIdRoute: ReportIdRouteWithChildren,
   RuleIdRoute: RuleIdRoute,
