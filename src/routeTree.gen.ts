@@ -83,6 +83,7 @@ import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessme
 import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
 import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
 import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
+import { Route as ApiTenancySearchRouteImport } from './routes/api/tenancy.search'
 import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
 import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
@@ -494,6 +495,11 @@ const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
   path: '/api/workspace/switch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTenancySearchRoute = ApiTenancySearchRouteImport.update({
+  id: '/api/tenancy/search',
+  path: '/api/tenancy/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSettingsWorkspaceRoute = ApiSettingsWorkspaceRouteImport.update({
   id: '/api/settings/workspace',
   path: '/api/settings/workspace',
@@ -716,6 +722,7 @@ export interface FileRoutesByFullPath {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/tenancy/search': typeof ApiTenancySearchRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -825,6 +832,7 @@ export interface FileRoutesByTo {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/tenancy/search': typeof ApiTenancySearchRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -935,6 +943,7 @@ export interface FileRoutesById {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/settings/organisation': typeof ApiSettingsOrganisationRoute
   '/api/settings/workspace': typeof ApiSettingsWorkspaceRoute
+  '/api/tenancy/search': typeof ApiTenancySearchRoute
   '/api/workspace/switch': typeof ApiWorkspaceSwitchRoute
   '/api/workspaces/$id': typeof ApiWorkspacesIdRoute
   '/assessment/$id/dashboard': typeof AssessmentIdDashboardRoute
@@ -1046,6 +1055,7 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/tenancy/search'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1155,6 +1165,7 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/tenancy/search'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1264,6 +1275,7 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/settings/organisation'
     | '/api/settings/workspace'
+    | '/api/tenancy/search'
     | '/api/workspace/switch'
     | '/api/workspaces/$id'
     | '/assessment/$id/dashboard'
@@ -1370,6 +1382,7 @@ export interface RootRouteChildren {
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   ApiSettingsOrganisationRoute: typeof ApiSettingsOrganisationRoute
   ApiSettingsWorkspaceRoute: typeof ApiSettingsWorkspaceRoute
+  ApiTenancySearchRoute: typeof ApiTenancySearchRoute
   ApiWorkspaceSwitchRoute: typeof ApiWorkspaceSwitchRoute
   AssessmentIdDashboardRoute: typeof AssessmentIdDashboardRoute
   AssessmentIdEvidenceGraphRoute: typeof AssessmentIdEvidenceGraphRoute
@@ -1933,6 +1946,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/tenancy/search': {
+      id: '/api/tenancy/search'
+      path: '/api/tenancy/search'
+      fullPath: '/api/tenancy/search'
+      preLoaderRoute: typeof ApiTenancySearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/settings/workspace': {
       id: '/api/settings/workspace'
       path: '/api/settings/workspace'
@@ -2348,6 +2368,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   ApiSettingsOrganisationRoute: ApiSettingsOrganisationRoute,
   ApiSettingsWorkspaceRoute: ApiSettingsWorkspaceRoute,
+  ApiTenancySearchRoute: ApiTenancySearchRoute,
   ApiWorkspaceSwitchRoute: ApiWorkspaceSwitchRoute,
   AssessmentIdDashboardRoute: AssessmentIdDashboardRoute,
   AssessmentIdEvidenceGraphRoute: AssessmentIdEvidenceGraphRoute,
