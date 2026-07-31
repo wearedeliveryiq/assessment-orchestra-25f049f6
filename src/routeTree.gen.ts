@@ -17,6 +17,7 @@ import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-pack
 import { Route as AssessIndexRouteImport } from './routes/assess.index'
 import { Route as WorkspacesIdRouteImport } from './routes/workspaces.$id'
 import { Route as SignalIdRouteImport } from './routes/signal.$id'
+import { Route as SessionsNewRouteImport } from './routes/sessions.new'
 import { Route as ScoreIdRouteImport } from './routes/score.$id'
 import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
 import { Route as RuntimeScoresRouteImport } from './routes/runtime.scores'
@@ -189,6 +190,11 @@ const WorkspacesIdRoute = WorkspacesIdRouteImport.update({
 const SignalIdRoute = SignalIdRouteImport.update({
   id: '/signal/$id',
   path: '/signal/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsNewRoute = SessionsNewRouteImport.update({
+  id: '/sessions/new',
+  path: '/sessions/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScoreIdRoute = ScoreIdRouteImport.update({
@@ -917,6 +923,7 @@ export interface FileRoutesByFullPath {
   '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
+  '/sessions/new': typeof SessionsNewRoute
   '/signal/$id': typeof SignalIdRoute
   '/workspaces/$id': typeof WorkspacesIdRoute
   '/assess/': typeof AssessIndexRoute
@@ -1060,6 +1067,7 @@ export interface FileRoutesByTo {
   '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
+  '/sessions/new': typeof SessionsNewRoute
   '/signal/$id': typeof SignalIdRoute
   '/workspaces/$id': typeof WorkspacesIdRoute
   '/assess': typeof AssessIndexRoute
@@ -1204,6 +1212,7 @@ export interface FileRoutesById {
   '/runtime/scores': typeof RuntimeScoresRoute
   '/runtime/signals': typeof RuntimeSignalsRoute
   '/score/$id': typeof ScoreIdRoute
+  '/sessions/new': typeof SessionsNewRoute
   '/signal/$id': typeof SignalIdRoute
   '/workspaces/$id': typeof WorkspacesIdRoute
   '/assess/': typeof AssessIndexRoute
@@ -1349,6 +1358,7 @@ export interface FileRouteTypes {
     | '/runtime/scores'
     | '/runtime/signals'
     | '/score/$id'
+    | '/sessions/new'
     | '/signal/$id'
     | '/workspaces/$id'
     | '/assess/'
@@ -1492,6 +1502,7 @@ export interface FileRouteTypes {
     | '/runtime/scores'
     | '/runtime/signals'
     | '/score/$id'
+    | '/sessions/new'
     | '/signal/$id'
     | '/workspaces/$id'
     | '/assess'
@@ -1635,6 +1646,7 @@ export interface FileRouteTypes {
     | '/runtime/scores'
     | '/runtime/signals'
     | '/score/$id'
+    | '/sessions/new'
     | '/signal/$id'
     | '/workspaces/$id'
     | '/assess/'
@@ -1779,6 +1791,7 @@ export interface RootRouteChildren {
   RuntimeScoresRoute: typeof RuntimeScoresRoute
   RuntimeSignalsRoute: typeof RuntimeSignalsRoute
   ScoreIdRoute: typeof ScoreIdRoute
+  SessionsNewRoute: typeof SessionsNewRoute
   SignalIdRoute: typeof SignalIdRoute
   WorkspacesIdRoute: typeof WorkspacesIdRoute
   AssessIndexRoute: typeof AssessIndexRoute
@@ -1902,6 +1915,13 @@ declare module '@tanstack/react-router' {
       path: '/signal/$id'
       fullPath: '/signal/$id'
       preLoaderRoute: typeof SignalIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions/new': {
+      id: '/sessions/new'
+      path: '/sessions/new'
+      fullPath: '/sessions/new'
+      preLoaderRoute: typeof SessionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/score/$id': {
@@ -3085,6 +3105,7 @@ const rootRouteChildren: RootRouteChildren = {
   RuntimeScoresRoute: RuntimeScoresRoute,
   RuntimeSignalsRoute: RuntimeSignalsRoute,
   ScoreIdRoute: ScoreIdRoute,
+  SessionsNewRoute: SessionsNewRoute,
   SignalIdRoute: SignalIdRoute,
   WorkspacesIdRoute: WorkspacesIdRoute,
   AssessIndexRoute: AssessIndexRoute,
