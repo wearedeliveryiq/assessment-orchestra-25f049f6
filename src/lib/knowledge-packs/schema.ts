@@ -167,7 +167,7 @@ export type SignalMatch = z.infer<typeof signalMatchSchema>;
 
 export const signalsSchema = z.object({
   /** Legacy section-benchmark signals consumed by the assessment runtime. */
-  signals: z.array(z.record(z.unknown())).min(1),
+  signals: z.array(z.record(z.string(), z.unknown())).min(1),
   /** Categories exposed by the pack; the Signal Explorer reads these. */
   categories: z.array(z.string().min(1)).default([]),
   /** Observation-driven signal definitions used by the Signal Engine. */
