@@ -20,12 +20,12 @@ export default defineTool({
   annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
   handler: async ({ organisationName, contactName, assessmentType }, ctx) => {
     if (!ctx.isAuthenticated()) {
-      throw new ToolError({ message: "You must be signed in to start an assessment.", code: "unauthenticated" });
+      throw new ToolError("You must be signed in to start an assessment.");
     }
     const supabase = supabaseForUser(ctx);
     const userId = ctx.getUserId();
     if (!userId) {
-      throw new ToolError({ message: "Unable to determine the signed-in user.", code: "unauthenticated" });
+      throw new ToolError("Unable to determine the signed-in user.");
     }
 
     const { data, error } = await supabase
@@ -43,10 +43,9 @@ export default defineTool({
       .single();
 
     if (error || !data) {
-      throw new ToolError({
-        message: error ? `Failed to create assessment: ${error.message}` : "Assessment creation returned no data.",
-        code: error ? "database_error" : "unknown",
-      });
+      throw new ToolError(
+        error ? `Failed to create assessment: ${error.message}` : "Assessment creation returned no data.",
+      );
     }
 
     return {

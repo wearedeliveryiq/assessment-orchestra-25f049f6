@@ -13,7 +13,7 @@ export default defineTool({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ id }, ctx) => {
     if (!ctx.isAuthenticated()) {
-      throw new ToolError({ message: "You must be signed in to view an assessment.", code: "unauthenticated" });
+      throw new ToolError("You must be signed in to view an assessment.");
     }
     const supabase = supabaseForUser(ctx);
 
@@ -23,10 +23,9 @@ export default defineTool({
       .eq("id", id)
       .single();
     if (sessionError || !session) {
-      throw new ToolError({
-        message: sessionError ? `Database error: ${sessionError.message}` : "Assessment not found.",
-        code: sessionError ? "database_error" : "not_found",
-      });
+      throw new ToolError(
+        sessionError ? `Database error: ${sessionError.message}` : "Assessment not found.",
+      );
     }
 
     const { data: responses, error: responsesError } = await supabase
@@ -35,7 +34,7 @@ export default defineTool({
       .eq("session_id", id)
       .order("created_at", { ascending: true });
     if (responsesError) {
-      throw new ToolError({ message: `Failed to load responses: ${responsesError.message}`, code: "database_error" });
+      throw new ToolError(`Failed to load responses: ${responsesError.message}`);
     }
 
     const { data: stageRuns, error: stagesError } = await supabase
@@ -44,7 +43,7 @@ export default defineTool({
       .eq("session_id", id)
       .order("sequence", { ascending: true });
     if (stagesError) {
-      throw new ToolError({ message: `Failed to load stage runs: ${stagesError.message}`, code: "database_error" });
+      throw new ToolError(`Failed to load stage runs: ${stagesError.message}`);
     }
 
     return {

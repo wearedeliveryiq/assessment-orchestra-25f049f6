@@ -22,10 +22,7 @@ export default defineTool({
         structuredContent: { packs },
       };
     } catch (error) {
-      throw new ToolError({
-        message: error instanceof Error ? error.message : "Failed to list knowledge packs.",
-        code: "registry_error",
-      });
+      throw new ToolError(error instanceof Error ? error.message : "Failed to list knowledge packs.");
     }
   },
 });

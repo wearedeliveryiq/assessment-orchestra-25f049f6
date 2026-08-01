@@ -28,7 +28,7 @@ export default defineTool({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ limit, status }, ctx) => {
     if (!ctx.isAuthenticated()) {
-      throw new ToolError({ message: "You must be signed in to list assessments.", code: "unauthenticated" });
+      throw new ToolError("You must be signed in to list assessments.");
     }
     const supabase = supabaseForUser(ctx);
     let query = supabase
@@ -40,7 +40,7 @@ export default defineTool({
 
     const { data, error } = await query;
     if (error) {
-      throw new ToolError({ message: `Failed to list assessments: ${error.message}`, code: "database_error" });
+      throw new ToolError(`Failed to list assessments: ${error.message}`);
     }
 
     const rows = (data ?? []).map((row) => assessmentRowSchema.parse(row));
