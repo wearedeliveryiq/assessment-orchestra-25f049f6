@@ -162,6 +162,7 @@ async function runExecution(executionId: string, deadlineAt?: number): Promise<v
       // pick it up from the first incomplete stage.
       if (deadlineAt !== undefined && Date.now() >= deadlineAt) return;
 
+      const current = await repo.getExecution(executionId);
       if (!current) return;
       execution = current;
 
