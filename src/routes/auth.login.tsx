@@ -9,9 +9,11 @@ import { Label } from "@/components/ui/label";
 import { signIn } from "@/lib/identity/client";
 
 export const Route = createFileRoute("/auth/login")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    const result: { redirect?: string } = {};
+    if (typeof search.redirect === "string") result.redirect = search.redirect;
+    return result;
+  },
   head: () => ({
     meta: [
       { title: "Sign in — DeliveryIQ" },

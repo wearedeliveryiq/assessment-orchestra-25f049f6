@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as AccountRouteImport } from './routes/account'
@@ -60,6 +61,8 @@ import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
 import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
@@ -134,6 +137,8 @@ import { Route as ApiAssessmentCatalogueRouteImport } from './routes/api/assessm
 import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id'
 import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
 import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
@@ -183,6 +188,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -430,6 +440,18 @@ const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
   path: '/api/assessment-sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
   id: '/knowledge-pack/$id/',
   path: '/knowledge-pack/$id/',
@@ -809,6 +831,17 @@ const ApiAssessmentSessionsIdRoute = ApiAssessmentSessionsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiAssessmentSessionsRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssessmentIdExportFormatRoute =
   AssessmentIdExportFormatRouteImport.update({
     id: '/assessment/$id/export/$format',
@@ -1034,8 +1067,11 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1081,6 +1117,8 @@ export interface FileRoutesByFullPath {
   '/organisations/': typeof OrganisationsIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/sessions/': typeof SessionsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1201,8 +1239,11 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1248,6 +1289,8 @@ export interface FileRoutesByTo {
   '/organisations': typeof OrganisationsIndexRoute
   '/reports': typeof ReportsIndexRoute
   '/sessions': typeof SessionsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1369,8 +1412,11 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/design-system': typeof DesignSystemRoute
   '/home': typeof HomeRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/settings': typeof SettingsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1416,6 +1462,8 @@ export interface FileRoutesById {
   '/organisations/': typeof OrganisationsIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/sessions/': typeof SessionsIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1538,8 +1586,11 @@ export interface FileRouteTypes {
     | '/account'
     | '/design-system'
     | '/home'
+    | '/mcp'
     | '/notifications'
     | '/settings'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1585,6 +1636,8 @@ export interface FileRouteTypes {
     | '/organisations/'
     | '/reports/'
     | '/sessions/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1705,8 +1758,11 @@ export interface FileRouteTypes {
     | '/account'
     | '/design-system'
     | '/home'
+    | '/mcp'
     | '/notifications'
     | '/settings'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1752,6 +1808,8 @@ export interface FileRouteTypes {
     | '/organisations'
     | '/reports'
     | '/sessions'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1872,8 +1930,11 @@ export interface FileRouteTypes {
     | '/account'
     | '/design-system'
     | '/home'
+    | '/mcp'
     | '/notifications'
     | '/settings'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1919,6 +1980,8 @@ export interface FileRouteTypes {
     | '/organisations/'
     | '/reports/'
     | '/sessions/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -2040,8 +2103,11 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   DesignSystemRoute: typeof DesignSystemRoute
   HomeRoute: typeof HomeRoute
+  McpRoute: typeof McpRoute
   NotificationsRoute: typeof NotificationsRoute
   SettingsRoute: typeof SettingsRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRouteWithChildren
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
@@ -2087,6 +2153,8 @@ export interface RootRouteChildren {
   OrganisationsIndexRoute: typeof OrganisationsIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
   SessionsIndexRoute: typeof SessionsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiAssessmentIdRoute: typeof ApiAssessmentIdRouteWithChildren
   ApiAssessmentCatalogueRoute: typeof ApiAssessmentCatalogueRoute
   ApiAssessmentStartRoute: typeof ApiAssessmentStartRoute
@@ -2171,6 +2239,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -2514,6 +2589,20 @@ declare module '@tanstack/react-router' {
       path: '/api/assessment-sessions'
       fullPath: '/api/assessment-sessions'
       preLoaderRoute: typeof ApiAssessmentSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge-pack/$id/': {
@@ -3033,6 +3122,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/assessment-sessions/$id'
       preLoaderRoute: typeof ApiAssessmentSessionsIdRouteImport
       parentRoute: typeof ApiAssessmentSessionsRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/assessment/$id/export/$format': {
       id: '/assessment/$id/export/$format'
@@ -3573,8 +3676,12 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   DesignSystemRoute: DesignSystemRoute,
   HomeRoute: HomeRoute,
+  McpRoute: McpRoute,
   NotificationsRoute: NotificationsRoute,
   SettingsRoute: SettingsRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiAssessmentSessionsRoute: ApiAssessmentSessionsRouteWithChildren,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
@@ -3620,6 +3727,8 @@ const rootRouteChildren: RootRouteChildren = {
   OrganisationsIndexRoute: OrganisationsIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
   SessionsIndexRoute: SessionsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiAssessmentIdRoute: ApiAssessmentIdRouteWithChildren,
   ApiAssessmentCatalogueRoute: ApiAssessmentCatalogueRoute,
   ApiAssessmentStartRoute: ApiAssessmentStartRoute,
@@ -3692,3 +3801,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

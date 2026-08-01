@@ -167,7 +167,7 @@ export type SignalMatch = z.infer<typeof signalMatchSchema>;
 
 export const signalsSchema = z.object({
   /** Legacy section-benchmark signals consumed by the assessment runtime. */
-  signals: z.array(z.record(z.unknown())).min(1),
+  signals: z.array(z.record(z.string(), z.unknown())).min(1),
   /** Categories exposed by the pack; the Signal Explorer reads these. */
   categories: z.array(z.string().min(1)).default([]),
   /** Observation-driven signal definitions used by the Signal Engine. */
@@ -208,7 +208,7 @@ export type RuleStatus = z.infer<typeof ruleStatusSchema>;
 
 export const rulesSchema = z.object({
   /** Legacy question-level rules consumed by the assessment runtime. */
-  rules: z.array(z.record(z.unknown())).min(1),
+  rules: z.array(z.record(z.string(), z.unknown())).min(1),
   /** Categories exposed by the pack; the Rule Explorer reads these. */
   categories: z.array(z.string().min(1)).default([]),
   /** Signal-driven rule definitions used by the Rule Engine. */
@@ -261,7 +261,7 @@ export type PatternDefinition = z.infer<typeof patternDefinitionSchema>;
 
 export const patternsSchema = z.object({
   /** Legacy section-score patterns consumed by the assessment runtime. */
-  patterns: z.array(z.record(z.unknown())).min(1),
+  patterns: z.array(z.record(z.string(), z.unknown())).min(1),
   /** Categories exposed by the pack; the Pattern Explorer reads these. */
   categories: z.array(z.string().min(1)).default([]),
   /** Rule-driven pattern definitions used by the Pattern Engine. */
@@ -291,7 +291,7 @@ export type RecommendationDefinition = z.infer<typeof recommendationDefinitionSc
 
 export const recommendationsSchema = z.object({
   /** Legacy trigger-based recommendations consumed by the assessment runtime. */
-  recommendations: z.array(z.record(z.unknown())).min(1),
+  recommendations: z.array(z.record(z.string(), z.unknown())).min(1),
   /** Pattern-driven definitions consumed by the Recommendation resolver. */
   definitions: z.array(recommendationDefinitionSchema).default([]),
 });
@@ -364,21 +364,38 @@ export const narrativeValidationSchema = z.object({
 });
 
 export const narrativeConfigSchema = z.object({
-  generation: narrativeGenerationSchema.default({}),
-  tone: narrativeToneSchema.default({}),
+  generation: narrativeGenerationSchema.default({
+    mode: "template",
+    provider: "lovable",
+    model: "google/gemini-3.6-flash",
+    temperature: 0.3,
+    maxOutputTokens: 900,
+    fallbackToTemplate: true,
+  }),
+  tone: narrativeToneSchema.default({
+    voice: "Direct, measured, consulting-grade",
+    audience: "Executive leadership",
+    register: "formal",
+    perspective: "third-person",
+  }),
   promptRules: narrativePromptRulesSchema,
   headline: z
     .object({ template: z.string().min(1), aiEnabled: z.boolean().default(false) })
     .default({ template: "{organisation}: {maturityLevel}", aiEnabled: false }),
   sections: z.array(narrativeSectionSchema).min(1),
-  validation: narrativeValidationSchema.default({}),
+  validation: narrativeValidationSchema.default({
+    requiredSections: [],
+    bannedPhrases: [],
+    requireEvidence: true,
+    minConfidence: 0,
+  }),
 });
 
 export type NarrativeConfig = z.infer<typeof narrativeConfigSchema>;
 
 export const narrativesSchema = z.object({
   /** Legacy runtime narrative fields consumed by the assessment pipeline. */
-  headlines: z.array(z.record(z.unknown())).min(1),
+  headlines: z.array(z.record(z.string(), z.unknown())).min(1),
   summaryTemplate: z.string().min(1),
   paragraphTemplates: z.array(z.string()).min(1),
   /** Declarative configuration for the Narrative Engine. */
@@ -425,9 +442,9 @@ export const scoreDefinitionSchema = z.object({
   /** Points applied when a pattern has no explicit impact configured. */
   defaultImpact: z.number().default(0),
   /** Per-pattern impact in points; negative values credit the dimension. */
-  patternImpacts: z.record(z.number()).default({}),
+  patternImpacts: z.record(z.string(), z.number()).default({}),
   /** Multiplies a pattern's impact by the severity it was raised at. */
-  severityMultipliers: z.record(z.number()).optional(),
+  severityMultipliers: z.record(z.string(), z.number()).optional(),
   /** Pattern count considered complete evidence for this dimension. */
   expectedEvidence: z.number().int().positive().default(1),
   /** Dimension-specific bands; falls back to `defaults.maturityBands`. */
@@ -449,21 +466,26 @@ export type OverallScoreDefinition = z.infer<typeof overallScoreSchema>;
 export const scoringSchema = z.object({
   /** Legacy section scoring consumed by the assessment runtime. */
   scale: z.object({ min: z.number(), max: z.number() }),
-  sectionWeights: z.record(z.number()),
+  sectionWeights: z.record(z.string(), z.number()),
   bands: z.array(z.object({ min: z.number(), band: z.string() })).min(1),
   penalties: z.array(z.object({ severity: z.string(), points: z.number() })),
 
   /** Pack-wide scoring defaults. */
   defaults: z
     .object({
-      severityMultipliers: z.record(z.number()).default({}),
+      severityMultipliers: z.record(z.string(), z.number()).default({}),
       maturityBands: z.array(maturityBandSchema).default([]),
     })
     .default({ severityMultipliers: {}, maturityBands: [] }),
   /** Pattern-driven scoring dimensions used by the Scoring Engine. */
   dimensions: z.array(scoreDefinitionSchema).default([]),
   /** Overall assessment aggregation model. */
-  overall: overallScoreSchema.default({}),
+  overall: overallScoreSchema.default({
+    scoreCode: "SCR-OVERALL",
+    dimension: "Overall Assessment",
+    maximumScore: 100,
+    weightingModel: "weighted-average",
+  }),
 });
 
 

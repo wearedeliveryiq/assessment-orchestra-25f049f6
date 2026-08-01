@@ -105,7 +105,14 @@ export const assessmentDefinitionSchema = z.object({
   name: z.string().min(1),
   description: z.string().default(""),
   estimatedMinutes: z.number().int().positive().optional(),
-  navigation: navigationRulesSchema.default({}),
+  navigation: navigationRulesSchema.default({
+    mode: "free",
+    allowExit: true,
+    allowResume: true,
+    allowRestart: false,
+    autoSaveIntervalMs: 20_000,
+    requireCompleteToFinish: true,
+  }),
   sections: z.array(sectionDefinitionSchema).min(1),
   metadata: z.record(z.string(), z.unknown()).default({}),
 });
