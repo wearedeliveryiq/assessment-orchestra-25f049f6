@@ -364,14 +364,31 @@ export const narrativeValidationSchema = z.object({
 });
 
 export const narrativeConfigSchema = z.object({
-  generation: narrativeGenerationSchema.default({}),
-  tone: narrativeToneSchema.default({}),
+  generation: narrativeGenerationSchema.default({
+    mode: "template",
+    provider: "lovable",
+    model: "google/gemini-3.6-flash",
+    temperature: 0.3,
+    maxOutputTokens: 900,
+    fallbackToTemplate: true,
+  }),
+  tone: narrativeToneSchema.default({
+    voice: "Direct, measured, consulting-grade",
+    audience: "Executive leadership",
+    register: "formal",
+    perspective: "third-person",
+  }),
   promptRules: narrativePromptRulesSchema,
   headline: z
     .object({ template: z.string().min(1), aiEnabled: z.boolean().default(false) })
     .default({ template: "{organisation}: {maturityLevel}", aiEnabled: false }),
   sections: z.array(narrativeSectionSchema).min(1),
-  validation: narrativeValidationSchema.default({}),
+  validation: narrativeValidationSchema.default({
+    requiredSections: [],
+    bannedPhrases: [],
+    requireEvidence: true,
+    minConfidence: 0,
+  }),
 });
 
 export type NarrativeConfig = z.infer<typeof narrativeConfigSchema>;
