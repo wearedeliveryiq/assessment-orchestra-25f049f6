@@ -33,6 +33,7 @@ const ICONS: Record<string, LucideIcon> = {
   store: Store,
   wand: Wand2,
   shield: Shield,
+  github: Github,
 };
 
 export function navIcon(key: string): LucideIcon {
