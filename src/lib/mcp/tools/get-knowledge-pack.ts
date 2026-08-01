@@ -34,15 +34,14 @@ export default defineTool({
           manifest: loaded.manifest,
           counts: summary.versions.find((v) => v.version === loaded.version)?.counts ?? null,
           questions: document.questions?.questions?.map((q) => ({ id: q.id, prompt: q.prompt })) ?? [],
-          dimensions: document.scoring?.scores?.map((s) => s.dimension) ?? [],
-          patterns: document.patterns?.patterns?.map((p) => ({ code: p.code, name: p.name, category: p.category })) ?? [],
+          dimensions: document.scoring?.dimensions?.map((d) => d.dimension) ?? [],
+          patterns: document.patterns?.definitions?.map((p) => ({ code: p.patternCode, name: p.name, category: p.category })) ?? [],
         },
       };
     } catch (error) {
-      throw new ToolError({
-        message: error instanceof Error ? error.message : `Failed to load knowledge pack "${id}".`,
-        code: "registry_error",
-      });
+      throw new ToolError(
+        error instanceof Error ? error.message : `Failed to load knowledge pack "${id}".`,
+      );
     }
   },
 });
