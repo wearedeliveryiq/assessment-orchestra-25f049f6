@@ -40,6 +40,7 @@ import { Route as ObservationIdRouteImport } from './routes/observation.$id'
 import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
 import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
 import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
+import { Route as InternalGithubSyncRouteImport } from './routes/internal.github-sync'
 import { Route as ErrorCodeRouteImport } from './routes/error.$code'
 import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
 import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
@@ -333,6 +334,11 @@ const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
 const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
   id: '/knowledge-packs/reload',
   path: '/knowledge-packs/reload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalGithubSyncRoute = InternalGithubSyncRouteImport.update({
+  id: '/internal/github-sync',
+  path: '/internal/github-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ErrorCodeRoute = ErrorCodeRouteImport.update({
@@ -1093,6 +1099,7 @@ export interface FileRoutesByFullPath {
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/error/$code': typeof ErrorCodeRoute
+  '/internal/github-sync': typeof InternalGithubSyncRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1265,6 +1272,7 @@ export interface FileRoutesByTo {
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/error/$code': typeof ErrorCodeRoute
+  '/internal/github-sync': typeof InternalGithubSyncRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1438,6 +1446,7 @@ export interface FileRoutesById {
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/dashboard/$id': typeof DashboardIdRoute
   '/error/$code': typeof ErrorCodeRoute
+  '/internal/github-sync': typeof InternalGithubSyncRoute
   '/knowledge-packs/reload': typeof KnowledgePacksReloadRoute
   '/knowledge-packs/validate': typeof KnowledgePacksValidateRoute
   '/narrative/$id': typeof NarrativeIdRoute
@@ -1612,6 +1621,7 @@ export interface FileRouteTypes {
     | '/auth/verify-email'
     | '/dashboard/$id'
     | '/error/$code'
+    | '/internal/github-sync'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -1784,6 +1794,7 @@ export interface FileRouteTypes {
     | '/auth/verify-email'
     | '/dashboard/$id'
     | '/error/$code'
+    | '/internal/github-sync'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -1956,6 +1967,7 @@ export interface FileRouteTypes {
     | '/auth/verify-email'
     | '/dashboard/$id'
     | '/error/$code'
+    | '/internal/github-sync'
     | '/knowledge-packs/reload'
     | '/knowledge-packs/validate'
     | '/narrative/$id'
@@ -2129,6 +2141,7 @@ export interface RootRouteChildren {
   AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   DashboardIdRoute: typeof DashboardIdRoute
   ErrorCodeRoute: typeof ErrorCodeRoute
+  InternalGithubSyncRoute: typeof InternalGithubSyncRoute
   KnowledgePacksReloadRoute: typeof KnowledgePacksReloadRoute
   KnowledgePacksValidateRoute: typeof KnowledgePacksValidateRoute
   NarrativeIdRoute: typeof NarrativeIdRoute
@@ -2442,6 +2455,13 @@ declare module '@tanstack/react-router' {
       path: '/knowledge-packs/reload'
       fullPath: '/knowledge-packs/reload'
       preLoaderRoute: typeof KnowledgePacksReloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/github-sync': {
+      id: '/internal/github-sync'
+      path: '/internal/github-sync'
+      fullPath: '/internal/github-sync'
+      preLoaderRoute: typeof InternalGithubSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/error/$code': {
@@ -3703,6 +3723,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   DashboardIdRoute: DashboardIdRoute,
   ErrorCodeRoute: ErrorCodeRoute,
+  InternalGithubSyncRoute: InternalGithubSyncRoute,
   KnowledgePacksReloadRoute: KnowledgePacksReloadRoute,
   KnowledgePacksValidateRoute: KnowledgePacksValidateRoute,
   NarrativeIdRoute: NarrativeIdRoute,
