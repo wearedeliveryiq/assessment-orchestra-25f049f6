@@ -4,6 +4,7 @@ import {
   ClipboardList,
   FileText,
   Gauge,
+  Github,
   Home,
   Layers,
   Package,
