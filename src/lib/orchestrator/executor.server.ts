@@ -158,7 +158,10 @@ async function runExecution(executionId: string, deadlineAt?: number): Promise<v
   try {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const current = await repo.getExecution(executionId);
+      // Out of request budget — leave the run resumable and let the next poll
+      // pick it up from the first incomplete stage.
+      if (deadlineAt !== undefined && Date.now() >= deadlineAt) return;
+
       if (!current) return;
       execution = current;
 
