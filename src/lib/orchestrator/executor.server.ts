@@ -113,7 +113,7 @@ function retryPolicyFor(pipeline: PipelineDefinition, stage: ExecutionStage): Re
   };
 }
 
-async function runExecution(executionId: string): Promise<void> {
+async function runExecution(executionId: string, deadlineAt?: number): Promise<void> {
   let execution = await repo.getExecution(executionId);
   if (!execution) return;
 
