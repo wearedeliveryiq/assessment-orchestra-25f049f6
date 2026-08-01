@@ -480,7 +480,12 @@ export const scoringSchema = z.object({
   /** Pattern-driven scoring dimensions used by the Scoring Engine. */
   dimensions: z.array(scoreDefinitionSchema).default([]),
   /** Overall assessment aggregation model. */
-  overall: overallScoreSchema.default({}),
+  overall: overallScoreSchema.default({
+    scoreCode: "SCR-OVERALL",
+    dimension: "Overall Assessment",
+    maximumScore: 100,
+    weightingModel: "weighted-average",
+  }),
 });
 
 
