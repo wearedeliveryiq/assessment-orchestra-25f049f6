@@ -40,6 +40,42 @@ export async function awaitExecution(executionId: string): Promise<void> {
   await running.get(executionId);
 }
 
+/**
+ * Drives the pipeline *inside the current request* for at most `budgetMs`.
+ *
+ * Serverless workers freeze (and eventually discard) floating promises the
+ * moment a response is returned, so a fire-and-forget loop can stall forever
+ * mid-stage. Polling therefore pumps the loop synchronously: each status
+ * request advances as many stages as fit inside its budget and persists the
+ * result, so the run always makes forward progress.
+ */
+export async function driveExecution(executionId: string, budgetMs = 6_000): Promise<void> {
+  const inFlight = running.get(executionId);
+  if (inFlight) {
+    let settled = false;
+    await Promise.race([
+      inFlight.then(() => {
+        settled = true;
+      }),
+      delay(budgetMs),
+    ]);
+    // A loop that did not settle belongs to a frozen invocation — drop it so
+    // this request can take over the run.
+    if (!settled) running.delete(executionId);
+    if (settled) return;
+  }
+
+  const task = runExecution(executionId, Date.now() + budgetMs).catch((error) => {
+    console.error("[orchestrator] execution loop crashed", executionId, error);
+  });
+  running.set(
+    executionId,
+    task.finally(() => running.delete(executionId)),
+  );
+  await task;
+}
+
+
 async function heartbeat(executionId: string): Promise<void> {
   try {
     await repo.updateExecution(executionId, { heartbeat_at: new Date().toISOString() } as never);
@@ -77,7 +113,7 @@ function retryPolicyFor(pipeline: PipelineDefinition, stage: ExecutionStage): Re
   };
 }
 
-async function runExecution(executionId: string): Promise<void> {
+async function runExecution(executionId: string, deadlineAt?: number): Promise<void> {
   let execution = await repo.getExecution(executionId);
   if (!execution) return;
 
@@ -122,6 +158,10 @@ async function runExecution(executionId: string): Promise<void> {
   try {
     // eslint-disable-next-line no-constant-condition
     while (true) {
+      // Out of request budget — leave the run resumable and let the next poll
+      // pick it up from the first incomplete stage.
+      if (deadlineAt !== undefined && Date.now() >= deadlineAt) return;
+
       const current = await repo.getExecution(executionId);
       if (!current) return;
       execution = current;
