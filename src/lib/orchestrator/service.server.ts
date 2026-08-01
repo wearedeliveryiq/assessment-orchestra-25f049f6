@@ -123,13 +123,15 @@ export async function getExecution(id: string, ownerKey: string): Promise<Execut
 export async function getStatus(id: string, ownerKey: string) {
   let execution = await requireExecution(id, ownerKey);
 
-  // Serverless workers can be torn down between requests, stranding the
-  // background loop. Polling re-attaches (and resumes) the run when needed.
-  if (isActive(execution.status) && !isExecutionRunningLocally(execution.id)) {
-    launchExecution(execution.id);
-    await Promise.race([awaitExecution(execution.id), delay(2_000)]);
+  // Serverless workers freeze background promises once a response is sent, so
+  // polling drives the pipeline inside the request for a bounded budget. Each
+  // poll advances as many stages as fit and persists them, guaranteeing
+  // forward progress even when the worker is recycled between requests.
+  if (isActive(execution.status)) {
+    await driveExecution(execution.id, 6_000);
     execution = await requireExecution(id, ownerKey);
   }
+
 
   const stages = await repo.getStages(execution.id);
   const progress = computeProgress(stages);
