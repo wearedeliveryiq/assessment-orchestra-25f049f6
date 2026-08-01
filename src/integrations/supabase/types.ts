@@ -825,6 +825,7 @@ export type Database = {
           contact_name: string | null
           created_at: string
           created_by: string | null
+          created_by_user_id: string | null
           current_section: string | null
           deleted_at: string | null
           deleted_by: string | null
@@ -851,6 +852,7 @@ export type Database = {
           contact_name?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_user_id?: string | null
           current_section?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
@@ -877,6 +879,7 @@ export type Database = {
           contact_name?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_user_id?: string | null
           current_section?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
