@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://fpwqnxdgkqiipltpgqvo.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "deliveryiq-orchestrator",
+      "version": "1.0.0",
+      "title": "DeliveryIQ Orchestrator"
+    },
+    "tools": [
+      {
+        "name": "list_knowledge_packs",
+        "title": "List knowledge packs",
+        "description": "List every knowledge pack available to the DeliveryIQ runtime, including the latest version, active version and validity status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_knowledge_pack",
+        "title": "Get knowledge pack details",
+        "description": "Return the manifest, validation status and high-level contents of a knowledge pack by its ID.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The knowledge pack ID (e.g. executive-sponsorship)."
+            },
+            "version": {
+              "description": "Optional specific version to load. Defaults to the active version.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_assessments",
+        "title": "List assessments",
+        "description": "List the signed-in user's assessment sessions, most recently updated first. Returns id, organisation name, status and progress.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Maximum number of sessions to return (1-100).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "status": {
+              "description": "Filter by assessment status.",
+              "type": "string",
+              "enum": [
+                "draft",
+                "in_progress",
+                "submitted",
+                "processing",
+                "completed",
+                "archived"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_assessment",
+        "title": "Get assessment details",
+        "description": "Return the full details of a single assessment session, including its responses and stage run status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "The assessment session ID."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "start_assessment",
+        "title": "Start a new assessment",
+        "description": "Create a new assessment session for the signed-in user. The session starts as a draft and can be filled in through the DeliveryIQ app or future MCP tools.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "organisationName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "Name of the organisation being assessed."
+            },
+            "contactName": {
+              "description": "Optional contact name for the assessment.",
+              "type": "string",
+              "maxLength": 200
+            },
+            "assessmentType": {
+              "description": "Optional assessment type (defaults to executive-sponsorship).",
+              "type": "string",
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "organisationName"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
