@@ -28,6 +28,13 @@ export const NAVIGATION: NavSection[] = [
         icon: "package",
         matchPrefix: true,
       },
+      {
+        id: "github-sync",
+        label: "GitHub Sync",
+        to: "/internal/github-sync",
+        icon: "github",
+        description: "Check your Lovable workspace GitHub connection status.",
+      },
     ],
   },
   {
