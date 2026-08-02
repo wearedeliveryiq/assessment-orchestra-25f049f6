@@ -96,6 +96,7 @@ BEGIN
   UPDATE public.assessment_analysis_handoffs h
   SET status = 'ineligible', eligibility_decision_id = p_eligibility_decision_id,
       analysis_run_id = NULL, last_error_code = NULL, claimed_at = NULL,
+      delivered_at = NULL,
       resolved_at = now(), updated_at = now()
   FROM public.assessment_analysis_eligibility_decisions d
   WHERE h.id = p_handoff_id AND d.id = p_eligibility_decision_id
