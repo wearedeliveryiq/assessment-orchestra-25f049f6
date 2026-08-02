@@ -49,3 +49,23 @@ export async function resolvePublicResult(tokenHash: string, ipHash: string) {
   }
   return response.data as Record<string, unknown> | null;
 }
+
+export async function revokePublicResult(input: {
+  id: string;
+  analysisRunId: string;
+  organisationId: string;
+  workspaceId: string;
+}) {
+  const response = await sb
+    .from("delivery_dna_public_results")
+    .update({ revoked_at: new Date().toISOString() })
+    .eq("id", input.id)
+    .eq("analysis_run_id", input.analysisRunId)
+    .eq("organisation_id", input.organisationId)
+    .eq("workspace_id", input.workspaceId)
+    .is("revoked_at", null)
+    .select("id")
+    .maybeSingle();
+  if (response.error) throw new Error(response.error.message);
+  return response.data != null;
+}

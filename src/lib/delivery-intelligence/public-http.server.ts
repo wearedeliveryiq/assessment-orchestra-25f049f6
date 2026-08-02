@@ -2,6 +2,8 @@ import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { AnalysisServiceError } from "../analysis/service.server";
 import { createPublicResult, readPublicResult } from "./public-service.server";
+import { assessmentAnalysisService } from "../analysis/service.server";
+import { revokePublicResult } from "./public-repository.server";
 
 const json = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), {
@@ -64,5 +66,32 @@ export async function getPublicResult(request: Request, token: string) {
     }
     console.error("[public-result-api]", error);
     return json({ error: "Public result is unavailable", code: "PUBLIC_RESULT_UNAVAILABLE" }, 404);
+  }
+}
+
+export async function deletePublicResult(request: Request, runId: string, publicResultId: string) {
+  try {
+    const verified = await assessmentRequestContext(request, { write: true });
+    const tenant = {
+      ownerKey: verified.ownerKey,
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      userId: verified.identity.user.id,
+    };
+    await assessmentAnalysisService.get(runId, tenant);
+    const revoked = await revokePublicResult({
+      id: publicResultId,
+      analysisRunId: runId,
+      organisationId: tenant.organisationId,
+      workspaceId: tenant.workspaceId,
+    });
+    return revoked
+      ? json({ id: publicResultId, status: "revoked" }, 200)
+      : json({ error: "Public result is unavailable", code: "PUBLIC_RESULT_UNAVAILABLE" }, 404);
+  } catch (error) {
+    if (error instanceof IdentityError || error instanceof AnalysisServiceError)
+      return json({ error: error.message, code: error.code }, error.status);
+    console.error("[public-result-revocation-api]", error);
+    return json({ error: "Public result revocation failed safely" }, 500);
   }
 }

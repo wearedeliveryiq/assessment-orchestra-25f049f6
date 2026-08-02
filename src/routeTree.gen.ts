@@ -185,6 +185,7 @@ import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/execution
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
+import { Route as ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport } from './routes/api/analysis-runs.$id.public-results.$publicResultId'
 import { Route as ApiReportingReportsIdArchiveRouteImport } from './routes/api/reporting.reports.$id.archive'
 import { Route as ApiReportingReportsIdDownloadRouteImport } from './routes/api/reporting.reports.$id.download'
 import { Route as ApiReportingReportsIdRegenerateRouteImport } from './routes/api/reporting.reports.$id.regenerate'
@@ -1101,6 +1102,12 @@ const AssessmentIdExportFormatRoute =
     path: '/assessment/$id/export/$format',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiAnalysisRunsIdPublicResultsPublicResultIdRoute =
+  ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport.update({
+    id: '/public-results/$publicResultId',
+    path: '/public-results/$publicResultId',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
 const ApiReportingReportsIdArchiveRoute =
   ApiReportingReportsIdArchiveRouteImport.update({
     id: '/archive',
@@ -1309,6 +1316,7 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
   '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
@@ -1492,6 +1500,7 @@ export interface FileRoutesByTo {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
   '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
@@ -1676,6 +1685,7 @@ export interface FileRoutesById {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
+  '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
   '/api/reporting/reports/$id/archive': typeof ApiReportingReportsIdArchiveRoute
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
@@ -1861,6 +1871,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/analysis-runs/$id/public-results/$publicResultId'
     | '/api/reporting/reports/$id/archive'
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
@@ -2044,6 +2055,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/analysis-runs/$id/public-results/$publicResultId'
     | '/api/reporting/reports/$id/archive'
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
@@ -2227,6 +2239,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
+    | '/api/analysis-runs/$id/public-results/$publicResultId'
     | '/api/reporting/reports/$id/archive'
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
@@ -3600,6 +3613,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/analysis-runs/$id/public-results/$publicResultId': {
+      id: '/api/analysis-runs/$id/public-results/$publicResultId'
+      path: '/public-results/$publicResultId'
+      fullPath: '/api/analysis-runs/$id/public-results/$publicResultId'
+      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
     '/api/reporting/reports/$id/archive': {
       id: '/api/reporting/reports/$id/archive'
       path: '/archive'
@@ -3642,6 +3662,7 @@ interface ApiAnalysisRunsIdRouteChildren {
   ApiAnalysisRunsIdExplanationsRoute: typeof ApiAnalysisRunsIdExplanationsRoute
   ApiAnalysisRunsIdPublicResultRoute: typeof ApiAnalysisRunsIdPublicResultRoute
   ApiAnalysisRunsIdResultRoute: typeof ApiAnalysisRunsIdResultRoute
+  ApiAnalysisRunsIdPublicResultsPublicResultIdRoute: typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
   ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute: typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
 }
 
@@ -3649,6 +3670,8 @@ const ApiAnalysisRunsIdRouteChildren: ApiAnalysisRunsIdRouteChildren = {
   ApiAnalysisRunsIdExplanationsRoute: ApiAnalysisRunsIdExplanationsRoute,
   ApiAnalysisRunsIdPublicResultRoute: ApiAnalysisRunsIdPublicResultRoute,
   ApiAnalysisRunsIdResultRoute: ApiAnalysisRunsIdResultRoute,
+  ApiAnalysisRunsIdPublicResultsPublicResultIdRoute:
+    ApiAnalysisRunsIdPublicResultsPublicResultIdRoute,
   ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute:
     ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute,
 }
