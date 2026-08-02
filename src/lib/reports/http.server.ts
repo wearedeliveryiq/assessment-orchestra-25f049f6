@@ -6,6 +6,8 @@ import {
   ReportServiceError,
 } from "./service.server";
 import type { ReportFormat, ReportGenerationRequest } from "./types";
+import { assessmentOwnerId } from "@/lib/identity/assessment-auth.server";
+import { IdentityError } from "@/lib/identity/errors";
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -14,15 +16,8 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function ownerKeyOf(request: Request): string | null {
-  const header = request.headers.get("x-owner-key") ?? new URL(request.url).searchParams.get("k");
-  if (!header) return null;
-  const trimmed = header.trim();
-  if (trimmed.length < 8 || trimmed.length > 128) return null;
-  return trimmed;
-}
-
 function failure(error: unknown): Response {
+  if (error instanceof IdentityError) return json({ error: error.message }, error.status);
   if (error instanceof ReportServiceError) return json({ error: error.message }, error.status);
   console.error("[reports-api]", error);
   return json({ error: "Report service error" }, 500);
@@ -54,10 +49,8 @@ export async function handleCreateReportRoute(
   request: Request,
   assessmentId: string,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     const body = await request.json().catch(() => ({}));
     const reports = await requestReports(assessmentId, ownerKey, parseRequest(body));
     const failed = reports.filter((report) => report.status === "failed");
@@ -72,10 +65,8 @@ export async function handleListReportsRoute(
   request: Request,
   assessmentId: string,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     return json(await listReports(assessmentId, ownerKey));
   } catch (error) {
     return failure(error);
@@ -84,10 +75,8 @@ export async function handleListReportsRoute(
 
 /** GET /report/{id} — one report record. */
 export async function handleReportRoute(request: Request, reportId: string): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     return json(await getReport(reportId, ownerKey));
   } catch (error) {
     return failure(error);
@@ -99,10 +88,8 @@ export async function handleReportDownloadRoute(
   request: Request,
   reportId: string,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     const { report, bytes } = await downloadReportFile(reportId, ownerKey);
     return new Response(bytes as unknown as BodyInit, {
       headers: {

@@ -1,4 +1,4 @@
-import { getOwnerKey } from "@/lib/assessment/client";
+import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
 import type {
   AssessmentCatalogueEntry,
   AssessmentSummary,
@@ -10,11 +10,12 @@ import type {
 } from "./types";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const authHeaders = await assessmentAuthHeaders();
   const response = await fetch(`/api/assessment${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
-      "x-owner-key": getOwnerKey(),
+      ...authHeaders,
       ...(init?.headers ?? {}),
     },
   });
@@ -65,16 +66,17 @@ export const runtimeKeys = {
 };
 
 /** Best-effort save issued while the tab is closing. */
-export function saveBeacon(id: string, answers: Answer[], currentPageId: string | null) {
+export async function saveBeacon(id: string, answers: Answer[], currentPageId: string | null) {
   if (typeof navigator === "undefined" || answers.length === 0) return;
-  const blob = new Blob([JSON.stringify({ answers, currentPageId, ownerKey: getOwnerKey() })], {
+  const blob = new Blob([JSON.stringify({ answers, currentPageId })], {
     type: "application/json",
   });
-  // Beacons cannot set headers, so fall back to a keepalive fetch with the key.
+  const authHeaders = await assessmentAuthHeaders();
+  // Beacons cannot set authentication headers, so use a keepalive fetch.
   void fetch(`/api/assessment/${id}/save`, {
     method: "POST",
     keepalive: true,
-    headers: { "content-type": "application/json", "x-owner-key": getOwnerKey() },
+    headers: { "content-type": "application/json", ...authHeaders },
     body: blob,
   }).catch(() => undefined);
 }

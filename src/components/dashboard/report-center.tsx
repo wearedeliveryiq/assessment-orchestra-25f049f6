@@ -239,13 +239,14 @@ export function ReportCenter() {
                         {report.status}
                       </span>
                       {report.status === "completed" && hydrated ? (
-                        <a
-                          href={reportsApi.downloadUrl(report.id)}
+                        <button
+                          type="button"
+                          onClick={() => void reportsApi.download(report.id)}
                           className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:border-primary/50 hover:text-foreground"
                         >
                           <Download className="h-3.5 w-3.5" aria-hidden />
                           Download
-                        </a>
+                        </button>
                       ) : null}
                     </div>
                   </div>

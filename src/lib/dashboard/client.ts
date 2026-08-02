@@ -1,4 +1,7 @@
-import { getOwnerKey } from "../assessment/client";
+import {
+  assessmentAuthHeaders,
+  openAuthenticatedDownload,
+} from "@/lib/identity/assessment-auth";
 import type { DashboardExportFormat, DashboardPayload } from "./types";
 
 /**
@@ -7,8 +10,9 @@ import type { DashboardExportFormat, DashboardPayload } from "./types";
  */
 export const dashboardApi = {
   async get(assessmentId: string): Promise<DashboardPayload> {
+    const authHeaders = await assessmentAuthHeaders();
     const response = await fetch(`/assessment/${assessmentId}/dashboard`, {
-      headers: { "content-type": "application/json", "x-owner-key": getOwnerKey() },
+      headers: { "content-type": "application/json", ...authHeaders },
     });
     const payload = (await response.json().catch(() => null)) as
       | (DashboardPayload & { error?: string })
@@ -22,8 +26,8 @@ export const dashboardApi = {
    * The owner key travels as a query param because these are top-level
    * navigations rather than fetches.
    */
-  exportUrl(assessmentId: string, format: DashboardExportFormat): string {
-    return `/assessment/${assessmentId}/export/${format}?k=${encodeURIComponent(getOwnerKey())}`;
+  export(assessmentId: string, format: DashboardExportFormat): Promise<void> {
+    return openAuthenticatedDownload(`/assessment/${assessmentId}/export/${format}`);
   },
 };
 

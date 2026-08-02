@@ -1,4 +1,4 @@
-import { getOwnerKey } from "../assessment/client";
+import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
 import type {
   AssessmentScoreSummary,
   Score,
@@ -8,11 +8,12 @@ import type {
 } from "./types";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const authHeaders = await assessmentAuthHeaders();
   const response = await fetch(path, {
     ...init,
     headers: {
       "content-type": "application/json",
-      "x-owner-key": getOwnerKey(),
+      ...authHeaders,
       ...(init?.headers ?? {}),
     },
   });

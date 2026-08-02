@@ -4,26 +4,15 @@ import type {
   AssessmentSession,
   RuntimeStatus,
 } from "./types";
-
-const OWNER_KEY_STORAGE = "deliveryiq.owner-key";
-
-/** Stable per-browser workspace key used to scope assessments. */
-export function getOwnerKey(): string {
-  if (typeof window === "undefined") return "";
-  let key = window.localStorage.getItem(OWNER_KEY_STORAGE);
-  if (!key) {
-    key = crypto.randomUUID().replace(/-/g, "");
-    window.localStorage.setItem(OWNER_KEY_STORAGE, key);
-  }
-  return key;
-}
+import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const authHeaders = await assessmentAuthHeaders();
   const response = await fetch(`/api/assessments${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
-      "x-owner-key": getOwnerKey(),
+      ...authHeaders,
       ...(init?.headers ?? {}),
     },
   });
