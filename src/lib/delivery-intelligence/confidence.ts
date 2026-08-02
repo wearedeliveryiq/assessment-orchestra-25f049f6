@@ -5,13 +5,28 @@ import type { CanonicalAnalysisResponse } from "../analysis/types";
 export type ConfidenceFactorId = keyof typeof sprint03Configuration.confidence.limitations;
 export type ConfidenceFactors = Record<ConfidenceFactorId, number>;
 
-const LIMITATION_CODES: Record<ConfidenceFactorId, string> = {
+export const CONFIDENCE_LIMITATION_CODES: Record<ConfidenceFactorId, string> = {
   required_completion: "incomplete_required_evidence",
   capability_coverage: "limited_capability_coverage",
   response_consistency: "inconsistent_responses",
   evidence_recency: "stale_evidence",
   respondent_breadth: "limited_respondent_breadth",
 };
+
+export interface ConfidenceLimitationDefinition {
+  code: string;
+  text: string;
+  prompt: string;
+  order: number;
+}
+
+export function confidenceLimitationDefinitions(): ConfidenceLimitationDefinition[] {
+  return sprint03Configuration.confidence.factors.map((factor, index) => ({
+    code: CONFIDENCE_LIMITATION_CODES[factor.id as ConfidenceFactorId],
+    ...sprint03Configuration.confidence.limitations[factor.id as ConfidenceFactorId],
+    order: index + 1,
+  }));
+}
 
 export function confidenceBand(index: number): string {
   const band = sprint03Configuration.confidence.bands.find(
@@ -45,7 +60,7 @@ export function calculateConfidence(factors: ConfidenceFactors) {
         factors[factor.id as ConfidenceFactorId] <
         sprint03Configuration.confidence.limitationThresholdExclusive,
     )
-    .map((factor) => LIMITATION_CODES[factor.id as ConfidenceFactorId]);
+    .map((factor) => CONFIDENCE_LIMITATION_CODES[factor.id as ConfidenceFactorId]);
   return {
     index,
     displayIndex: roundHalfUp(index, sprint03Configuration.confidence.displayPrecisionDecimals),

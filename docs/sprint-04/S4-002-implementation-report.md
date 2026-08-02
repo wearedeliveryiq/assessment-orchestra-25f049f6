@@ -121,7 +121,7 @@ Final verification results:
 ## Known limitations and deployment gates
 
 - The two migrations must be preflighted and applied separately through Lovable Cloud, followed immediately by the hardening migration.
-- The production S4-001 catalogue must be governed and active before a live evaluation can be generated. No migration seeds or silently activates product configuration.
+- The governed production S4-001 catalogue is active with two distinct verified governance identities. No migration seeded or silently activated product configuration.
 - Live SQL execution, privilege inspection, concurrency/idempotency rehearsal and a production API smoke test remain deployment evidence.
 - Repository-wide formatting debt remains an accepted inherited limitation; S4-002 introduces no new lint finding in its changed scope.
 - S4-003 will add the separate confidence-gate state. S4-002 records confidence but intentionally does not introduce a second gate or change Sprint 03 withholding behaviour.
@@ -132,4 +132,4 @@ The analysis worker performs one best-effort evaluation attempt. Durable retries
 
 ## Product decisions required
 
-None for the implemented story. Production activation requires two authorised governance identities under the already locked S4-001 separation-of-duties policy.
+None for the implemented story. The S4-001 separation-of-duties activation prerequisite has been satisfied in Lovable Cloud.

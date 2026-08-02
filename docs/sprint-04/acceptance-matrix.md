@@ -13,12 +13,12 @@
 
 ### S4-001 Product Governance isolation remediation
 
-| Locked requirement                                         | Implementation evidence                                                                                                                | Test evidence                                                                         | Status                                     |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Product Governance has no tenant data by default           | dedicated platform-scoped `product_governance` role grants only `recommendation:govern`; tenant evaluation audit requires `audit:read` | Product Governance role and recommendation-evaluation permission tests                | PASS                                       |
-| Platform and tenant administration do not govern catalogue | `recommendation:govern` removed from `platform_admin`; catalogue routes retain the explicit permission check                           | exact-permission RBAC test                                                            | PASS                                       |
-| Governance role cannot become a tenant role                | application assignment guard plus database checks on organisation/workspace memberships and invitations                                | Product Governance role and migration-security tests                                  | PASS                                       |
-| Author and approver are different genuine identities       | existing service/database self-approval denial; updated promotion runbook                                                              | catalogue lifecycle tests; live assignment and activation pending identity nomination | BLOCKED — second genuine identity required |
+| Locked requirement                                         | Implementation evidence                                                                                                                | Test evidence                                                                             | Status |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------ |
+| Product Governance has no tenant data by default           | dedicated platform-scoped `product_governance` role grants only `recommendation:govern`; tenant evaluation audit requires `audit:read` | Product Governance role and recommendation-evaluation permission tests                    | PASS   |
+| Platform and tenant administration do not govern catalogue | `recommendation:govern` removed from `platform_admin`; catalogue routes retain the explicit permission check                           | exact-permission RBAC test                                                                | PASS   |
+| Governance role cannot become a tenant role                | application assignment guard plus database checks on organisation/workspace memberships and invitations                                | Product Governance role and migration-security tests                                      | PASS   |
+| Author and approver are different genuine identities       | existing service/database self-approval denial; updated promotion runbook                                                              | catalogue lifecycle tests; live production activation by two distinct verified identities | PASS   |
 
 ## S4-002 — Eligibility and Trigger Evaluation
 
@@ -46,6 +46,34 @@
 | Full regression                 | 30 files / 317 tests                                                       | PASS                                                                               |
 | Production build                | Vite/Nitro production build                                                | PASS                                                                               |
 
+## S4-003 — Confidence Gates and Evidence Sufficiency
+
+| Acceptance criterion                                          | Implementation evidence                                                                                                          | Test evidence                                                      | Status |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------ |
+| AC1 exact confidence boundaries                               | `applyRecommendationConfidenceGate` delegates to the unchanged DIQ-203 confidence boundaries                                     | 49.999999, 50, 74.999999 and 75 fixtures                           | PASS   |
+| AC2 low-confidence material action is withheld                | immutable post-gate state preserves the eligible pre-gate result; medium/high effort uses `low_confidence_material_action`       | material-action, low-effort and evidence-first cases               | PASS   |
+| AC3 confidence changes affect only gate/confidence components | separate S4-003 record linked to immutable S4-002 candidates; no score, impact, effort or base-evaluation mutation               | moderate/high invariant projection and analysis non-rollback tests | PASS   |
+| AC4 caveats match locked copy                                 | low uses the DIQ-203A caveat verbatim; moderate composes only ordered DIQ-203A limitation sentences; high has no default caveat  | exact low, moderate/multiple-limitation and high-copy assertions   | PASS   |
+| AC5 withheld details are restricted appropriately             | public/workspace projections return counts and safe reasons but omit withheld identities, hashes and lineage; audit is permitted | public/workspace/audit schema-leakage and redaction assertions     | PASS   |
+
+## S4-003 quality gates
+
+| Gate                              | Evidence                                                                                     | Status                                                                        |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Deterministic domain/unit         | `tests/recommendation-confidence-gate.test.ts`                                               | PASS                                                                          |
+| Integration/idempotency/failure   | immutable service replay, cross-scope failure and non-blocking analysis-worker tests         | PASS                                                                          |
+| Tenant isolation/traceability     | service scope checks, confidence-node lineage and database publication contract              | PASS — live migration verification pending                                    |
+| Permission/redaction              | public/workspace/audit projections and deny-by-default migration contract                    | PASS — live privilege inspection pending                                      |
+| Accessibility/copy                | textual status, reason and caveat contracts; exact locked-copy tests; no new presentation UI | PASS                                                                          |
+| Performance                       | 250 eligible candidates gated under the one-second test guard                                | PASS                                                                          |
+| Sprint 03 and S4-002 regression   | complete DIQ-203B and recommendation-evaluation suites                                       | PASS                                                                          |
+| Type checking                     | `tsc --noEmit`                                                                               | PASS                                                                          |
+| Changed-file lint/format          | ESLint and Prettier over all S4-003 application, route, generated-route and test files       | PASS                                                                          |
+| Full-repository lint              | Existing repository formatting baseline                                                      | RECORDED LIMITATION — 5,070 inherited errors outside the S4-003 changed scope |
+| Full regression                   | 32 files / 347 tests                                                                         | PASS                                                                          |
+| Production build                  | Vite/Nitro production build                                                                  | PASS                                                                          |
+| Lovable Cloud migration execution | `20260803030000` followed by `20260803031000`; live schema, ACL and idempotency verification | PENDING DEPLOYMENT                                                            |
+
 ## Quality gates
 
-Actual command results are recorded in the S4-001 engineering hand-off and Product Governance remediation report. Product Governance migration execution and live identity provisioning remain Lovable Cloud deployment gates.
+Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation is complete; S4-003 migration execution and live verification remain Lovable Cloud deployment gates.
