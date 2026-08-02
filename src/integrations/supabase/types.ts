@@ -5051,7 +5051,6 @@ export type Database = {
       organisation_status: "active" | "suspended" | "archived"
       platform_role:
         | "platform_admin"
-        | "product_governance"
         | "org_admin"
         | "assessment_manager"
         | "contributor"
@@ -5059,6 +5058,7 @@ export type Database = {
         | "read_only"
         | "organisation_owner"
         | "workspace_manager"
+        | "product_governance"
       recommendation_catalogue_state:
         | "draft"
         | "in_review"
@@ -5227,7 +5227,6 @@ export const Constants = {
       organisation_status: ["active", "suspended", "archived"],
       platform_role: [
         "platform_admin",
-        "product_governance",
         "org_admin",
         "assessment_manager",
         "contributor",
@@ -5235,6 +5234,7 @@ export const Constants = {
         "read_only",
         "organisation_owner",
         "workspace_manager",
+        "product_governance",
       ],
       recommendation_catalogue_state: [
         "draft",
