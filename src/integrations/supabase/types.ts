@@ -5058,6 +5058,7 @@ export type Database = {
         | "read_only"
         | "organisation_owner"
         | "workspace_manager"
+        | "product_governance"
       recommendation_catalogue_state:
         | "draft"
         | "in_review"
@@ -5233,6 +5234,7 @@ export const Constants = {
         "read_only",
         "organisation_owner",
         "workspace_manager",
+        "product_governance",
       ],
       recommendation_catalogue_state: [
         "draft",
