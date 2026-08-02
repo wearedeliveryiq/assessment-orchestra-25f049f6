@@ -14,6 +14,55 @@ export type Database = {
   }
   public: {
     Tables: {
+      analysis_recommendation_acceptances: {
+        Row: {
+          accepted_at: string
+          accepted_by_user_id: string
+          analysis_run_id: string
+          organisation_id: string
+          recommendation_id: string
+          workspace_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          accepted_by_user_id: string
+          analysis_run_id: string
+          organisation_id: string
+          recommendation_id: string
+          workspace_id: string
+        }
+        Update: {
+          accepted_at?: string
+          accepted_by_user_id?: string
+          analysis_run_id?: string
+          organisation_id?: string
+          recommendation_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analysis_recommendation_acceptances_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analysis_recommendation_acceptances_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analysis_recommendation_acceptances_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_analysis_events: {
         Row: {
           analysis_run_id: string
@@ -1720,6 +1769,27 @@ export type Database = {
           },
         ]
       }
+      delivery_product_availability: {
+        Row: {
+          product_id: string
+          product_type: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          product_id: string
+          product_type: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          product_id?: string
+          product_type?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       identity_audit_events: {
         Row: {
           created_at: string
@@ -2204,6 +2274,38 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "organisation_memberships_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organisation_product_entitlements: {
+        Row: {
+          entitled: boolean
+          organisation_id: string
+          product_id: string
+          product_type: string
+          updated_at: string
+        }
+        Insert: {
+          entitled?: boolean
+          organisation_id: string
+          product_id: string
+          product_type: string
+          updated_at?: string
+        }
+        Update: {
+          entitled?: boolean
+          organisation_id?: string
+          product_id?: string
+          product_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_product_entitlements_organisation_id_fkey"
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
