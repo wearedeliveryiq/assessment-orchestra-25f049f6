@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { clearAssessmentTenantCache } from "@/lib/identity/assessment-auth";
 
 import type { ApiResponse } from "@/lib/identity/types";
 import type { WorkspaceMemberView } from "./workspace-membership.server";
@@ -149,8 +150,10 @@ export function removeMember(membershipId: string): Promise<MemberView[]> {
 
 /* ------------------------------- workspace ops ---------------------------- */
 
-export function switchWorkspace(workspaceId: string): Promise<WorkspaceContext> {
-  return send("POST", "workspace/switch", { workspaceId });
+export async function switchWorkspace(workspaceId: string): Promise<WorkspaceContext> {
+  const context = await send<WorkspaceContext>("POST", "workspace/switch", { workspaceId });
+  clearAssessmentTenantCache();
+  return context;
 }
 
 export function workspaceContext(): Promise<WorkspaceContext> {

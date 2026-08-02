@@ -25,6 +25,9 @@ const stageRuns = () => sb.from("assessment_stage_runs");
 type SessionRow = {
   id: string;
   owner_key: string;
+  organisation_id: string;
+  workspace_id: string;
+  created_by_user_id: string;
   organisation_name: string;
   contact_name: string | null;
   assessment_type: string;
@@ -60,6 +63,9 @@ function unwrap<T>(result: { data: unknown; error: { message: string } | null })
 export function toSession(row: SessionRow): AssessmentSession {
   return {
     id: row.id,
+    organisationId: row.organisation_id,
+    workspaceId: row.workspace_id,
+    createdByUserId: row.created_by_user_id,
     organisationName: row.organisation_name,
     contactName: row.contact_name,
     assessmentType: row.assessment_type,
@@ -90,6 +96,9 @@ export function toStageRun(row: StageRow): StageRun {
 
 export async function createSession(input: {
   ownerKey: string;
+  organisationId: string;
+  workspaceId: string;
+  createdByUserId: string;
   organisationName: string;
   contactName?: string | null;
   assessmentType?: string;
@@ -98,6 +107,9 @@ export async function createSession(input: {
     await sessions()
       .insert({
         owner_key: input.ownerKey,
+        organisation_id: input.organisationId,
+        workspace_id: input.workspaceId,
+        created_by_user_id: input.createdByUserId,
         organisation_name: input.organisationName,
         contact_name: input.contactName ?? null,
         assessment_type: input.assessmentType ?? "delivery-maturity",
@@ -109,13 +121,18 @@ export async function createSession(input: {
   return toSession(row);
 }
 
-export async function listSessions(ownerKey: string): Promise<AssessmentSession[]> {
+export async function listSessions(
+  ownerKey: string,
+  tenant?: { organisationId: string; workspaceId: string },
+): Promise<AssessmentSession[]> {
+  let query = sessions().select("*").eq("owner_key", ownerKey);
+  if (tenant) {
+    query = query
+      .eq("organisation_id", tenant.organisationId)
+      .eq("workspace_id", tenant.workspaceId);
+  }
   const rows = unwrap<SessionRow[]>(
-    await sessions()
-      .select("*")
-      .eq("owner_key", ownerKey)
-      .order("updated_at", { ascending: false })
-      .limit(100),
+    await query.order("updated_at", { ascending: false }).limit(100),
   );
   return rows.map(toSession);
 }

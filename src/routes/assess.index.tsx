@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock, FileQuestion, Layers, Loader2, PlayCircle, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
@@ -10,6 +10,9 @@ import { useHydrated } from "@/hooks/use-hydrated";
 import { runtimeApi, runtimeKeys } from "@/lib/runtime/client";
 
 export const Route = createFileRoute("/assess/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title: "Start an assessment — DeliveryIQ Runtime" },

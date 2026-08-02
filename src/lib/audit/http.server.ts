@@ -8,6 +8,9 @@ import {
 import { explainEntity, getDecisionTrace, getEvidence, getSessionGraph } from "./explainability.server";
 import { applyRetention, listRetentionPolicies, saveRetentionPolicy } from "./retention.server";
 import { isEvidenceEntityType, type AuditQuery, type EvidenceEntityType } from "./types";
+import { identityFromRequest } from "@/lib/identity/authentication.server";
+import { IdentityError } from "@/lib/identity/errors";
+import type { AuthenticatedIdentity } from "@/lib/identity/types";
 
 /**
  * REST adapter for the Audit & Explainability APIs. Access is permission
@@ -22,15 +25,10 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function ownerKeyOf(request: Request): string | null {
-  const header = request.headers.get("x-owner-key") ?? new URL(request.url).searchParams.get("k");
-  if (!header) return null;
-  const trimmed = header.trim();
-  if (trimmed.length < 8 || trimmed.length > 128) return null;
-  return trimmed;
-}
-
 function failure(error: unknown): Response {
+  if (error instanceof IdentityError) {
+    return json({ error: error.message, code: error.code }, error.status);
+  }
   if (error instanceof AuditServiceError) return json({ error: error.message }, error.status);
   console.error("[audit-api]", error);
   return json({ error: "Audit service error" }, 500);
@@ -38,12 +36,11 @@ function failure(error: unknown): Response {
 
 async function guarded(
   request: Request,
-  fn: (ownerKey: string, url: URL) => Promise<unknown>,
+  fn: (ownerKey: string, url: URL, identity: AuthenticatedIdentity) => Promise<unknown>,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
   try {
-    return json(await fn(ownerKey, new URL(request.url)));
+    const identity = await identityFromRequest(request);
+    return json(await fn(identity.user.id, new URL(request.url), identity));
   } catch (error) {
     return failure(error);
   }
@@ -177,8 +174,15 @@ export function handleEvidenceGraph(request: Request, assessmentId: string): Pro
 
 /** GET|POST|PUT /audit/retention */
 export function handleRetention(request: Request): Promise<Response> {
-  return guarded(request, async (ownerKey) => {
+  return guarded(request, async (ownerKey, _url, identity) => {
     if (request.method === "GET") return { policies: await listRetentionPolicies() };
+    if (!identity.roles.includes("platform_admin")) {
+      throw new IdentityError(
+        "forbidden",
+        "Only platform administrators can change or apply retention policies.",
+        403,
+      );
+    }
     if (request.method === "POST") {
       const result = await applyRetention();
       console.info(`[audit-retention] applied by ${ownerKey}`, result);

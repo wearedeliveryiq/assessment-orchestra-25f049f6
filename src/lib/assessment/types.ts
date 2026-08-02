@@ -25,6 +25,9 @@ export type EngineStageId =
 
 export interface AssessmentSession {
   id: string;
+  organisationId: string;
+  workspaceId: string;
+  createdByUserId: string;
   organisationName: string;
   contactName: string | null;
   assessmentType: string;

@@ -1,4 +1,7 @@
-import { getOwnerKey } from "../assessment/client";
+import {
+  assessmentAuthHeaders,
+  openAuthenticatedDownload,
+} from "@/lib/identity/assessment-auth";
 import type { Report, ReportGenerationRequest, ReportListPayload } from "./types";
 
 /**
@@ -12,23 +15,26 @@ async function parse<T>(response: Response): Promise<T> {
 }
 
 export const reportsApi = {
-  list(assessmentId: string): Promise<ReportListPayload> {
+  async list(assessmentId: string): Promise<ReportListPayload> {
     return fetch(`/assessment/${assessmentId}/reports`, {
-      headers: { "x-owner-key": getOwnerKey() },
+      headers: await assessmentAuthHeaders(),
     }).then(parse<ReportListPayload>);
   },
 
-  create(assessmentId: string, request: ReportGenerationRequest): Promise<{ reports: Report[] }> {
+  async create(
+    assessmentId: string,
+    request: ReportGenerationRequest,
+  ): Promise<{ reports: Report[] }> {
+    const authHeaders = await assessmentAuthHeaders();
     return fetch(`/assessment/${assessmentId}/reports`, {
       method: "POST",
-      headers: { "content-type": "application/json", "x-owner-key": getOwnerKey() },
+      headers: { "content-type": "application/json", ...authHeaders },
       body: JSON.stringify(request),
     }).then(parse<{ reports: Report[] }>);
   },
 
-  /** Top-level navigation, so the owner key travels as a query param. */
-  downloadUrl(reportId: string): string {
-    return `/report/${reportId}/download?k=${encodeURIComponent(getOwnerKey())}`;
+  download(reportId: string): Promise<void> {
+    return openAuthenticatedDownload(`/report/${reportId}/download`);
   },
 };
 

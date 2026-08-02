@@ -1,4 +1,6 @@
 import { assessmentRuntime, listAssessments, RuntimeError } from "./service.server";
+import { assessmentOwnerId } from "@/lib/identity/assessment-auth.server";
+import { IdentityError } from "@/lib/identity/errors";
 
 export type RuntimeApi = {
   runtime: typeof assessmentRuntime;
@@ -12,13 +14,6 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function ownerKeyOf(request: Request): string | null {
-  const header = request.headers.get("x-owner-key");
-  if (!header) return null;
-  const trimmed = header.trim();
-  return trimmed.length >= 8 && trimmed.length <= 128 ? trimmed : null;
-}
-
 /**
  * Shared REST envelope for the Assessment Runtime: resolves the caller, invokes
  * the runtime and maps runtime failures onto clean HTTP responses while logging
@@ -28,12 +23,13 @@ export async function handleRuntimeRoute(
   request: Request,
   fn: (api: RuntimeApi, ownerKey: string) => Promise<unknown>,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     return json(await fn({ runtime: assessmentRuntime, catalogue: listAssessments }, ownerKey));
   } catch (error) {
+    if (error instanceof IdentityError) {
+      return json({ error: error.message, code: error.code }, error.status);
+    }
     if (error instanceof RuntimeError) {
       return json({ error: error.message, details: error.details ?? null }, error.status);
     }

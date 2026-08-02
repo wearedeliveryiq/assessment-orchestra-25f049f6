@@ -9,6 +9,7 @@ import { IdentityMenu } from "@/components/identity/identity-menu";
 import { StatusPill } from "@/components/deliveryiq/status-pill";
 import { assessmentApi, assessmentKeys } from "@/lib/assessment/client";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { useIdentity } from "@/hooks/use-identity";
 import type { AssessmentSession } from "@/lib/assessment/types";
 
 export const Route = createFileRoute("/")({
@@ -41,6 +42,7 @@ function formatDate(value: string) {
 
 function LandingPage() {
   const hydrated = useHydrated();
+  const { isAuthenticated, isLoading: identityLoading } = useIdentity();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [organisation, setOrganisation] = useState("");
@@ -48,7 +50,7 @@ function LandingPage() {
   const { data, isLoading } = useQuery({
     queryKey: assessmentKeys.list,
     queryFn: assessmentApi.list,
-    enabled: hydrated,
+    enabled: hydrated && isAuthenticated,
   });
 
   const sessions = data?.sessions ?? [];
@@ -93,39 +95,49 @@ function LandingPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Create a draft and start capturing responses immediately.
           </p>
-          <form
-            className="mt-5 flex flex-col gap-3"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (!organisation.trim()) {
-                toast.error("Enter an organisation name to continue");
-                return;
-              }
-              create.mutate();
-            }}
-          >
-            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Organisation
-              <input
-                value={organisation}
-                onChange={(event) => setOrganisation(event.target.value)}
-                placeholder="e.g. Northwind Logistics"
-                className="mt-1.5 w-full rounded-md border border-input bg-background/70 px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring"
-              />
-            </label>
-            <button
-              type="submit"
-              disabled={create.isPending}
-              className="ribbon-bar inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          {!isAuthenticated ? (
+            <Link
+              to="/auth/login"
+              className="ribbon-bar mt-5 inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground"
             >
-              {create.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <ArrowRight className="h-4 w-4" />
-              )}
-              Start assessment
-            </button>
-          </form>
+              Sign in to start
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          ) : (
+            <form
+              className="mt-5 flex flex-col gap-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                if (!organisation.trim()) {
+                  toast.error("Enter an organisation name to continue");
+                  return;
+                }
+                create.mutate();
+              }}
+            >
+              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Organisation
+                <input
+                  value={organisation}
+                  onChange={(event) => setOrganisation(event.target.value)}
+                  placeholder="e.g. Northwind Logistics"
+                  className="mt-1.5 w-full rounded-md border border-input bg-background/70 px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={create.isPending}
+                className="ribbon-bar inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {create.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
+                Start assessment
+              </button>
+            </form>
+          )}
         </article>
 
         {/* Continue draft */}
@@ -133,8 +145,8 @@ function LandingPage() {
           title="Continue draft"
           icon={<ClipboardList className="h-4 w-4" />}
           description="Pick up an in-flight assessment where you left off."
-          empty="No drafts in progress."
-          loading={isLoading || !hydrated}
+          empty={isAuthenticated ? "No drafts in progress." : "Sign in to view your drafts."}
+          loading={isAuthenticated && (identityLoading || isLoading || !hydrated)}
           sessions={[...drafts, ...running]}
           renderMeta={(session) => `${session.progress}% complete`}
           hrefFor={(session) =>
@@ -149,8 +161,12 @@ function LandingPage() {
           title="Completed assessments"
           icon={<FileCheck2 className="h-4 w-4" />}
           description="Review scores, patterns and the generated narrative."
-          empty="No completed assessments yet."
-          loading={isLoading || !hydrated}
+          empty={
+            isAuthenticated
+              ? "No completed assessments yet."
+              : "Sign in to view completed assessments."
+          }
+          loading={isAuthenticated && (identityLoading || isLoading || !hydrated)}
           sessions={completed}
           renderMeta={(session) =>
             session.completedAt ? `Completed ${formatDate(session.completedAt)}` : "Completed"
@@ -262,7 +278,6 @@ function LandingPage() {
             Open →
           </Link>
         </div>
-
       </div>
     </AppShell>
   );

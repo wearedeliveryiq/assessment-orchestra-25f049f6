@@ -1,5 +1,7 @@
 import * as orchestrator from "./service.server";
 import { OrchestratorError, type ExecutionHistoryFilters, type ExecutionMode } from "./types";
+import { assessmentOwnerId } from "@/lib/identity/assessment-auth.server";
+import { IdentityError } from "@/lib/identity/errors";
 
 export type Orchestrator = typeof orchestrator;
 
@@ -10,25 +12,18 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-function ownerKeyOf(request: Request): string | null {
-  const header = request.headers.get("x-owner-key");
-  if (!header) return null;
-  const trimmed = header.trim();
-  if (trimmed.length < 8 || trimmed.length > 128) return null;
-  return trimmed;
-}
-
 /** Shared REST envelope for every orchestrator endpoint. */
 export async function handleRoute(
   request: Request,
   fn: (api: Orchestrator, ownerKey: string) => Promise<unknown>,
 ): Promise<Response> {
-  const ownerKey = ownerKeyOf(request);
-  if (!ownerKey) return json({ error: "Missing or invalid x-owner-key header" }, 401);
-
   try {
+    const ownerKey = await assessmentOwnerId(request);
     return json(await fn(orchestrator, ownerKey));
   } catch (error) {
+    if (error instanceof IdentityError) {
+      return json({ error: error.message, code: error.code }, error.status);
+    }
     if (error instanceof OrchestratorError) {
       return json({ error: error.message, code: error.code }, error.status);
     }
