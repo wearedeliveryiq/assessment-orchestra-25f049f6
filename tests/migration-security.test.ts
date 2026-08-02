@@ -9,6 +9,13 @@ const hardening = readFileSync(
   new URL("../supabase/migrations/20260802025000_harden_analysis_permissions.sql", import.meta.url),
   "utf8",
 );
+const triggerHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802025500_harden_analysis_trigger_helpers.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -35,5 +42,14 @@ describe("Sprint 03 migration security", () => {
       expect(hardening).toContain(`REVOKE EXECUTE ON FUNCTION public.${name}`);
     }
     expect(hardening).toContain("GRANT SELECT ON TABLE public.assessment_analysis_runs");
+  });
+
+  it("removes PUBLIC execution from internal trigger helpers", () => {
+    expect(triggerHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.assign_analysis_event_sequence() FROM PUBLIC",
+    );
+    expect(triggerHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.enforce_analysis_run_transition() FROM PUBLIC",
+    );
   });
 });
