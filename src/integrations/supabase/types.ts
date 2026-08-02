@@ -2379,6 +2379,7 @@ export type Database = {
           completed_at: string | null
           created_at: string
           created_by: string | null
+          created_by_user_id: string | null
           current_page_id: string | null
           current_section_id: string | null
           deleted_at: string | null
@@ -2409,6 +2410,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_user_id?: string | null
           current_page_id?: string | null
           current_section_id?: string | null
           deleted_at?: string | null
@@ -2439,6 +2441,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_user_id?: string | null
           current_page_id?: string | null
           current_section_id?: string | null
           deleted_at?: string | null
