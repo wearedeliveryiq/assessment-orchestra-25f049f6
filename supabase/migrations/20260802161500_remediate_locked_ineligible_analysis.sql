@@ -6,12 +6,13 @@ DECLARE
   v_decision_id uuid;
   v_handoff public.assessment_analysis_handoffs;
   v_manifest_digest text;
+  v_verified record;
 BEGIN
-  SELECT h,
+  SELECT h AS handoff,
          encode(digest(convert_to(array_to_json(array_agg(
            response ->> 'questionId' ORDER BY response ->> 'questionId'
-         ))::text, 'UTF8'), 'sha256'), 'hex')
-    INTO v_handoff, v_manifest_digest
+         ))::text, 'UTF8'), 'sha256'), 'hex') AS manifest_digest
+    INTO v_verified
   FROM public.assessment_analysis_runs r
   JOIN public.assessment_sessions s ON s.id = r.assessment_session_id
   JOIN public.assessment_analysis_handoffs h
@@ -31,6 +32,9 @@ BEGIN
     AND r.canonical_input #>> '{knowledgePack,id}' = 'executive-sponsorship'
     AND r.canonical_input #>> '{knowledgePack,version}' = '1.4.0'
   GROUP BY h.id;
+
+  v_handoff := v_verified.handoff;
+  v_manifest_digest := v_verified.manifest_digest;
 
   IF v_handoff.id IS NULL THEN
     RAISE EXCEPTION 'PDR_003_002_REMEDIATION_SCOPE_VERIFICATION_FAILED';

@@ -192,6 +192,9 @@ describe("Sprint 03 migration security", () => {
     expect(eligibilityRemediation).toContain("r.organisation_id = s.organisation_id");
     expect(eligibilityRemediation).toContain("r.assessment_revision = s.assessment_revision");
     expect(eligibilityRemediation).toContain("PDR_003_002_REMEDIATION_SCOPE_VERIFICATION_FAILED");
+    expect(eligibilityRemediation).toContain("INTO v_verified");
+    expect(eligibilityRemediation).toContain("v_handoff := v_verified.handoff");
+    expect(eligibilityRemediation).not.toContain("INTO v_handoff, v_manifest_digest");
     expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_runs/);
     expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_events/);
   });
