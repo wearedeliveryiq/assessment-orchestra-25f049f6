@@ -49,7 +49,7 @@ export interface AssessmentResponse {
   evidenceStatus?: "answered" | "not_applicable" | "excluded" | "missing";
   exclusionReason?: string | null;
   respondentGroupId?: string | null;
-  evidenceAt?: string;
+  evidenceAt?: string | null;
 }
 
 export interface StageRun {

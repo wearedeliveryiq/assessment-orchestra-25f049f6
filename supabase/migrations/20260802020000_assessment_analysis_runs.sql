@@ -181,3 +181,83 @@ COMMENT ON TABLE public.assessment_analysis_runs IS
   'Version-pinned canonical input and asynchronous lifecycle for Sprint 03. Completed rows are immutable.';
 COMMENT ON TABLE public.assessment_analysis_events IS
   'Append-only, tenant-scoped structured lifecycle events for analysis runs.';
+
+-- Atomic worker transitions are service-role-only. A lease-expired worker is
+-- reclaimed as the next attempt on the same immutable run.
+CREATE FUNCTION public.claim_assessment_analysis_run(
+  p_run_id uuid,
+  p_lease_owner text,
+  p_lease_seconds integer DEFAULT 120
+)
+RETURNS SETOF public.assessment_analysis_runs
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  IF p_lease_owner IS NULL OR length(p_lease_owner) < 1 OR p_lease_seconds NOT BETWEEN 15 AND 900 THEN
+    RAISE EXCEPTION 'invalid analysis lease';
+  END IF;
+  RETURN QUERY
+  UPDATE public.assessment_analysis_runs run
+  SET status = 'running',
+      attempt = run.attempt + 1,
+      lease_owner = p_lease_owner,
+      lease_expires_at = now() + make_interval(secs => p_lease_seconds),
+      started_at = COALESCE(run.started_at, now()),
+      failed_at = NULL,
+      error_code = NULL,
+      safe_error_message = NULL,
+      retryable = NULL
+  WHERE run.id = p_run_id
+    AND run.attempt < 3
+    AND (
+      run.status = 'queued'
+      OR (run.status = 'running' AND run.lease_expires_at < now())
+    )
+  RETURNING run.*;
+END;
+$$;
+
+CREATE FUNCTION public.complete_assessment_analysis_run(p_run_id uuid, p_lease_owner text)
+RETURNS SETOF public.assessment_analysis_runs
+LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
+  UPDATE public.assessment_analysis_runs run
+  SET status = 'completed', completed_at = now(), lease_owner = NULL, lease_expires_at = NULL
+  WHERE run.id = p_run_id AND run.status = 'running' AND run.lease_owner = p_lease_owner
+  RETURNING run.*;
+$$;
+
+CREATE FUNCTION public.fail_assessment_analysis_run(
+  p_run_id uuid,
+  p_lease_owner text,
+  p_error_code text,
+  p_safe_message text,
+  p_retryable boolean
+)
+RETURNS SETOF public.assessment_analysis_runs
+LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
+  UPDATE public.assessment_analysis_runs run
+  SET status = 'failed', failed_at = now(), error_code = p_error_code,
+      safe_error_message = p_safe_message, retryable = p_retryable,
+      lease_owner = NULL, lease_expires_at = NULL
+  WHERE run.id = p_run_id AND run.status = 'running' AND run.lease_owner = p_lease_owner
+  RETURNING run.*;
+$$;
+
+CREATE FUNCTION public.retry_assessment_analysis_run(p_run_id uuid)
+RETURNS SETOF public.assessment_analysis_runs
+LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
+  UPDATE public.assessment_analysis_runs run
+  SET status = 'queued', queued_at = now(), failed_at = NULL,
+      error_code = NULL, safe_error_message = NULL, retryable = NULL
+  WHERE run.id = p_run_id AND run.status = 'failed'
+    AND run.retryable = true AND run.attempt < 3
+  RETURNING run.*;
+$$;
+
+REVOKE ALL ON FUNCTION public.claim_assessment_analysis_run(uuid, text, integer) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.complete_assessment_analysis_run(uuid, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.fail_assessment_analysis_run(uuid, text, text, text, boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.retry_assessment_analysis_run(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.claim_assessment_analysis_run(uuid, text, integer) TO service_role;
+GRANT EXECUTE ON FUNCTION public.complete_assessment_analysis_run(uuid, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.fail_assessment_analysis_run(uuid, text, text, text, boolean) TO service_role;
+GRANT EXECUTE ON FUNCTION public.retry_assessment_analysis_run(uuid) TO service_role;

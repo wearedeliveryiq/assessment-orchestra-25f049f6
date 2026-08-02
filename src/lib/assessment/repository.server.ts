@@ -192,7 +192,7 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
     evidenceStatus: row.evidence_status ?? "answered",
     exclusionReason: row.exclusion_reason ?? null,
     respondentGroupId: row.respondent_group_id ?? null,
-    evidenceAt: row.evidence_at ?? row.answered_at,
+    evidenceAt: row.evidence_at ?? null,
   }));
 }
 

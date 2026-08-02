@@ -1,5 +1,6 @@
 import { sprint03Configuration } from "./config";
-import { roundHalfUp } from "./math";
+import { mean, populationStandardDeviation, roundHalfUp } from "./math";
+import type { CanonicalAnalysisResponse } from "../analysis/types";
 
 export type ConfidenceFactorId = keyof typeof sprint03Configuration.confidence.limitations;
 export type ConfidenceFactors = Record<ConfidenceFactorId, number>;
@@ -51,4 +52,92 @@ export function calculateConfidence(factors: ConfidenceFactors) {
     band: confidenceBand(index),
     limitations,
   };
+}
+
+function recencyValue(evidenceAt: string | null, completedAt: string): number {
+  if (!evidenceAt) return 0;
+  const days = Math.max(0, (Date.parse(completedAt) - Date.parse(evidenceAt)) / 86_400_000);
+  const buckets = sprint03Configuration.confidence.factors.find(
+    (factor) => factor.id === "evidence_recency",
+  )?.buckets as Array<{ maximumDays: number | null; value: number }> | undefined;
+  if (!buckets) throw new Error("ANALYSIS_CONFIGURATION_INVALID: recency buckets missing");
+  return buckets.find((bucket) => bucket.maximumDays == null || days <= bucket.maximumDays)!.value;
+}
+
+function breadthValue(groups: number): number {
+  if (groups >= 3) return 1;
+  if (groups === 2) return 0.7;
+  if (groups === 1) return 0.4;
+  return 0;
+}
+
+export interface ConfidenceDerivationCapability {
+  id: string;
+  requiredQuestionIds: string[];
+  responses: CanonicalAnalysisResponse[];
+  available: boolean;
+}
+
+export function deriveConfidenceFactors(input: {
+  completedAt: string;
+  capabilities: ConfidenceDerivationCapability[];
+}) {
+  const allResponses = input.capabilities.flatMap((capability) => capability.responses);
+  const requiredIds = input.capabilities.flatMap((capability) => capability.requiredQuestionIds);
+  const eligibleRequired = allResponses.filter(
+    (response) => requiredIds.includes(response.questionId) && response.status === "answered",
+  ).length;
+  const consistency = input.capabilities
+    .filter((capability) => capability.available)
+    .map((capability) => {
+      const values = capability.responses
+        .filter((response) => response.status === "answered" && typeof response.value === "number")
+        .map((response) => ((Number(response.value) - 1) / 4) * 100);
+      return 1 - Math.min(populationStandardDeviation(values) / 50, 1);
+    });
+  const eligible = allResponses.filter((response) => response.status === "answered");
+  const groups = new Set(eligible.map((response) => response.respondentGroupId).filter(Boolean));
+  const factors: ConfidenceFactors = {
+    required_completion: requiredIds.length ? eligibleRequired / requiredIds.length : 0,
+    capability_coverage:
+      input.capabilities.filter((capability) => capability.available).length /
+      sprint03Configuration.capabilities.length,
+    response_consistency: mean(consistency),
+    evidence_recency: mean(
+      eligible.map((response) => recencyValue(response.evidenceAt, input.completedAt)),
+    ),
+    respondent_breadth: breadthValue(groups.size),
+  };
+  return { factors, result: calculateConfidence(factors) };
+}
+
+export function calculateCapabilityConfidence(
+  capability: ConfidenceDerivationCapability,
+  completedAt: string,
+): number {
+  const requiredCompletion = capability.requiredQuestionIds.length
+    ? capability.responses.filter(
+        (response) =>
+          capability.requiredQuestionIds.includes(response.questionId) &&
+          response.status === "answered",
+      ).length / capability.requiredQuestionIds.length
+    : 0;
+  const eligible = capability.responses.filter(
+    (response) => response.status === "answered" && typeof response.value === "number",
+  );
+  const consistency = capability.available
+    ? 1 -
+      Math.min(
+        populationStandardDeviation(
+          eligible.map((response) => ((Number(response.value) - 1) / 4) * 100),
+        ) / 50,
+        1,
+      )
+    : 0;
+  const recency = mean(eligible.map((response) => recencyValue(response.evidenceAt, completedAt)));
+  // DIQ-203 §6: rescale the three relevant weighted factors to 100.
+  return roundHalfUp(
+    (100 * (requiredCompletion * 0.35 + consistency * 0.2 + recency * 0.1)) / 0.65,
+    6,
+  );
 }

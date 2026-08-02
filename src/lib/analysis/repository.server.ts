@@ -2,7 +2,10 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { AssessmentAnalysisRun, CanonicalAnalysisInput } from "./types";
 
-const sb = supabaseAdmin as unknown as { from: (table: string) => any };
+const sb = supabaseAdmin as unknown as {
+  from: (table: string) => any;
+  rpc: (name: string, parameters: Record<string, unknown>) => Promise<any>;
+};
 const runs = () => sb.from("assessment_analysis_runs");
 const events = () => sb.from("assessment_analysis_events");
 
@@ -150,63 +153,54 @@ export async function appendEvent(
 export async function claimRun(
   id: string,
   leaseOwner: string,
-  leaseExpiresAt: string,
+  leaseSeconds = 120,
 ): Promise<AssessmentAnalysisRun | null> {
-  const result = await runs()
-    .update({
-      status: "running",
-      attempt: 1,
-      lease_owner: leaseOwner,
-      lease_expires_at: leaseExpiresAt,
-      started_at: new Date().toISOString(),
-    })
-    .eq("id", id)
-    .eq("status", "queued")
-    .eq("attempt", 0)
-    .select("*")
-    .maybeSingle();
+  const result = await sb.rpc("claim_assessment_analysis_run", {
+    p_run_id: id,
+    p_lease_owner: leaseOwner,
+    p_lease_seconds: leaseSeconds,
+  });
   if (result.error) throw new Error(result.error.message);
-  return result.data ? toAnalysisRun(result.data as AnalysisRunRow) : null;
+  const row = Array.isArray(result.data) ? result.data[0] : result.data;
+  return row ? toAnalysisRun(row as AnalysisRunRow) : null;
 }
 
-export async function completeRun(id: string): Promise<AssessmentAnalysisRun> {
+export async function completeRun(id: string, leaseOwner: string): Promise<AssessmentAnalysisRun> {
+  const result = await sb.rpc("complete_assessment_analysis_run", {
+    p_run_id: id,
+    p_lease_owner: leaseOwner,
+  });
   return toAnalysisRun(
-    unwrap<AnalysisRunRow>(
-      await runs()
-        .update({
-          status: "completed",
-          completed_at: new Date().toISOString(),
-          lease_owner: null,
-          lease_expires_at: null,
-        })
-        .eq("id", id)
-        .eq("status", "running")
-        .select("*")
-        .single(),
-    ),
+    unwrap<AnalysisRunRow>({
+      data: Array.isArray(result.data) ? result.data[0] : result.data,
+      error: result.error,
+    }),
   );
 }
 
 export async function failRun(
   id: string,
+  leaseOwner: string,
   error: { code: string; message: string; retryable: boolean },
 ): Promise<AssessmentAnalysisRun> {
+  const result = await sb.rpc("fail_assessment_analysis_run", {
+    p_run_id: id,
+    p_lease_owner: leaseOwner,
+    p_error_code: error.code,
+    p_safe_message: error.message,
+    p_retryable: error.retryable,
+  });
   return toAnalysisRun(
-    unwrap<AnalysisRunRow>(
-      await runs()
-        .update({
-          status: "failed",
-          failed_at: new Date().toISOString(),
-          error_code: error.code,
-          safe_error_message: error.message,
-          retryable: error.retryable,
-          lease_owner: null,
-          lease_expires_at: null,
-        })
-        .eq("id", id)
-        .in("status", ["queued", "running"])
-        .select("*")
-        .single(),
-    ),
+    unwrap<AnalysisRunRow>({
+      data: Array.isArray(result.data) ? result.data[0] : result.data,
+      error: result.error,
+    }),
   );
+}
+
+export async function retryRun(id: string): Promise<AssessmentAnalysisRun | null> {
+  const result = await sb.rpc("retry_assessment_analysis_run", { p_run_id: id });
+  if (result.error) throw new Error(result.error.message);
+  const row = Array.isArray(result.data) ? result.data[0] : result.data;
+  return row ? toAnalysisRun(row as AnalysisRunRow) : null;
 }

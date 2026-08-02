@@ -93,7 +93,7 @@ export function normaliseAnalysisInput(input: {
           status,
           exclusionReason: response.exclusionReason ?? null,
           respondentGroupId: response.respondentGroupId ?? null,
-          evidenceAt: response.evidenceAt ?? response.answeredAt,
+          evidenceAt: response.evidenceAt ?? null,
         };
       }),
   };

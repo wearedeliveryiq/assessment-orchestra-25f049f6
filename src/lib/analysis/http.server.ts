@@ -76,7 +76,13 @@ export function postAnalysisRun(request: Request): Promise<Response> {
 
 export function getAnalysisRun(request: Request, runId: string): Promise<Response> {
   return safe(async () => {
-    const run = await assessmentAnalysisService.get(runId, await context(request, false));
+    const verified = await context(request, false);
+    let run = await assessmentAnalysisService.get(runId, verified);
+    if (run.status === "queued" || run.status === "running") {
+      const { driveAnalysisRun } = await import("./executor.server");
+      await driveAnalysisRun(run.id);
+      run = await assessmentAnalysisService.get(runId, verified);
+    }
     return json({
       id: run.id,
       status: run.status,

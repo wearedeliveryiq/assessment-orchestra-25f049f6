@@ -15,7 +15,7 @@ export interface CanonicalAnalysisResponse {
   status: "answered" | "not_applicable" | "excluded";
   exclusionReason: string | null;
   respondentGroupId: string | null;
-  evidenceAt: string;
+  evidenceAt: string | null;
 }
 
 export interface CanonicalAnalysisInput {
