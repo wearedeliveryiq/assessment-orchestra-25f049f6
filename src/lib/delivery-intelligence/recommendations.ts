@@ -1,4 +1,5 @@
 import { sprint03Configuration } from "./config";
+import { roundHalfUp } from "./math";
 
 type RecommendationDefinition = (typeof sprint03Configuration.recommendations)[number];
 export interface RecommendationInput {
@@ -95,4 +96,73 @@ export function deduplicateRecommendations(
     else existing.triggers = [...new Set([...existing.triggers, ...candidate.triggers])];
   }
   return [...groups.values()].map(({ id, triggers }) => ({ id, triggers }));
+}
+
+export function rankRecommendations(input: {
+  opportunities: Array<{ id: string; score: number }>;
+  patterns: Array<{ id: string; severity: string }>;
+  analysisConfidence: number;
+}) {
+  const eligibility = resolveRecommendationEligibility({
+    opportunities: input.opportunities.map((item) => item.id),
+    patterns: input.patterns.map((item) => item.id),
+    analysisConfidence: input.analysisConfidence,
+  });
+  const policy = sprint03Configuration.recommendationPolicy;
+  const ranked = eligibility.eligible.map((definition) => {
+    const opportunityUrgencies = definition.triggers.any.flatMap((trigger) => {
+      if (!("opportunity" in trigger)) return [];
+      const opportunity = input.opportunities.find((item) => item.id === trigger.opportunity);
+      return opportunity ? [opportunity.score < 25 ? 90 : 65] : [];
+    });
+    const patternUrgencies = definition.triggers.any.flatMap((trigger) => {
+      if (!("pattern" in trigger)) return [];
+      const pattern = input.patterns.find((item) => item.id === trigger.pattern);
+      return pattern
+        ? [pattern.severity === "critical" ? 100 : pattern.severity === "high" ? 80 : 65]
+        : [];
+    });
+    const urgency = Math.max(0, ...opportunityUrgencies, ...patternUrgencies);
+    const impactBand = definition.impact as keyof typeof policy.impactValues;
+    const effortBand = definition.effort as keyof typeof policy.effortEaseValues;
+    const impact = policy.impactValues[impactBand];
+    const effortEase = policy.effortEaseValues[effortBand];
+    const dependencyReadiness = eligibility.dependencyReadiness[definition.id];
+    const rankScore = roundHalfUp(
+      impact * policy.rankFormula.impact +
+        urgency * policy.rankFormula.urgency +
+        input.analysisConfidence * policy.rankFormula.confidence +
+        effortEase * policy.rankFormula.effortEase +
+        dependencyReadiness * policy.rankFormula.dependencyReadiness,
+      6,
+    );
+    return {
+      id: definition.id,
+      title: definition.title,
+      impact: impactBand,
+      effort: effortBand,
+      outcome: definition.outcome,
+      successMeasures: definition.successMeasures,
+      dependencies: definition.dependencies,
+      rankScore,
+      urgency,
+      impactValue: impact,
+      effortEase,
+      dependencyReadiness,
+      order: definition.order,
+    };
+  });
+  return {
+    ranked: [...ranked].sort(
+      (a, b) =>
+        b.rankScore - a.rankScore ||
+        b.impactValue - a.impactValue ||
+        b.urgency - a.urgency ||
+        b.effortEase - a.effortEase ||
+        a.order - b.order ||
+        a.id.localeCompare(b.id),
+    ),
+    excluded: eligibility.excluded,
+    withheld: eligibility.withheld,
+  };
 }

@@ -3,6 +3,8 @@ import { calculateCapabilityConfidence, deriveConfidenceFactors } from "./confid
 import { componentDigests, sprint03Configuration } from "./config";
 import { classifyFindings } from "./findings";
 import { detectPatterns } from "./patterns";
+import { rankRecommendations } from "./recommendations";
+import { buildRoadmap } from "./roadmap";
 import { calculateCapabilityScore, calculateOverallScore, type ScoreResponse } from "./scoring";
 
 export interface CanonicalCapabilityResult {
@@ -121,6 +123,27 @@ export function analyseCanonicalInput(input: CanonicalAnalysisInput) {
       capabilities.map((capability) => [capability.id, capability.confidenceContribution]),
     ),
   });
+  const patternResults = patterns.detected.map((item) => ({
+    id: item.id,
+    version: item.version,
+    severity: item.severity,
+    explanation: item.explanation,
+  }));
+  const recommendations = rankRecommendations({
+    opportunities: findings.priorityOpportunities.map((item) => ({
+      id: item.id,
+      score: item.score,
+    })),
+    patterns: patternResults.map((item) => ({ id: item.id, severity: item.severity })),
+    analysisConfidence: confidence.result.index,
+  });
+  const roadmap = buildRoadmap({
+    ranked: recommendations.ranked.map((item) => item.id),
+    effort: Object.fromEntries(recommendations.ranked.map((item) => [item.id, item.effort])),
+    dependencies: Object.fromEntries(
+      recommendations.ranked.map((item) => [item.id, item.dependencies]),
+    ),
+  });
 
   return {
     schemaVersion: "deliveryiq.intelligence-result/1.0.0",
@@ -140,13 +163,11 @@ export function analyseCanonicalInput(input: CanonicalAnalysisInput) {
       insufficientEvidence: findings.insufficientEvidence.map((item) => item.id),
     },
     patterns: {
-      detected: patterns.detected.map((item) => ({
-        id: item.id,
-        version: item.version,
-        explanation: item.explanation,
-      })),
+      detected: patternResults,
       suppressed: patterns.suppressed,
     },
+    recommendations,
+    roadmap,
   };
 }
 

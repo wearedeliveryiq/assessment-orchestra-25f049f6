@@ -131,5 +131,67 @@ export async function buildCoreTrace(
       });
     }
   }
+  for (const recommendation of result.recommendations.ranked) {
+    await add(
+      `recommendation:${recommendation.id}`,
+      "recommendation",
+      run.configurationVersion,
+      recommendation,
+      true,
+    );
+    const definition = sprint03Configuration.recommendations.find(
+      (item) => item.id === recommendation.id,
+    )!;
+    for (const trigger of definition.triggers.any) {
+      if ("opportunity" in trigger && ids.has(`finding:${trigger.opportunity}`)) {
+        edges.push({
+          source: ids.get(`finding:${trigger.opportunity}`)!,
+          target: ids.get(`recommendation:${recommendation.id}`)!,
+          type: "triggers",
+        });
+      }
+      if ("pattern" in trigger && ids.has(`pattern:${trigger.pattern}`)) {
+        edges.push({
+          source: ids.get(`pattern:${trigger.pattern}`)!,
+          target: ids.get(`recommendation:${recommendation.id}`)!,
+          type: "triggers",
+        });
+      }
+      if ("analysisConfidence" in trigger) {
+        edges.push({
+          source: ids.get("confidence")!,
+          target: ids.get(`recommendation:${recommendation.id}`)!,
+          type: "triggers",
+        });
+      }
+    }
+  }
+  const roadmap = result.roadmap;
+  if (!("error" in roadmap)) {
+    const horizons: Array<[
+      "day30" | "day60" | "day90",
+      Array<{ id: string; reason: string }>,
+    ]> = [
+      ["day30", roadmap.day30],
+      ["day60", roadmap.day60],
+      ["day90", roadmap.day90],
+    ];
+    for (const [horizon, items] of horizons) {
+      for (const item of items) {
+        await add(
+          `roadmap:${horizon}:${item.id}`,
+          "roadmap_item",
+          run.configurationVersion,
+          { ...item, horizon },
+          true,
+        );
+        edges.push({
+          source: ids.get(`recommendation:${item.id}`)!,
+          target: ids.get(`roadmap:${horizon}:${item.id}`)!,
+          type: "scheduled_as",
+        });
+      }
+    }
+  }
   return { nodes, edges };
 }
