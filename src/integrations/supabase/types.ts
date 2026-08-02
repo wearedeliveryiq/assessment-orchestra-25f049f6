@@ -124,6 +124,163 @@ export type Database = {
           },
         ]
       }
+      assessment_analysis_handoff_events: {
+        Row: {
+          assessment_session_id: string
+          correlation_id: string
+          created_at: string
+          event_type: string
+          handoff_id: string
+          id: number
+          organisation_id: string
+          payload: Json
+          safe_error_code: string | null
+          workspace_id: string
+        }
+        Insert: {
+          assessment_session_id: string
+          correlation_id: string
+          created_at?: string
+          event_type: string
+          handoff_id: string
+          id?: never
+          organisation_id: string
+          payload?: Json
+          safe_error_code?: string | null
+          workspace_id: string
+        }
+        Update: {
+          assessment_session_id?: string
+          correlation_id?: string
+          created_at?: string
+          event_type?: string
+          handoff_id?: string
+          id?: never
+          organisation_id?: string
+          payload?: Json
+          safe_error_code?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_analysis_handoff_events_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoff_events_handoff_id_fkey"
+            columns: ["handoff_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_handoffs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoff_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoff_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_analysis_handoffs: {
+        Row: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id?: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt?: number
+          claimed_at?: string | null
+          configuration_set_id: string
+          correlation_id?: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          last_error_code?: string | null
+          next_attempt_at?: string
+          organisation_id: string
+          requested_mode?: Database["public"]["Enums"]["analysis_requested_mode"]
+          status?: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string | null
+          assessment_revision?: number
+          assessment_session_id?: string
+          attempt?: number
+          claimed_at?: string | null
+          configuration_set_id?: string
+          correlation_id?: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          last_error_code?: string | null
+          next_attempt_at?: string
+          organisation_id?: string
+          requested_mode?: Database["public"]["Enums"]["analysis_requested_mode"]
+          status?: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_analysis_handoffs_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoffs_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoffs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoffs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_analysis_runs: {
         Row: {
           assessment_revision: number
@@ -3635,6 +3792,62 @@ export type Database = {
         Args: { p_organisation_id: string; p_workspace_id: string }
         Returns: boolean
       }
+      claim_assessment_analysis_handoff: {
+        Args: { p_handoff_id: string }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      claim_assessment_analysis_handoffs: {
+        Args: { p_limit?: number }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       claim_assessment_analysis_run: {
         Args: {
           p_lease_owner: string
@@ -3687,6 +3900,34 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      complete_assessment_analysis_handoff: {
+        Args: { p_analysis_run_id: string; p_handoff_id: string }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       complete_assessment_analysis_run: {
         Args: { p_lease_owner: string; p_run_id: string }
         Returns: {
@@ -3733,6 +3974,34 @@ export type Database = {
           to: "assessment_analysis_runs"
           isOneToOne: false
           isSetofReturn: true
+        }
+      }
+      fail_assessment_analysis_handoff: {
+        Args: { p_handoff_id: string; p_safe_error_code: string }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
         }
       }
       fail_assessment_analysis_run: {
@@ -3863,6 +4132,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      reconcile_assessment_analysis_handoffs: {
+        Args: { p_limit?: number }
+        Returns: number
+      }
       resolve_delivery_dna_public_result: {
         Args: { p_ip_hash: string; p_token_hash: string }
         Returns: Json
@@ -3917,6 +4190,7 @@ export type Database = {
       }
     }
     Enums: {
+      analysis_handoff_status: "pending" | "processing" | "delivered" | "failed"
       analysis_requested_mode: "workspace" | "public"
       analysis_run_status: "queued" | "running" | "completed" | "failed"
       assessment_status:
@@ -4073,6 +4347,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      analysis_handoff_status: ["pending", "processing", "delivered", "failed"],
       analysis_requested_mode: ["workspace", "public"],
       analysis_run_status: ["queued", "running", "completed", "failed"],
       assessment_status: [
