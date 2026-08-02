@@ -176,6 +176,9 @@ describe("Sprint 03 migration security", () => {
       "UNIQUE (organisation_id, workspace_id, assessment_session_id",
     );
     expect(eligibilityMigration).toContain("status = 'ineligible' AND analysis_run_id IS NULL");
+    expect(eligibilityMigration).toMatch(
+      /SET status = 'ineligible'[\s\S]*analysis_run_id = NULL[\s\S]*delivered_at = NULL/,
+    );
     expect(eligibilityMigration).toContain(
       "ALTER TABLE public.assessment_analysis_eligibility_decisions ENABLE ROW LEVEL SECURITY",
     );
