@@ -68,6 +68,20 @@ const eligibilityHardening = readFileSync(
   ),
   "utf8",
 );
+const catalogueMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803010000_recommendation_catalogue_governance.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const catalogueHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803011000_harden_recommendation_catalogue_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -197,5 +211,22 @@ describe("Sprint 03 migration security", () => {
     expect(eligibilityRemediation).not.toContain("INTO v_handoff, v_manifest_digest");
     expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_runs/);
     expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_events/);
+  });
+
+  it("governs catalogue promotion with immutable history and least privilege", () => {
+    expect(catalogueMigration).toContain("pg_advisory_xact_lock");
+    expect(catalogueMigration).toContain("CATALOGUE_SELF_APPROVAL_DENIED");
+    expect(catalogueMigration).toContain("recommendation_catalogue_version_immutable");
+    expect(catalogueMigration).toContain("UNIQUE (catalogue_id, version)");
+    expect(catalogueMigration).toContain("PRIMARY KEY (environment, recommendation_id)");
+    expect(catalogueMigration).not.toContain("CREATE POLICY");
+    expect(catalogueHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(catalogueHardening).toContain("REVOKE MAINTAIN");
+    expect(catalogueHardening).toContain(
+      "GRANT SELECT ON public.recommendation_catalogue_versions",
+    );
+    expect(catalogueHardening).not.toContain(
+      "GRANT ALL ON public.recommendation_catalogue_versions",
+    );
   });
 });
