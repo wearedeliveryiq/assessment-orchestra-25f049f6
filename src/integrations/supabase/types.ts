@@ -1418,6 +1418,212 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_intelligence_results: {
+        Row: {
+          analysis_run_id: string
+          canonical_result: Json
+          configuration_digest: string
+          configuration_set_id: string
+          created_at: string
+          engine_version: string
+          id: string
+          organisation_id: string
+          published_at: string
+          result_hash: string
+          schema_version: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          canonical_result: Json
+          configuration_digest: string
+          configuration_set_id: string
+          created_at?: string
+          engine_version: string
+          id?: string
+          organisation_id: string
+          published_at?: string
+          result_hash: string
+          schema_version: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          canonical_result?: Json
+          configuration_digest?: string
+          configuration_set_id?: string
+          created_at?: string
+          engine_version?: string
+          id?: string
+          organisation_id?: string
+          published_at?: string
+          result_hash?: string
+          schema_version?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_intelligence_results_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: true
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_results_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_results_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_intelligence_trace_edges: {
+        Row: {
+          analysis_run_id: string
+          created_at: string
+          edge_type: string
+          id: string
+          organisation_id: string
+          payload: Json
+          source_node_id: string
+          target_node_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          created_at?: string
+          edge_type: string
+          id?: string
+          organisation_id: string
+          payload?: Json
+          source_node_id: string
+          target_node_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          created_at?: string
+          edge_type?: string
+          id?: string
+          organisation_id?: string
+          payload?: Json
+          source_node_id?: string
+          target_node_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_intelligence_trace_edges_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_edges_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_edges_source_node_id_fkey"
+            columns: ["source_node_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_intelligence_trace_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_edges_target_node_id_fkey"
+            columns: ["target_node_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_intelligence_trace_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_edges_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_intelligence_trace_nodes: {
+        Row: {
+          analysis_run_id: string
+          configuration_set_id: string
+          content_hash: string
+          created_at: string
+          domain_id: string
+          domain_version: string
+          id: string
+          node_type: string
+          organisation_id: string
+          payload: Json
+          visible: boolean
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          configuration_set_id: string
+          content_hash: string
+          created_at?: string
+          domain_id: string
+          domain_version: string
+          id?: string
+          node_type: string
+          organisation_id: string
+          payload: Json
+          visible?: boolean
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          configuration_set_id?: string
+          content_hash?: string
+          created_at?: string
+          domain_id?: string
+          domain_version?: string
+          id?: string
+          node_type?: string
+          organisation_id?: string
+          payload?: Json
+          visible?: boolean
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_intelligence_trace_nodes_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_nodes_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_intelligence_trace_nodes_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       identity_audit_events: {
         Row: {
           created_at: string
@@ -3227,6 +3433,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_read_delivery_intelligence: {
+        Args: { p_organisation_id: string; p_workspace_id: string }
+        Returns: boolean
+      }
       claim_assessment_analysis_run: {
         Args: {
           p_lease_owner: string
@@ -3399,6 +3609,61 @@ export type Database = {
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
+      }
+      publish_delivery_intelligence_result: {
+        Args: {
+          p_canonical_result: Json
+          p_lease_owner: string
+          p_result_hash: string
+          p_run_id: string
+          p_trace_edges: Json
+          p_trace_nodes: Json
+        }
+        Returns: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_runs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       retry_assessment_analysis_run: {
         Args: { p_run_id: string }
