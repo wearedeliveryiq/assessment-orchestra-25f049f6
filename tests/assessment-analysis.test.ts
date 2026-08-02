@@ -119,6 +119,26 @@ describe("S3-001 assessment analysis pipeline", () => {
     });
   });
 
+  it("preserves explicit missing, not-applicable and excluded evidence semantics", () => {
+    for (const status of ["missing", "not_applicable", "excluded"] as const) {
+      const canonical = normaliseAnalysisInput({
+        session,
+        pack,
+        responses: responses.map((response, index) =>
+          index === 0
+            ? { ...response, value: null, score: null, evidenceStatus: status }
+            : response,
+        ),
+      });
+      expect(
+        canonical.responses.find((item) => item.questionId === responses[0].questionId),
+      ).toMatchObject({
+        status,
+        value: null,
+      });
+    }
+  });
+
   it("creates one queued immutable snapshot and emits a correlated event", async () => {
     const { service, stored, events } = harness();
     const result = await service.request(

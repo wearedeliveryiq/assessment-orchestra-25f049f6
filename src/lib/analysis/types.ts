@@ -12,7 +12,7 @@ export interface CanonicalAnalysisResponse {
   questionVersion: string;
   sectionId: string;
   value: string | number | null;
-  status: "answered" | "not_applicable" | "excluded";
+  status: "answered" | "not_applicable" | "excluded" | "missing";
   exclusionReason: string | null;
   respondentGroupId: string | null;
   evidenceAt: string | null;

@@ -1,5 +1,19 @@
 # Sprint 03 Acceptance Matrix
 
+## PDR-003-002 — Analysis Eligibility Policy
+
+| Requirement                                                  | Implementation evidence                                                         | Test evidence                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Exact completed Delivery DNA / pack / question-set identity  | `src/lib/analysis/eligibility.ts`, `src/lib/analysis/handoff-service.server.ts` | `tests/analysis-eligibility.test.ts`                          |
+| Exact 39-ID manifest; missing/extra/duplicate/alias rejected | DIQ-203A-derived `configuredQuestionIds`                                        | manifest cases in `tests/analysis-eligibility.test.ts`        |
+| Explicit evidence semantics preserved                        | `src/lib/analysis/normalizer.ts`, `src/lib/analysis/types.ts`                   | analysis normalizer and golden regression suites              |
+| Immutable tenant-scoped decision                             | `20260802161000_analysis_eligibility_decisions.sql`                             | migration/security contract tests                             |
+| Terminal ineligible; no run and no retry                     | hand-off service, repository RPC and UI state                                   | `tests/analysis-handoff.test.ts`                              |
+| Locked reasons, precedence, copy and actions                 | evaluator and Delivery Intelligence dashboard                                   | eligibility and dashboard source-contract tests               |
+| Legacy 1.4.0 remains outside Sprint 03                       | deterministic identity checks                                                   | legacy hand-off integration case                              |
+| Named failed-run remediation without history mutation        | `20260802161500_remediate_locked_ineligible_analysis.sql`                       | migration contract plus live deployment verification required |
+| Least privilege, privacy and tenant isolation                | RLS, service-role-only RPCs, digest-only decision                               | migration/security and cross-tenant tests                     |
+
 Evidence baseline: branch `agent/sprint-03-foundation`, 2 August 2026.
 
 | Story  | Status | Implementation and acceptance evidence                                                                                                                                                     |
