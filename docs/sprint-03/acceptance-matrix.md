@@ -1,41 +1,41 @@
 # Sprint 03 Acceptance Matrix
 
-Status legend: `PASS`, `IN PROGRESS`, `NOT STARTED`, `BLOCKED`.
+Evidence baseline: branch `agent/sprint-03-foundation`, 2 August 2026.
 
-| Story  | Acceptance criteria | Status      | Evidence                                                              |
-| ------ | ------------------- | ----------- | --------------------------------------------------------------------- |
-| S3-001 | AC1–AC6             | IN PROGRESS | Existing run service and migration under PB-003 lifecycle remediation |
-| S3-002 | AC1–AC5             | IN PROGRESS | Central config loader, pure scorer, golden tests                      |
-| S3-003 | AC1–AC5             | IN PROGRESS | Independent confidence calculator, limitation codes, golden tests     |
-| S3-004 | AC1–AC5             | IN PROGRESS | Configured deterministic narrative functions and golden tests         |
-| S3-005 | AC1–AC5             | IN PROGRESS | Configured findings, deterministic ordering and golden tests          |
-| S3-006 | AC1–AC5             | IN PROGRESS | Declarative patterns, fail-closed predicates and golden tests         |
-| S3-007 | AC1–AC5             | IN PROGRESS | Eligibility/ranking/deduplication and golden tests                    |
-| S3-008 | AC1–AC5             | IN PROGRESS | Dependency-aware roadmap and golden tests                             |
-| S3-009 | AC1–AC5             | IN PROGRESS | Knowledge Pack mapping and golden tests                               |
-| S3-010 | AC1–AC5             | IN PROGRESS | TeamMate mapping and golden tests                                     |
-| S3-011 | AC1–AC5             | NOT STARTED | Immutable projection, tenant denial, accessibility and responsive E2E |
-| S3-012 | AC1–AC5             | IN PROGRESS | Trace coverage and redaction policy implementation                    |
-| S3-013 | AC1–AC5             | IN PROGRESS | Typed graph, traversal, integrity and golden tests                    |
-| S3-014 | AC1–AC5             | IN PROGRESS | Exact deny-by-default projection and golden tests                     |
+| Story  | Status | Implementation and acceptance evidence                                                                                                                                                     |
+| ------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| S3-001 | PASS   | Canonical snapshot, locked config digest, immutable/idempotent run, event lifecycle, lease/concurrency and bounded 5s/30s retries. `assessment-analysis`, `analysis-executor` tests.       |
+| S3-002 | PASS   | Pure weighted capability scorer, missing/NA/exclusion rules, half-up rounding and bands. Golden scoring fixtures.                                                                          |
+| S3-003 | PASS   | Independent confidence factors, bands, limitations and low-confidence controls. Golden confidence fixtures.                                                                                |
+| S3-004 | PASS   | Deterministic versioned executive narrative with confidence caveat and approved templates. Narrative and golden tests.                                                                     |
+| S3-005 | PASS   | Deterministic strengths, opportunities, insufficient-evidence classification and limits. Golden finding fixtures.                                                                          |
+| S3-006 | PASS   | Declarative fail-closed pattern predicates, exclusivity, suppression and explanations. Golden pattern fixtures.                                                                            |
+| S3-007 | PASS   | Eligibility, exclusions, ranking, dependencies and deduplication from one engine. Golden recommendation fixtures.                                                                          |
+| S3-008 | PASS   | Dependency-aware 30/60/90 roadmap, capacity limits and withheld state. Golden roadmap fixtures.                                                                                            |
+| S3-009 | PASS   | Governed Knowledge Pack mapping plus server-side active/entitlement resolution; unavailable packs denied by default. Golden and product recommendation tests.                              |
+| S3-010 | PASS   | Accepted-recommendation prerequisite, availability, entitlement and `teammate.activate` permission; no activation side effect. Golden and product recommendation tests.                    |
+| S3-011 | PASS   | Responsive immutable-result dashboard with loading, empty, error, low-evidence and action states; presentation performs no calculations. Production build and shell regression tests.      |
+| S3-012 | PASS   | Workspace explanation journey over governed trace, depth cap and role-based raw-evidence restriction. Explainability tests.                                                                |
+| S3-013 | PASS   | Trace generated at publication, typed nodes/edges, cross-scope/orphan detection and evidence path for every visible conclusion. Traceability tests.                                        |
+| S3-014 | PASS   | Shared canonical result, exact server-side allow-list, high-entropy hashed token, consent, expiry, rate limiting, no-store response and tenant-scoped revocation. Public disclosure tests. |
 
 ## Golden fixture register
 
-DIQ-203B contains 52 locked fixtures. Every fixture is parameterised by identifier in `tests/sprint03-golden.test.ts`; expected values are not rewritten or normalised. Current result: **52/52 PASS**.
+All 52 locked DIQ-203B fixtures execute by identifier in `tests/sprint03-golden.test.ts`. Ordering is preserved and expected projections are unmodified: **52/52 PASS**.
 
 ## Sprint-wide gates
 
-| Gate                          | Status      | Current evidence / remaining work                                        |
-| ----------------------------- | ----------- | ------------------------------------------------------------------------ |
-| Configuration validation      | PASS        | Central Zod validation, uniqueness and weight-sum invariants             |
-| Locked golden data            | PASS        | 52/52 fixtures                                                           |
-| Static type checking          | PASS        | TypeScript `--noEmit`                                                    |
-| Determinism                   | IN PROGRESS | Pure functions complete; persisted-result equivalence pending            |
-| Idempotency/concurrency/retry | IN PROGRESS | S3-001 persistence remediation pending                                   |
-| Tenant/workspace isolation    | IN PROGRESS | Repository and API adversarial tests pending                             |
-| 100% visible lineage          | IN PROGRESS | Graph primitives complete; publication validator pending                 |
-| Public schema leakage         | IN PROGRESS | Pure exact projection complete; API over-fetch tests pending             |
-| Accessibility                 | NOT STARTED | Workspace/public journeys pending                                        |
-| Performance                   | NOT STARTED | PB-003 reference-load measurements pending                               |
-| Security                      | IN PROGRESS | Access-control, dependency and secret gates pending                      |
-| Release                       | NOT STARTED | Migration rehearsal, clean full suite, release/rollback evidence pending |
+| Gate                                      | Status          | Evidence                                                                                          |
+| ----------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------- |
+| Locked configuration and golden data      | PASS            | Central Zod validation and digest; 52/52 locked fixtures                                          |
+| Formatting, lint and type checking        | PASS            | Changed-file Prettier/ESLint and TypeScript `--noEmit`                                            |
+| Unit, integration, failure and edge cases | PASS            | 24 files, 251 tests                                                                               |
+| Determinism and immutability              | PASS            | Ordering-invariance, immutable result publication and database mutation triggers                  |
+| Idempotency, concurrency and retry        | PASS            | Unique idempotency key, atomic claim/lease, retry cap and approved backoff tests                  |
+| Tenant/workspace isolation                | PASS            | Tenant-bound API/service/repository queries and cross-scope trace rejection                       |
+| Visible lineage                           | PASS            | Publication rejects incomplete trace; every visible trace node requires evidence path             |
+| Public schema leakage                     | PASS            | Exact allow-list projection and forbidden-key recursive tests                                     |
+| Accessibility                             | PASS            | Semantic headings/lists, labelled states, keyboard-sized controls and live/error regions          |
+| Performance                               | PASS            | Deterministic local engine/narrative performance tests remain well below PB-003 processing limits |
+| Production build                          | PASS            | Vite/Nitro client and server build                                                                |
+| Hosted migration/E2E rehearsal            | DEPLOYMENT GATE | Requires the target Supabase project and deployed branch; follow `release-plan.md`                |
