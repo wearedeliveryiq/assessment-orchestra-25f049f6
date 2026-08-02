@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AnalysisRunExecutor,
   classifyExecutionFailure,
+  isRetryDue,
+  retryDelayMs,
   type AnalysisExecutorDependencies,
 } from "@/lib/analysis/executor.server";
 import type { AssessmentAnalysisRun } from "@/lib/analysis/types";
@@ -14,6 +16,20 @@ const run = {
   configurationSetId: "sprint03-product-config-1.0.0",
   inputHash: "a".repeat(64),
 } as AssessmentAnalysisRun;
+
+describe("retry schedule", () => {
+  it("applies the locked bounded backoff", () => {
+    expect(retryDelayMs(1)).toBe(5_000);
+    expect(retryDelayMs(2)).toBe(30_000);
+    expect(retryDelayMs(3)).toBeNull();
+    expect(
+      isRetryDue(
+        { status: "failed", retryable: true, attempt: 1, failedAt: "2026-08-02T00:00:00Z" },
+        Date.parse("2026-08-02T00:00:05Z"),
+      ),
+    ).toBe(true);
+  });
+});
 
 function harness(publish: () => Promise<AssessmentAnalysisRun>) {
   const events: string[] = [];

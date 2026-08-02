@@ -97,6 +97,27 @@ export function classifyExecutionFailure(error: unknown) {
   };
 }
 
+/** Approved retry schedule: first transient retry after 5s, second after 30s. */
+export function retryDelayMs(attempt: number): number | null {
+  if (attempt === 1) return 5_000;
+  if (attempt === 2) return 30_000;
+  return null;
+}
+
+export function isRetryDue(
+  run: Pick<AssessmentAnalysisRun, "status" | "retryable" | "attempt" | "failedAt">,
+  now = Date.now(),
+) {
+  const delay = retryDelayMs(run.attempt);
+  return (
+    run.status === "failed" &&
+    run.retryable === true &&
+    delay != null &&
+    run.failedAt != null &&
+    now >= new Date(run.failedAt).getTime() + delay
+  );
+}
+
 export async function driveAnalysisRun(runId: string): Promise<AssessmentAnalysisRun | null> {
   const current = locallyRunning.get(runId);
   if (current) return current;

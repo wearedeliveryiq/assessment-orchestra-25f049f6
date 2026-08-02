@@ -78,6 +78,15 @@ export function getAnalysisRun(request: Request, runId: string): Promise<Respons
   return safe(async () => {
     const verified = await context(request, false);
     let run = await assessmentAnalysisService.get(runId, verified);
+    if (run.status === "failed" && run.retryable) {
+      const { driveAnalysisRun, isRetryDue } = await import("./executor.server");
+      if (isRetryDue(run)) {
+        const { retryRun } = await import("./repository.server");
+        const queued = await retryRun(run.id);
+        if (queued) await driveAnalysisRun(run.id);
+        run = await assessmentAnalysisService.get(runId, verified);
+      }
+    }
     if (run.status === "queued" || run.status === "running") {
       const { driveAnalysisRun } = await import("./executor.server");
       await driveAnalysisRun(run.id);
