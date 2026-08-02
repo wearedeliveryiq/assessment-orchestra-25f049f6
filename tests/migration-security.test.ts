@@ -23,6 +23,13 @@ const resultHardening = readFileSync(
   ),
   "utf8",
 );
+const finalHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802060000_harden_sprint03_cloud_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -72,5 +79,17 @@ describe("Sprint 03 migration security", () => {
       "GRANT EXECUTE ON FUNCTION public.can_read_delivery_intelligence(uuid, uuid)",
     );
     expect(resultHardening).toContain("TO authenticated, service_role");
+  });
+
+  it("denies client access to operational product and public-projection storage", () => {
+    expect(finalHardening).toContain(
+      "public.analysis_recommendation_acceptances FROM anon, authenticated",
+    );
+    expect(finalHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.resolve_delivery_dna_public_result(text, text)",
+    );
+    expect(finalHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(finalHardening).toContain("REVOKE MAINTAIN ON TABLE");
+    expect(finalHardening).toContain("FROM authenticated");
   });
 });
