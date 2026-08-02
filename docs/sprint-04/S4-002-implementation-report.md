@@ -48,7 +48,7 @@ All three tables use RLS with no client policies. `anon` and `authenticated` rec
 
 - Requires an authenticated active workspace context and `assessment:read`.
 - Returns only eligible rationale to normal customers.
-- Returns all terminal evaluations, decisive facts, hashes and trace IDs only to `audit:read` or `recommendation:govern` callers.
+- Returns all terminal evaluations, decisive facts, hashes and trace IDs only to callers with `audit:read`; catalogue governance alone never unlocks tenant evaluation audit detail.
 - Uses non-enumerating analysis-run access checks.
 
 `POST /api/analysis-runs/{runId}/recommendation-evaluation`

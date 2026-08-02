@@ -8,7 +8,7 @@ Implemented a governed, immutable recommendation catalogue lifecycle around the 
 
 - Reuses the validated DIQ-203A loader as the authoritative initial catalogue source.
 - Keeps catalogue governance separate from tenant availability and analysis results.
-- Uses the existing identity platform and adds `recommendation:govern` only to `platform_admin`.
+- Uses the existing identity platform and grants `recommendation:govern` only through the dedicated, non-tenant `product_governance` role.
 - Uses service-role-only database functions, deny-by-default RLS and existing immutable-audit triggers.
 
 ## Delivered
@@ -28,15 +28,19 @@ Implemented a governed, immutable recommendation catalogue lifecycle around the 
 - `anon` and `authenticated` receive no table, sequence or function privileges.
 - Only server-side product-governance handlers can invoke service-role operations.
 - Tenant data is not read by catalogue governance.
+- Organisation/workspace membership and invitation constraints reject `product_governance`.
+- `platform_admin` no longer implies product-governance authority; duties are explicitly provisioned.
 
 ## Verification
 
-- S4-001 focused domain and security suite: 22/22 passed.
-- Full regression suite: 296/296 passed across 28 test files, including all 53 DIQ-203B fixtures.
+- Product Governance and affected catalogue/security suites: 42/42 passed.
+- Full regression suite: 317/317 passed across 30 test files, including all 53 DIQ-203B harness tests.
 - Static type checking: passed.
 - Changed-file lint and formatting: passed.
 - Production client/server/task build: passed.
-- Live migration, grant and concurrent-promotion rehearsal: pending Lovable Cloud deployment.
+- Original S4-001 live migrations and promotion/rollback rehearsal: passed.
+- Product Governance role migrations and live isolation verification: pending Lovable Cloud deployment.
+- Full-repository lint: 615 inherited errors and 15 warnings outside this remediation; recorded limitation, with changed files clean.
 
 ## Deployment
 
@@ -45,7 +49,7 @@ Apply separately through Lovable Cloud:
 1. `20260803010000_recommendation_catalogue_governance.sql`
 2. `20260803011000_harden_recommendation_catalogue_permissions.sql`
 
-Then regenerate Supabase types, verify grants and use two different authorised platform administrators to submit/approve the locked `1.0.0` snapshot before activation.
+The two S4-001 migrations are already applied. Apply the Product Governance role remediation migrations, regenerate Supabase types, verify isolation and use two different genuine users holding `product_governance` to submit/approve the locked `1.0.0` snapshot before activation.
 
 ## Limitations and debt
 

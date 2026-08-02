@@ -4,7 +4,10 @@ import type { AssessmentAnalysisRun } from "@/lib/analysis/types";
 import { sprint03CatalogueSnapshot } from "@/lib/recommendation-catalogue/catalogue";
 import type { CatalogueVersionRecord } from "@/lib/recommendation-catalogue/types";
 import { evaluatePinnedCatalogue } from "@/lib/recommendation-evaluation/evaluator";
-import { projectRecommendationEvaluation } from "@/lib/recommendation-evaluation/projection";
+import {
+  canViewRecommendationEvaluationAudit,
+  projectRecommendationEvaluation,
+} from "@/lib/recommendation-evaluation/projection";
 import {
   RecommendationEvaluationService,
   type RecommendationEvaluationDependencies,
@@ -291,5 +294,13 @@ describe("S4-002 persistence and projection service", () => {
     expect(customer.candidates[0]).not.toHaveProperty("traceIds");
     expect(audit.candidates).toHaveLength(2);
     expect(audit.candidates[0]).toHaveProperty("traceIds", ["trace-1"]);
+  });
+
+  it("reserves tenant evaluation audit detail for audit permission", () => {
+    expect(canViewRecommendationEvaluationAudit(["recommendation:govern"])).toBe(false);
+    expect(canViewRecommendationEvaluationAudit(["assessment:read", "recommendation:govern"])).toBe(
+      false,
+    );
+    expect(canViewRecommendationEvaluationAudit(["audit:read"])).toBe(true);
   });
 });

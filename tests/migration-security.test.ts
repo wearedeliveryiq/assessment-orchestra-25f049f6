@@ -93,6 +93,17 @@ const recommendationEvaluationHardening = readFileSync(
   ),
   "utf8",
 );
+const productGovernanceRoleMigration = readFileSync(
+  new URL("../supabase/migrations/20260803022000_add_product_governance_role.sql", import.meta.url),
+  "utf8",
+);
+const productGovernanceIsolationMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803023000_isolate_product_governance_role.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -260,6 +271,25 @@ describe("Sprint 03 migration security", () => {
     expect(recommendationEvaluationHardening).toContain("REVOKE MAINTAIN");
     expect(recommendationEvaluationHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.publish_recommendation_evaluation(jsonb) TO service_role",
+    );
+  });
+
+  it("keeps product governance outside every tenant role column", () => {
+    expect(productGovernanceRoleMigration).toContain(
+      "ALTER TYPE public.platform_role ADD VALUE IF NOT EXISTS 'product_governance'",
+    );
+    expect(productGovernanceRoleMigration).not.toContain("organisation_memberships");
+    expect(productGovernanceIsolationMigration).toContain(
+      "organisation_memberships_no_product_governance_role",
+    );
+    expect(productGovernanceIsolationMigration).toContain(
+      "organisation_invitations_no_product_governance_role",
+    );
+    expect(productGovernanceIsolationMigration).toContain(
+      "organisation_invitations_no_product_governance_workspace_role",
+    );
+    expect(productGovernanceIsolationMigration).toContain(
+      "workspace_memberships_no_product_governance_role",
     );
   });
 });

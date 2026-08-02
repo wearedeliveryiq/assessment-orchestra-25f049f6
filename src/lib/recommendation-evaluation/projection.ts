@@ -1,5 +1,9 @@
 import type { RecommendationEvaluationRecord } from "./types";
 
+export function canViewRecommendationEvaluationAudit(permissions: readonly string[]): boolean {
+  return permissions.includes("audit:read");
+}
+
 export function projectRecommendationEvaluation(
   record: RecommendationEvaluationRecord,
   canAudit: boolean,
