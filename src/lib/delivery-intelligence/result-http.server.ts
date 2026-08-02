@@ -67,3 +67,32 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
     );
   }
 }
+
+export async function getLatestWorkspaceResult(
+  request: Request,
+  assessmentId: string,
+): Promise<Response> {
+  try {
+    const verified = await assessmentRequestContext(request);
+    const run = await assessmentAnalysisService.latest(assessmentId, {
+      ownerKey: verified.ownerKey,
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      userId: verified.identity.user.id,
+    });
+    if (!run) return json({ analysisRunId: null, status: "empty", result: null }, 404);
+    const target = new URL(request.url);
+    target.pathname = `/api/analysis-runs/${run.id}/result`;
+    return getWorkspaceResult(new Request(target, request), run.id);
+  } catch (error) {
+    if (error instanceof IdentityError)
+      return json({ error: error.message, code: error.code }, error.status);
+    if (error instanceof AnalysisServiceError)
+      return json({ error: error.message, code: error.code }, error.status);
+    console.error("[latest-intelligence-result-api]", error);
+    return json(
+      { error: "Intelligence result failed safely", code: "ANALYSIS_EXECUTION_FAILED" },
+      500,
+    );
+  }
+}
