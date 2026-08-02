@@ -25,6 +25,7 @@ const WORKSPACE_MANAGER = [
   "workspace:read",
   "workspace:manage",
   "workspace:member_manage",
+  "teammate.activate",
 ];
 const ORG_ADMIN = [
   ...WORKSPACE_MANAGER,

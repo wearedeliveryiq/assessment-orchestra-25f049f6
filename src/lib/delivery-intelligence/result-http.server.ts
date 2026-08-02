@@ -3,6 +3,7 @@ import { IdentityError } from "../identity/errors";
 import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/service.server";
 import { getResult } from "./result-repository.server";
 import { projectWorkspaceResult } from "./projection";
+import { resolveProductRecommendations } from "./product-recommendations.server";
 
 const json = (body: unknown, status: number, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -54,7 +55,15 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
         headers: { etag, "cache-control": "private, no-cache" },
       });
     }
-    return json(projectWorkspaceResult(stored), 200, { etag });
+    const projected = projectWorkspaceResult(stored);
+    const productRecommendations = await resolveProductRecommendations({
+      analysisRunId: run.id,
+      organisationId: context.organisationId,
+      workspaceId: context.workspaceId,
+      recommendationIds: projected.recommendations.map((item) => item.id),
+      permissions: verified.identity.permissions,
+    });
+    return json({ ...projected, productRecommendations }, 200, { etag });
   } catch (error) {
     if (error instanceof IdentityError)
       return json({ error: error.message, code: error.code }, error.status);

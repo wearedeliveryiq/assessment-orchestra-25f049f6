@@ -189,6 +189,7 @@ import { Route as ApiReportingReportsIdArchiveRouteImport } from './routes/api/r
 import { Route as ApiReportingReportsIdDownloadRouteImport } from './routes/api/reporting.reports.$id.download'
 import { Route as ApiReportingReportsIdRegenerateRouteImport } from './routes/api/reporting.reports.$id.regenerate'
 import { Route as ApiReportingReportsIdRetryRouteImport } from './routes/api/reporting.reports.$id.retry'
+import { Route as ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRouteImport } from './routes/api/analysis-runs.$id.recommendations.$recommendationId.accept'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -1124,6 +1125,12 @@ const ApiReportingReportsIdRetryRoute =
     path: '/retry',
     getParentRoute: () => ApiReportingReportsIdRoute,
   } as any)
+const ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute =
+  ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRouteImport.update({
+    id: '/recommendations/$recommendationId/accept',
+    path: '/recommendations/$recommendationId/accept',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1306,6 +1313,7 @@ export interface FileRoutesByFullPath {
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
   '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
+  '/api/analysis-runs/$id/recommendations/$recommendationId/accept': typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1488,6 +1496,7 @@ export interface FileRoutesByTo {
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
   '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
+  '/api/analysis-runs/$id/recommendations/$recommendationId/accept': typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1671,6 +1680,7 @@ export interface FileRoutesById {
   '/api/reporting/reports/$id/download': typeof ApiReportingReportsIdDownloadRoute
   '/api/reporting/reports/$id/regenerate': typeof ApiReportingReportsIdRegenerateRoute
   '/api/reporting/reports/$id/retry': typeof ApiReportingReportsIdRetryRoute
+  '/api/analysis-runs/$id/recommendations/$recommendationId/accept': typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1855,6 +1865,7 @@ export interface FileRouteTypes {
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
     | '/api/reporting/reports/$id/retry'
+    | '/api/analysis-runs/$id/recommendations/$recommendationId/accept'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -2037,6 +2048,7 @@ export interface FileRouteTypes {
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
     | '/api/reporting/reports/$id/retry'
+    | '/api/analysis-runs/$id/recommendations/$recommendationId/accept'
   id:
     | '__root__'
     | '/'
@@ -2219,6 +2231,7 @@ export interface FileRouteTypes {
     | '/api/reporting/reports/$id/download'
     | '/api/reporting/reports/$id/regenerate'
     | '/api/reporting/reports/$id/retry'
+    | '/api/analysis-runs/$id/recommendations/$recommendationId/accept'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -3615,6 +3628,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiReportingReportsIdRetryRouteImport
       parentRoute: typeof ApiReportingReportsIdRoute
     }
+    '/api/analysis-runs/$id/recommendations/$recommendationId/accept': {
+      id: '/api/analysis-runs/$id/recommendations/$recommendationId/accept'
+      path: '/recommendations/$recommendationId/accept'
+      fullPath: '/api/analysis-runs/$id/recommendations/$recommendationId/accept'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
   }
 }
 
@@ -3622,12 +3642,15 @@ interface ApiAnalysisRunsIdRouteChildren {
   ApiAnalysisRunsIdExplanationsRoute: typeof ApiAnalysisRunsIdExplanationsRoute
   ApiAnalysisRunsIdPublicResultRoute: typeof ApiAnalysisRunsIdPublicResultRoute
   ApiAnalysisRunsIdResultRoute: typeof ApiAnalysisRunsIdResultRoute
+  ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute: typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
 }
 
 const ApiAnalysisRunsIdRouteChildren: ApiAnalysisRunsIdRouteChildren = {
   ApiAnalysisRunsIdExplanationsRoute: ApiAnalysisRunsIdExplanationsRoute,
   ApiAnalysisRunsIdPublicResultRoute: ApiAnalysisRunsIdPublicResultRoute,
   ApiAnalysisRunsIdResultRoute: ApiAnalysisRunsIdResultRoute,
+  ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute:
+    ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute,
 }
 
 const ApiAnalysisRunsIdRouteWithChildren =

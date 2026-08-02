@@ -1,7 +1,12 @@
 import { assessmentAuthHeaders } from "../identity/assessment-auth";
 import type { projectWorkspaceResult } from "./projection";
 
-export type WorkspaceIntelligenceResult = ReturnType<typeof projectWorkspaceResult>;
+export type WorkspaceIntelligenceResult = ReturnType<typeof projectWorkspaceResult> & {
+  productRecommendations: {
+    knowledgePacks: Array<{ id: string; rank: number; cta: string; copy: string }>;
+    teamMates: Array<{ id: string; cta: string; copy: string }>;
+  };
+};
 
 export async function fetchLatestIntelligence(
   assessmentId: string,
@@ -19,4 +24,12 @@ export async function fetchLatestIntelligence(
           : `Request failed (${response.status})`),
     );
   return body as WorkspaceIntelligenceResult;
+}
+
+export async function acceptIntelligenceRecommendation(runId: string, recommendationId: string) {
+  const response = await fetch(
+    `/api/analysis-runs/${runId}/recommendations/${recommendationId}/accept`,
+    { method: "POST", headers: await assessmentAuthHeaders() },
+  );
+  if (!response.ok) throw new Error("The recommendation could not be accepted.");
 }

@@ -1,18 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import {
   fetchLatestIntelligence,
+  acceptIntelligenceRecommendation,
   type WorkspaceIntelligenceResult,
 } from "@/lib/delivery-intelligence/client";
 import { useHydrated } from "@/hooks/use-hydrated";
 
 export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: string }) {
   const hydrated = useHydrated();
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["delivery-intelligence", assessmentId],
     queryFn: () => fetchLatestIntelligence(assessmentId),
     enabled: hydrated,
     staleTime: 60_000,
+  });
+  const acceptance = useMutation({
+    mutationFn: (recommendationId: string) =>
+      acceptIntelligenceRecommendation(query.data!.analysisRunId, recommendationId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] }),
   });
   if (!hydrated || query.isPending)
     return (
@@ -156,6 +164,14 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
                     <p className="mt-2 text-xs capitalize text-muted-foreground">
                       {item.impact} impact · {item.effort} effort
                     </p>
+                    <button
+                      type="button"
+                      className="mt-3 min-h-11 rounded-lg border border-border px-3 text-sm font-medium"
+                      disabled={acceptance.isPending}
+                      onClick={() => acceptance.mutate(item.id)}
+                    >
+                      Accept recommendation
+                    </button>
                   </div>
                 </div>
               </li>
@@ -167,8 +183,49 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           </p>
         )}
       </section>
+      <ProductPanel
+        title="Recommended Knowledge Packs"
+        items={result.productRecommendations.knowledgePacks}
+        empty="No currently available Knowledge Pack matches these priorities."
+      />
+      <ProductPanel
+        title="Recommended Team Mates"
+        items={result.productRecommendations.teamMates}
+        empty="Accept a recommendation to review an available Team Mate."
+      />
       <Roadmap result={result.roadmap} />
     </div>
+  );
+}
+
+function ProductPanel({
+  title,
+  items,
+  empty,
+}: {
+  title: string;
+  items: Array<{ id: string; cta: string; copy: string }>;
+  empty: string;
+}) {
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <h2 className="text-xl font-semibold">{title}</h2>
+      {items.length ? (
+        <ul className="mt-4 space-y-3">
+          {items.map((item) => (
+            <li key={item.id} className="rounded-xl border border-border/70 p-4">
+              <h3 className="font-medium">{item.id.replaceAll("_", " ")}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{item.copy}</p>
+              <span className="mt-3 inline-block text-sm font-medium text-primary">
+                {item.cta.replaceAll("_", " ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-3 text-sm text-muted-foreground">{empty}</p>
+      )}
+    </section>
   );
 }
 
