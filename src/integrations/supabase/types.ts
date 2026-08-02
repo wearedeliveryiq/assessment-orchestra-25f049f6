@@ -1418,6 +1418,102 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_dna_public_access_events: {
+        Row: {
+          id: number
+          ip_hash: string
+          occurred_at: string
+          public_result_id: string
+        }
+        Insert: {
+          id?: never
+          ip_hash: string
+          occurred_at?: string
+          public_result_id: string
+        }
+        Update: {
+          id?: never
+          ip_hash?: string
+          occurred_at?: string
+          public_result_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_public_access_events_public_result_id_fkey"
+            columns: ["public_result_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_dna_public_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_dna_public_results: {
+        Row: {
+          analysis_run_id: string
+          audience: string
+          consented_by_user_id: string
+          created_at: string
+          disclosure_version: string
+          expires_at: string
+          id: string
+          organisation_id: string
+          public_projection: Json
+          revoked_at: string | null
+          token_hash: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          audience: string
+          consented_by_user_id: string
+          created_at?: string
+          disclosure_version: string
+          expires_at: string
+          id?: string
+          organisation_id: string
+          public_projection: Json
+          revoked_at?: string | null
+          token_hash: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          audience?: string
+          consented_by_user_id?: string
+          created_at?: string
+          disclosure_version?: string
+          expires_at?: string
+          id?: string
+          organisation_id?: string
+          public_projection?: Json
+          revoked_at?: string | null
+          token_hash?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_public_results_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_public_results_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_public_results_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_intelligence_results: {
         Row: {
           analysis_run_id: string
@@ -3664,6 +3760,10 @@ export type Database = {
           isOneToOne: false
           isSetofReturn: true
         }
+      }
+      resolve_delivery_dna_public_result: {
+        Args: { p_ip_hash: string; p_token_hash: string }
+        Returns: Json
       }
       retry_assessment_analysis_run: {
         Args: { p_run_id: string }
