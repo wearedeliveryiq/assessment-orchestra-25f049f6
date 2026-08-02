@@ -19,6 +19,7 @@ Implemented the locked Sprint 03 Analysis Eligibility Policy as a deterministic,
 - Added immutable eligibility decisions, terminal hand-off state, append-only audit events and least-privilege grants.
 - Added guarded remediation for run `b822ce85-f2bf-4cde-ba2f-b8abc31713cf`; the migration aborts unless run, tenant, workspace, assessment revision, hand-off and legacy product identity all match. It does not update the run or its events.
 - The terminal transition clears the previous hand-off `delivered_at` marker as well as its run linkage before setting `ineligible`, satisfying the locked terminal-state constraint. This changes only the mutable hand-off resolution; immutable run and event history remain untouched.
+- The guarded remediation selects its composite hand-off and calculated digest into one PL/pgSQL record before assigning the typed variables, matching the syntax verified by the Lovable Cloud execution.
 - Added the locked ineligible customer message, support reference and authorised assessment action. Starting a new Delivery DNA assessment remains hidden because no approved Delivery DNA 1.0.0 collection journey is available in this repository.
 
 ## Security and privacy
