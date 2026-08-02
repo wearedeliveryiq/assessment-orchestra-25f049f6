@@ -4,7 +4,8 @@
 
 - Back up the database and confirm both S4-001 migrations have passed read-only preflight.
 - Confirm the source snapshot is the locked DIQ-203A `sprint03-product-config-1.0.0` catalogue.
-- Nominate two different users with `platform_admin` and `recommendation:govern`: author and approver.
+- Nominate two different genuine users with the dedicated `product_governance` role: author and approver.
+- Confirm neither identity receives tenant membership as part of governance provisioning. `platform_admin` alone does not grant catalogue governance.
 
 ## Promotion
 
@@ -15,6 +16,13 @@
 5. Activate with a new idempotency key.
 6. Verify one active row per recommendation ID in `production`, the lifecycle events, approval identity and immutable snapshot.
 7. Re-submit each command to confirm idempotent replay and run a concurrent activation attempt to confirm only one winner.
+
+## Governance identity provisioning
+
+- Provision `product_governance` only in `user_roles` through the approved service-role administration process.
+- Do not place `product_governance` in organisation memberships, workspace memberships or invitations; database constraints reject it.
+- A governance identity may separately hold customer membership, but that membership is independently authorised and does not make tenant evaluation audit detail available through `recommendation:govern`.
+- Record the two genuine identities and their author/approver duties in the release evidence before production activation.
 
 ## Rollback
 

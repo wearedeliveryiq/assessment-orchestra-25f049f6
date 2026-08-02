@@ -2,7 +2,10 @@ import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/ser
 import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
-import { projectRecommendationEvaluation } from "./projection";
+import {
+  canViewRecommendationEvaluationAudit,
+  projectRecommendationEvaluation,
+} from "./projection";
 import {
   recommendationEvaluationService,
   RecommendationEvaluationServiceError,
@@ -59,9 +62,7 @@ export async function getRecommendationEvaluation(request: Request, runId: strin
         404,
       );
     }
-    const canAudit =
-      verified.identity.permissions.includes("audit:read") ||
-      verified.identity.permissions.includes("recommendation:govern");
+    const canAudit = canViewRecommendationEvaluationAudit(verified.identity.permissions);
     return json(projectRecommendationEvaluation(evaluation, canAudit), 200);
   } catch (error) {
     return failure(error);
@@ -72,9 +73,7 @@ export async function postRecommendationEvaluation(request: Request, runId: stri
   try {
     const { verified, run } = await context(request, runId);
     const result = await recommendationEvaluationService.evaluate(run);
-    const canAudit =
-      verified.identity.permissions.includes("audit:read") ||
-      verified.identity.permissions.includes("recommendation:govern");
+    const canAudit = canViewRecommendationEvaluationAudit(verified.identity.permissions);
     return json(
       { ...projectRecommendationEvaluation(result.evaluation, canAudit), reused: result.reused },
       result.reused ? 200 : 201,

@@ -11,6 +11,8 @@ export interface RoleDefinition {
   role: PlatformRole;
   label: string;
   description: string;
+  /** Platform roles are never valid organisation or workspace membership roles. */
+  scope: "platform" | "tenant";
   /** Higher rank implies a broader remit; used for role-change guard rails. */
   rank: number;
   permissions: string[];
@@ -43,22 +45,32 @@ const PLATFORM_ADMIN = [
   "platform:manage",
   "organisation:create",
   "audit:read",
-  "recommendation:govern",
   "user:manage",
 ];
+const PRODUCT_GOVERNANCE = ["recommendation:govern"];
 
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     role: "platform_admin",
     label: "Platform Administrator",
     description: "Full control of the platform, tenants and identity administration.",
+    scope: "platform",
     rank: 70,
     permissions: PLATFORM_ADMIN,
+  },
+  {
+    role: "product_governance",
+    label: "Product Governance",
+    description: "Authors and approves governed product configuration without tenant access.",
+    scope: "platform",
+    rank: 0,
+    permissions: PRODUCT_GOVERNANCE,
   },
   {
     role: "organisation_owner",
     label: "Organisation Owner",
     description: "Owns an organisation, its subscription and its administrators.",
+    scope: "tenant",
     rank: 60,
     permissions: ORG_OWNER,
   },
@@ -66,6 +78,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "org_admin",
     label: "Organisation Administrator",
     description: "Administers a single organisation, its workspaces, members and invitations.",
+    scope: "tenant",
     rank: 50,
     permissions: ORG_ADMIN,
   },
@@ -73,6 +86,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "workspace_manager",
     label: "Workspace Manager",
     description: "Manages a workspace and the people working inside it.",
+    scope: "tenant",
     rank: 45,
     permissions: WORKSPACE_MANAGER,
   },
@@ -80,6 +94,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "assessment_manager",
     label: "Assessment Manager",
     description: "Creates and manages work within an organisation.",
+    scope: "tenant",
     rank: 40,
     permissions: MANAGER,
   },
@@ -88,6 +103,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "contributor",
     label: "Contributor",
     description: "Contributes content and responses.",
+    scope: "tenant",
     rank: 30,
     permissions: CONTRIBUTOR,
   },
@@ -95,6 +111,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "reviewer",
     label: "Reviewer",
     description: "Reviews and comments without editing.",
+    scope: "tenant",
     rank: 20,
     permissions: REVIEWER,
   },
@@ -102,6 +119,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     role: "read_only",
     label: "Read Only",
     description: "View-only access.",
+    scope: "tenant",
     rank: 10,
     permissions: READ_ONLY,
   },
@@ -143,8 +161,21 @@ export function hasAnyPermission(roles: PlatformRole[], permissions: string[]): 
   return permissions.some((permission) => granted.has(permission));
 }
 
-/** A role may only be assigned by someone whose own rank is greater or equal. */
+/**
+ * Tenant roles may only be assigned by a platform administrator or someone
+ * whose own tenant-role rank is greater or equal. Platform roles use a
+ * separate governed provisioning path and can never be written to membership
+ * records through this guard.
+ */
 export function canAssignRole(actorRoles: PlatformRole[], target: PlatformRole): boolean {
-  const actorRank = Math.max(0, ...actorRoles.map((role) => BY_ROLE.get(role)?.rank ?? 0));
+  if (roleDefinition(target).scope !== "tenant") return false;
+  if (actorRoles.includes("platform_admin")) return true;
+  const actorRank = Math.max(
+    0,
+    ...actorRoles.map((role) => {
+      const definition = BY_ROLE.get(role);
+      return definition?.scope === "tenant" ? definition.rank : 0;
+    }),
+  );
   return actorRank >= roleDefinition(target).rank;
 }
