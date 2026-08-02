@@ -16,12 +16,7 @@
  */
 
 export type EmailOtpType =
-  | "signup"
-  | "invite"
-  | "magiclink"
-  | "recovery"
-  | "email_change"
-  | "email";
+  "signup" | "invite" | "magiclink" | "recovery" | "email_change" | "email";
 
 const OTP_TYPES: readonly EmailOtpType[] = [
   "signup",
@@ -86,6 +81,7 @@ export function parseAuthCallback(
  * crafted link can never bounce a freshly authenticated user off-site.
  */
 export function safeRedirectPath(value: string | null | undefined, fallback = "/"): string {
-  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return fallback;
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//"))
+    return fallback;
   return value;
 }

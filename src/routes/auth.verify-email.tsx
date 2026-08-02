@@ -12,7 +12,10 @@ export const Route = createFileRoute("/auth/verify-email")({
   head: () => ({
     meta: [
       { title: "Verify your email — DeliveryIQ" },
-      { name: "description", content: "Confirm your email address to activate your DeliveryIQ account." },
+      {
+        name: "description",
+        content: "Confirm your email address to activate your DeliveryIQ account.",
+      },
       { property: "og:title", content: "Verify your email — DeliveryIQ" },
       { property: "og:description", content: "Activate your DeliveryIQ account." },
     ],
