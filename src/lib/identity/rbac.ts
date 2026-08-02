@@ -43,6 +43,7 @@ const PLATFORM_ADMIN = [
   "platform:manage",
   "organisation:create",
   "audit:read",
+  "recommendation:govern",
   "user:manage",
 ];
 
