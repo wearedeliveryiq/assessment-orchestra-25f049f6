@@ -72,9 +72,11 @@ export function recommendationConfidenceState(value: number): RecommendationConf
   if (!Number.isFinite(value) || value < 0 || value > 100) {
     throw new RecommendationEvaluationError("Recommendation confidence is outside 0..100");
   }
-  if (value >= 75) return "high";
-  if (value >= 50) return "moderate";
-  return "low";
+  const gates = sprint03Configuration.recommendationPolicy.confidenceGates;
+  if (value >= gates.highMinimum) return "high";
+  if (value >= gates.moderateMinimum && value < gates.highMinimum) return "moderate";
+  if (value < gates.lowMaximumExclusive) return "low";
+  throw new RecommendationEvaluationError("Recommendation confidence does not match a gate");
 }
 
 function validateSignals(input: RecommendationSignalInput) {

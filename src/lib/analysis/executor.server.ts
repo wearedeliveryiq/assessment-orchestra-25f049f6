@@ -3,6 +3,7 @@ import { analyseCanonicalInput } from "../delivery-intelligence/engine";
 import { publishResult } from "../delivery-intelligence/result-repository.server";
 import { buildCoreTrace } from "../delivery-intelligence/trace-builder";
 import { validateTraceGraph } from "../delivery-intelligence/traceability";
+import { recommendationConfidenceGateService } from "../recommendation-confidence/service.server";
 import { recommendationEvaluationService } from "../recommendation-evaluation/service.server";
 import type { AssessmentAnalysisRun } from "./types";
 
@@ -23,6 +24,7 @@ export interface AnalysisExecutorDependencies {
   ): Promise<void>;
   publish(run: AssessmentAnalysisRun, owner: string): Promise<AssessmentAnalysisRun>;
   evaluateRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
+  gateRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
   workerId(): string;
 }
 
@@ -47,6 +49,9 @@ const defaultDependencies: AnalysisExecutorDependencies = {
   evaluateRecommendations: async (run) => {
     await recommendationEvaluationService.evaluate(run);
   },
+  gateRecommendations: async (run) => {
+    await recommendationConfidenceGateService.evaluate(run);
+  },
   workerId: () => `analysis-worker:${crypto.randomUUID()}`,
 };
 
@@ -68,9 +73,11 @@ export class AnalysisRunExecutor {
         configurationSetId: completed.configurationSetId,
         inputHash: completed.inputHash,
       });
+      let recommendationEvaluationCompleted = false;
       if (this.deps.evaluateRecommendations) {
         try {
           await this.deps.evaluateRecommendations(completed);
+          recommendationEvaluationCompleted = true;
           await this.deps.event(completed, "recommendation.evaluation_completed", {
             policyVersion: "PB-004/S4-002/1.0.0",
           });
@@ -78,6 +85,21 @@ export class AnalysisRunExecutor {
           await this.deps.event(
             completed,
             "recommendation.evaluation_failed",
+            { code: "RECOMMENDATION_EVALUATION_INVALID" },
+            "error",
+          );
+        }
+      }
+      if (recommendationEvaluationCompleted && this.deps.gateRecommendations) {
+        try {
+          await this.deps.gateRecommendations(completed);
+          await this.deps.event(completed, "recommendation.confidence_gate_completed", {
+            policyVersion: "PB-004/S4-003/1.0.0",
+          });
+        } catch {
+          await this.deps.event(
+            completed,
+            "recommendation.confidence_gate_failed",
             { code: "RECOMMENDATION_EVALUATION_INVALID" },
             "error",
           );

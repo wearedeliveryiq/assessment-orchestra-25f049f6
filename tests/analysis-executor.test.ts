@@ -93,6 +93,40 @@ describe("S3-001 analysis worker", () => {
     ]);
   });
 
+  it("runs confidence gating only after the base recommendation evaluation", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.evaluateRecommendations).toHaveBeenCalledBefore(
+      vi.mocked(dependencies.gateRecommendations),
+    );
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_completed",
+    ]);
+  });
+
+  it("does not roll back completed analysis when confidence gating fails", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => {
+      throw new Error("confidence lineage unavailable");
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_failed",
+    ]);
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),

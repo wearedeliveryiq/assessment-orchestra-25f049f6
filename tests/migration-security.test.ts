@@ -104,6 +104,20 @@ const productGovernanceIsolationMigration = readFileSync(
   ),
   "utf8",
 );
+const recommendationConfidenceGateMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803030000_recommendation_confidence_gates.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationConfidenceGateHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803031000_harden_recommendation_confidence_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -290,6 +304,34 @@ describe("Sprint 03 migration security", () => {
     );
     expect(productGovernanceIsolationMigration).toContain(
       "workspace_memberships_no_product_governance_role",
+    );
+  });
+
+  it("publishes immutable tenant-scoped confidence gates with complete lineage", () => {
+    expect(recommendationConfidenceGateMigration).toContain(
+      "recommendation_confidence_gates_immutable",
+    );
+    expect(recommendationConfidenceGateMigration).toContain(
+      "recommendation_candidate_confidence_gates_immutable",
+    );
+    expect(recommendationConfidenceGateMigration).toContain(
+      "recommendation_confidence_gate_trace_links_immutable",
+    );
+    expect(recommendationConfidenceGateMigration).toContain(
+      "v_evaluation.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationConfidenceGateMigration).toContain(
+      "v_confidence_trace.domain_id <> 'confidence'",
+    );
+    expect(recommendationConfidenceGateMigration).toContain(
+      "jsonb_array_length(p_input -> 'candidates') <> v_expected_count",
+    );
+    expect(recommendationConfidenceGateMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationConfidenceGateMigration).not.toContain("CREATE POLICY");
+    expect(recommendationConfidenceGateHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationConfidenceGateHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationConfidenceGateHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_confidence_gate(jsonb) TO service_role",
     );
   });
 });
