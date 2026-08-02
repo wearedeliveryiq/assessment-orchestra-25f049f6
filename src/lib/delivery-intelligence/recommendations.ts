@@ -1,5 +1,7 @@
 import { sprint03Configuration } from "./config";
 import { roundHalfUp } from "./math";
+import { sprint03CatalogueSnapshot } from "../recommendation-catalogue/catalogue";
+import { evaluateRecommendationCandidates } from "../recommendations/eligibility";
 
 type RecommendationDefinition = (typeof sprint03Configuration.recommendations)[number];
 export interface RecommendationInput {
@@ -8,31 +10,22 @@ export interface RecommendationInput {
   analysisConfidence: number;
 }
 
-function triggerMatches(trigger: object, input: RecommendationInput): boolean {
-  if ("opportunity" in trigger && typeof trigger.opportunity === "string")
-    return input.opportunities.includes(trigger.opportunity);
-  if ("pattern" in trigger && typeof trigger.pattern === "string")
-    return input.patterns.includes(trigger.pattern);
-  if ("analysisConfidence" in trigger && trigger.analysisConfidence === "low")
-    return input.analysisConfidence < 50;
-  return false;
-}
-
 export function resolveRecommendationEligibility(input: RecommendationInput) {
+  const definitions = sprint03Configuration.recommendations;
+  const byId = new Map(definitions.map((item) => [item.id, item]));
+  const evaluated = evaluateRecommendationCandidates(
+    sprint03CatalogueSnapshot().definitions,
+    input,
+  );
   const eligible: RecommendationDefinition[] = [];
-  const excluded: Array<{ id: string; reason: string }> = [];
+  const excluded = evaluated
+    .filter((item) => item.result === "excluded")
+    .map((item) => ({ id: item.recommendationId, reason: item.exclusions[0].split(":", 2)[1] }));
   const withheld: Array<{ id: string; reason: "low_confidence_material_action" }> = [];
 
-  for (const definition of sprint03Configuration.recommendations) {
-    const matched = definition.triggers.any.some((trigger) => triggerMatches(trigger, input));
-    if (!matched) continue;
-    const exclusion = definition.exclusions.find((item) =>
-      "pattern" in item ? input.patterns.includes(item.pattern) : false,
-    );
-    if (exclusion && "pattern" in exclusion) {
-      excluded.push({ id: definition.id, reason: exclusion.pattern });
-      continue;
-    }
+  for (const candidate of evaluated.filter((item) => item.result === "eligible")) {
+    const definition = byId.get(candidate.recommendationId);
+    if (!definition) continue;
     if (
       input.analysisConfidence <
         sprint03Configuration.recommendationPolicy.confidenceGates.lowMaximumExclusive &&

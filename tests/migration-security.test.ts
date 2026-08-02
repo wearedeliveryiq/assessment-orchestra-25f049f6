@@ -82,6 +82,17 @@ const catalogueHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationEvaluationMigration = readFileSync(
+  new URL("../supabase/migrations/20260803020000_recommendation_evaluations.sql", import.meta.url),
+  "utf8",
+);
+const recommendationEvaluationHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803021000_harden_recommendation_evaluation_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -227,6 +238,28 @@ describe("Sprint 03 migration security", () => {
     );
     expect(catalogueHardening).not.toContain(
       "GRANT ALL ON public.recommendation_catalogue_versions",
+    );
+  });
+
+  it("publishes immutable tenant/run-scoped recommendation evaluations with least privilege", () => {
+    expect(recommendationEvaluationMigration).toContain("recommendation_evaluations_immutable");
+    expect(recommendationEvaluationMigration).toContain(
+      "recommendation_candidate_evaluations_immutable",
+    );
+    expect(recommendationEvaluationMigration).toContain(
+      "recommendation_evaluation_trace_links_immutable",
+    );
+    expect(recommendationEvaluationMigration).toContain("v_result.analysis_run_id <> v_run.id");
+    expect(recommendationEvaluationMigration).toContain("v_trace.analysis_run_id <> v_run.id");
+    expect(recommendationEvaluationMigration).toContain(
+      "jsonb_array_length(p_input -> 'candidates') <> v_expected_count",
+    );
+    expect(recommendationEvaluationMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationEvaluationMigration).not.toContain("CREATE POLICY");
+    expect(recommendationEvaluationHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationEvaluationHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationEvaluationHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_evaluation(jsonb) TO service_role",
     );
   });
 });

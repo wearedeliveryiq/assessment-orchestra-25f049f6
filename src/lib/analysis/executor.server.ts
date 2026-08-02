@@ -3,6 +3,7 @@ import { analyseCanonicalInput } from "../delivery-intelligence/engine";
 import { publishResult } from "../delivery-intelligence/result-repository.server";
 import { buildCoreTrace } from "../delivery-intelligence/trace-builder";
 import { validateTraceGraph } from "../delivery-intelligence/traceability";
+import { recommendationEvaluationService } from "../recommendation-evaluation/service.server";
 import type { AssessmentAnalysisRun } from "./types";
 
 const locallyRunning = new Map<string, Promise<AssessmentAnalysisRun | null>>();
@@ -21,6 +22,7 @@ export interface AnalysisExecutorDependencies {
     severity?: string,
   ): Promise<void>;
   publish(run: AssessmentAnalysisRun, owner: string): Promise<AssessmentAnalysisRun>;
+  evaluateRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
   workerId(): string;
 }
 
@@ -41,6 +43,9 @@ const defaultDependencies: AnalysisExecutorDependencies = {
       throw new Error(`ANALYSIS_TRACE_INCOMPLETE: ${validation.errors.join(",")}`);
     }
     return publishResult(run, owner, canonicalResult, trace);
+  },
+  evaluateRecommendations: async (run) => {
+    await recommendationEvaluationService.evaluate(run);
   },
   workerId: () => `analysis-worker:${crypto.randomUUID()}`,
 };
@@ -63,6 +68,21 @@ export class AnalysisRunExecutor {
         configurationSetId: completed.configurationSetId,
         inputHash: completed.inputHash,
       });
+      if (this.deps.evaluateRecommendations) {
+        try {
+          await this.deps.evaluateRecommendations(completed);
+          await this.deps.event(completed, "recommendation.evaluation_completed", {
+            policyVersion: "PB-004/S4-002/1.0.0",
+          });
+        } catch {
+          await this.deps.event(
+            completed,
+            "recommendation.evaluation_failed",
+            { code: "RECOMMENDATION_EVALUATION_INVALID" },
+            "error",
+          );
+        }
+      }
       return completed;
     } catch (error) {
       const classification = classifyExecutionFailure(error);

@@ -78,6 +78,21 @@ describe("S3-001 analysis worker", () => {
     expect(events).toEqual(["analysis.started", "analysis.failed"]);
   });
 
+  it("does not roll back completed analysis when recommendation evaluation fails", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => {
+      throw new Error("catalogue unavailable");
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_failed",
+    ]);
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),
