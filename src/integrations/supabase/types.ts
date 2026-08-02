@@ -3215,6 +3215,111 @@ export type Database = {
           },
         ]
       }
+      recommendation_candidate_evaluations: {
+        Row: {
+          analysis_run_id: string
+          catalogue_order: number
+          confidence_state: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at: string
+          decisive_facts: Json
+          evaluation_id: string
+          exclusions: Json
+          id: string
+          matched_triggers: Json
+          organisation_id: string
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          result: Database["public"]["Enums"]["recommendation_evaluation_result"]
+          semantic_hash: string
+          source_domain_ids: Json
+          source_trace_node_ids: Json
+          unmet_prerequisites: Json
+          unmet_triggers: Json
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          catalogue_order: number
+          confidence_state: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at?: string
+          decisive_facts: Json
+          evaluation_id: string
+          exclusions: Json
+          id?: string
+          matched_triggers: Json
+          organisation_id: string
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          result: Database["public"]["Enums"]["recommendation_evaluation_result"]
+          semantic_hash: string
+          source_domain_ids: Json
+          source_trace_node_ids: Json
+          unmet_prerequisites: Json
+          unmet_triggers: Json
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          catalogue_order?: number
+          confidence_state?: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at?: string
+          decisive_facts?: Json
+          evaluation_id?: string
+          exclusions?: Json
+          id?: string
+          matched_triggers?: Json
+          organisation_id?: string
+          recommendation_definition_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          result?: Database["public"]["Enums"]["recommendation_evaluation_result"]
+          semantic_hash?: string
+          source_domain_ids?: Json
+          source_trace_node_ids?: Json
+          unmet_prerequisites?: Json
+          unmet_triggers?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_candidate_eval_recommendation_definition_id_fkey"
+            columns: ["recommendation_definition_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_candidate_evaluations_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_candidate_evaluations_evaluation_id_fkey"
+            columns: ["evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_candidate_evaluations_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_candidate_evaluations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_catalogue_activations: {
         Row: {
           activated_at: string
@@ -3470,6 +3575,175 @@ export type Database = {
             columns: ["catalogue_version_id"]
             isOneToOne: false
             referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_evaluation_trace_links: {
+        Row: {
+          analysis_run_id: string
+          candidate_evaluation_id: string
+          created_at: string
+          evaluation_id: string
+          organisation_id: string
+          trace_node_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          candidate_evaluation_id: string
+          created_at?: string
+          evaluation_id: string
+          organisation_id: string
+          trace_node_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          candidate_evaluation_id?: string
+          created_at?: string
+          evaluation_id?: string
+          organisation_id?: string
+          trace_node_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_evaluation_trace_li_candidate_evaluation_id_fkey"
+            columns: ["candidate_evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_candidate_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluation_trace_links_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluation_trace_links_evaluation_id_fkey"
+            columns: ["evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluation_trace_links_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluation_trace_links_trace_node_id_fkey"
+            columns: ["trace_node_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_intelligence_trace_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluation_trace_links_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_evaluations: {
+        Row: {
+          analysis_run_id: string
+          canonical_evaluation: Json
+          canonical_input: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          created_at: string
+          evaluator_version: string
+          id: string
+          input_hash: string
+          intelligence_result_id: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          canonical_evaluation: Json
+          canonical_input: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          created_at?: string
+          evaluator_version: string
+          id?: string
+          input_hash: string
+          intelligence_result_id: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          canonical_evaluation?: Json
+          canonical_input?: Json
+          catalogue_digest?: string
+          catalogue_id?: string
+          catalogue_version?: string
+          catalogue_version_id?: string
+          configuration_set_id?: string
+          created_at?: string
+          evaluator_version?: string
+          id?: string
+          input_hash?: string
+          intelligence_result_id?: string
+          organisation_id?: string
+          output_hash?: string
+          policy_version?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_evaluations_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluations_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluations_intelligence_result_id_fkey"
+            columns: ["intelligence_result_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_intelligence_results"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluations_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_evaluations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -4637,6 +4911,34 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      publish_recommendation_evaluation: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          canonical_evaluation: Json
+          canonical_input: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          created_at: string
+          evaluator_version: string
+          id: string
+          input_hash: string
+          intelligence_result_id: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       reconcile_assessment_analysis_handoffs: {
         Args: { p_limit?: number }
         Returns: number
@@ -4763,6 +5065,8 @@ export type Database = {
         | "active"
         | "retired"
         | "superseded"
+      recommendation_confidence_state: "low" | "moderate" | "high"
+      recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
       stage_status: "pending" | "running" | "completed" | "failed" | "skipped"
       workspace_status: "active" | "archived"
     }
@@ -4938,6 +5242,8 @@ export const Constants = {
         "retired",
         "superseded",
       ],
+      recommendation_confidence_state: ["low", "moderate", "high"],
+      recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
       stage_status: ["pending", "running", "completed", "failed", "skipped"],
       workspace_status: ["active", "archived"],
     },
