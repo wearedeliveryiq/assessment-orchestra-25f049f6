@@ -11,10 +11,13 @@
 7. Deploy the application SHA, smoke test, then promote using the normal Lovable/GitHub release path.
 8. Apply `20260802150000_analysis_handoff_outbox.sql`, regenerate Supabase types, and verify the
    completion trigger, outbox claim functions, append-only events and deny-by-default grants.
-9. Verify the deployed worker retained the generated `* * * * *` cron trigger for the bundled
-   `analysis:reconcile` task. As an operational fallback, set `ANALYSIS_RECONCILER_SECRET` and invoke
-   `POST /api/internal/analysis-handoffs/reconcile` every 60 seconds with its bearer token.
-10. Confirm the migration's bounded backfill creates hand-offs for completed assessments without a
+9. Immediately apply `20260802151000_harden_analysis_handoff_permissions.sql` separately and verify
+   `anon`/`authenticated` have no table, sequence or function privileges while `service_role`
+   retains the required lifecycle access.
+10. Verify the deployed worker retained the generated `* * * * *` cron trigger for the bundled
+    `analysis:reconcile` task. As an operational fallback, set `ANALYSIS_RECONCILER_SECRET` and invoke
+    `POST /api/internal/analysis-handoffs/reconcile` every 60 seconds with its bearer token.
+11. Confirm the migration's bounded backfill creates hand-offs for completed assessments without a
     Sprint 03 run, then verify queue age returns below 60 seconds.
 
 ## Rollback

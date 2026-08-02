@@ -53,6 +53,11 @@ one-minute cron trigger, then publish the application. Roll back application cod
 necessary; the outbox tables may remain dormant and must not be destructively removed during an
 incident.
 
+Apply `20260802150000_analysis_handoff_outbox.sql` and then immediately apply
+`20260802151000_harden_analysis_handoff_permissions.sql` as a separate Lovable-managed migration.
+The second migration removes Cloud platform default client grants and restores service-role-only
+access before application publication.
+
 ## Known deployment gate
 
 The production build emits `triggers.crons = ["* * * * *"]` and bundles the
