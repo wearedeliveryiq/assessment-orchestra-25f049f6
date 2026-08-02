@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import {
   fetchLatestIntelligence,
   acceptIntelligenceRecommendation,
+  fetchIntelligenceExplanation,
   type WorkspaceIntelligenceResult,
 } from "@/lib/delivery-intelligence/client";
 import { useHydrated } from "@/hooks/use-hydrated";
@@ -10,6 +12,7 @@ import { useHydrated } from "@/hooks/use-hydrated";
 export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: string }) {
   const hydrated = useHydrated();
   const queryClient = useQueryClient();
+  const [conclusionId, setConclusionId] = useState<string | null>(null);
   const query = useQuery({
     queryKey: ["delivery-intelligence", assessmentId],
     queryFn: () => fetchLatestIntelligence(assessmentId),
@@ -21,6 +24,11 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
       acceptIntelligenceRecommendation(query.data!.analysisRunId, recommendationId),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] }),
+  });
+  const explanation = useQuery({
+    queryKey: ["delivery-intelligence-explanation", query.data?.analysisRunId, conclusionId],
+    queryFn: () => fetchIntelligenceExplanation(query.data!.analysisRunId, conclusionId!),
+    enabled: Boolean(query.data && conclusionId),
   });
   if (!hydrated || query.isPending)
     return (
@@ -193,6 +201,41 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
         items={result.productRecommendations.teamMates}
         empty="Accept a recommendation to review an available Team Mate."
       />
+      <section className="rounded-2xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">Explainable intelligence</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Review the governed evidence and rule lineage behind a published conclusion.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {result.explanations.slice(0, 12).map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className="min-h-11 rounded-lg border border-border px-3 text-sm"
+              onClick={() => setConclusionId(item.id)}
+            >
+              Explain {item.domainId.replaceAll("_", " ")}
+            </button>
+          ))}
+        </div>
+        {explanation.data && (
+          <div className="mt-4 rounded-xl border border-border/70 p-4" aria-live="polite">
+            <h3 className="font-medium">{explanation.data.conclusion.domainId}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Version {explanation.data.conclusion.domainVersion} · {explanation.data.nodes.length}
+              {" governed lineage items"}
+            </p>
+            {explanation.data.evidenceRestricted && (
+              <p className="mt-2 text-sm">Raw evidence is restricted for your role.</p>
+            )}
+          </div>
+        )}
+        {explanation.error && (
+          <p role="alert" className="mt-4 text-sm text-destructive">
+            {explanation.error.message}
+          </p>
+        )}
+      </section>
       <Roadmap result={result.roadmap} />
     </div>
   );

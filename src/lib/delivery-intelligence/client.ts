@@ -6,6 +6,7 @@ export type WorkspaceIntelligenceResult = ReturnType<typeof projectWorkspaceResu
     knowledgePacks: Array<{ id: string; rank: number; cta: string; copy: string }>;
     teamMates: Array<{ id: string; cta: string; copy: string }>;
   };
+  explanations: Array<{ id: string; type: string; domainId: string }>;
 };
 
 export async function fetchLatestIntelligence(
@@ -32,4 +33,17 @@ export async function acceptIntelligenceRecommendation(runId: string, recommenda
     { method: "POST", headers: await assessmentAuthHeaders() },
   );
   if (!response.ok) throw new Error("The recommendation could not be accepted.");
+}
+
+export async function fetchIntelligenceExplanation(runId: string, conclusionId: string) {
+  const response = await fetch(
+    `/api/analysis-runs/${runId}/explanations?conclusionId=${encodeURIComponent(conclusionId)}`,
+    { headers: await assessmentAuthHeaders() },
+  );
+  if (!response.ok) throw new Error("The explanation could not be loaded.");
+  return response.json() as Promise<{
+    conclusion: { domainId: string; domainVersion: string };
+    nodes: Array<{ id: string; type: string; domainId: string; domainVersion: string }>;
+    evidenceRestricted: boolean;
+  }>;
 }

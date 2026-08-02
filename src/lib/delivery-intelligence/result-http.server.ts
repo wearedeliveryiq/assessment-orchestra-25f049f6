@@ -4,6 +4,7 @@ import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/ser
 import { getResult } from "./result-repository.server";
 import { projectWorkspaceResult } from "./projection";
 import { resolveProductRecommendations } from "./product-recommendations.server";
+import { getTrace } from "./trace-repository.server";
 
 const json = (body: unknown, status: number, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -63,7 +64,11 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
       recommendationIds: projected.recommendations.map((item) => item.id),
       permissions: verified.identity.permissions,
     });
-    return json({ ...projected, productRecommendations }, 200, { etag });
+    const trace = await getTrace(run.id, context);
+    const explanations = trace.nodes
+      .filter((node) => node.visible)
+      .map((node) => ({ id: node.id, type: node.nodeType, domainId: node.domainId }));
+    return json({ ...projected, productRecommendations, explanations }, 200, { etag });
   } catch (error) {
     if (error instanceof IdentityError)
       return json({ error: error.message, code: error.code }, error.status);
