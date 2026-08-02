@@ -14,6 +14,216 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_analysis_events: {
+        Row: {
+          analysis_run_id: string
+          correlation_id: string
+          event_type: string
+          id: number
+          occurred_at: string
+          organisation_id: string
+          payload: Json
+          sequence: number
+          severity: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          correlation_id: string
+          event_type: string
+          id?: never
+          occurred_at?: string
+          organisation_id: string
+          payload?: Json
+          sequence?: number
+          severity: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          correlation_id?: string
+          event_type?: string
+          id?: never
+          occurred_at?: string
+          organisation_id?: string
+          payload?: Json
+          sequence?: number
+          severity?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_analysis_events_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_analysis_runs: {
+        Row: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt?: number
+          canonical_input: Json
+          completed_at?: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at?: string
+          created_by_user_id: string
+          engine_version: string
+          error_code?: string | null
+          failed_at?: string | null
+          id?: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at?: string | null
+          lease_owner?: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at?: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable?: boolean | null
+          runtime_execution_id: string
+          safe_error_message?: string | null
+          schema_version: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          assessment_revision?: number
+          assessment_session_id?: string
+          attempt?: number
+          canonical_input?: Json
+          completed_at?: string | null
+          configuration_digest?: string
+          configuration_set_id?: string
+          configuration_snapshot?: Json
+          configuration_version?: string
+          consent_basis?: string
+          correlation_id?: string
+          created_at?: string
+          created_by_user_id?: string
+          engine_version?: string
+          error_code?: string | null
+          failed_at?: string | null
+          id?: string
+          idempotency_key?: string
+          initiator?: Json
+          input_hash?: string
+          knowledge_pack_id?: string
+          knowledge_pack_version?: string
+          lease_expires_at?: string | null
+          lease_owner?: string | null
+          organisation_id?: string
+          question_set_version?: string
+          queued_at?: string
+          requested_mode?: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count?: number
+          retryable?: boolean | null
+          runtime_execution_id?: string
+          safe_error_message?: string | null
+          schema_version?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_analysis_runs_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_runs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_runs_runtime_execution_id_fkey"
+            columns: ["runtime_execution_id"]
+            isOneToOne: false
+            referencedRelation: "runtime_executions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_runs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_lifecycle_sessions: {
         Row: {
           archived_at: string | null
@@ -432,10 +642,14 @@ export type Database = {
           created_by: string | null
           deleted_at: string | null
           deleted_by: string | null
+          evidence_at: string | null
+          evidence_status: string
+          exclusion_reason: string | null
           id: string
           is_deleted: boolean
           notes: string | null
           question_id: string
+          respondent_group_id: string | null
           score: number | null
           section_id: string
           session_id: string
@@ -450,10 +664,14 @@ export type Database = {
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
+          evidence_at?: string | null
+          evidence_status?: string
+          exclusion_reason?: string | null
           id?: string
           is_deleted?: boolean
           notes?: string | null
           question_id: string
+          respondent_group_id?: string | null
           score?: number | null
           section_id: string
           session_id: string
@@ -468,10 +686,14 @@ export type Database = {
           created_by?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
+          evidence_at?: string | null
+          evidence_status?: string
+          exclusion_reason?: string | null
           id?: string
           is_deleted?: boolean
           notes?: string | null
           question_id?: string
+          respondent_group_id?: string | null
           score?: number | null
           section_id?: string
           session_id?: string
@@ -820,8 +1042,10 @@ export type Database = {
       assessment_sessions: {
         Row: {
           archived_at: string | null
+          assessment_revision: number
           assessment_type: string
           completed_at: string | null
+          consent_basis: string
           contact_name: string | null
           created_at: string
           created_by: string | null
@@ -847,8 +1071,10 @@ export type Database = {
         }
         Insert: {
           archived_at?: string | null
+          assessment_revision?: number
           assessment_type?: string
           completed_at?: string | null
+          consent_basis?: string
           contact_name?: string | null
           created_at?: string
           created_by?: string | null
@@ -874,8 +1100,10 @@ export type Database = {
         }
         Update: {
           archived_at?: string | null
+          assessment_revision?: number
           assessment_type?: string
           completed_at?: string | null
+          consent_basis?: string
           contact_name?: string | null
           created_at?: string
           created_by?: string | null
@@ -2999,6 +3227,160 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_assessment_analysis_run: {
+        Args: {
+          p_lease_owner: string
+          p_lease_seconds?: number
+          p_run_id: string
+        }
+        Returns: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_runs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      complete_assessment_analysis_run: {
+        Args: { p_lease_owner: string; p_run_id: string }
+        Returns: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_runs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      fail_assessment_analysis_run: {
+        Args: {
+          p_error_code: string
+          p_lease_owner: string
+          p_retryable: boolean
+          p_run_id: string
+          p_safe_message: string
+        }
+        Returns: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_runs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       has_org_role: {
         Args: {
           _org_id: string
@@ -3018,8 +3400,58 @@ export type Database = {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
       }
+      retry_assessment_analysis_run: {
+        Args: { p_run_id: string }
+        Returns: {
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          canonical_input: Json
+          completed_at: string | null
+          configuration_digest: string
+          configuration_set_id: string
+          configuration_snapshot: Json
+          configuration_version: string
+          consent_basis: string
+          correlation_id: string
+          created_at: string
+          created_by_user_id: string
+          engine_version: string
+          error_code: string | null
+          failed_at: string | null
+          id: string
+          idempotency_key: string
+          initiator: Json
+          input_hash: string
+          knowledge_pack_id: string
+          knowledge_pack_version: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          question_set_version: string
+          queued_at: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          response_count: number
+          retryable: boolean | null
+          runtime_execution_id: string
+          safe_error_message: string | null
+          schema_version: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["analysis_run_status"]
+          updated_at: string
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_runs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
+      analysis_requested_mode: "workspace" | "public"
+      analysis_run_status: "queued" | "running" | "completed" | "failed"
       assessment_status:
         | "draft"
         | "in_progress"
@@ -3174,6 +3606,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      analysis_requested_mode: ["workspace", "public"],
+      analysis_run_status: ["queued", "running", "completed", "failed"],
       assessment_status: [
         "draft",
         "in_progress",
