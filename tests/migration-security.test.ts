@@ -2,30 +2,36 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const migration = readFileSync(
-  new URL("../supabase/migrations/20260802020000_assessment_analysis_runs.sql", import.meta.url),
+  new URL(
+    "../supabase/migrations/20260802132259_6eb86fbf-5303-442c-bf8d-74f6499f2bde.sql",
+    import.meta.url,
+  ),
   "utf8",
 );
 const hardening = readFileSync(
-  new URL("../supabase/migrations/20260802025000_harden_analysis_permissions.sql", import.meta.url),
+  new URL(
+    "../supabase/migrations/20260802133013_a2888f14-0304-445c-8440-63d3478e0c16.sql",
+    import.meta.url,
+  ),
   "utf8",
 );
 const triggerHardening = readFileSync(
   new URL(
-    "../supabase/migrations/20260802025500_harden_analysis_trigger_helpers.sql",
+    "../supabase/migrations/20260802133500_c80e2829-b89f-45f2-9f85-e9dace5f5cb1.sql",
     import.meta.url,
   ),
   "utf8",
 );
 const resultHardening = readFileSync(
   new URL(
-    "../supabase/migrations/20260802035000_harden_intelligence_result_permissions.sql",
+    "../supabase/migrations/20260802134814_278ac71d-1e67-45e4-bfcb-3f06b8dfcbf7.sql",
     import.meta.url,
   ),
   "utf8",
 );
 const finalHardening = readFileSync(
   new URL(
-    "../supabase/migrations/20260802060000_harden_sprint03_cloud_permissions.sql",
+    "../supabase/migrations/20260802140125_3877a0d0-dea6-4429-8eef-8c2e9af0bcea.sql",
     import.meta.url,
   ),
   "utf8",
