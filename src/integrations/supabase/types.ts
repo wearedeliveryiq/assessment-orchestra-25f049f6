@@ -5051,7 +5051,6 @@ export type Database = {
       organisation_status: "active" | "suspended" | "archived"
       platform_role:
         | "platform_admin"
-        | "product_governance"
         | "org_admin"
         | "assessment_manager"
         | "contributor"
@@ -5227,7 +5226,6 @@ export const Constants = {
       organisation_status: ["active", "suspended", "archived"],
       platform_role: [
         "platform_admin",
-        "product_governance",
         "org_admin",
         "assessment_manager",
         "contributor",
