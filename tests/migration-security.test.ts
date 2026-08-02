@@ -16,6 +16,13 @@ const triggerHardening = readFileSync(
   ),
   "utf8",
 );
+const resultHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802035000_harden_intelligence_result_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -51,5 +58,19 @@ describe("Sprint 03 migration security", () => {
     expect(triggerHardening).toContain(
       "REVOKE EXECUTE ON FUNCTION public.enforce_analysis_run_transition() FROM PUBLIC",
     );
+  });
+
+  it("restricts result publication while preserving the authenticated RLS helper", () => {
+    expect(resultHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.publish_delivery_intelligence_result",
+    );
+    expect(resultHardening).toContain("FROM anon, authenticated");
+    expect(resultHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.enforce_delivery_intelligence_edge_scope() FROM PUBLIC",
+    );
+    expect(resultHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.can_read_delivery_intelligence(uuid, uuid)",
+    );
+    expect(resultHardening).toContain("TO authenticated, service_role");
   });
 });
