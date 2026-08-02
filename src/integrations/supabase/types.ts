@@ -63,6 +63,120 @@ export type Database = {
           },
         ]
       }
+      assessment_analysis_eligibility_decisions: {
+        Row: {
+          analysis_run_id: string | null
+          assessment_manifest_digest: string
+          assessment_revision: number
+          assessment_session_id: string
+          assessment_type: string | null
+          configuration_set_id: string
+          configured_manifest_digest: string
+          correlation_id: string
+          evaluated_at: string
+          evaluator_version: string
+          handoff_id: string
+          id: string
+          knowledge_pack_id: string | null
+          knowledge_pack_version: string | null
+          organisation_id: string
+          policy_id: string
+          policy_version: string
+          primary_reason_code: string | null
+          question_set_id: string | null
+          question_set_version: string | null
+          secondary_reason_codes: string[]
+          status: Database["public"]["Enums"]["analysis_eligibility_status"]
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id?: string | null
+          assessment_manifest_digest: string
+          assessment_revision: number
+          assessment_session_id: string
+          assessment_type?: string | null
+          configuration_set_id: string
+          configured_manifest_digest: string
+          correlation_id: string
+          evaluated_at?: string
+          evaluator_version: string
+          handoff_id: string
+          id?: string
+          knowledge_pack_id?: string | null
+          knowledge_pack_version?: string | null
+          organisation_id: string
+          policy_id: string
+          policy_version: string
+          primary_reason_code?: string | null
+          question_set_id?: string | null
+          question_set_version?: string | null
+          secondary_reason_codes?: string[]
+          status: Database["public"]["Enums"]["analysis_eligibility_status"]
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string | null
+          assessment_manifest_digest?: string
+          assessment_revision?: number
+          assessment_session_id?: string
+          assessment_type?: string | null
+          configuration_set_id?: string
+          configured_manifest_digest?: string
+          correlation_id?: string
+          evaluated_at?: string
+          evaluator_version?: string
+          handoff_id?: string
+          id?: string
+          knowledge_pack_id?: string | null
+          knowledge_pack_version?: string | null
+          organisation_id?: string
+          policy_id?: string
+          policy_version?: string
+          primary_reason_code?: string | null
+          question_set_id?: string | null
+          question_set_version?: string | null
+          secondary_reason_codes?: string[]
+          status?: Database["public"]["Enums"]["analysis_eligibility_status"]
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_analysis_eligibility_deci_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_eligibility_decisions_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_eligibility_decisions_handoff_id_fkey"
+            columns: ["handoff_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_handoffs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_eligibility_decisions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_eligibility_decisions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_analysis_events: {
         Row: {
           analysis_run_id: string
@@ -203,11 +317,13 @@ export type Database = {
           correlation_id: string
           created_at: string
           delivered_at: string | null
+          eligibility_decision_id: string | null
           id: string
           last_error_code: string | null
           next_attempt_at: string
           organisation_id: string
           requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
           status: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at: string
           workspace_id: string
@@ -222,11 +338,13 @@ export type Database = {
           correlation_id?: string
           created_at?: string
           delivered_at?: string | null
+          eligibility_decision_id?: string | null
           id?: string
           last_error_code?: string | null
           next_attempt_at?: string
           organisation_id: string
           requested_mode?: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at?: string | null
           status?: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at?: string
           workspace_id: string
@@ -241,11 +359,13 @@ export type Database = {
           correlation_id?: string
           created_at?: string
           delivered_at?: string | null
+          eligibility_decision_id?: string | null
           id?: string
           last_error_code?: string | null
           next_attempt_at?: string
           organisation_id?: string
           requested_mode?: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at?: string | null
           status?: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at?: string
           workspace_id?: string
@@ -263,6 +383,13 @@ export type Database = {
             columns: ["assessment_session_id"]
             isOneToOne: false
             referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_analysis_handoffs_eligibility_decision_id_fkey"
+            columns: ["eligibility_decision_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_eligibility_decisions"
             referencedColumns: ["id"]
           },
           {
@@ -3788,6 +3915,36 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      attach_assessment_analysis_eligibility_decision: {
+        Args: { p_eligibility_decision_id: string; p_handoff_id: string }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          eligibility_decision_id: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       can_read_delivery_intelligence: {
         Args: { p_organisation_id: string; p_workspace_id: string }
         Returns: boolean
@@ -3804,11 +3961,13 @@ export type Database = {
           correlation_id: string
           created_at: string
           delivered_at: string | null
+          eligibility_decision_id: string | null
           id: string
           last_error_code: string | null
           next_attempt_at: string
           organisation_id: string
           requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
           status: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at: string
           workspace_id: string
@@ -3832,11 +3991,13 @@ export type Database = {
           correlation_id: string
           created_at: string
           delivered_at: string | null
+          eligibility_decision_id: string | null
           id: string
           last_error_code: string | null
           next_attempt_at: string
           organisation_id: string
           requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
           status: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at: string
           workspace_id: string
@@ -3912,11 +4073,13 @@ export type Database = {
           correlation_id: string
           created_at: string
           delivered_at: string | null
+          eligibility_decision_id: string | null
           id: string
           last_error_code: string | null
           next_attempt_at: string
           organisation_id: string
           requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
           status: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at: string
           workspace_id: string
@@ -3988,11 +4151,13 @@ export type Database = {
           correlation_id: string
           created_at: string
           delivered_at: string | null
+          eligibility_decision_id: string | null
           id: string
           last_error_code: string | null
           next_attempt_at: string
           organisation_id: string
           requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
           status: Database["public"]["Enums"]["analysis_handoff_status"]
           updated_at: string
           workspace_id: string
@@ -4076,6 +4241,36 @@ export type Database = {
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
+      }
+      mark_assessment_analysis_handoff_ineligible: {
+        Args: { p_eligibility_decision_id: string; p_handoff_id: string }
+        Returns: {
+          analysis_run_id: string | null
+          assessment_revision: number
+          assessment_session_id: string
+          attempt: number
+          claimed_at: string | null
+          configuration_set_id: string
+          correlation_id: string
+          created_at: string
+          delivered_at: string | null
+          eligibility_decision_id: string | null
+          id: string
+          last_error_code: string | null
+          next_attempt_at: string
+          organisation_id: string
+          requested_mode: Database["public"]["Enums"]["analysis_requested_mode"]
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["analysis_handoff_status"]
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assessment_analysis_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       publish_delivery_intelligence_result: {
         Args: {
@@ -4190,6 +4385,7 @@ export type Database = {
       }
     }
     Enums: {
+      analysis_eligibility_status: "eligible" | "ineligible"
       analysis_handoff_status:
         | "pending"
         | "processing"
@@ -4352,6 +4548,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      analysis_eligibility_status: ["eligible", "ineligible"],
       analysis_handoff_status: [
         "pending",
         "processing",
