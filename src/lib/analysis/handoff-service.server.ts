@@ -1,5 +1,13 @@
 import * as assessmentRepo from "../assessment/repository.server";
+import * as executionRepo from "../orchestrator/repository.server";
+import { SPRINT03_CONFIGURATION_SET_ID } from "../delivery-intelligence/config";
 import { driveAnalysisRun } from "./executor.server";
+import {
+  ANALYSIS_ELIGIBILITY_EVALUATOR_VERSION,
+  ANALYSIS_ELIGIBILITY_POLICY_ID,
+  ANALYSIS_ELIGIBILITY_POLICY_VERSION,
+  evaluateAnalysisEligibility,
+} from "./eligibility";
 import { retryRun } from "./repository.server";
 import * as handoffRepo from "./handoff-repository.server";
 import type { AssessmentAnalysisHandoff, AnalysisHandoffView } from "./handoff-types";
@@ -10,6 +18,8 @@ const SAFE_HANDOFF_ERROR = "ANALYSIS_HANDOFF_FAILED";
 export interface HandoffDependencies {
   getSession: typeof assessmentRepo.getSession;
   getSessionById: typeof assessmentRepo.getSessionById;
+  getResponses: typeof assessmentRepo.getResponses;
+  findCompletedExecution: typeof executionRepo.findCompletedExecutionForSession;
   ensureHandoff: typeof handoffRepo.ensureHandoff;
   getHandoff: typeof handoffRepo.getHandoff;
   claimHandoffs: typeof handoffRepo.claimHandoffs;
@@ -18,6 +28,10 @@ export interface HandoffDependencies {
   failHandoff: typeof handoffRepo.failHandoff;
   reconcileHandoffs: typeof handoffRepo.reconcileHandoffs;
   appendEvent: typeof handoffRepo.appendHandoffEvent;
+  persistEligibilityDecision: typeof handoffRepo.persistEligibilityDecision;
+  getEligibilityDecision: typeof handoffRepo.getEligibilityDecision;
+  attachEligibilityDecision: typeof handoffRepo.attachEligibilityDecision;
+  markHandoffIneligible: typeof handoffRepo.markHandoffIneligible;
   requestAnalysis: typeof assessmentAnalysisService.request;
   latestRun: typeof assessmentAnalysisService.latest;
   driveRun: typeof driveAnalysisRun;
@@ -28,6 +42,8 @@ export interface HandoffDependencies {
 const dependencies: HandoffDependencies = {
   getSession: assessmentRepo.getSession,
   getSessionById: assessmentRepo.getSessionById,
+  getResponses: assessmentRepo.getResponses,
+  findCompletedExecution: executionRepo.findCompletedExecutionForSession,
   ensureHandoff: handoffRepo.ensureHandoff,
   getHandoff: handoffRepo.getHandoff,
   claimHandoffs: handoffRepo.claimHandoffs,
@@ -36,6 +52,10 @@ const dependencies: HandoffDependencies = {
   failHandoff: handoffRepo.failHandoff,
   reconcileHandoffs: handoffRepo.reconcileHandoffs,
   appendEvent: handoffRepo.appendHandoffEvent,
+  persistEligibilityDecision: handoffRepo.persistEligibilityDecision,
+  getEligibilityDecision: handoffRepo.getEligibilityDecision,
+  attachEligibilityDecision: handoffRepo.attachEligibilityDecision,
+  markHandoffIneligible: handoffRepo.markHandoffIneligible,
   requestAnalysis: assessmentAnalysisService.request.bind(assessmentAnalysisService),
   latestRun: assessmentAnalysisService.latest.bind(assessmentAnalysisService),
   driveRun: driveAnalysisRun,
@@ -92,6 +112,72 @@ export class AnalysisHandoffService {
       throw new Error("ANALYSIS_ACCESS_DENIED");
     }
     const verifiedOwnerKey = `${session.createdByUserId}:${session.workspaceId}`;
+    const execution = await this.deps.findCompletedExecution(
+      handoff.assessmentSessionId,
+      verifiedOwnerKey,
+    );
+    if (!execution) {
+      throw new AnalysisServiceError(
+        "Required immutable version is unavailable",
+        409,
+        "ANALYSIS_VERSION_UNAVAILABLE",
+      );
+    }
+    const responses = await this.deps.getResponses(handoff.assessmentSessionId);
+    const evaluation = await evaluateAnalysisEligibility({
+      assessmentId: session.id,
+      assessmentRevision: session.assessmentRevision ?? 1,
+      organisationId: session.organisationId,
+      workspaceId: session.workspaceId,
+      expectedOrganisationId: handoff.organisationId,
+      expectedWorkspaceId: handoff.workspaceId,
+      completed: session.status === "completed" && Boolean(session.completedAt),
+      assessmentType: session.assessmentType,
+      packId: execution.knowledgePackId,
+      packVersion: execution.knowledgePackVersion,
+      questionSetId: execution.knowledgePackId,
+      questionSetVersion: execution.knowledgePackVersion,
+      questionIds: responses.map((response) => response.questionId),
+      configurationSetId: handoff.configurationSetId,
+    });
+    const decision = await this.deps.persistEligibilityDecision({
+      handoff_id: handoff.id,
+      assessment_session_id: session.id,
+      organisation_id: handoff.organisationId,
+      workspace_id: handoff.workspaceId,
+      assessment_revision: handoff.assessmentRevision,
+      configuration_set_id: SPRINT03_CONFIGURATION_SET_ID,
+      assessment_type: session.assessmentType,
+      knowledge_pack_id: execution.knowledgePackId,
+      knowledge_pack_version: execution.knowledgePackVersion,
+      question_set_id: execution.knowledgePackId,
+      question_set_version: execution.knowledgePackVersion,
+      assessment_manifest_digest: evaluation.assessmentManifestDigest,
+      configured_manifest_digest: evaluation.configuredManifestDigest,
+      status: evaluation.status,
+      primary_reason_code: evaluation.primaryReason,
+      secondary_reason_codes: evaluation.secondaryReasons,
+      policy_id: ANALYSIS_ELIGIBILITY_POLICY_ID,
+      policy_version: ANALYSIS_ELIGIBILITY_POLICY_VERSION,
+      evaluator_version: ANALYSIS_ELIGIBILITY_EVALUATOR_VERSION,
+      correlation_id: handoff.correlationId,
+    });
+    await this.deps.appendEvent(handoff, "analysis.eligibility_evaluated", {
+      eligibilityDecisionId: decision.id,
+      eligibilityStatus: decision.status,
+      reasonCode: decision.primaryReasonCode,
+      policyId: ANALYSIS_ELIGIBILITY_POLICY_ID,
+      policyVersion: ANALYSIS_ELIGIBILITY_POLICY_VERSION,
+    });
+    if (decision.status === "ineligible") {
+      await this.deps.markHandoffIneligible(handoff.id, decision.id);
+      await this.deps.appendEvent(handoff, "analysis.ineligible_terminal", {
+        eligibilityDecisionId: decision.id,
+        reasonCode: decision.primaryReasonCode,
+      });
+      return null;
+    }
+    await this.deps.attachEligibilityDecision(handoff.id, decision.id);
     let requested: Awaited<ReturnType<HandoffDependencies["requestAnalysis"]>>;
     try {
       await this.deps.appendEvent(handoff, "analysis.requested", {
@@ -170,6 +256,13 @@ export class AnalysisHandoffService {
     },
   ) {
     const handoff = await this.ensureForAssessment(assessmentId, context);
+    if (handoff.status === "ineligible") {
+      throw new AnalysisServiceError(
+        "Analysis retry is not available",
+        409,
+        "ANALYSIS_RETRY_NOT_AVAILABLE",
+      );
+    }
     await this.deps.appendEvent(handoff, "analysis.user_retry_requested", {
       assessmentRevision: handoff.assessmentRevision,
       configurationSetId: handoff.configurationSetId,
@@ -234,6 +327,20 @@ export class AnalysisHandoffService {
         404,
         "ANALYSIS_ACCESS_DENIED",
       );
+    }
+    const eligibility = await this.deps.getEligibilityDecision(assessmentId, context);
+    if (eligibility?.status === "ineligible") {
+      return {
+        state: "ineligible",
+        analysisRunId: eligibility.analysisRunId,
+        retryable: false,
+        completedAt: session.completedAt,
+        safeMessage:
+          "This assessment was completed using an earlier or different question set that isn’t compatible with the current Delivery DNA analysis. Your assessment is complete and your responses are safe.",
+        supportReference: eligibility.correlationId,
+        canViewAssessment: true,
+        canStartDeliveryDna: false,
+      };
     }
     const run = await this.deps.latestRun(assessmentId, context);
     if (run) {

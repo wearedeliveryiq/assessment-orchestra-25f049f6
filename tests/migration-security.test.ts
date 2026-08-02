@@ -47,6 +47,27 @@ const handoffHardeningMigration = readFileSync(
   ),
   "utf8",
 );
+const eligibilityMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802161000_analysis_eligibility_decisions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const eligibilityRemediation = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802161500_remediate_locked_ineligible_analysis.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const eligibilityHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802162000_harden_analysis_eligibility_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -147,5 +168,28 @@ describe("Sprint 03 migration security", () => {
     expect(handoffHardeningMigration).toContain(
       "GRANT EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer) TO service_role",
     );
+  });
+
+  it("stores immutable tenant-scoped eligibility and terminal ineligible outcomes", () => {
+    expect(eligibilityMigration).toContain("assessment_analysis_eligibility_immutable");
+    expect(eligibilityMigration).toContain(
+      "UNIQUE (organisation_id, workspace_id, assessment_session_id",
+    );
+    expect(eligibilityMigration).toContain("status = 'ineligible' AND analysis_run_id IS NULL");
+    expect(eligibilityMigration).toContain(
+      "ALTER TABLE public.assessment_analysis_eligibility_decisions ENABLE ROW LEVEL SECURITY",
+    );
+    expect(eligibilityMigration).not.toContain("CREATE POLICY");
+    expect(eligibilityHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(eligibilityHardening).toContain("TO service_role");
+  });
+
+  it("guards the named remediation and never mutates immutable run history", () => {
+    expect(eligibilityRemediation).toContain("b822ce85-f2bf-4cde-ba2f-b8abc31713cf");
+    expect(eligibilityRemediation).toContain("r.organisation_id = s.organisation_id");
+    expect(eligibilityRemediation).toContain("r.assessment_revision = s.assessment_revision");
+    expect(eligibilityRemediation).toContain("PDR_003_002_REMEDIATION_SCOPE_VERIFICATION_FAILED");
+    expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_runs/);
+    expect(eligibilityRemediation).not.toMatch(/UPDATE public\.assessment_analysis_events/);
   });
 });

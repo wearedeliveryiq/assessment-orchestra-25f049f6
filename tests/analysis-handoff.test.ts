@@ -10,6 +10,7 @@ import {
 import type { AssessmentAnalysisHandoff } from "@/lib/analysis/handoff-types";
 import { AnalysisServiceError } from "@/lib/analysis/service.server";
 import type { AssessmentAnalysisRun } from "@/lib/analysis/types";
+import { configuredQuestionIds } from "@/lib/analysis/eligibility";
 
 const session: AssessmentSession = {
   id: "11111111-1111-4111-8111-111111111111",
@@ -44,6 +45,7 @@ const handoff: AssessmentAnalysisHandoff = {
   attempt: 1,
   correlationId: "66666666-6666-4666-8666-666666666666",
   analysisRunId: null,
+  eligibilityDecisionId: null,
   lastErrorCode: null,
   nextAttemptAt: "2026-08-02T00:01:00.000Z",
   claimedAt: "2026-08-02T00:01:01.000Z",
@@ -78,6 +80,43 @@ function harness(overrides: Partial<HandoffDependencies> = {}) {
   const dependencies: HandoffDependencies = {
     getSession: vi.fn(async () => session),
     getSessionById: vi.fn(async () => session),
+    getResponses: vi.fn(async () =>
+      configuredQuestionIds.map((questionId) => ({
+        questionId,
+        sectionId: "delivery-dna",
+        value: 3,
+        score: 3,
+        notes: null,
+        answeredAt: session.completedAt!,
+        evidenceStatus: "answered" as const,
+      })),
+    ),
+    findCompletedExecution: vi.fn(async () => ({
+      id: crypto.randomUUID(),
+      assessmentSessionId: session.id,
+      ownerKey: `${session.createdByUserId}:${session.workspaceId}`,
+      organisationName: session.organisationName,
+      knowledgePackId: "delivery-dna",
+      knowledgePackVersion: "1.0.0",
+      pipelineId: "assessment",
+      pipelineVersion: "1.0.0",
+      status: "completed",
+      currentStage: null,
+      progress: 100,
+      startedAt: session.submittedAt,
+      completedAt: session.completedAt,
+      durationMs: 1000,
+      errorMessage: null,
+      failureClass: null,
+      retryCount: 0,
+      executionMode: "triggered",
+      correlationId: handoff.correlationId,
+      cancelRequested: false,
+      heartbeatAt: session.completedAt,
+      metadata: {},
+      createdAt: session.createdAt,
+      updatedAt: session.updatedAt,
+    })),
     ensureHandoff: vi.fn(async () => handoff),
     getHandoff: vi.fn(async () => handoff),
     claimHandoffs: vi.fn(async () => [handoff]),
@@ -97,6 +136,30 @@ function harness(overrides: Partial<HandoffDependencies> = {}) {
     appendEvent: vi.fn(async (_handoff, event) => {
       events.push(event);
     }),
+    persistEligibilityDecision: vi.fn(async (input) => ({
+      id: "88888888-8888-4888-8888-888888888888",
+      handoffId: handoff.id,
+      assessmentSessionId: session.id,
+      organisationId: session.organisationId,
+      workspaceId: session.workspaceId,
+      assessmentRevision: 1,
+      configurationSetId: "sprint03-product-config-1.0.0",
+      status: input.status as "eligible" | "ineligible",
+      primaryReasonCode: input.primary_reason_code as string | null,
+      secondaryReasonCodes: input.secondary_reason_codes as string[],
+      correlationId: handoff.correlationId,
+      analysisRunId: null,
+    })),
+    getEligibilityDecision: vi.fn(async () => null),
+    attachEligibilityDecision: vi.fn(async () => ({
+      ...handoff,
+      eligibilityDecisionId: "88888888-8888-4888-8888-888888888888",
+    })),
+    markHandoffIneligible: vi.fn(async () => ({
+      ...handoff,
+      status: "ineligible" as const,
+      eligibilityDecisionId: "88888888-8888-4888-8888-888888888888",
+    })),
     requestAnalysis: vi.fn(async () => {
       latest = run;
       return { run, reused: false, httpStatus: 202 } as const;
@@ -131,7 +194,11 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
     );
     expect(dependencies.completeHandoff).toHaveBeenCalledWith(handoff.id, run.id);
     expect(dependencies.driveRun).toHaveBeenCalledWith(run.id);
-    expect(events).toEqual(["analysis.requested", "analysis.request_created"]);
+    expect(events).toEqual([
+      "analysis.eligibility_evaluated",
+      "analysis.requested",
+      "analysis.request_created",
+    ]);
   });
 
   it("records a retryable hand-off failure without changing assessment completion", async () => {
@@ -148,7 +215,41 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
       handoff.id,
       "ANALYSIS_EXECUTION_TRANSIENT",
     );
-    expect(events).toEqual(["analysis.requested", "analysis.handoff_failed"]);
+    expect(events).toEqual([
+      "analysis.eligibility_evaluated",
+      "analysis.requested",
+      "analysis.handoff_failed",
+    ]);
+  });
+
+  it("terminates an incompatible legacy assessment without creating an analysis run", async () => {
+    const { service, dependencies, events } = harness({
+      getSessionById: vi.fn(async () => ({ ...session, assessmentType: "delivery-maturity" })),
+      findCompletedExecution: vi.fn(async () => ({
+        ...(await vi.mocked(harness().dependencies.findCompletedExecution)(
+          session.id,
+          context.ownerKey,
+        ))!,
+        knowledgePackId: "executive-sponsorship",
+        knowledgePackVersion: "1.4.0",
+      })),
+      getResponses: vi.fn(async () => [
+        {
+          questionId: "flow.legacy",
+          sectionId: "flow",
+          value: 3,
+          score: 3,
+          notes: null,
+          answeredAt: session.completedAt!,
+          evidenceStatus: "answered",
+        },
+      ]),
+    });
+    await expect(service.processClaimed(handoff)).resolves.toBeNull();
+    expect(dependencies.markHandoffIneligible).toHaveBeenCalledOnce();
+    expect(dependencies.requestAnalysis).not.toHaveBeenCalled();
+    expect(dependencies.driveRun).not.toHaveBeenCalled();
+    expect(events).toEqual(["analysis.eligibility_evaluated", "analysis.ineligible_terminal"]);
   });
 
   it("reconciles missing completion events and processes claimed rows", async () => {

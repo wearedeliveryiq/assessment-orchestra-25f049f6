@@ -3,7 +3,7 @@
 | Control                    | Value                                                             |
 | -------------------------- | ----------------------------------------------------------------- |
 | Document ID                | DIQ-000                                                           |
-| Version                    | 1.7                                                               |
+| Version                    | 1.9                                                               |
 | Status                     | **CONTROLLED**                                                    |
 | Owner                      | Product Owner                                                     |
 | Approver                   | Matt Prust                                                        |
@@ -18,6 +18,7 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 ## Status definitions
 
 - **DRAFT** — under development and not yet an approved baseline.
+- **CONTROLLED DRAFT** — registered and governed work in progress; not implementation or production authority.
 - **PRODUCT OWNER APPROVED — FINAL APPROVAL PENDING** — product definition is complete and may support engineering preparation, but production promotion requires the named final approver.
 - **PRODUCT OWNER ACCEPTED — FOUNDER ACCEPTANCE PENDING** — Product Owner review has passed; founder acceptance remains an explicit release condition.
 - **ACCEPTED** — the defined acceptance authority has approved the record; downstream implementation or release gates remain independently applicable.
@@ -27,26 +28,31 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 
 ## Controlled Document Register
 
-| ID          | Document                                                                                                                                        | Version | Status          | Location                                              |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------: | --------------- | ----------------------------------------------------- |
-| DIQ-000     | Master Index                                                                                                                                    |     1.7 | CONTROLLED      | This document                                         |
-| DIQ-001     | [Vision & Mission](<DIQ-001 Vision & Mission.md>)                                                                                               |     0.1 | DRAFT           | `docs/00-master-index`                                |
-| DIQ-002     | [Product Architecture](<DIQ-002 Product Architecture.md>)                                                                                       |     1.0 | **LOCKED**      | `docs/00-master-index`                                |
-| DIQ-003     | [Product Roadmap](<DIQ-003 Product Roadmap.md>)                                                                                                 |     0.1 | DRAFT           | `docs/00-master-index`                                |
-| DIQ-004     | [Design Principles](<DIQ-004 Design Principles.md>)                                                                                             |     0.1 | DRAFT           | `docs/00-master-index`                                |
-| DIQ-100     | [Delivery DNA Specification](<../01-product/delivery-dna/DIQ-100 Delivery DNA Specification.md>)                                                |     0.1 | DRAFT — OUTLINE | `docs/01-product/delivery-dna`                        |
-| DIQ-200     | [Delivery Intelligence Engine](<../01-product/delivery-intelligence/DIQ-200 Delivery Intelligence Engine.md>)                                   |     0.1 | DRAFT — OUTLINE | `docs/01-product/delivery-intelligence`               |
-| DIQ-201     | [Recommendation Framework](<../01-product/recommendation-framework/DIQ-201 Recommendation Framework.md>)                                        |     0.1 | DRAFT — OUTLINE | `docs/01-product/recommendation-framework`            |
-| DIQ-202     | [Delivery Intelligence Traceability Model](<../01-product/delivery-intelligence/DIQ-202 Delivery Intelligence Traceability Model.md>)           |     0.1 | DRAFT — OUTLINE | `docs/01-product/delivery-intelligence`               |
-| DIQ-203     | [Sprint 03 Product Configuration Specification](<../01-product/delivery-intelligence/DIQ-203 Sprint 03 Product Configuration Specification.md>) |     1.0 | **LOCKED**      | `docs/01-product/delivery-intelligence`               |
-| DIQ-203A    | [Sprint 03 Production Configuration](<../01-product/delivery-intelligence/configuration/DIQ-203A Sprint 03 Production Configuration.json>)      |   1.0.0 | **LOCKED**      | `docs/01-product/delivery-intelligence/configuration` |
-| DIQ-203B    | [Sprint 03 Golden Fixtures](<../01-product/delivery-intelligence/configuration/DIQ-203B Sprint 03 Golden Fixtures.json>)                        |   1.0.0 | **LOCKED**      | `docs/01-product/delivery-intelligence/configuration` |
-| DIQ-300     | [Knowledge Pack Framework](<../01-product/knowledge-pack-framework/DIQ-300 Knowledge Pack Framework.md>)                                        |     0.1 | DRAFT — OUTLINE | `docs/01-product/knowledge-pack-framework`            |
-| DIQ-400     | [TeamMate Framework](<../01-product/teammate-framework/DIQ-400 TeamMate Framework.md>)                                                          |     0.1 | DRAFT — OUTLINE | `docs/01-product/teammate-framework`                  |
-| PB-003      | [Sprint 03 Playbook — Delivery Intelligence Engine MVP](<../02-playbooks/PB-003 Sprint 03 Playbook.md>)                                         |     1.0 | LOCKED          | `docs/02-playbooks`                                   |
-| PB-004      | [Sprint 04 Playbook — Recommendation Framework](<../02-playbooks/PB-004 Sprint 04 Playbook.md>)                                                 |     1.0 | **LOCKED**      | `docs/02-playbooks`                                   |
-| PDR-003-001 | [Sprint 03 Analysis Trigger Policy](<../07-release/PDR-003-001 Sprint 03 Analysis Trigger Policy.md>)                                           |     1.0 | **APPROVED**    | `docs/07-release`                                     |
-| SAR-003-PD  | [Sprint 03 Product Definition Acceptance](<../07-release/SAR-003-PD Sprint 03 Product Definition Acceptance.md>)                                |     1.0 | **ACCEPTED**    | `docs/07-release`                                     |
+| ID          | Document                                                                                                                                        |   Version | Status                                          | Location                                                     |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------: | ----------------------------------------------- | ------------------------------------------------------------ |
+| DIQ-000     | Master Index                                                                                                                                    |       1.9 | CONTROLLED                                      | This document                                                |
+| DIQ-001     | [Vision & Mission](<DIQ-001 Vision & Mission.md>)                                                                                               |       0.1 | DRAFT                                           | `docs/00-master-index`                                       |
+| DIQ-002     | [Product Architecture](<DIQ-002 Product Architecture.md>)                                                                                       |       1.0 | **LOCKED**                                      | `docs/00-master-index`                                       |
+| DIQ-003     | [Product Roadmap](<DIQ-003 Product Roadmap.md>)                                                                                                 |       0.1 | DRAFT                                           | `docs/00-master-index`                                       |
+| DIQ-004     | [Design Principles](<DIQ-004 Design Principles.md>)                                                                                             |       0.1 | DRAFT                                           | `docs/00-master-index`                                       |
+| DIQ-100     | [Delivery DNA Specification](<../01-product/delivery-dna/DIQ-100 Delivery DNA Specification.md>)                                                |       0.1 | DRAFT — OUTLINE                                 | `docs/01-product/delivery-dna`                               |
+| DIQ-200     | [Delivery Intelligence Engine](<../01-product/delivery-intelligence/DIQ-200 Delivery Intelligence Engine.md>)                                   |       0.1 | DRAFT — OUTLINE                                 | `docs/01-product/delivery-intelligence`                      |
+| DIQ-201     | [Recommendation Framework](<../01-product/recommendation-framework/DIQ-201 Recommendation Framework.md>)                                        |       0.1 | DRAFT — OUTLINE                                 | `docs/01-product/recommendation-framework`                   |
+| DIQ-202     | [Delivery Intelligence Traceability Model](<../01-product/delivery-intelligence/DIQ-202 Delivery Intelligence Traceability Model.md>)           |       0.1 | DRAFT — OUTLINE                                 | `docs/01-product/delivery-intelligence`                      |
+| DIQ-203     | [Sprint 03 Product Configuration Specification](<../01-product/delivery-intelligence/DIQ-203 Sprint 03 Product Configuration Specification.md>) |       1.0 | **LOCKED**                                      | `docs/01-product/delivery-intelligence`                      |
+| DIQ-203A    | [Sprint 03 Production Configuration](<../01-product/delivery-intelligence/configuration/DIQ-203A Sprint 03 Production Configuration.json>)      |     1.0.0 | **LOCKED**                                      | `docs/01-product/delivery-intelligence/configuration`        |
+| DIQ-203B    | [Sprint 03 Golden Fixtures](<../01-product/delivery-intelligence/configuration/DIQ-203B Sprint 03 Golden Fixtures.json>)                        |     1.0.0 | **LOCKED**                                      | `docs/01-product/delivery-intelligence/configuration`        |
+| DIQ-300     | [Knowledge Pack Framework](<../01-product/knowledge-pack-framework/DIQ-300 Knowledge Pack Framework.md>)                                        |   1.0-RC1 | PRODUCT OWNER APPROVED — FINAL APPROVAL PENDING | `docs/01-product/knowledge-pack-framework`                   |
+| KP-001      | [Executive Sponsor Knowledge Pack](<../01-product/knowledge-pack-framework/executive-sponsor/KP-001 Executive Sponsor Knowledge Pack.md>)       |   1.0-RC1 | PRODUCT OWNER APPROVED — FINAL APPROVAL PENDING | `docs/01-product/knowledge-pack-framework/executive-sponsor` |
+| KP-001A     | [Executive Sponsor Catalogue](<../01-product/knowledge-pack-framework/executive-sponsor/KP-001A Executive Sponsor Catalogue.json>)              | 1.0.0-rc1 | PRODUCT OWNER APPROVED — FINAL APPROVAL PENDING | `docs/01-product/knowledge-pack-framework/executive-sponsor` |
+| KP-001B     | [Executive Sponsor Golden Fixtures](<../01-product/knowledge-pack-framework/executive-sponsor/KP-001B Executive Sponsor Golden Fixtures.json>)  | 1.0.0-rc1 | PRODUCT OWNER APPROVED — FINAL APPROVAL PENDING | `docs/01-product/knowledge-pack-framework/executive-sponsor` |
+| DIQ-400     | [TeamMate Framework](<../01-product/teammate-framework/DIQ-400 TeamMate Framework.md>)                                                          |       0.1 | DRAFT — OUTLINE                                 | `docs/01-product/teammate-framework`                         |
+| PB-003      | [Sprint 03 Playbook — Delivery Intelligence Engine MVP](<../02-playbooks/PB-003 Sprint 03 Playbook.md>)                                         |       1.0 | LOCKED                                          | `docs/02-playbooks`                                          |
+| PB-004      | [Sprint 04 Playbook — Recommendation Framework](<../02-playbooks/PB-004 Sprint 04 Playbook.md>)                                                 |       1.0 | **LOCKED**                                      | `docs/02-playbooks`                                          |
+| PB-005      | [Sprint 05 Playbook — Knowledge Pack Framework and Executive Sponsor Pack](<../02-playbooks/PB-005 Sprint 05 Playbook.md>)                      |       0.1 | CONTROLLED DRAFT                                | `docs/02-playbooks`                                          |
+| PDR-003-001 | [Sprint 03 Analysis Trigger Policy](<../07-release/PDR-003-001 Sprint 03 Analysis Trigger Policy.md>)                                           |       1.0 | **APPROVED**                                    | `docs/07-release`                                            |
+| PDR-003-002 | [Sprint 03 Analysis Eligibility Policy](<../07-release/PDR-003-002 Sprint 03 Analysis Eligibility Policy.md>)                                   |       1.0 | **LOCKED**                                      | `docs/07-release`                                            |
+| SAR-003-PD  | [Sprint 03 Product Definition Acceptance](<../07-release/SAR-003-PD Sprint 03 Product Definition Acceptance.md>)                                |       1.0 | **ACCEPTED**                                    | `docs/07-release`                                            |
 
 ## Filing structure
 
@@ -75,6 +81,8 @@ docs/
 
 | Version | Date          | Change                                                                                                                |
 | ------- | ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| 1.9     | 2 August 2026 | Registered and locked PDR-003-002 Sprint 03 analysis eligibility policy                                               |
+| 1.8     | 2 August 2026 | Registered DIQ-300 RC1, KP-001/A/B RC1, and PB-005 initial controlled draft                                           |
 | 1.7     | 2 August 2026 | Registered PDR-003-001 automatic analysis trigger and retry policy                                                    |
 | 1.6     | 2 August 2026 | Recorded Matt Prust’s approval and promoted PB-004 to the locked version 1.0 baseline                                 |
 | 1.5     | 2 August 2026 | Registered completed PB-004 v1.0-RC1 for final approval                                                               |

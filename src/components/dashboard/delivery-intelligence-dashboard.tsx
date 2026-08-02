@@ -21,7 +21,12 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
     enabled: hydrated,
     refetchInterval: (query) => {
       const state = query.state.data?.state;
-      return state === "completed" || state === "failed" || state === "missing" ? false : 2_000;
+      return state === "completed" ||
+        state === "failed" ||
+        state === "missing" ||
+        state === "ineligible"
+        ? false
+        : 2_000;
     },
   });
   const query = useQuery({
@@ -81,6 +86,44 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
     );
 
   const handoff = statusQuery.data;
+  if (handoff?.state === "ineligible") {
+    return (
+      <section aria-live="polite" className="rounded-xl border border-border bg-card p-6">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" aria-hidden />
+          <div>
+            <h2 className="font-semibold">
+              Delivery Intelligence isn’t available for this assessment
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">{handoff.safeMessage}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {handoff.canViewAssessment && (
+                <a
+                  href={`/assessment/${assessmentId}/results`}
+                  className="inline-flex min-h-11 items-center rounded-lg border border-border px-4 text-sm font-medium"
+                >
+                  View assessment
+                </a>
+              )}
+              {handoff.canStartDeliveryDna && (
+                <a
+                  href="/sessions/new"
+                  className="inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
+                >
+                  Start a Delivery DNA assessment
+                </a>
+              )}
+            </div>
+            {handoff.supportReference && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                Contact support and quote {handoff.supportReference}.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
   if (handoff && handoff.state !== "completed") {
     const processing = ["preparing", "queued", "running"].includes(handoff.state);
     const canRetry =

@@ -73,10 +73,7 @@ export function normaliseAnalysisInput(input: {
       .sort((a, b) => a.id.localeCompare(b.id))
       .map((question) => {
         const response = responseByQuestion.get(question.id)!;
-        const status =
-          !response.evidenceStatus || response.evidenceStatus === "missing"
-            ? "answered"
-            : response.evidenceStatus;
+        const status = response.evidenceStatus ?? "answered";
         if (status === "answered" && response.value == null) {
           throw new AnalysisValidationError(
             "Answered evidence has no value",
