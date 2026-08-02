@@ -60,7 +60,12 @@ AS $$
 DECLARE
   v_handoff public.assessment_analysis_handoffs;
 BEGIN
-  IF NEW.status <> 'completed' OR NEW.completed_at IS NULL OR NEW.is_deleted THEN
+  IF NEW.status <> 'completed'
+     OR NEW.completed_at IS NULL
+     OR NEW.is_deleted
+     OR NEW.organisation_id IS NULL
+     OR NEW.workspace_id IS NULL
+     OR NEW.created_by_user_id IS NULL THEN
     RETURN NEW;
   END IF;
   IF TG_OP = 'UPDATE' AND OLD.status = 'completed'
@@ -217,7 +222,12 @@ BEGIN
     SELECT s.id, s.organisation_id, s.workspace_id, s.assessment_revision,
            'sprint03-product-config-1.0.0', 'workspace'::public.analysis_requested_mode
     FROM public.assessment_sessions s
-    WHERE s.status = 'completed' AND s.completed_at IS NOT NULL AND s.is_deleted = false
+    WHERE s.status = 'completed'
+      AND s.completed_at IS NOT NULL
+      AND s.is_deleted = false
+      AND s.organisation_id IS NOT NULL
+      AND s.workspace_id IS NOT NULL
+      AND s.created_by_user_id IS NOT NULL
       AND NOT EXISTS (
         SELECT 1 FROM public.assessment_analysis_runs r
         WHERE r.assessment_session_id = s.id

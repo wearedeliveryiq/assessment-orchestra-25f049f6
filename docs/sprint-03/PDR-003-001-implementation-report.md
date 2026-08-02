@@ -22,6 +22,9 @@ states rather than a normal-path generation button.
   claims, bounded hand-off retry and tenant scope.
 - `assessment_analysis_handoff_events`: append-only safe lifecycle evidence.
 - Completion trigger: enqueues only valid, non-deleted completed assessments.
+- Legacy completed rows without an organisation, workspace or creating user are deliberately
+  excluded by both the completion trigger and reconciler; they cannot form a tenant-safe analysis
+  request and must never cause assessment completion or the scheduled worker to fail.
 - Reconciler: repairs completed assessments without a run and processes claims in bounded batches.
 - `GET /api/assessments/{id}/analysis-status`: authorised safe customer lifecycle projection.
 - `POST /api/assessments/{id}/analysis-retry`: authorised idempotent recovery action.

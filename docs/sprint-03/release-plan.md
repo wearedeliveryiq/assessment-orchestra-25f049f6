@@ -18,7 +18,8 @@
     `analysis:reconcile` task. As an operational fallback, set `ANALYSIS_RECONCILER_SECRET` and invoke
     `POST /api/internal/analysis-handoffs/reconcile` every 60 seconds with its bearer token.
 11. Confirm the migration's bounded backfill creates hand-offs for completed assessments without a
-    Sprint 03 run, then verify queue age returns below 60 seconds.
+    Sprint 03 run, excludes legacy rows without complete tenant/owner scope, then verify queue age
+    returns below 60 seconds.
 
 ## Rollback
 

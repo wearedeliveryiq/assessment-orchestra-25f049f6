@@ -127,6 +127,12 @@ describe("Sprint 03 migration security", () => {
       "REVOKE EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer) FROM PUBLIC, anon, authenticated",
     );
     expect(handoffMigration).toContain("s.organisation_id, s.workspace_id");
+    expect(handoffMigration).toContain("AND s.organisation_id IS NOT NULL");
+    expect(handoffMigration).toContain("AND s.workspace_id IS NOT NULL");
+    expect(handoffMigration).toContain("AND s.created_by_user_id IS NOT NULL");
+    expect(handoffMigration).toContain("OR NEW.organisation_id IS NULL");
+    expect(handoffMigration).toContain("OR NEW.workspace_id IS NULL");
+    expect(handoffMigration).toContain("OR NEW.created_by_user_id IS NULL");
     expect(handoffMigration).not.toContain("canonical_input");
     expect(handoffMigration).not.toContain("assessment_responses");
     expect(handoffHardeningMigration).toContain(
