@@ -41,6 +41,8 @@ type SessionRow = {
   completed_at: string | null;
   created_at: string;
   updated_at: string;
+  assessment_revision?: number;
+  consent_basis?: string;
 };
 
 type StageRow = {
@@ -78,6 +80,8 @@ export function toSession(row: SessionRow): AssessmentSession {
     completedAt: row.completed_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    assessmentRevision: row.assessment_revision ?? 1,
+    consentBasis: row.consent_basis ?? "authenticated_assessment_submission",
   };
 }
 
@@ -171,6 +175,10 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
       score: number | null;
       notes: string | null;
       answered_at: string;
+      evidence_status?: "answered" | "not_applicable" | "excluded" | "missing";
+      exclusion_reason?: string | null;
+      respondent_group_id?: string | null;
+      evidence_at?: string | null;
     }[]
   >(await responses().select("*").eq("session_id", sessionId));
 
@@ -181,6 +189,10 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
     score: row.score === null ? null : Number(row.score),
     notes: row.notes,
     answeredAt: row.answered_at,
+    evidenceStatus: row.evidence_status ?? "answered",
+    exclusionReason: row.exclusion_reason ?? null,
+    respondentGroupId: row.respondent_group_id ?? null,
+    evidenceAt: row.evidence_at ?? row.answered_at,
   }));
 }
 
@@ -235,9 +247,6 @@ export async function updateStageRun(
   stage: EngineStageId,
   patch: Record<string, unknown>,
 ): Promise<void> {
-  const { error } = await stageRuns()
-    .update(patch)
-    .eq("session_id", sessionId)
-    .eq("stage", stage);
+  const { error } = await stageRuns().update(patch).eq("session_id", sessionId).eq("stage", stage);
   if (error) throw new Error(error.message);
 }

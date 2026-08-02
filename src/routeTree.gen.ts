@@ -18,6 +18,7 @@ import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as ApiAnalysisRunsRouteImport } from './routes/api/analysis-runs'
 import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
@@ -67,6 +68,7 @@ import { Route as WorkspacesIndexRouteImport } from './routes/workspaces.index'
 import { Route as WorkspacesIdRouteImport } from './routes/workspaces.$id'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as ApiAnalysisRunsIdRouteImport } from './routes/api/analysis-runs.$id'
 import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
 import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
 import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id'
@@ -162,7 +164,6 @@ import { Route as ApiAssessmentIdResumeRouteImport } from './routes/api/assessme
 import { Route as ApiAssessmentIdSaveRouteImport } from './routes/api/assessment.$id.save'
 import { Route as ApiAssessmentIdSummaryRouteImport } from './routes/api/assessment.$id.summary'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
-import { Route as ApiAssessmentsIdAnalysisRouteImport } from './routes/api/assessments.$id.analysis'
 import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
 import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
@@ -230,6 +231,11 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiAnalysisRunsRoute = ApiAnalysisRunsRouteImport.update({
+  id: '/api/analysis-runs',
+  path: '/api/analysis-runs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
   id: '/api/assessment-sessions',
   path: '/api/assessment-sessions',
@@ -476,6 +482,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiAnalysisRunsIdRoute = ApiAnalysisRunsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAnalysisRunsRoute,
+} as any)
 const ApiAssessmentSessionsIdRoute = ApiAssessmentSessionsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -972,12 +983,6 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
   path: '/advance',
   getParentRoute: () => ApiAssessmentsIdRoute,
 } as any)
-const ApiAssessmentsIdAnalysisRoute =
-  ApiAssessmentsIdAnalysisRouteImport.update({
-    id: '/analysis',
-    path: '/analysis',
-    getParentRoute: () => ApiAssessmentsIdRoute,
-  } as any)
 const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
   id: '/execute',
   path: '/execute',
@@ -1091,6 +1096,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1140,6 +1146,7 @@ export interface FileRoutesByFullPath {
   '/workspaces/': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1235,7 +1242,6 @@ export interface FileRoutesByFullPath {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
-  '/api/assessments/$id/analysis': typeof ApiAssessmentsIdAnalysisRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -1266,6 +1272,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1315,6 +1322,7 @@ export interface FileRoutesByTo {
   '/workspaces': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1410,7 +1418,6 @@ export interface FileRoutesByTo {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
-  '/api/assessments/$id/analysis': typeof ApiAssessmentsIdAnalysisRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -1442,6 +1449,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
@@ -1491,6 +1499,7 @@ export interface FileRoutesById {
   '/workspaces/': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1586,7 +1595,6 @@ export interface FileRoutesById {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
-  '/api/assessments/$id/analysis': typeof ApiAssessmentsIdAnalysisRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
   '/api/assessments/$id/retry': typeof ApiAssessmentsIdRetryRoute
@@ -1619,6 +1627,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1668,6 +1677,7 @@ export interface FileRouteTypes {
     | '/workspaces/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/analysis-runs/$id'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1763,7 +1773,6 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
-    | '/api/assessments/$id/analysis'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -1794,6 +1803,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -1843,6 +1853,7 @@ export interface FileRouteTypes {
     | '/workspaces'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/analysis-runs/$id'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -1938,7 +1949,6 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
-    | '/api/assessments/$id/analysis'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -1969,6 +1979,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
     | '/api/members'
@@ -2018,6 +2029,7 @@ export interface FileRouteTypes {
     | '/workspaces/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/api/analysis-runs/$id'
     | '/api/assessment-sessions/$id'
     | '/api/assessment-sessions/dashboard'
     | '/api/assessment/$id'
@@ -2113,7 +2125,6 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
-    | '/api/assessments/$id/analysis'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/results'
     | '/api/assessments/$id/retry'
@@ -2145,6 +2156,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiAnalysisRunsRoute: typeof ApiAnalysisRunsRouteWithChildren
   ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRouteWithChildren
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
@@ -2327,6 +2339,13 @@ declare module '@tanstack/react-router' {
       path: '/.well-known/oauth-protected-resource'
       fullPath: '/.well-known/oauth-protected-resource'
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/analysis-runs': {
+      id: '/api/analysis-runs'
+      path: '/api/analysis-runs'
+      fullPath: '/api/analysis-runs'
+      preLoaderRoute: typeof ApiAnalysisRunsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/assessment-sessions': {
@@ -2671,6 +2690,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.mcp/invoke-tool/$tool'
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/analysis-runs/$id': {
+      id: '/api/analysis-runs/$id'
+      path: '/$id'
+      fullPath: '/api/analysis-runs/$id'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRouteImport
+      parentRoute: typeof ApiAnalysisRunsRoute
     }
     '/api/assessment-sessions/$id': {
       id: '/api/assessment-sessions/$id'
@@ -3337,13 +3363,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsIdAdvanceRouteImport
       parentRoute: typeof ApiAssessmentsIdRoute
     }
-    '/api/assessments/$id/analysis': {
-      id: '/api/assessments/$id/analysis'
-      path: '/analysis'
-      fullPath: '/api/assessments/$id/analysis'
-      preLoaderRoute: typeof ApiAssessmentsIdAnalysisRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
     '/api/assessments/$id/execute': {
       id: '/api/assessments/$id/execute'
       path: '/execute'
@@ -3480,6 +3499,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ApiAnalysisRunsRouteChildren {
+  ApiAnalysisRunsIdRoute: typeof ApiAnalysisRunsIdRoute
+}
+
+const ApiAnalysisRunsRouteChildren: ApiAnalysisRunsRouteChildren = {
+  ApiAnalysisRunsIdRoute: ApiAnalysisRunsIdRoute,
+}
+
+const ApiAnalysisRunsRouteWithChildren = ApiAnalysisRunsRoute._addFileChildren(
+  ApiAnalysisRunsRouteChildren,
+)
+
 interface ApiAssessmentSessionsIdRouteChildren {
   ApiAssessmentSessionsIdArchiveRoute: typeof ApiAssessmentSessionsIdArchiveRoute
   ApiAssessmentSessionsIdAssignRoute: typeof ApiAssessmentSessionsIdAssignRoute
@@ -3534,7 +3565,6 @@ const ApiAssessmentSessionsRouteWithChildren =
 
 interface ApiAssessmentsIdRouteChildren {
   ApiAssessmentsIdAdvanceRoute: typeof ApiAssessmentsIdAdvanceRoute
-  ApiAssessmentsIdAnalysisRoute: typeof ApiAssessmentsIdAnalysisRoute
   ApiAssessmentsIdExecuteRoute: typeof ApiAssessmentsIdExecuteRoute
   ApiAssessmentsIdResultsRoute: typeof ApiAssessmentsIdResultsRoute
   ApiAssessmentsIdRetryRoute: typeof ApiAssessmentsIdRetryRoute
@@ -3544,7 +3574,6 @@ interface ApiAssessmentsIdRouteChildren {
 
 const ApiAssessmentsIdRouteChildren: ApiAssessmentsIdRouteChildren = {
   ApiAssessmentsIdAdvanceRoute: ApiAssessmentsIdAdvanceRoute,
-  ApiAssessmentsIdAnalysisRoute: ApiAssessmentsIdAnalysisRoute,
   ApiAssessmentsIdExecuteRoute: ApiAssessmentsIdExecuteRoute,
   ApiAssessmentsIdResultsRoute: ApiAssessmentsIdResultsRoute,
   ApiAssessmentsIdRetryRoute: ApiAssessmentsIdRetryRoute,
@@ -3744,6 +3773,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiAnalysisRunsRoute: ApiAnalysisRunsRouteWithChildren,
   ApiAssessmentSessionsRoute: ApiAssessmentSessionsRouteWithChildren,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,

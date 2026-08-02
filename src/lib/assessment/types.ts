@@ -4,12 +4,7 @@
  */
 
 export type AssessmentStatus =
-  | "draft"
-  | "in_progress"
-  | "submitted"
-  | "processing"
-  | "completed"
-  | "archived";
+  "draft" | "in_progress" | "submitted" | "processing" | "completed" | "archived";
 
 export type StageStatus = "pending" | "running" | "completed" | "failed" | "skipped";
 
@@ -40,6 +35,8 @@ export interface AssessmentSession {
   completedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  assessmentRevision?: number;
+  consentBasis?: string;
 }
 
 export interface AssessmentResponse {
@@ -49,6 +46,10 @@ export interface AssessmentResponse {
   score: number | null;
   notes: string | null;
   answeredAt: string;
+  evidenceStatus?: "answered" | "not_applicable" | "excluded" | "missing";
+  exclusionReason?: string | null;
+  respondentGroupId?: string | null;
+  evidenceAt?: string;
 }
 
 export interface StageRun {

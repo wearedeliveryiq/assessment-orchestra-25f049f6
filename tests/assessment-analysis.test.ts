@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { AssessmentSession } from "@/lib/assessment/types";
-import { normaliseAnalysisInput } from "@/lib/analysis/normalizer";
+import { deriveAnalysisIdempotencyKey, normaliseAnalysisInput } from "@/lib/analysis/normalizer";
 import {
   AssessmentAnalysisService,
   type AnalysisDependencies,
 } from "@/lib/analysis/service.server";
-import type { AssessmentAnalysisRun, AnalysisEventType } from "@/lib/analysis/types";
+import type { AssessmentAnalysisRun } from "@/lib/analysis/types";
 import type { KnowledgePackDocument } from "@/lib/knowledge-packs/schema";
 import type { Execution } from "@/lib/orchestrator/types";
 
@@ -17,7 +17,7 @@ const session: AssessmentSession = {
   createdByUserId: "44444444-4444-4444-8444-444444444444",
   organisationName: "DeliveryIQ Test",
   contactName: null,
-  assessmentType: "executive-sponsorship",
+  assessmentType: "delivery-dna",
   status: "completed",
   currentSection: null,
   progress: 100,
@@ -27,10 +27,11 @@ const session: AssessmentSession = {
   completedAt: "2026-08-02T00:01:00.000Z",
   createdAt: "2026-08-01T23:55:00.000Z",
   updatedAt: "2026-08-02T00:01:00.000Z",
+  assessmentRevision: 3,
+  consentBasis: "authenticated_assessment_submission",
 };
-
 const pack = {
-  manifest: { id: "executive-sponsorship", version: "1.4.0" },
+  manifest: { id: "delivery-dna", version: "1.0.0" },
   questions: {
     questions: [
       { id: "q-b", sectionId: "s-2" },
@@ -38,131 +39,161 @@ const pack = {
     ],
   },
 } as KnowledgePackDocument;
-
 const responses = [
   {
     questionId: "q-b",
     sectionId: "s-2",
     value: 4,
     score: 4,
-    notes: "excluded",
-    answeredAt: "later",
+    notes: null,
+    answeredAt: "2026-08-02T00:00:02Z",
+    evidenceStatus: "answered" as const,
+    respondentGroupId: "delivery",
+    evidenceAt: "2026-08-01T00:00:00Z",
   },
-  { questionId: "q-a", sectionId: "s-1", value: 2, score: 2, notes: null, answeredAt: "earlier" },
+  {
+    questionId: "q-a",
+    sectionId: "s-1",
+    value: 2,
+    score: 2,
+    notes: null,
+    answeredAt: "2026-08-02T00:00:01Z",
+    evidenceStatus: "answered" as const,
+    respondentGroupId: "leadership",
+    evidenceAt: "2026-08-01T00:00:00Z",
+  },
 ];
-
 const execution = {
   id: "55555555-5555-4555-8555-555555555555",
-  knowledgePackId: "executive-sponsorship",
-  knowledgePackVersion: "1.4.0",
+  knowledgePackId: "delivery-dna",
+  knowledgePackVersion: "1.0.0",
 } as Execution;
-
 const context = {
-  ownerKey: `${session.createdByUserId}:${session.workspaceId}`,
+  ownerKey: "owner",
   organisationId: session.organisationId,
   workspaceId: session.workspaceId,
   userId: session.createdByUserId,
+  correlationId: "corr-1",
 };
 
 function harness(overrides: Partial<AnalysisDependencies> = {}) {
   const stored: AssessmentAnalysisRun[] = [];
-  const events: AnalysisEventType[] = [];
+  const events: string[] = [];
   const deps: AnalysisDependencies = {
     getSession: vi.fn(async () => session),
     getResponses: vi.fn(async () => responses),
     findCompletedExecution: vi.fn(async () => execution),
     loadPack: vi.fn(() => pack),
     findRun: vi.fn(async (key) => stored.find((run) => run.idempotencyKey === key) ?? null),
+    getRun: vi.fn(async (id) => stored.find((run) => run.id === id) ?? null),
     latestRun: vi.fn(async () => stored.at(-1) ?? null),
     createRun: vi.fn(async (input) => {
-      const run = { ...input, id: `run-${stored.length + 1}`, createdAt: input.completedAt };
+      const run = {
+        ...input,
+        id: `run-${stored.length + 1}`,
+        createdAt: input.queuedAt,
+        updatedAt: input.queuedAt,
+      };
       stored.push(run);
       return run;
     }),
-    publish: vi.fn((_session, _owner, type) => events.push(type)),
+    appendEvent: vi.fn(async (_run, type) => {
+      events.push(type);
+    }),
     now: () => "2026-08-02T00:02:00.000Z",
     ...overrides,
   };
   return { service: new AssessmentAnalysisService(deps), deps, stored, events };
 }
 
-describe("S3-001 assessment analysis", () => {
-  it("normalises responses into a stable Knowledge Pack order without volatile fields", () => {
-    const input = normaliseAnalysisInput({ session, responses, pack });
-    expect(input.responses.map((response) => response.questionId)).toEqual(["q-a", "q-b"]);
-    expect(input.responses[0]).toEqual({ questionId: "q-a", sectionId: "s-1", value: 2, score: 2 });
-    expect(JSON.stringify(input)).not.toContain("notes");
-    expect(JSON.stringify(input)).not.toContain("answeredAt");
+describe("S3-001 assessment analysis pipeline", () => {
+  it("retains stable answer, question, respondent and evidence references", () => {
+    const input = normaliseAnalysisInput({ session, responses, pack, requestedMode: "workspace" });
+    expect(input.responses.map((item) => item.questionId)).toEqual(["q-a", "q-b"]);
+    expect(input.responses[0]).toMatchObject({
+      answerId: `${session.id}:q-a`,
+      answerVersion: responses[1].answeredAt,
+      questionVersion: "1.0.0",
+      respondentGroupId: "leadership",
+      evidenceAt: "2026-08-01T00:00:00Z",
+    });
   });
 
-  it("persists one immutable canonical run and emits structured lifecycle events", async () => {
+  it("creates one queued immutable snapshot and emits a correlated event", async () => {
     const { service, stored, events } = harness();
-    const run = await service.analyse(session.id, context);
-    expect(run.knowledgePackVersion).toBe("1.4.0");
-    expect(run.responseCount).toBe(2);
-    expect(run.inputHash).toMatch(/^[0-9a-f]{64}$/);
+    const result = await service.request(
+      { assessmentId: session.id, requestedMode: "workspace" },
+      context,
+    );
+    expect(result.httpStatus).toBe(202);
+    expect(result.run.status).toBe("queued");
+    expect(result.run.configurationSetId).toBe("sprint03-product-config-1.0.0");
+    expect(result.run.configurationDigest).toMatch(/^[0-9a-f]{64}$/);
+    expect(result.run.correlationId).toBe("corr-1");
     expect(stored).toHaveLength(1);
-    expect(events).toEqual(["analysis.started", "analysis.completed"]);
+    expect(events).toEqual(["analysis.queued"]);
   });
 
-  it("is idempotent for an identical completed session", async () => {
-    const { service, deps, stored, events } = harness();
-    const first = await service.analyse(session.id, context);
-    const second = await service.analyse(session.id, context);
-    expect(second.id).toBe(first.id);
+  it("derives the locked idempotency material and replays without duplication", async () => {
+    const canonical = normaliseAnalysisInput({
+      session,
+      responses,
+      pack,
+      requestedMode: "workspace",
+    });
+    await expect(deriveAnalysisIdempotencyKey(canonical)).resolves.toMatch(/^[0-9a-f]{64}$/);
+    const { service, stored } = harness();
+    const first = await service.request(
+      { assessmentId: session.id, requestedMode: "workspace" },
+      context,
+    );
+    const replay = await service.request(
+      { assessmentId: session.id, requestedMode: "workspace" },
+      context,
+    );
+    expect(replay.run.id).toBe(first.run.id);
+    expect(replay.reused).toBe(true);
     expect(stored).toHaveLength(1);
-    expect(deps.createRun).toHaveBeenCalledTimes(1);
-    expect(events).toContain("analysis.reused");
   });
 
-  it("rejects an incomplete response set and records failure", async () => {
-    const { service, events } = harness({ getResponses: vi.fn(async () => responses.slice(0, 1)) });
-    await expect(service.analyse(session.id, context)).rejects.toMatchObject({
-      code: "assessment_incomplete",
-      status: 422,
-    });
-    expect(events.at(-1)).toBe("analysis.failed");
-  });
-
-  it("rejects a non-completed session", async () => {
-    const { service } = harness({
-      getSession: vi.fn(async () => ({ ...session, status: "processing", completedAt: null })),
-    });
-    await expect(service.analyse(session.id, context)).rejects.toMatchObject({
-      code: "assessment_not_completed",
-      status: 409,
-    });
-  });
-
-  it("fails closed when the pinned Knowledge Pack version cannot be loaded", async () => {
-    const { service } = harness({
-      loadPack: vi.fn(() => {
-        throw new Error("missing version");
-      }),
-    });
-    await expect(service.analyse(session.id, context)).rejects.toMatchObject({
-      code: "knowledge_pack_invalid",
-      status: 422,
-    });
-  });
-
-  it("requires a completed version-pinned runtime execution", async () => {
-    const { service, events } = harness({ findCompletedExecution: vi.fn(async () => null) });
-    await expect(service.analyse(session.id, context)).rejects.toMatchObject({
-      code: "completed_execution_required",
-      status: 409,
-    });
-    expect(events.at(-1)).toBe("analysis.failed");
-  });
-
-  it("does not reveal a session from another workspace", async () => {
-    const { service, deps } = harness();
+  it("returns a stable conflict for same-key different canonical input", async () => {
+    const { service } = harness();
+    await service.request(
+      { assessmentId: session.id, requestedMode: "workspace", idempotencyKey: "customer-key-0001" },
+      context,
+    );
+    session.assessmentRevision = 4;
     await expect(
-      service.analyse(session.id, {
-        ...context,
-        workspaceId: "99999999-9999-4999-8999-999999999999",
-      }),
-    ).rejects.toMatchObject({ code: "tenant_mismatch", status: 404 });
-    expect(deps.getResponses).not.toHaveBeenCalled();
+      service.request(
+        {
+          assessmentId: session.id,
+          requestedMode: "workspace",
+          idempotencyKey: "customer-key-0001",
+        },
+        context,
+      ),
+    ).rejects.toMatchObject({ code: "ANALYSIS_IDEMPOTENCY_CONFLICT", status: 409 });
+    session.assessmentRevision = 3;
+  });
+
+  it("fails closed for incomplete, unavailable-version and cross-tenant input", async () => {
+    const incomplete = harness({ getResponses: vi.fn(async () => responses.slice(0, 1)) });
+    await expect(
+      incomplete.service.request({ assessmentId: session.id, requestedMode: "workspace" }, context),
+    ).rejects.toMatchObject({ code: "ANALYSIS_INPUT_INCOMPLETE", status: 422 });
+    const unavailable = harness({ findCompletedExecution: vi.fn(async () => null) });
+    await expect(
+      unavailable.service.request(
+        { assessmentId: session.id, requestedMode: "workspace" },
+        context,
+      ),
+    ).rejects.toMatchObject({ code: "ANALYSIS_VERSION_UNAVAILABLE", status: 409 });
+    const mismatch = harness();
+    await expect(
+      mismatch.service.request(
+        { assessmentId: session.id, requestedMode: "workspace" },
+        { ...context, workspaceId: "99999999-9999-4999-8999-999999999999" },
+      ),
+    ).rejects.toMatchObject({ code: "ANALYSIS_ACCESS_DENIED", status: 404 });
   });
 });

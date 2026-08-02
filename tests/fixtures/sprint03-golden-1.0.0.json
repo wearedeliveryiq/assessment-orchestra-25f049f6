@@ -1,0 +1,953 @@
+{
+  "document": {
+    "id": "DIQ-203B",
+    "version": "1.0.0",
+    "status": "locked",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "configurationSetId": "sprint03-product-config-1.0.0",
+    "approvedBy": "Matt Prust",
+    "approvedAt": "2026-08-02"
+  },
+  "contract": {
+    "expectedIsExactWithinAssertionProjection": true,
+    "defaultOrderSensitive": true,
+    "productionAcceptanceAfterFinalApproval": true,
+    "illustrative": false
+  },
+  "fixtures": [
+    {
+      "id": "score_minimum",
+      "stage": "capability_scoring",
+      "assertionProjection": ["available", "rawScore", "displayScore", "band", "eligibleWeight"],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 1, "status": "answered" },
+          "p": { "value": 1, "status": "answered" },
+          "e": { "value": 1, "status": "answered" }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 0.0,
+        "displayScore": 0.0,
+        "band": "fragile",
+        "eligibleWeight": 1.0
+      }
+    },
+    {
+      "id": "score_midpoint",
+      "stage": "capability_scoring",
+      "assertionProjection": ["available", "rawScore", "displayScore", "band", "eligibleWeight"],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 3, "status": "answered" },
+          "p": { "value": 3, "status": "answered" },
+          "e": { "value": 3, "status": "answered" }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 50.0,
+        "displayScore": 50.0,
+        "band": "established",
+        "eligibleWeight": 1.0
+      }
+    },
+    {
+      "id": "score_maximum",
+      "stage": "capability_scoring",
+      "assertionProjection": ["available", "rawScore", "displayScore", "band", "eligibleWeight"],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 5, "status": "answered" },
+          "p": { "value": 5, "status": "answered" },
+          "e": { "value": 5, "status": "answered" }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 100.0,
+        "displayScore": 100.0,
+        "band": "leading",
+        "eligibleWeight": 1.0
+      }
+    },
+    {
+      "id": "score_missing_required_but_available",
+      "stage": "capability_scoring",
+      "assertionProjection": [
+        "available",
+        "rawScore",
+        "displayScore",
+        "band",
+        "eligibleWeight",
+        "missingQuestionIds"
+      ],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 1, "status": "answered" },
+          "p": { "value": 5, "status": "answered" },
+          "e": { "status": "missing" }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 57.142857,
+        "displayScore": 57.1,
+        "band": "established",
+        "eligibleWeight": 0.7,
+        "missingQuestionIds": ["e"]
+      }
+    },
+    {
+      "id": "score_missing_unavailable",
+      "stage": "capability_scoring",
+      "assertionProjection": ["available", "rawScore", "band", "eligibleWeight", "reasonCode"],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "status": "missing" },
+          "p": { "value": 5, "status": "answered" },
+          "e": { "status": "missing" }
+        }
+      },
+      "expected": {
+        "available": false,
+        "rawScore": null,
+        "band": null,
+        "eligibleWeight": 0.4,
+        "reasonCode": "insufficient_evidence"
+      }
+    },
+    {
+      "id": "score_excluded_and_not_applicable",
+      "stage": "capability_scoring",
+      "assertionProjection": [
+        "available",
+        "rawScore",
+        "displayScore",
+        "band",
+        "eligibleWeight",
+        "excludedQuestionIds",
+        "notApplicableQuestionIds"
+      ],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 3, "status": "answered" },
+          "p": { "status": "excluded", "reason": "quality_review" },
+          "e": { "value": 5, "status": "not_applicable", "reason": "not_used_in_operating_model" }
+        }
+      },
+      "expected": {
+        "available": false,
+        "rawScore": null,
+        "displayScore": null,
+        "band": null,
+        "eligibleWeight": 0.3,
+        "excludedQuestionIds": ["p"],
+        "notApplicableQuestionIds": ["e"]
+      }
+    },
+    {
+      "id": "score_optional_context_ignored",
+      "stage": "capability_scoring",
+      "assertionProjection": ["rawScore", "displayScore", "band", "contextContribution"],
+      "input": {
+        "questionWeights": { "f": 0.3, "p": 0.4, "e": 0.3 },
+        "responses": {
+          "f": { "value": 3, "status": "answered" },
+          "p": { "value": 3, "status": "answered" },
+          "e": { "value": 3, "status": "answered" }
+        },
+        "optionalContext": {
+          "comment": "Strong narrative claim that must not affect scoring",
+          "attachmentCount": 4
+        }
+      },
+      "expected": {
+        "rawScore": 50.0,
+        "displayScore": 50.0,
+        "band": "established",
+        "contextContribution": 0
+      }
+    },
+    {
+      "id": "score_band_boundary_25",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 25.0 },
+      "expected": { "band": "developing" }
+    },
+    {
+      "id": "score_band_boundary_50",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 50.0 },
+      "expected": { "band": "established" }
+    },
+    {
+      "id": "score_band_boundary_75",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 75.0 },
+      "expected": { "band": "leading" }
+    },
+    {
+      "id": "score_band_below_25",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 24.999999 },
+      "expected": { "band": "fragile" }
+    },
+    {
+      "id": "score_band_below_50",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 49.999999 },
+      "expected": { "band": "developing" }
+    },
+    {
+      "id": "score_band_below_75",
+      "stage": "banding",
+      "assertionProjection": ["band"],
+      "input": { "rawScore": 74.999999 },
+      "expected": { "band": "established" }
+    },
+    {
+      "id": "overall_minimum_nine_capabilities",
+      "stage": "overall_scoring",
+      "assertionProjection": [
+        "available",
+        "rawScore",
+        "displayScore",
+        "band",
+        "availableCapabilityCount"
+      ],
+      "input": {
+        "capabilityScores": [0, 25, 50, 75, 100, 0, 25, 50, 75],
+        "unavailableCapabilityCount": 4
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 44.444444,
+        "displayScore": 44.4,
+        "band": "developing",
+        "availableCapabilityCount": 9
+      }
+    },
+    {
+      "id": "overall_unavailable_eight_capabilities",
+      "stage": "overall_scoring",
+      "assertionProjection": [
+        "available",
+        "rawScore",
+        "band",
+        "availableCapabilityCount",
+        "reasonCode"
+      ],
+      "input": {
+        "capabilityScores": [50, 50, 50, 50, 50, 50, 50, 50],
+        "unavailableCapabilityCount": 5
+      },
+      "expected": {
+        "available": false,
+        "rawScore": null,
+        "band": null,
+        "availableCapabilityCount": 8,
+        "reasonCode": "insufficient_capability_coverage"
+      }
+    },
+    {
+      "id": "confidence_all_factors_maximum",
+      "stage": "confidence",
+      "assertionProjection": ["index", "displayIndex", "band", "limitations"],
+      "input": {
+        "factors": {
+          "required_completion": 1,
+          "capability_coverage": 1,
+          "response_consistency": 1,
+          "evidence_recency": 1,
+          "respondent_breadth": 1
+        }
+      },
+      "expected": { "index": 100.0, "displayIndex": 100, "band": "high", "limitations": [] }
+    },
+    {
+      "id": "confidence_missing_metadata",
+      "stage": "confidence",
+      "assertionProjection": ["index", "displayIndex", "band", "limitations"],
+      "input": {
+        "factors": {
+          "required_completion": 1,
+          "capability_coverage": 1,
+          "response_consistency": 1,
+          "evidence_recency": 0,
+          "respondent_breadth": 0
+        }
+      },
+      "expected": {
+        "index": 80.0,
+        "displayIndex": 80,
+        "band": "high",
+        "limitations": ["stale_evidence", "limited_respondent_breadth"]
+      }
+    },
+    {
+      "id": "confidence_boundary_50",
+      "stage": "confidence_banding",
+      "assertionProjection": ["band"],
+      "input": { "index": 50.0 },
+      "expected": { "band": "moderate" }
+    },
+    {
+      "id": "confidence_boundary_75",
+      "stage": "confidence_banding",
+      "assertionProjection": ["band"],
+      "input": { "index": 75.0 },
+      "expected": { "band": "high" }
+    },
+    {
+      "id": "confidence_below_50",
+      "stage": "confidence_banding",
+      "assertionProjection": ["band"],
+      "input": { "index": 49.999999 },
+      "expected": { "band": "low" }
+    },
+    {
+      "id": "confidence_below_75",
+      "stage": "confidence_banding",
+      "assertionProjection": ["band"],
+      "input": { "index": 74.999999 },
+      "expected": { "band": "moderate" }
+    },
+    {
+      "id": "confidence_factor_independence",
+      "stage": "confidence",
+      "assertionProjection": ["resultA.index", "resultB.index", "equal"],
+      "input": {
+        "resultA": {
+          "answerValues": [1, 1, 1],
+          "factors": {
+            "required_completion": 1,
+            "capability_coverage": 1,
+            "response_consistency": 1,
+            "evidence_recency": 1,
+            "respondent_breadth": 0.7
+          }
+        },
+        "resultB": {
+          "answerValues": [5, 5, 5],
+          "factors": {
+            "required_completion": 1,
+            "capability_coverage": 1,
+            "response_consistency": 1,
+            "evidence_recency": 1,
+            "respondent_breadth": 0.7
+          }
+        }
+      },
+      "expected": { "resultA": { "index": 97.0 }, "resultB": { "index": 97.0 }, "equal": true }
+    },
+    {
+      "id": "finding_ties",
+      "stage": "findings",
+      "assertionProjection": ["strengths", "priorityOpportunities"],
+      "input": {
+        "capabilities": [
+          { "id": "strategy_alignment", "order": 1, "score": 75, "confidence": 80 },
+          { "id": "governance", "order": 2, "score": 75, "confidence": 80 },
+          { "id": "sponsorship", "order": 3, "score": 25, "confidence": 80 },
+          { "id": "portfolio", "order": 4, "score": 25, "confidence": 80 }
+        ]
+      },
+      "expected": {
+        "strengths": ["strategy_alignment", "governance"],
+        "priorityOpportunities": ["sponsorship", "portfolio"]
+      }
+    },
+    {
+      "id": "finding_confidence_gate",
+      "stage": "findings",
+      "assertionProjection": ["strengths", "priorityOpportunities", "insufficientEvidence"],
+      "input": {
+        "capabilities": [
+          { "id": "governance", "order": 2, "score": 10, "confidence": 49.999999 },
+          { "id": "reporting_insight", "order": 12, "score": 90, "confidence": 49.999999 }
+        ]
+      },
+      "expected": {
+        "strengths": [],
+        "priorityOpportunities": [],
+        "insufficientEvidence": ["governance", "reporting_insight"]
+      }
+    },
+    {
+      "id": "pattern_governance_sponsorship_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "governance": 25, "sponsorship": 49.999999 },
+        "confidence": { "governance": 50, "sponsorship": 50 }
+      },
+      "expected": { "detected": ["pat_governance_sponsorship_gap"] }
+    },
+    {
+      "id": "pattern_governance_sponsorship_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "governance": 25, "sponsorship": 50 },
+        "confidence": { "governance": 50, "sponsorship": 50 }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_execution_without_control_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": {
+          "programme_delivery": 75,
+          "project_delivery": 75,
+          "governance": 25,
+          "planning_controls": 25
+        },
+        "confidence": {
+          "programme_delivery": 80,
+          "project_delivery": 80,
+          "governance": 80,
+          "planning_controls": 80
+        }
+      },
+      "expected": { "detected": ["pat_execution_without_control"] }
+    },
+    {
+      "id": "pattern_execution_without_control_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": {
+          "programme_delivery": 74,
+          "project_delivery": 76,
+          "governance": 50,
+          "planning_controls": 50
+        },
+        "confidence": {
+          "programme_delivery": 80,
+          "project_delivery": 80,
+          "governance": 80,
+          "planning_controls": 80
+        }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_strategy_execution_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "strategy_alignment": 50, "programme_delivery": 25, "project_delivery": 49 },
+        "confidence": { "strategy_alignment": 80, "programme_delivery": 80, "project_delivery": 80 }
+      },
+      "expected": { "detected": ["pat_strategy_execution_disconnect"] }
+    },
+    {
+      "id": "pattern_strategy_execution_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": {
+          "strategy_alignment": 49.999999,
+          "programme_delivery": 25,
+          "project_delivery": 25
+        },
+        "confidence": { "strategy_alignment": 80, "programme_delivery": 80, "project_delivery": 80 }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_benefits_blind_spot_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "benefits": 49.999999, "reporting_insight": 0 },
+        "confidence": { "benefits": 80, "reporting_insight": 80 }
+      },
+      "expected": { "detected": ["pat_benefits_blind_spot"] }
+    },
+    {
+      "id": "pattern_benefits_blind_spot_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "benefits": 50, "reporting_insight": 0 },
+        "confidence": { "benefits": 80, "reporting_insight": 80 }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_resilient_foundation_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "governance": 50, "planning_controls": 50, "risk_assurance": 50 },
+        "confidence": { "governance": 50, "planning_controls": 50, "risk_assurance": 50 }
+      },
+      "expected": { "detected": ["pat_resilient_delivery_foundation"] }
+    },
+    {
+      "id": "pattern_resilient_foundation_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "governance": 50, "planning_controls": 49.999999, "risk_assurance": 50 },
+        "confidence": { "governance": 50, "planning_controls": 50, "risk_assurance": 50 }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_learning_system_positive",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "reporting_insight": 75, "continuous_improvement": 75 },
+        "confidence": { "reporting_insight": 50, "continuous_improvement": 50 }
+      },
+      "expected": { "detected": ["pat_learning_system"] }
+    },
+    {
+      "id": "pattern_learning_system_negative",
+      "stage": "patterns",
+      "assertionProjection": ["detected"],
+      "input": {
+        "scores": { "reporting_insight": 75, "continuous_improvement": 74.999999 },
+        "confidence": { "reporting_insight": 50, "continuous_improvement": 50 }
+      },
+      "expected": { "detected": [] }
+    },
+    {
+      "id": "pattern_exclusive_conflict",
+      "stage": "pattern_conflict",
+      "assertionProjection": ["retained", "suppressed"],
+      "input": {
+        "matched": [
+          {
+            "id": "pat_governance_sponsorship_gap",
+            "group": "leadership_control_state",
+            "priority": 100,
+            "order": 1
+          },
+          {
+            "id": "pat_resilient_delivery_foundation",
+            "group": "leadership_control_state",
+            "priority": 40,
+            "order": 5
+          }
+        ]
+      },
+      "expected": {
+        "retained": ["pat_governance_sponsorship_gap"],
+        "suppressed": [
+          { "id": "pat_resilient_delivery_foundation", "reason": "exclusive_group_lower_priority" }
+        ]
+      }
+    },
+    {
+      "id": "recommendation_eligibility_and_exclusion",
+      "stage": "recommendations",
+      "assertionProjection": ["eligible", "excluded"],
+      "input": {
+        "opportunities": ["risk_assurance", "reporting_insight"],
+        "patterns": ["pat_resilient_delivery_foundation", "pat_learning_system"],
+        "analysisConfidence": 80
+      },
+      "expected": {
+        "eligible": [],
+        "excluded": [
+          { "id": "rec_risk_assurance", "reason": "pat_resilient_delivery_foundation" },
+          { "id": "rec_delivery_insight", "reason": "pat_learning_system" }
+        ]
+      }
+    },
+    {
+      "id": "recommendation_low_confidence_gate",
+      "stage": "recommendations",
+      "assertionProjection": ["eligible", "withheld"],
+      "input": {
+        "opportunities": ["governance", "reporting_insight"],
+        "patterns": [],
+        "analysisConfidence": 49.999999
+      },
+      "expected": {
+        "eligible": ["rec_delivery_insight", "rec_deepen_diagnosis"],
+        "withheld": [{ "id": "rec_decision_rights", "reason": "low_confidence_material_action" }]
+      }
+    },
+    {
+      "id": "recommendation_dependency_not_eligibility_prerequisite",
+      "stage": "recommendations",
+      "assertionProjection": ["eligible", "dependencyReadiness"],
+      "input": { "opportunities": ["planning_controls"], "patterns": [], "analysisConfidence": 80 },
+      "expected": {
+        "eligible": ["rec_integrated_controls"],
+        "dependencyReadiness": { "rec_integrated_controls": 40 }
+      }
+    },
+    {
+      "id": "recommendation_rank_tie",
+      "stage": "recommendation_sort",
+      "assertionProjection": ["orderedIds"],
+      "input": {
+        "recommendations": [
+          {
+            "id": "rec_decision_rights",
+            "rankScore": 80,
+            "impact": 90,
+            "urgency": 80,
+            "effortEase": 60,
+            "order": 1
+          },
+          {
+            "id": "rec_sponsor_contract",
+            "rankScore": 80,
+            "impact": 90,
+            "urgency": 80,
+            "effortEase": 60,
+            "order": 2
+          }
+        ]
+      },
+      "expected": { "orderedIds": ["rec_decision_rights", "rec_sponsor_contract"] }
+    },
+    {
+      "id": "recommendation_deduplication",
+      "stage": "recommendation_deduplication",
+      "assertionProjection": ["recommendations"],
+      "input": {
+        "candidates": [
+          {
+            "id": "rec_decision_rights",
+            "dedupeGroup": "governance_foundation",
+            "order": 1,
+            "triggers": ["opportunity:governance"]
+          },
+          {
+            "id": "rec_decision_rights",
+            "dedupeGroup": "governance_foundation",
+            "order": 1,
+            "triggers": ["pattern:pat_governance_sponsorship_gap"]
+          }
+        ]
+      },
+      "expected": {
+        "recommendations": [
+          {
+            "id": "rec_decision_rights",
+            "triggers": ["opportunity:governance", "pattern:pat_governance_sponsorship_gap"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "roadmap_dependency_sequence",
+      "stage": "roadmap",
+      "assertionProjection": ["day30", "day60", "day90", "unscheduled"],
+      "input": {
+        "ranked": [
+          "rec_integrated_controls",
+          "rec_decision_rights",
+          "rec_delivery_insight",
+          "rec_improvement_cadence"
+        ],
+        "effort": {
+          "rec_integrated_controls": "high",
+          "rec_decision_rights": "medium",
+          "rec_delivery_insight": "low",
+          "rec_improvement_cadence": "low"
+        },
+        "dependencies": {
+          "rec_integrated_controls": ["rec_decision_rights"],
+          "rec_improvement_cadence": ["rec_delivery_insight"]
+        }
+      },
+      "expected": {
+        "day30": [
+          { "id": "rec_decision_rights", "reason": "dependency_precedence" },
+          { "id": "rec_delivery_insight", "reason": "rank_and_horizon_fit" }
+        ],
+        "day60": [
+          { "id": "rec_integrated_controls", "reason": "dependency_satisfied" },
+          { "id": "rec_improvement_cadence", "reason": "dependency_satisfied" }
+        ],
+        "day90": [],
+        "unscheduled": []
+      }
+    },
+    {
+      "id": "roadmap_capacity",
+      "stage": "roadmap",
+      "assertionProjection": ["day30", "day60", "day90", "unscheduled"],
+      "input": {
+        "ranked": ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11"],
+        "effort": {
+          "r1": "low",
+          "r2": "low",
+          "r3": "low",
+          "r4": "medium",
+          "r5": "medium",
+          "r6": "medium",
+          "r7": "high",
+          "r8": "high",
+          "r9": "high",
+          "r10": "high",
+          "r11": "high"
+        },
+        "dependencies": {}
+      },
+      "expected": {
+        "day30": ["r1", "r2", "r3"],
+        "day60": ["r4", "r5", "r6"],
+        "day90": ["r7", "r8", "r9", "r10"],
+        "unscheduled": [{ "id": "r11", "reason": "capacity_exceeded" }]
+      }
+    },
+    {
+      "id": "roadmap_cycle",
+      "stage": "roadmap",
+      "assertionProjection": ["published", "error"],
+      "input": { "ranked": ["a", "b"], "dependencies": { "a": ["b"], "b": ["a"] } },
+      "expected": {
+        "published": false,
+        "error": { "code": "ROADMAP_DEPENDENCY_CYCLE", "cycle": ["a", "b", "a"] }
+      }
+    },
+    {
+      "id": "knowledge_pack_mapping",
+      "stage": "knowledge_packs",
+      "assertionProjection": ["recommendations"],
+      "input": {
+        "recommendationRanks": { "rec_decision_rights": 1, "rec_sponsor_contract": 2 },
+        "catalogue": {
+          "governance": { "status": "active", "entitled": true },
+          "executive_sponsor": { "status": "active", "entitled": false }
+        }
+      },
+      "expected": {
+        "recommendations": [
+          {
+            "id": "governance",
+            "rank": 1,
+            "cta": "start_assessment",
+            "copy": "Explore the Governance Knowledge Pack to examine decision rights, forums and escalation effectiveness in more depth."
+          },
+          {
+            "id": "executive_sponsor",
+            "rank": 2,
+            "cta": "view_pack",
+            "copy": "Explore the Executive Sponsor Knowledge Pack to examine executive sponsorship and accountability in more depth."
+          }
+        ]
+      }
+    },
+    {
+      "id": "teammate_mapping",
+      "stage": "teammates",
+      "assertionProjection": ["recommendations"],
+      "input": {
+        "acceptedRecommendations": ["rec_decision_rights"],
+        "authenticated": true,
+        "permission": "teammate.activate",
+        "catalogue": {
+          "executive": { "available": true, "entitled": true },
+          "meeting": { "available": true, "entitled": false }
+        }
+      },
+      "expected": {
+        "recommendations": [
+          {
+            "id": "executive",
+            "cta": "review_activation",
+            "copy": "The Executive TeamMate can help your team prepare decisions, maintain executive accountability and track value. Review its scope and permissions before activation."
+          },
+          {
+            "id": "meeting",
+            "cta": "view_teammate",
+            "copy": "The Meeting TeamMate can help your team prepare governance meetings and track decisions and actions. Review its scope and permissions before activation."
+          }
+        ]
+      }
+    },
+    {
+      "id": "low_confidence_narrative",
+      "stage": "narrative",
+      "assertionProjection": ["confidenceSection", "caveat"],
+      "input": {
+        "confidenceBand": "low",
+        "confidenceLimitationSummary": "Required evidence and respondent breadth are limited."
+      },
+      "expected": {
+        "confidenceSection": "Confidence in this result is low. Required evidence and respondent breadth are limited.",
+        "caveat": "This result is directional because the available evidence has low confidence. Validate the priority areas before committing material action."
+      }
+    },
+    {
+      "id": "full_traceability",
+      "stage": "traceability",
+      "assertionProjection": ["valid", "reverseEvidencePaths", "errors"],
+      "input": {
+        "nodes": ["e1", "q1", "cc1", "cs1", "f1", "p1", "r1", "rm1", "kp1", "tm1", "nf1", "pi1"],
+        "edges": [
+          ["e1", "answers", "q1"],
+          ["q1", "maps_to", "cc1"],
+          ["cc1", "contributes_to", "cs1"],
+          ["cs1", "supports", "f1"],
+          ["cs1", "supports", "p1"],
+          ["f1", "triggers", "r1"],
+          ["p1", "triggers", "r1"],
+          ["r1", "scheduled_as", "rm1"],
+          ["r1", "recommends", "kp1"],
+          ["r1", "recommends", "tm1"],
+          ["cs1", "supports", "nf1"],
+          ["nf1", "renders_as", "pi1"]
+        ],
+        "visibleOutputs": ["cs1", "f1", "p1", "r1", "rm1", "kp1", "tm1", "pi1"]
+      },
+      "expected": {
+        "valid": true,
+        "reverseEvidencePaths": {
+          "cs1": ["cs1", "cc1", "q1", "e1"],
+          "f1": ["f1", "cs1", "cc1", "q1", "e1"],
+          "p1": ["p1", "cs1", "cc1", "q1", "e1"],
+          "r1": ["r1", "f1", "cs1", "cc1", "q1", "e1"],
+          "rm1": ["rm1", "r1", "f1", "cs1", "cc1", "q1", "e1"],
+          "kp1": ["kp1", "r1", "f1", "cs1", "cc1", "q1", "e1"],
+          "tm1": ["tm1", "r1", "f1", "cs1", "cc1", "q1", "e1"],
+          "pi1": ["pi1", "nf1", "cs1", "cc1", "q1", "e1"]
+        },
+        "errors": []
+      }
+    },
+    {
+      "id": "workspace_public_disclosure",
+      "stage": "disclosure",
+      "assertionProjection": ["public"],
+      "input": {
+        "workspace": {
+          "schemaVersion": "1.0",
+          "resultId": "run_internal",
+          "publicResultId": "pub_opaque",
+          "generatedAt": "2026-08-02T12:00:00Z",
+          "tenantId": "tenant_secret",
+          "workspaceId": "workspace_secret",
+          "overall": {
+            "rawScore": 62.345678,
+            "displayScore": 62.3,
+            "band": "established",
+            "traceIds": ["t1"]
+          },
+          "confidence": {
+            "index": 71,
+            "band": "moderate",
+            "caveat": "The result represents a limited range of perspectives.",
+            "factors": [{ "id": "breadth", "value": 0.4 }]
+          },
+          "summary": "Your delivery capability is established, with clear strengths and priority opportunities.",
+          "strengths": [
+            {
+              "title": "Planning and Controls",
+              "summary": "Planning evidence is comparatively strong.",
+              "score": 80,
+              "traceIds": ["t2"]
+            }
+          ],
+          "opportunities": [
+            {
+              "title": "Governance and Decision-Making",
+              "summary": "Clarify decision ownership and cadence.",
+              "score": 35,
+              "traceIds": ["t3"]
+            }
+          ],
+          "recommendationPreviews": [
+            {
+              "title": "Define decision rights and governance cadence",
+              "impact": "high",
+              "summary": "Clarify owners, forums and escalation thresholds.",
+              "rankScore": 88,
+              "traceIds": ["t4"]
+            }
+          ],
+          "roadmap": { "day30": ["rec_decision_rights"] },
+          "registrationPrompt": {
+            "label": "Create your free DeliveryIQ account to unlock your full report, improvement roadmap and recommended next steps.",
+            "destination": "/register?source=delivery-dna&result=pub_opaque"
+          }
+        }
+      },
+      "expected": {
+        "public": {
+          "schemaVersion": "1.0",
+          "resultId": "pub_opaque",
+          "generatedAt": "2026-08-02T12:00:00Z",
+          "overall": { "displayScore": 62.3, "band": "established" },
+          "confidence": {
+            "band": "moderate",
+            "caveat": "The result represents a limited range of perspectives."
+          },
+          "summary": "Your delivery capability is established, with clear strengths and priority opportunities.",
+          "strengths": [
+            {
+              "title": "Planning and Controls",
+              "summary": "Planning evidence is comparatively strong."
+            }
+          ],
+          "opportunities": [
+            {
+              "title": "Governance and Decision-Making",
+              "summary": "Clarify decision ownership and cadence."
+            }
+          ],
+          "recommendationPreviews": [
+            {
+              "title": "Define decision rights and governance cadence",
+              "impact": "high",
+              "summary": "Clarify owners, forums and escalation thresholds."
+            }
+          ],
+          "registrationPrompt": {
+            "label": "Create your free DeliveryIQ account to unlock your full report, improvement roadmap and recommended next steps.",
+            "destination": "/register?source=delivery-dna&result=pub_opaque"
+          }
+        }
+      }
+    },
+    {
+      "id": "analysis_idempotent_replay",
+      "stage": "analysis_lifecycle",
+      "assertionProjection": ["firstResponse", "replayResponse", "runCount"],
+      "input": {
+        "sameCanonicalInput": true,
+        "sameIdempotencyKey": true,
+        "existingStatus": "completed"
+      },
+      "expected": {
+        "firstResponse": { "http": 202, "status": "queued" },
+        "replayResponse": { "http": 200, "status": "completed", "sameRun": true },
+        "runCount": 1
+      }
+    },
+    {
+      "id": "analysis_idempotency_conflict",
+      "stage": "analysis_lifecycle",
+      "assertionProjection": ["http", "errorCode", "runCount"],
+      "input": { "sameCanonicalInput": false, "sameIdempotencyKey": true },
+      "expected": { "http": 409, "errorCode": "ANALYSIS_IDEMPOTENCY_CONFLICT", "runCount": 1 }
+    }
+  ]
+}
