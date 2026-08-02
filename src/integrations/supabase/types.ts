@@ -4190,7 +4190,12 @@ export type Database = {
       }
     }
     Enums: {
-      analysis_handoff_status: "pending" | "processing" | "delivered" | "failed"
+      analysis_handoff_status:
+        | "pending"
+        | "processing"
+        | "delivered"
+        | "failed"
+        | "ineligible"
       analysis_requested_mode: "workspace" | "public"
       analysis_run_status: "queued" | "running" | "completed" | "failed"
       assessment_status:
@@ -4347,7 +4352,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      analysis_handoff_status: ["pending", "processing", "delivered", "failed"],
+      analysis_handoff_status: [
+        "pending",
+        "processing",
+        "delivered",
+        "failed",
+        "ineligible",
+      ],
       analysis_requested_mode: ["workspace", "public"],
       analysis_run_status: ["queued", "running", "completed", "failed"],
       assessment_status: [
