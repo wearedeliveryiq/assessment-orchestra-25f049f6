@@ -1,4 +1,5 @@
 import { sprint03Configuration } from "./config";
+import type { ReturnTypeWorkspaceProjection } from "./projection-types";
 
 type RecordValue = Record<string, unknown>;
 
@@ -42,4 +43,45 @@ export function projectPublicResult(workspaceValue: unknown): RecordValue {
     registrationPrompt: pick(workspace.registrationPrompt, ["label", "destination"]),
   };
   return publicResult;
+}
+
+export function publicSourceFromWorkspace(
+  workspace: ReturnTypeWorkspaceProjection,
+  publicResultId: string,
+) {
+  const capabilities = new Map(workspace.capabilities.map((item) => [item.id, item]));
+  const strengthSummary = workspace.executiveSummary.strengths;
+  const opportunitySummary = workspace.executiveSummary.opportunities;
+  return {
+    schemaVersion: "deliveryiq.public-result/1.0.0",
+    publicResultId,
+    generatedAt: workspace.generatedAt,
+    overall: workspace.overall,
+    confidence: {
+      band: workspace.confidence.band,
+      caveat: workspace.executiveSummary.caveat,
+    },
+    summary: workspace.executiveSummary.overallPosition,
+    strengths: workspace.findings.strengths.map((id, index) => ({
+      title: capabilities.get(id)?.label ?? id,
+      summary: strengthSummary[index] ?? "This capability meets the approved strength threshold.",
+    })),
+    opportunities: workspace.findings.priorityOpportunities.map((id, index) => ({
+      title: capabilities.get(id)?.label ?? id,
+      summary:
+        opportunitySummary[index] ?? "This capability meets the approved priority threshold.",
+    })),
+    recommendationPreviews: workspace.recommendations.map((item) => ({
+      title: item.title,
+      impact: item.impact,
+      summary: item.outcome,
+    })),
+    registrationPrompt: {
+      label: sprint03Configuration.publicDisclosure.registrationPrompt,
+      destination: sprint03Configuration.publicDisclosure.registrationDestination.replace(
+        "{publicResultId}",
+        publicResultId,
+      ),
+    },
+  };
 }

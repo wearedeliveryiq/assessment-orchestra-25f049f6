@@ -1,11 +1,14 @@
 import * as repository from "./repository.server";
+import { analyseCanonicalInput } from "../delivery-intelligence/engine";
+import { publishResult } from "../delivery-intelligence/result-repository.server";
+import { buildCoreTrace } from "../delivery-intelligence/trace-builder";
+import { validateTraceGraph } from "../delivery-intelligence/traceability";
 import type { AssessmentAnalysisRun } from "./types";
 
 const locallyRunning = new Map<string, Promise<AssessmentAnalysisRun | null>>();
 
 export interface AnalysisExecutorDependencies {
   claim(id: string, owner: string, leaseSeconds?: number): Promise<AssessmentAnalysisRun | null>;
-  complete(id: string, owner: string): Promise<AssessmentAnalysisRun>;
   fail(
     id: string,
     owner: string,
@@ -17,18 +20,28 @@ export interface AnalysisExecutorDependencies {
     payload: Record<string, unknown>,
     severity?: string,
   ): Promise<void>;
-  execute(run: AssessmentAnalysisRun): Promise<void>;
+  publish(run: AssessmentAnalysisRun, owner: string): Promise<AssessmentAnalysisRun>;
   workerId(): string;
 }
 
 const defaultDependencies: AnalysisExecutorDependencies = {
   claim: repository.claimRun,
-  complete: repository.completeRun,
   fail: repository.failRun,
   event: repository.appendEvent,
-  // S3-001 deliberately performs no scoring, narrative or recommendation work.
-  // Later Sprint stories replace this domain callback with canonical result publication.
-  execute: async () => undefined,
+  publish: async (run, owner) => {
+    const core = analyseCanonicalInput(run.input);
+    const canonicalResult = {
+      ...core,
+      analysisRunId: run.id,
+      generatedAt: run.startedAt ?? run.queuedAt,
+    };
+    const trace = await buildCoreTrace(run, core);
+    const validation = validateTraceGraph(trace);
+    if (!validation.valid) {
+      throw new Error(`ANALYSIS_TRACE_INCOMPLETE: ${validation.errors.join(",")}`);
+    }
+    return publishResult(run, owner, canonicalResult, trace);
+  },
   workerId: () => `analysis-worker:${crypto.randomUUID()}`,
 };
 
@@ -44,8 +57,7 @@ export class AnalysisRunExecutor {
       worker: workerId,
     });
     try {
-      await this.deps.execute(claimed);
-      const completed = await this.deps.complete(runId, workerId);
+      const completed = await this.deps.publish(claimed, workerId);
       await this.deps.event(completed, "analysis.completed", {
         attempt: completed.attempt,
         configurationSetId: completed.configurationSetId,
@@ -68,7 +80,11 @@ export class AnalysisRunExecutor {
 
 export function classifyExecutionFailure(error: unknown) {
   const code = error instanceof Error ? error.message.split(":", 1)[0] : "";
-  if (code === "ANALYSIS_CONFIGURATION_INVALID" || code === "ANALYSIS_INPUT_INVALID") {
+  if (
+    code === "ANALYSIS_CONFIGURATION_INVALID" ||
+    code === "ANALYSIS_INPUT_INVALID" ||
+    code === "ANALYSIS_TRACE_INCOMPLETE"
+  ) {
     return { code, message: "Analysis input or configuration is invalid", retryable: false };
   }
   if (code === "ANALYSIS_EXECUTION_TRANSIENT") {

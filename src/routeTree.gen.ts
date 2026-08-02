@@ -91,6 +91,7 @@ import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
 import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
+import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
 import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
 import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
 import { Route as ApiReportingHistoryRouteImport } from './routes/api/reporting.history'
@@ -141,8 +142,12 @@ import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
 import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
 import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
+import { Route as PublicResultsTokenRouteImport } from './routes/public/results.$token'
 import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
 import { Route as TraceEntityTypeEntityIdRouteImport } from './routes/trace.$entityType.$entityId'
+import { Route as ApiAnalysisRunsIdExplanationsRouteImport } from './routes/api/analysis-runs.$id.explanations'
+import { Route as ApiAnalysisRunsIdPublicResultRouteImport } from './routes/api/analysis-runs.$id.public-result'
+import { Route as ApiAnalysisRunsIdResultRouteImport } from './routes/api/analysis-runs.$id.result'
 import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
 import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
 import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/api/assessment-sessions.$id.complete'
@@ -598,6 +603,11 @@ const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiOrganisationsRoute,
 } as any)
+const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
+  id: '/api/public-results/$token',
+  path: '/api/public-results/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiReportingBrandingRoute = ApiReportingBrandingRouteImport.update({
   id: '/api/reporting/branding',
   path: '/api/reporting/branding',
@@ -856,6 +866,11 @@ const KnowledgePackIdVersionsRoute = KnowledgePackIdVersionsRouteImport.update({
   path: '/knowledge-pack/$id/versions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicResultsTokenRoute = PublicResultsTokenRouteImport.update({
+  id: '/public/results/$token',
+  path: '/public/results/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
   id: '/download',
   path: '/download',
@@ -865,6 +880,23 @@ const TraceEntityTypeEntityIdRoute = TraceEntityTypeEntityIdRouteImport.update({
   id: '/trace/$entityType/$entityId',
   path: '/trace/$entityType/$entityId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalysisRunsIdExplanationsRoute =
+  ApiAnalysisRunsIdExplanationsRouteImport.update({
+    id: '/explanations',
+    path: '/explanations',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdPublicResultRoute =
+  ApiAnalysisRunsIdPublicResultRouteImport.update({
+    id: '/public-result',
+    path: '/public-result',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdResultRoute = ApiAnalysisRunsIdResultRouteImport.update({
+  id: '/result',
+  path: '/result',
+  getParentRoute: () => ApiAnalysisRunsIdRoute,
 } as any)
 const ApiAssessmentSessionsIdArchiveRoute =
   ApiAssessmentSessionsIdArchiveRouteImport.update({
@@ -1146,7 +1178,7 @@ export interface FileRoutesByFullPath {
   '/workspaces/': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
-  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRouteWithChildren
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1169,6 +1201,7 @@ export interface FileRoutesByFullPath {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1208,6 +1241,7 @@ export interface FileRoutesByFullPath {
   '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
+  '/public/results/$token': typeof PublicResultsTokenRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
@@ -1221,6 +1255,9 @@ export interface FileRoutesByFullPath {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/analysis-runs/$id/explanations': typeof ApiAnalysisRunsIdExplanationsRoute
+  '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
+  '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
@@ -1322,7 +1359,7 @@ export interface FileRoutesByTo {
   '/workspaces': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
-  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRouteWithChildren
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1345,6 +1382,7 @@ export interface FileRoutesByTo {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1384,6 +1422,7 @@ export interface FileRoutesByTo {
   '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
+  '/public/results/$token': typeof PublicResultsTokenRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id': typeof AssessmentIdIndexRoute
@@ -1397,6 +1436,9 @@ export interface FileRoutesByTo {
   '/internal/scores': typeof InternalScoresIndexRoute
   '/internal/signals': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id': typeof KnowledgePackIdIndexRoute
+  '/api/analysis-runs/$id/explanations': typeof ApiAnalysisRunsIdExplanationsRoute
+  '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
+  '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
@@ -1499,7 +1541,7 @@ export interface FileRoutesById {
   '/workspaces/': typeof WorkspacesIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
-  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRoute
+  '/api/analysis-runs/$id': typeof ApiAnalysisRunsIdRouteWithChildren
   '/api/assessment-sessions/$id': typeof ApiAssessmentSessionsIdRouteWithChildren
   '/api/assessment-sessions/dashboard': typeof ApiAssessmentSessionsDashboardRoute
   '/api/assessment/$id': typeof ApiAssessmentIdRouteWithChildren
@@ -1522,6 +1564,7 @@ export interface FileRoutesById {
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1561,6 +1604,7 @@ export interface FileRoutesById {
   '/internal/signals/$id': typeof InternalSignalsIdRoute
   '/knowledge-pack/$id/activate': typeof KnowledgePackIdActivateRoute
   '/knowledge-pack/$id/versions': typeof KnowledgePackIdVersionsRoute
+  '/public/results/$token': typeof PublicResultsTokenRoute
   '/report/$id/download': typeof ReportIdDownloadRoute
   '/trace/$entityType/$entityId': typeof TraceEntityTypeEntityIdRoute
   '/assessment/$id/': typeof AssessmentIdIndexRoute
@@ -1574,6 +1618,9 @@ export interface FileRoutesById {
   '/internal/scores/': typeof InternalScoresIndexRoute
   '/internal/signals/': typeof InternalSignalsIndexRoute
   '/knowledge-pack/$id/': typeof KnowledgePackIdIndexRoute
+  '/api/analysis-runs/$id/explanations': typeof ApiAnalysisRunsIdExplanationsRoute
+  '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
+  '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
   '/api/assessment-sessions/$id/complete': typeof ApiAssessmentSessionsIdCompleteRoute
@@ -1700,6 +1747,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/public-results/$token'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -1739,6 +1787,7 @@ export interface FileRouteTypes {
     | '/internal/signals/$id'
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
+    | '/public/results/$token'
     | '/report/$id/download'
     | '/trace/$entityType/$entityId'
     | '/assessment/$id/'
@@ -1752,6 +1801,9 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/analysis-runs/$id/explanations'
+    | '/api/analysis-runs/$id/public-result'
+    | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
     | '/api/assessment-sessions/$id/complete'
@@ -1876,6 +1928,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/public-results/$token'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -1915,6 +1968,7 @@ export interface FileRouteTypes {
     | '/internal/signals/$id'
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
+    | '/public/results/$token'
     | '/report/$id/download'
     | '/trace/$entityType/$entityId'
     | '/assessment/$id'
@@ -1928,6 +1982,9 @@ export interface FileRouteTypes {
     | '/internal/scores'
     | '/internal/signals'
     | '/knowledge-pack/$id'
+    | '/api/analysis-runs/$id/explanations'
+    | '/api/analysis-runs/$id/public-result'
+    | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
     | '/api/assessment-sessions/$id/complete'
@@ -2052,6 +2109,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/public-results/$token'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -2091,6 +2149,7 @@ export interface FileRouteTypes {
     | '/internal/signals/$id'
     | '/knowledge-pack/$id/activate'
     | '/knowledge-pack/$id/versions'
+    | '/public/results/$token'
     | '/report/$id/download'
     | '/trace/$entityType/$entityId'
     | '/assessment/$id/'
@@ -2104,6 +2163,9 @@ export interface FileRouteTypes {
     | '/internal/scores/'
     | '/internal/signals/'
     | '/knowledge-pack/$id/'
+    | '/api/analysis-runs/$id/explanations'
+    | '/api/analysis-runs/$id/public-result'
+    | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
     | '/api/assessment-sessions/$id/complete'
@@ -2221,6 +2283,7 @@ export interface RootRouteChildren {
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
+  ApiPublicResultsTokenRoute: typeof ApiPublicResultsTokenRoute
   ApiReportingBrandingRoute: typeof ApiReportingBrandingRoute
   ApiReportingDownloadCentreRoute: typeof ApiReportingDownloadCentreRoute
   ApiReportingHistoryRoute: typeof ApiReportingHistoryRoute
@@ -2259,6 +2322,7 @@ export interface RootRouteChildren {
   InternalSignalsIdRoute: typeof InternalSignalsIdRoute
   KnowledgePackIdActivateRoute: typeof KnowledgePackIdActivateRoute
   KnowledgePackIdVersionsRoute: typeof KnowledgePackIdVersionsRoute
+  PublicResultsTokenRoute: typeof PublicResultsTokenRoute
   TraceEntityTypeEntityIdRoute: typeof TraceEntityTypeEntityIdRoute
   AssessmentIdIndexRoute: typeof AssessmentIdIndexRoute
   InternalAuditIndexRoute: typeof InternalAuditIndexRoute
@@ -2852,6 +2916,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiOrganisationsIdRouteImport
       parentRoute: typeof ApiOrganisationsRoute
     }
+    '/api/public-results/$token': {
+      id: '/api/public-results/$token'
+      path: '/api/public-results/$token'
+      fullPath: '/api/public-results/$token'
+      preLoaderRoute: typeof ApiPublicResultsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/reporting/branding': {
       id: '/api/reporting/branding'
       path: '/api/reporting/branding'
@@ -3202,6 +3273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KnowledgePackIdVersionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/public/results/$token': {
+      id: '/public/results/$token'
+      path: '/public/results/$token'
+      fullPath: '/public/results/$token'
+      preLoaderRoute: typeof PublicResultsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/report/$id/download': {
       id: '/report/$id/download'
       path: '/download'
@@ -3215,6 +3293,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/trace/$entityType/$entityId'
       preLoaderRoute: typeof TraceEntityTypeEntityIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/analysis-runs/$id/explanations': {
+      id: '/api/analysis-runs/$id/explanations'
+      path: '/explanations'
+      fullPath: '/api/analysis-runs/$id/explanations'
+      preLoaderRoute: typeof ApiAnalysisRunsIdExplanationsRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/public-result': {
+      id: '/api/analysis-runs/$id/public-result'
+      path: '/public-result'
+      fullPath: '/api/analysis-runs/$id/public-result'
+      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/result': {
+      id: '/api/analysis-runs/$id/result'
+      path: '/result'
+      fullPath: '/api/analysis-runs/$id/result'
+      preLoaderRoute: typeof ApiAnalysisRunsIdResultRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
     }
     '/api/assessment-sessions/$id/archive': {
       id: '/api/assessment-sessions/$id/archive'
@@ -3499,12 +3598,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ApiAnalysisRunsIdRouteChildren {
+  ApiAnalysisRunsIdExplanationsRoute: typeof ApiAnalysisRunsIdExplanationsRoute
+  ApiAnalysisRunsIdPublicResultRoute: typeof ApiAnalysisRunsIdPublicResultRoute
+  ApiAnalysisRunsIdResultRoute: typeof ApiAnalysisRunsIdResultRoute
+}
+
+const ApiAnalysisRunsIdRouteChildren: ApiAnalysisRunsIdRouteChildren = {
+  ApiAnalysisRunsIdExplanationsRoute: ApiAnalysisRunsIdExplanationsRoute,
+  ApiAnalysisRunsIdPublicResultRoute: ApiAnalysisRunsIdPublicResultRoute,
+  ApiAnalysisRunsIdResultRoute: ApiAnalysisRunsIdResultRoute,
+}
+
+const ApiAnalysisRunsIdRouteWithChildren =
+  ApiAnalysisRunsIdRoute._addFileChildren(ApiAnalysisRunsIdRouteChildren)
+
 interface ApiAnalysisRunsRouteChildren {
-  ApiAnalysisRunsIdRoute: typeof ApiAnalysisRunsIdRoute
+  ApiAnalysisRunsIdRoute: typeof ApiAnalysisRunsIdRouteWithChildren
 }
 
 const ApiAnalysisRunsRouteChildren: ApiAnalysisRunsRouteChildren = {
-  ApiAnalysisRunsIdRoute: ApiAnalysisRunsIdRoute,
+  ApiAnalysisRunsIdRoute: ApiAnalysisRunsIdRouteWithChildren,
 }
 
 const ApiAnalysisRunsRouteWithChildren = ApiAnalysisRunsRoute._addFileChildren(
@@ -3838,6 +3952,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
+  ApiPublicResultsTokenRoute: ApiPublicResultsTokenRoute,
   ApiReportingBrandingRoute: ApiReportingBrandingRoute,
   ApiReportingDownloadCentreRoute: ApiReportingDownloadCentreRoute,
   ApiReportingHistoryRoute: ApiReportingHistoryRoute,
@@ -3876,6 +3991,7 @@ const rootRouteChildren: RootRouteChildren = {
   InternalSignalsIdRoute: InternalSignalsIdRoute,
   KnowledgePackIdActivateRoute: KnowledgePackIdActivateRoute,
   KnowledgePackIdVersionsRoute: KnowledgePackIdVersionsRoute,
+  PublicResultsTokenRoute: PublicResultsTokenRoute,
   TraceEntityTypeEntityIdRoute: TraceEntityTypeEntityIdRoute,
   AssessmentIdIndexRoute: AssessmentIdIndexRoute,
   InternalAuditIndexRoute: InternalAuditIndexRoute,

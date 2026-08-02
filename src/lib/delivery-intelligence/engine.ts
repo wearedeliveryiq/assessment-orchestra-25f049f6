@@ -5,6 +5,7 @@ import { classifyFindings } from "./findings";
 import { detectPatterns } from "./patterns";
 import { rankRecommendations } from "./recommendations";
 import { buildRoadmap } from "./roadmap";
+import { renderExecutiveNarrative } from "./narrative";
 import { calculateCapabilityScore, calculateOverallScore, type ScoreResponse } from "./scoring";
 
 export interface CanonicalCapabilityResult {
@@ -144,6 +145,22 @@ export function analyseCanonicalInput(input: CanonicalAnalysisInput) {
       recommendations.ranked.map((item) => [item.id, item.dependencies]),
     ),
   });
+  const narrative = renderExecutiveNarrative({
+    overall,
+    confidence: confidence.result,
+    capabilities: capabilities.map((item) => ({
+      id: item.id,
+      label: item.label,
+      displayScore: item.score.displayScore,
+      confidence: item.confidenceContribution,
+    })),
+    strengths: findings.strengths.map((item) => item.id),
+    opportunities: findings.priorityOpportunities.map((item) => item.id),
+    recommendations: recommendations.ranked.map((item) => ({
+      title: item.title,
+      outcome: item.outcome,
+    })),
+  });
 
   return {
     schemaVersion: "deliveryiq.intelligence-result/1.0.0",
@@ -168,6 +185,7 @@ export function analyseCanonicalInput(input: CanonicalAnalysisInput) {
     },
     recommendations,
     roadmap,
+    narrative,
   };
 }
 

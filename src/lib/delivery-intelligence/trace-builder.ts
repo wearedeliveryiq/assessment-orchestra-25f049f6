@@ -36,6 +36,7 @@ export async function buildCoreTrace(
       configurationSetId: run.configurationSetId,
       contentHash: await hash(value),
       visible,
+      payload: value,
     });
   };
 
@@ -168,10 +169,7 @@ export async function buildCoreTrace(
   }
   const roadmap = result.roadmap;
   if (!("error" in roadmap)) {
-    const horizons: Array<[
-      "day30" | "day60" | "day90",
-      Array<{ id: string; reason: string }>,
-    ]> = [
+    const horizons: Array<["day30" | "day60" | "day90", Array<{ id: string; reason: string }>]> = [
       ["day30", roadmap.day30],
       ["day60", roadmap.day60],
       ["day90", roadmap.day90],
@@ -192,6 +190,52 @@ export async function buildCoreTrace(
         });
       }
     }
+  }
+  const narrativeItems: Array<{ key: string; value: string; source: string }> = [
+    { key: "overall", value: result.narrative.overallPosition, source: "overall" },
+    { key: "confidence", value: result.narrative.confidence, source: "confidence" },
+    ...result.narrative.strengths.map((value, index) => ({
+      key: `strength:${index}`,
+      value,
+      source: `finding:${result.findings.strengths[index]}`,
+    })),
+    ...result.narrative.opportunities.map((value, index) => ({
+      key: `opportunity:${index}`,
+      value,
+      source: `finding:${result.findings.priorityOpportunities[index]}`,
+    })),
+    ...result.narrative.recommendations.map((value, index) => ({
+      key: `recommendation:${index}`,
+      value,
+      source: `recommendation:${result.recommendations.ranked[index].id}`,
+    })),
+    ...(result.narrative.caveat
+      ? [{ key: "caveat", value: result.narrative.caveat, source: "confidence" }]
+      : []),
+  ];
+  for (const item of narrativeItems) {
+    await add(`narrative:${item.key}`, "narrative_fact", run.configurationVersion, {
+      text: item.value,
+    });
+    await add(
+      `presentation:${item.key}`,
+      "presentation_item",
+      run.configurationVersion,
+      {
+        text: item.value,
+      },
+      true,
+    );
+    edges.push({
+      source: ids.get(item.source)!,
+      target: ids.get(`narrative:${item.key}`)!,
+      type: "supports",
+    });
+    edges.push({
+      source: ids.get(`narrative:${item.key}`)!,
+      target: ids.get(`presentation:${item.key}`)!,
+      type: "renders_as",
+    });
   }
   return { nodes, edges };
 }

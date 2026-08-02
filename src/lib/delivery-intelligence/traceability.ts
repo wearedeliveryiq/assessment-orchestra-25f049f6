@@ -14,6 +14,7 @@ export interface TraceNode {
   configurationSetId: string;
   contentHash: string;
   visible: boolean;
+  payload: unknown;
 }
 
 export interface TraceEdge {
@@ -92,6 +93,7 @@ export function validateFixtureTrace(input: TraceFixtureInput) {
       configurationSetId: "sprint03-product-config-1.0.0",
       contentHash: "0".repeat(64),
       visible: input.visibleOutputs.includes(id),
+      payload: { id },
     })),
     edges: input.edges.map(([source, type, target]) => ({
       source,

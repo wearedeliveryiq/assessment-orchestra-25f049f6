@@ -18,6 +18,7 @@ function node(id: string, type: TraceNode["nodeType"], visible = false): TraceNo
     configurationSetId: "sprint03-product-config-1.0.0",
     contentHash: "a".repeat(64),
     visible,
+    payload: { id },
   };
 }
 
