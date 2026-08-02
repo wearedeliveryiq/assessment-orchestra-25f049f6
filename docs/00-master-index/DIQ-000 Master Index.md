@@ -3,7 +3,7 @@
 | Control                    | Value                                                             |
 | -------------------------- | ----------------------------------------------------------------- |
 | Document ID                | DIQ-000                                                           |
-| Version                    | 1.9                                                               |
+| Version                    | 2.0                                                               |
 | Status                     | **CONTROLLED**                                                    |
 | Owner                      | Product Owner                                                     |
 | Approver                   | Matt Prust                                                        |
@@ -30,7 +30,7 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 
 | ID          | Document                                                                                                                                        |   Version | Status                                          | Location                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------: | ----------------------------------------------- | ------------------------------------------------------------ |
-| DIQ-000     | Master Index                                                                                                                                    |       1.9 | CONTROLLED                                      | This document                                                |
+| DIQ-000     | Master Index                                                                                                                                    |       2.0 | CONTROLLED                                      | This document                                                |
 | DIQ-001     | [Vision & Mission](<DIQ-001 Vision & Mission.md>)                                                                                               |       0.1 | DRAFT                                           | `docs/00-master-index`                                       |
 | DIQ-002     | [Product Architecture](<DIQ-002 Product Architecture.md>)                                                                                       |       1.0 | **LOCKED**                                      | `docs/00-master-index`                                       |
 | DIQ-003     | [Product Roadmap](<DIQ-003 Product Roadmap.md>)                                                                                                 |       0.1 | DRAFT                                           | `docs/00-master-index`                                       |
@@ -53,6 +53,7 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 | PDR-003-001 | [Sprint 03 Analysis Trigger Policy](<../07-release/PDR-003-001 Sprint 03 Analysis Trigger Policy.md>)                                           |       1.0 | **APPROVED**                                    | `docs/07-release`                                            |
 | PDR-003-002 | [Sprint 03 Analysis Eligibility Policy](<../07-release/PDR-003-002 Sprint 03 Analysis Eligibility Policy.md>)                                   |       1.0 | **LOCKED**                                      | `docs/07-release`                                            |
 | SAR-003-PD  | [Sprint 03 Product Definition Acceptance](<../07-release/SAR-003-PD Sprint 03 Product Definition Acceptance.md>)                                |       1.0 | **ACCEPTED**                                    | `docs/07-release`                                            |
+| SAR-003     | [Sprint 03 Product Acceptance](<../07-release/SAR-003 Sprint 03 Product Acceptance.md>)                                                         |       1.0 | **ACCEPTED WITH RECORDED LIMITATIONS**          | `docs/07-release`                                            |
 
 ## Filing structure
 
@@ -81,6 +82,7 @@ docs/
 
 | Version | Date          | Change                                                                                                                |
 | ------- | ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| 2.0     | 2 August 2026 | Registered SAR-003 final Sprint 03 Product Acceptance with recorded limitations                                       |
 | 1.9     | 2 August 2026 | Registered and locked PDR-003-002 Sprint 03 analysis eligibility policy                                               |
 | 1.8     | 2 August 2026 | Registered DIQ-300 RC1, KP-001/A/B RC1, and PB-005 initial controlled draft                                           |
 | 1.7     | 2 August 2026 | Registered PDR-003-001 automatic analysis trigger and retry policy                                                    |

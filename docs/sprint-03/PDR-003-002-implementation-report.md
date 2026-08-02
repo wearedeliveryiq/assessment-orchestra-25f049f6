@@ -36,10 +36,17 @@ Implemented the locked Sprint 03 Analysis Eligibility Policy as a deterministic,
 - Targeted lint for every changed TypeScript/TSX test and implementation file: passed.
 - Production build: passed, including the one-minute reconciliation task bundle.
 - Repository-wide lint: not passed because the inherited baseline contains 4,375 formatting errors in unrelated files. No changed implementation or test file has a lint error.
-- Migration security contracts: passed. Cloud execution remains a deployment gate because this environment has no Lovable Cloud migration authority.
+- Migration security contracts passed. The migrations, RLS/client-role restrictions and named remediation were subsequently applied and verified in Lovable Cloud.
 
 ## Limitations
 
 - The repository has no governed Delivery DNA 1.0.0 collection pack or new-assessment journey, so the optional “Start a new Delivery DNA assessment” action is correctly unavailable.
-- Live migration execution and named-row remediation evidence can only be completed in the Lovable Cloud deployment environment.
-- No browser-backed authenticated end-to-end environment was available locally; deterministic service/UI contract coverage passed, but the post-migration authenticated journey remains a deployment verification gate.
+- The authenticated ineligible journey passed hosted smoke verification. An eligible customer end-to-end journey remains unavailable until an approved Delivery DNA 1.0.0 collection journey is delivered.
+
+## Final hosted verification
+
+- The published authenticated smoke test passed for the remediated ineligible assessment.
+- The named run remains immutable with `ANALYSIS_INPUT_INVALID`; its hand-off is terminal `ineligible`, with no additional run or retry.
+- Locked copy, support reference and authorised **View assessment** action are displayed; retry, generate and processing controls are absent.
+- The Delivery DNA reassessment action is correctly suppressed because no authorised Delivery DNA 1.0.0 collection journey exists.
+- GitHub and successfully applied Lovable migration syntax were reconciled through merge `0a184369f1198e7266ac371774d54e158a4ecf7c`.
