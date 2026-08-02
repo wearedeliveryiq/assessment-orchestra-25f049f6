@@ -3215,6 +3215,294 @@ export type Database = {
           },
         ]
       }
+      recommendation_catalogue_activations: {
+        Row: {
+          activated_at: string
+          activated_by: string
+          catalogue_version_id: string
+          environment: string
+          recommendation_definition_id: string
+          recommendation_id: string
+        }
+        Insert: {
+          activated_at?: string
+          activated_by: string
+          catalogue_version_id: string
+          environment: string
+          recommendation_definition_id: string
+          recommendation_id: string
+        }
+        Update: {
+          activated_at?: string
+          activated_by?: string
+          catalogue_version_id?: string
+          environment?: string
+          recommendation_definition_id?: string
+          recommendation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_catalogue_acti_recommendation_definition_id_fkey"
+            columns: ["recommendation_definition_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_catalogue_activations_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_catalogue_approvals: {
+        Row: {
+          approved_at: string
+          approved_by: string
+          catalogue_version_id: string
+          id: string
+        }
+        Insert: {
+          approved_at?: string
+          approved_by: string
+          catalogue_version_id: string
+          id?: string
+        }
+        Update: {
+          approved_at?: string
+          approved_by?: string
+          catalogue_version_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_catalogue_approvals_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_catalogue_lifecycle_events: {
+        Row: {
+          actor_id: string
+          catalogue_version_id: string
+          created_at: string
+          event_type: string
+          from_state:
+            | Database["public"]["Enums"]["recommendation_catalogue_state"]
+            | null
+          id: number
+          idempotency_key: string
+          payload: Json
+          to_state: Database["public"]["Enums"]["recommendation_catalogue_state"]
+        }
+        Insert: {
+          actor_id: string
+          catalogue_version_id: string
+          created_at?: string
+          event_type: string
+          from_state?:
+            | Database["public"]["Enums"]["recommendation_catalogue_state"]
+            | null
+          id?: never
+          idempotency_key: string
+          payload?: Json
+          to_state: Database["public"]["Enums"]["recommendation_catalogue_state"]
+        }
+        Update: {
+          actor_id?: string
+          catalogue_version_id?: string
+          created_at?: string
+          event_type?: string
+          from_state?:
+            | Database["public"]["Enums"]["recommendation_catalogue_state"]
+            | null
+          id?: never
+          idempotency_key?: string
+          payload?: Json
+          to_state?: Database["public"]["Enums"]["recommendation_catalogue_state"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_catalogue_lifecycle_ev_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_catalogue_versions: {
+        Row: {
+          authored_by: string
+          catalogue_id: string
+          content_digest: string
+          created_at: string
+          current_state: Database["public"]["Enums"]["recommendation_catalogue_state"]
+          id: string
+          idempotency_key: string
+          snapshot: Json
+          source_configuration_set_id: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          authored_by: string
+          catalogue_id: string
+          content_digest: string
+          created_at?: string
+          current_state?: Database["public"]["Enums"]["recommendation_catalogue_state"]
+          id?: string
+          idempotency_key: string
+          snapshot: Json
+          source_configuration_set_id: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          authored_by?: string
+          catalogue_id?: string
+          content_digest?: string
+          created_at?: string
+          current_state?: Database["public"]["Enums"]["recommendation_catalogue_state"]
+          id?: string
+          idempotency_key?: string
+          snapshot?: Json
+          source_configuration_set_id?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      recommendation_conflict_mappings: {
+        Row: {
+          catalogue_version_id: string
+          conflicting_recommendation_id: string
+          recommendation_id: string
+        }
+        Insert: {
+          catalogue_version_id: string
+          conflicting_recommendation_id: string
+          recommendation_id: string
+        }
+        Update: {
+          catalogue_version_id?: string
+          conflicting_recommendation_id?: string
+          recommendation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_conflict_mappings_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_definitions: {
+        Row: {
+          catalogue_order: number
+          catalogue_version_id: string
+          created_at: string
+          definition: Json
+          id: string
+          intent_digest: string
+          recommendation_id: string
+          recommendation_version: string
+        }
+        Insert: {
+          catalogue_order: number
+          catalogue_version_id: string
+          created_at?: string
+          definition: Json
+          id?: string
+          intent_digest: string
+          recommendation_id: string
+          recommendation_version: string
+        }
+        Update: {
+          catalogue_order?: number
+          catalogue_version_id?: string
+          created_at?: string
+          definition?: Json
+          id?: string
+          intent_digest?: string
+          recommendation_id?: string
+          recommendation_version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_definitions_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_dependency_mappings: {
+        Row: {
+          catalogue_version_id: string
+          dependency_id: string
+          dependency_type: string
+          recommendation_id: string
+        }
+        Insert: {
+          catalogue_version_id: string
+          dependency_id: string
+          dependency_type?: string
+          recommendation_id: string
+        }
+        Update: {
+          catalogue_version_id?: string
+          dependency_id?: string
+          dependency_type?: string
+          recommendation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_dependency_mappings_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_stable_identities: {
+        Row: {
+          created_at: string
+          first_catalogue_version_id: string
+          intent_digest: string
+          recommendation_id: string
+        }
+        Insert: {
+          created_at?: string
+          first_catalogue_version_id: string
+          intent_digest: string
+          recommendation_id: string
+        }
+        Update: {
+          created_at?: string
+          first_catalogue_version_id?: string
+          intent_digest?: string
+          recommendation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_stable_identitie_first_catalogue_version_id_fkey"
+            columns: ["first_catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       runtime_assessment_events: {
         Row: {
           created_at: string
@@ -4139,6 +4427,28 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      create_recommendation_catalogue_version: {
+        Args: { p_input: Json }
+        Returns: {
+          authored_by: string
+          catalogue_id: string
+          content_digest: string
+          created_at: string
+          current_state: Database["public"]["Enums"]["recommendation_catalogue_state"]
+          id: string
+          idempotency_key: string
+          snapshot: Json
+          source_configuration_set_id: string
+          updated_at: string
+          version: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_catalogue_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       fail_assessment_analysis_handoff: {
         Args: { p_handoff_id: string; p_safe_error_code: string }
         Returns: {
@@ -4383,6 +4693,33 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      transition_recommendation_catalogue: {
+        Args: {
+          p_actor_id: string
+          p_catalogue_version_id: string
+          p_command: string
+          p_idempotency_key: string
+        }
+        Returns: {
+          authored_by: string
+          catalogue_id: string
+          content_digest: string
+          created_at: string
+          current_state: Database["public"]["Enums"]["recommendation_catalogue_state"]
+          id: string
+          idempotency_key: string
+          snapshot: Json
+          source_configuration_set_id: string
+          updated_at: string
+          version: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_catalogue_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       analysis_eligibility_status: "eligible" | "ineligible"
@@ -4419,6 +4756,13 @@ export type Database = {
         | "read_only"
         | "organisation_owner"
         | "workspace_manager"
+      recommendation_catalogue_state:
+        | "draft"
+        | "in_review"
+        | "approved"
+        | "active"
+        | "retired"
+        | "superseded"
       stage_status: "pending" | "running" | "completed" | "failed" | "skipped"
       workspace_status: "active" | "archived"
     }
@@ -4585,6 +4929,14 @@ export const Constants = {
         "read_only",
         "organisation_owner",
         "workspace_manager",
+      ],
+      recommendation_catalogue_state: [
+        "draft",
+        "in_review",
+        "approved",
+        "active",
+        "retired",
+        "superseded",
       ],
       stage_status: ["pending", "running", "completed", "failed", "skipped"],
       workspace_status: ["active", "archived"],
