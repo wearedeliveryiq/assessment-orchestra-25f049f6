@@ -255,6 +255,23 @@ export async function listHistory(filters: ExecutionHistoryFilters): Promise<Exe
   return (rows ?? []).map(toExecution);
 }
 
+/** The pinned model execution that produced a completed assessment. */
+export async function findCompletedExecutionForSession(
+  sessionId: string,
+  ownerKey: string,
+): Promise<Execution | null> {
+  const rows = unwrap<ExecutionRow[]>(
+    await executions()
+      .select("*")
+      .eq("assessment_session_id", sessionId)
+      .eq("owner_key", ownerKey)
+      .eq("status", "completed")
+      .order("completed_at", { ascending: false })
+      .limit(1),
+  );
+  return rows?.[0] ? toExecution(rows[0]) : null;
+}
+
 export async function listStagesForExecutions(
   executionIds: string[],
 ): Promise<Record<string, ExecutionStage[]>> {
