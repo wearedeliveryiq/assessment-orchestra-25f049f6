@@ -1,5 +1,8 @@
 import * as runtime from "./runtime.server";
-import { assessmentOwnerId } from "@/lib/identity/assessment-auth.server";
+import {
+  assessmentRequestContext,
+  type AssessmentRequestContext,
+} from "@/lib/identity/assessment-auth.server";
 import { IdentityError } from "@/lib/identity/errors";
 
 export type Runtime = typeof runtime;
@@ -17,11 +20,11 @@ function json(body: unknown, status = 200): Response {
  */
 export async function handleRoute(
   request: Request,
-  fn: (rt: Runtime, ownerKey: string) => Promise<unknown>,
+  fn: (rt: Runtime, ownerKey: string, context: AssessmentRequestContext) => Promise<unknown>,
 ): Promise<Response> {
   try {
-    const ownerKey = await assessmentOwnerId(request);
-    return json(await fn(runtime, ownerKey));
+    const context = await assessmentRequestContext(request, { write: request.method !== "GET" });
+    return json(await fn(runtime, context.ownerKey, context));
   } catch (error) {
     if (error instanceof IdentityError) {
       return json({ error: error.message, code: error.code }, error.status);

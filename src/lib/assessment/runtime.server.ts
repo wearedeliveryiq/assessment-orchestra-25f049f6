@@ -37,6 +37,9 @@ async function requireSession(id: string, ownerKey: string): Promise<AssessmentS
 
 export async function createAssessment(input: {
   ownerKey: string;
+  organisationId: string;
+  workspaceId: string;
+  createdByUserId: string;
   organisationName: string;
   contactName?: string | null;
   assessmentType?: string;
@@ -46,8 +49,11 @@ export async function createAssessment(input: {
   return repo.createSession({ ...input, organisationName: name });
 }
 
-export async function listAssessments(ownerKey: string): Promise<AssessmentSession[]> {
-  return repo.listSessions(ownerKey);
+export async function listAssessments(
+  ownerKey: string,
+  tenant?: { organisationId: string; workspaceId: string },
+): Promise<AssessmentSession[]> {
+  return repo.listSessions(ownerKey, tenant);
 }
 
 export async function getAssessment(id: string, ownerKey: string): Promise<AssessmentDetail> {

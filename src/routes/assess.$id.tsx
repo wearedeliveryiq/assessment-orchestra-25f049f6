@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -31,6 +31,9 @@ import { isVisible, validateQuestion } from "@/lib/runtime/validation";
 import type { ResponseValue, RuntimeSnapshot, ValidationIssue } from "@/lib/runtime/types";
 
 export const Route = createFileRoute("/assess/$id")({
+  beforeLoad: () => {
+    throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title: "Assessment in progress — DeliveryIQ Runtime" },
