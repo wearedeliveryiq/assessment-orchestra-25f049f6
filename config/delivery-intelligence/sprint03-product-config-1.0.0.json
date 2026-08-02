@@ -1,0 +1,883 @@
+{
+  "document": {
+    "id": "DIQ-203A",
+    "version": "1.0.0",
+    "status": "locked",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "configurationSetId": "sprint03-product-config-1.0.0",
+    "approvedBy": "Matt Prust",
+    "approvedAt": "2026-08-02"
+  },
+  "scoring": {
+    "answerScale": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "transformation": "(answer-1)/4*100",
+    "eligibleStatuses": ["answered"],
+    "nonContributingStatuses": ["not_applicable", "excluded", "missing"],
+    "approvedExclusionReasons": ["superseded", "invalidated", "duplicate", "quality_review"],
+    "notApplicableReasonRequired": true,
+    "minimumEligibleQuestionsPerCapability": 2,
+    "minimumEligibleWeightPerCapability": 0.6,
+    "minimumAvailableCapabilitiesForOverall": 9,
+    "capabilityAggregation": "renormalised_weighted_mean",
+    "overallAggregation": "equal_weight_mean_of_available_capabilities",
+    "storagePrecisionDecimals": 6,
+    "displayPrecisionDecimals": 1,
+    "roundingMode": "half_up",
+    "bands": [
+      { "id": "fragile", "minimumInclusive": 0, "maximumExclusive": 25 },
+      { "id": "developing", "minimumInclusive": 25, "maximumExclusive": 50 },
+      { "id": "established", "minimumInclusive": 50, "maximumExclusive": 75 },
+      { "id": "leading", "minimumInclusive": 75, "maximumInclusive": 100 }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "strategy_alignment",
+      "label": "Strategy and Alignment",
+      "order": 1,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.strategy_alignment.f", "weight": 0.3, "required": true },
+        { "id": "ddna.strategy_alignment.p", "weight": 0.4, "required": true },
+        { "id": "ddna.strategy_alignment.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "governance",
+      "label": "Governance and Decision-Making",
+      "order": 2,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.governance.f", "weight": 0.3, "required": true },
+        { "id": "ddna.governance.p", "weight": 0.4, "required": true },
+        { "id": "ddna.governance.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "sponsorship",
+      "label": "Executive Sponsorship and Accountability",
+      "order": 3,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.sponsorship.f", "weight": 0.3, "required": true },
+        { "id": "ddna.sponsorship.p", "weight": 0.4, "required": true },
+        { "id": "ddna.sponsorship.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "portfolio",
+      "label": "Portfolio Direction and Prioritisation",
+      "order": 4,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.portfolio.f", "weight": 0.3, "required": true },
+        { "id": "ddna.portfolio.p", "weight": 0.4, "required": true },
+        { "id": "ddna.portfolio.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "programme_delivery",
+      "label": "Programme Delivery",
+      "order": 5,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.programme_delivery.f", "weight": 0.3, "required": true },
+        { "id": "ddna.programme_delivery.p", "weight": 0.4, "required": true },
+        { "id": "ddna.programme_delivery.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "project_delivery",
+      "label": "Project Delivery",
+      "order": 6,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.project_delivery.f", "weight": 0.3, "required": true },
+        { "id": "ddna.project_delivery.p", "weight": 0.4, "required": true },
+        { "id": "ddna.project_delivery.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "planning_controls",
+      "label": "Planning and Controls",
+      "order": 7,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.planning_controls.f", "weight": 0.3, "required": true },
+        { "id": "ddna.planning_controls.p", "weight": 0.4, "required": true },
+        { "id": "ddna.planning_controls.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "benefits",
+      "label": "Benefits Realisation",
+      "order": 8,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.benefits.f", "weight": 0.3, "required": true },
+        { "id": "ddna.benefits.p", "weight": 0.4, "required": true },
+        { "id": "ddna.benefits.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "risk_assurance",
+      "label": "Risk and Assurance",
+      "order": 9,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.risk_assurance.f", "weight": 0.3, "required": true },
+        { "id": "ddna.risk_assurance.p", "weight": 0.4, "required": true },
+        { "id": "ddna.risk_assurance.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "stakeholder_change",
+      "label": "Stakeholder and Change Leadership",
+      "order": 10,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.stakeholder_change.f", "weight": 0.3, "required": true },
+        { "id": "ddna.stakeholder_change.p", "weight": 0.4, "required": true },
+        { "id": "ddna.stakeholder_change.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "pmo_enablement",
+      "label": "PMO Enablement",
+      "order": 11,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.pmo_enablement.f", "weight": 0.3, "required": true },
+        { "id": "ddna.pmo_enablement.p", "weight": 0.4, "required": true },
+        { "id": "ddna.pmo_enablement.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "reporting_insight",
+      "label": "Reporting and Delivery Insight",
+      "order": 12,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.reporting_insight.f", "weight": 0.3, "required": true },
+        { "id": "ddna.reporting_insight.p", "weight": 0.4, "required": true },
+        { "id": "ddna.reporting_insight.e", "weight": 0.3, "required": true }
+      ]
+    },
+    {
+      "id": "continuous_improvement",
+      "label": "Continuous Improvement",
+      "order": 13,
+      "weight": 1,
+      "questions": [
+        { "id": "ddna.continuous_improvement.f", "weight": 0.3, "required": true },
+        { "id": "ddna.continuous_improvement.p", "weight": 0.4, "required": true },
+        { "id": "ddna.continuous_improvement.e", "weight": 0.3, "required": true }
+      ]
+    }
+  ],
+  "confidence": {
+    "storagePrecisionDecimals": 6,
+    "displayPrecisionDecimals": 0,
+    "roundingMode": "half_up",
+    "factors": [
+      {
+        "id": "required_completion",
+        "weight": 0.35,
+        "method": "eligible_required_answers/required_questions"
+      },
+      { "id": "capability_coverage", "weight": 0.25, "method": "available_capabilities/13" },
+      {
+        "id": "response_consistency",
+        "weight": 0.2,
+        "method": "mean(1-min(population_sd(normalised_eligible_answers)/50,1))"
+      },
+      {
+        "id": "evidence_recency",
+        "weight": 0.1,
+        "method": "mean(recency_bucket)",
+        "buckets": [
+          { "maximumDays": 90, "value": 1 },
+          { "maximumDays": 180, "value": 0.75 },
+          { "maximumDays": 365, "value": 0.5 },
+          { "maximumDays": null, "value": 0.25 }
+        ],
+        "missingValue": 0
+      },
+      {
+        "id": "respondent_breadth",
+        "weight": 0.1,
+        "method": "verified_distinct_group_bucket",
+        "buckets": [
+          { "groups": 0, "value": 0 },
+          { "groups": 1, "value": 0.4 },
+          { "groups": 2, "value": 0.7 },
+          { "minimumGroups": 3, "value": 1 }
+        ]
+      }
+    ],
+    "formula": "100*sum(factor.value*factor.weight)",
+    "bands": [
+      { "id": "low", "minimumInclusive": 0, "maximumExclusive": 50 },
+      { "id": "moderate", "minimumInclusive": 50, "maximumExclusive": 75 },
+      { "id": "high", "minimumInclusive": 75, "maximumInclusive": 100 }
+    ],
+    "limitationThresholdExclusive": 0.75,
+    "limitations": {
+      "required_completion": {
+        "text": "Some required evidence is missing.",
+        "prompt": "Complete the unanswered required questions."
+      },
+      "capability_coverage": {
+        "text": "The evidence does not cover enough delivery capabilities.",
+        "prompt": "Provide evidence across all Delivery DNA capabilities."
+      },
+      "response_consistency": {
+        "text": "Some responses within a capability vary materially.",
+        "prompt": "Review the underlying evidence with relevant stakeholders."
+      },
+      "evidence_recency": {
+        "text": "Some evidence may no longer reflect current practice.",
+        "prompt": "Refresh evidence older than 180 days."
+      },
+      "respondent_breadth": {
+        "text": "The result represents a limited range of perspectives.",
+        "prompt": "Invite evidence from at least three relevant stakeholder groups."
+      }
+    }
+  },
+  "findings": {
+    "strength": {
+      "scoreMinimumInclusive": 75,
+      "capabilityConfidenceMinimumInclusive": 50,
+      "maximumWorkspace": 5,
+      "maximumPublic": 3,
+      "sort": ["score_desc", "confidence_desc", "capability_order_asc", "capability_id_asc"]
+    },
+    "priorityOpportunity": {
+      "scoreMaximumExclusive": 50,
+      "capabilityConfidenceMinimumInclusive": 50,
+      "maximumWorkspace": 5,
+      "maximumPublic": 3,
+      "sort": ["score_asc", "confidence_desc", "capability_order_asc", "capability_id_asc"]
+    },
+    "insufficientEvidence": { "capabilityConfidenceMaximumExclusive": 50 },
+    "customerTerm": "priority opportunity",
+    "prohibitedCustomerTerms": ["weakness", "failure", "poor performer"]
+  },
+  "patterns": [
+    {
+      "id": "pat_governance_sponsorship_gap",
+      "version": "1.0.0",
+      "order": 1,
+      "priority": 100,
+      "severity": "critical",
+      "exclusiveGroup": "leadership_control_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        { "capability": "governance", "operator": "lt", "value": 50 },
+        { "capability": "sponsorship", "operator": "lt", "value": 50 }
+      ],
+      "explanation": "Governance and executive sponsorship both need attention, increasing the risk that decisions and accountability will not support delivery."
+    },
+    {
+      "id": "pat_execution_without_control",
+      "version": "1.0.0",
+      "order": 2,
+      "priority": 80,
+      "severity": "high",
+      "exclusiveGroup": "delivery_balance_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "aggregate": "mean",
+          "capabilities": ["programme_delivery", "project_delivery"],
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "aggregate": "mean",
+          "capabilities": ["governance", "planning_controls"],
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "difference": {
+            "leftMean": ["programme_delivery", "project_delivery"],
+            "rightMean": ["governance", "planning_controls"]
+          },
+          "operator": "gte",
+          "value": 25
+        }
+      ],
+      "explanation": "Delivery activity is stronger than the governance and control environment supporting it."
+    },
+    {
+      "id": "pat_strategy_execution_disconnect",
+      "version": "1.0.0",
+      "order": 3,
+      "priority": 80,
+      "severity": "high",
+      "exclusiveGroup": "delivery_balance_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        { "capability": "strategy_alignment", "operator": "gte", "value": 50 },
+        {
+          "aggregate": "mean",
+          "capabilities": ["programme_delivery", "project_delivery"],
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Strategic direction is clearer than the organisation’s ability to translate it into consistent delivery."
+    },
+    {
+      "id": "pat_benefits_blind_spot",
+      "version": "1.0.0",
+      "order": 4,
+      "priority": 80,
+      "severity": "high",
+      "exclusiveGroup": "value_visibility_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        { "capability": "benefits", "operator": "lt", "value": 50 },
+        { "capability": "reporting_insight", "operator": "lt", "value": 50 }
+      ],
+      "explanation": "Benefits ownership and delivery insight both need attention, limiting visibility of whether change is creating value."
+    },
+    {
+      "id": "pat_resilient_delivery_foundation",
+      "version": "1.0.0",
+      "order": 5,
+      "priority": 40,
+      "severity": "positive",
+      "exclusiveGroup": "leadership_control_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        { "capability": "governance", "operator": "gte", "value": 50 },
+        { "capability": "planning_controls", "operator": "gte", "value": 50 },
+        { "capability": "risk_assurance", "operator": "gte", "value": 50 }
+      ],
+      "explanation": "Governance, planning and risk evidence indicate a comparatively resilient foundation for delivery."
+    },
+    {
+      "id": "pat_learning_system",
+      "version": "1.0.0",
+      "order": 6,
+      "priority": 40,
+      "severity": "positive",
+      "exclusiveGroup": "value_visibility_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        { "capability": "reporting_insight", "operator": "gte", "value": 75 },
+        { "capability": "continuous_improvement", "operator": "gte", "value": 75 }
+      ],
+      "explanation": "Strong delivery insight and continuous-improvement practices indicate an active learning system."
+    }
+  ],
+  "patternConflictPolicy": {
+    "winner": "priority_desc_then_catalogue_order",
+    "absenceDoesNotImplyOpposite": true
+  },
+  "recommendationPolicy": {
+    "rankFormula": {
+      "impact": 0.4,
+      "urgency": 0.25,
+      "confidence": 0.15,
+      "effortEase": 0.1,
+      "dependencyReadiness": 0.1
+    },
+    "impactValues": { "low": 25, "medium": 60, "high": 90 },
+    "effortEaseValues": { "low": 100, "medium": 60, "high": 25 },
+    "confidenceGates": {
+      "highMinimum": 75,
+      "moderateMinimum": 50,
+      "lowMaximumExclusive": 50,
+      "lowConfidenceWithholdEffort": ["medium", "high"]
+    },
+    "sort": [
+      "rank_score_desc",
+      "impact_desc",
+      "urgency_desc",
+      "effort_ease_desc",
+      "catalogue_order_asc",
+      "recommendation_id_asc"
+    ],
+    "deduplication": "merge_by_dedupe_group_into_lowest_catalogue_order"
+  },
+  "recommendations": [
+    {
+      "id": "rec_decision_rights",
+      "order": 1,
+      "title": "Define decision rights and governance cadence",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "governance_foundation",
+      "triggers": {
+        "any": [{ "opportunity": "governance" }, { "pattern": "pat_governance_sponsorship_gap" }]
+      },
+      "exclusions": [],
+      "dependencies": [],
+      "outcome": "Decisions have clear owners, forums, thresholds and cadence.",
+      "successMeasures": [
+        "100% of priority decision types have an accountable owner",
+        "Governance calendar and escalation thresholds are published"
+      ]
+    },
+    {
+      "id": "rec_sponsor_contract",
+      "order": 2,
+      "title": "Establish an active sponsor contract",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "sponsor_foundation",
+      "triggers": {
+        "any": [{ "opportunity": "sponsorship" }, { "pattern": "pat_governance_sponsorship_gap" }]
+      },
+      "exclusions": [],
+      "dependencies": [],
+      "outcome": "Executive sponsorship has explicit accountabilities and intervention routines.",
+      "successMeasures": [
+        "Named sponsor accountabilities are agreed",
+        "Sponsor decisions and barrier-removal actions are reviewed monthly"
+      ]
+    },
+    {
+      "id": "rec_integrated_controls",
+      "order": 3,
+      "title": "Establish an integrated planning and controls baseline",
+      "impact": "high",
+      "effort": "high",
+      "dedupeGroup": "delivery_controls",
+      "triggers": {
+        "any": [
+          { "opportunity": "planning_controls" },
+          { "pattern": "pat_execution_without_control" }
+        ]
+      },
+      "exclusions": [],
+      "dependencies": ["rec_decision_rights"],
+      "outcome": "Delivery plans, milestones, dependencies and controls form one reliable baseline.",
+      "successMeasures": [
+        "Critical milestones and dependencies have named owners",
+        "Baseline variance is reviewed through the agreed governance cadence"
+      ]
+    },
+    {
+      "id": "rec_portfolio_priorities",
+      "order": 4,
+      "title": "Establish transparent portfolio prioritisation",
+      "impact": "high",
+      "effort": "high",
+      "dedupeGroup": "portfolio_direction",
+      "triggers": {
+        "any": [{ "opportunity": "portfolio" }, { "pattern": "pat_strategy_execution_disconnect" }]
+      },
+      "exclusions": [],
+      "dependencies": ["rec_decision_rights"],
+      "outcome": "Investment and delivery priorities are explicit and consistently applied.",
+      "successMeasures": [
+        "All active initiatives have an agreed priority",
+        "Priority changes are decided through a recorded governance process"
+      ]
+    },
+    {
+      "id": "rec_benefits_ownership",
+      "order": 5,
+      "title": "Assign benefits ownership and measures",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "value_realisation",
+      "triggers": {
+        "any": [{ "opportunity": "benefits" }, { "pattern": "pat_benefits_blind_spot" }]
+      },
+      "exclusions": [],
+      "dependencies": ["rec_decision_rights"],
+      "outcome": "Expected benefits have accountable owners, baselines and measures.",
+      "successMeasures": [
+        "Every priority benefit has a named owner",
+        "Every priority benefit has a baseline, target and review date"
+      ]
+    },
+    {
+      "id": "rec_risk_assurance",
+      "order": 6,
+      "title": "Strengthen risk escalation and assurance",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "risk_control",
+      "triggers": { "any": [{ "opportunity": "risk_assurance" }] },
+      "exclusions": [{ "pattern": "pat_resilient_delivery_foundation" }],
+      "dependencies": ["rec_decision_rights"],
+      "outcome": "Material risks and assurance findings reach accountable decision-makers in time.",
+      "successMeasures": [
+        "Material risks have escalation thresholds and owners",
+        "Overdue assurance actions are reviewed monthly"
+      ]
+    },
+    {
+      "id": "rec_change_engagement",
+      "order": 7,
+      "title": "Establish stakeholder and change leadership",
+      "impact": "medium",
+      "effort": "medium",
+      "dedupeGroup": "change_leadership",
+      "triggers": { "any": [{ "opportunity": "stakeholder_change" }] },
+      "exclusions": [],
+      "dependencies": ["rec_sponsor_contract"],
+      "outcome": "Stakeholders understand, support and adopt the intended change.",
+      "successMeasures": [
+        "Priority stakeholder groups have owners and engagement actions",
+        "Adoption risks are reviewed through governance"
+      ]
+    },
+    {
+      "id": "rec_delivery_insight",
+      "order": 8,
+      "title": "Create an outcome-led delivery insight pack",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "delivery_visibility",
+      "triggers": {
+        "any": [{ "opportunity": "reporting_insight" }, { "pattern": "pat_benefits_blind_spot" }]
+      },
+      "exclusions": [{ "pattern": "pat_learning_system" }],
+      "dependencies": [],
+      "outcome": "Leaders receive concise evidence about progress, confidence, decisions and outcomes.",
+      "successMeasures": [
+        "Executive reporting includes outcomes, confidence, decisions and exceptions",
+        "Report recipients confirm the pack supports timely decisions"
+      ]
+    },
+    {
+      "id": "rec_improvement_cadence",
+      "order": 9,
+      "title": "Establish a continuous-improvement cadence",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "learning_system",
+      "triggers": { "any": [{ "opportunity": "continuous_improvement" }] },
+      "exclusions": [{ "pattern": "pat_learning_system" }],
+      "dependencies": ["rec_delivery_insight"],
+      "outcome": "Delivery lessons produce owned and measurable improvements.",
+      "successMeasures": [
+        "Improvement actions have owners and review dates",
+        "Completed improvements record evidence of effect"
+      ]
+    },
+    {
+      "id": "rec_deepen_diagnosis",
+      "order": 10,
+      "title": "Gather deeper specialist evidence",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "evidence_quality",
+      "triggers": { "any": [{ "analysisConfidence": "low" }] },
+      "exclusions": [],
+      "dependencies": [],
+      "outcome": "Material decisions are supported by broader and more current evidence.",
+      "successMeasures": [
+        "Confidence reaches at least moderate before material action is committed"
+      ]
+    }
+  ],
+  "roadmap": {
+    "capacity": { "day30": 3, "day60": 3, "day90": 4 },
+    "cycleError": "ROADMAP_DEPENDENCY_CYCLE",
+    "unscheduledReasons": ["capacity_exceeded", "dependency_unavailable"],
+    "sequence": "topological_then_recommendation_rank"
+  },
+  "knowledgePacks": [
+    {
+      "id": "governance",
+      "order": 1,
+      "name": "Governance",
+      "mapsFromRecommendations": ["rec_decision_rights"],
+      "diagnosticValue": "decision rights, forums and escalation effectiveness"
+    },
+    {
+      "id": "executive_sponsor",
+      "order": 2,
+      "name": "Executive Sponsor",
+      "mapsFromRecommendations": ["rec_sponsor_contract"],
+      "diagnosticValue": "executive sponsorship and accountability"
+    },
+    {
+      "id": "planning_controls",
+      "order": 3,
+      "name": "Planning and Controls",
+      "mapsFromRecommendations": ["rec_integrated_controls"],
+      "diagnosticValue": "planning, dependencies, milestones and controls"
+    },
+    {
+      "id": "portfolio",
+      "order": 4,
+      "name": "Portfolio",
+      "mapsFromRecommendations": ["rec_portfolio_priorities"],
+      "diagnosticValue": "portfolio direction and prioritisation"
+    },
+    {
+      "id": "benefits",
+      "order": 5,
+      "name": "Benefits",
+      "mapsFromRecommendations": ["rec_benefits_ownership"],
+      "diagnosticValue": "benefits ownership, measures and realisation"
+    },
+    {
+      "id": "risk_assurance",
+      "order": 6,
+      "name": "Risk and Assurance",
+      "mapsFromRecommendations": ["rec_risk_assurance"],
+      "diagnosticValue": "risk escalation, controls and assurance"
+    },
+    {
+      "id": "stakeholder_change",
+      "order": 7,
+      "name": "Stakeholder and Change",
+      "mapsFromRecommendations": ["rec_change_engagement"],
+      "diagnosticValue": "stakeholder leadership and adoption"
+    },
+    {
+      "id": "pmo_effectiveness",
+      "order": 8,
+      "name": "PMO Effectiveness",
+      "mapsFromRecommendations": ["rec_delivery_insight", "rec_improvement_cadence"],
+      "diagnosticValue": "delivery insight, enablement and continuous improvement"
+    }
+  ],
+  "knowledgePackPolicy": {
+    "activeEntitledCta": "start_assessment",
+    "activeNotEntitledCta": "view_pack",
+    "unavailableCta": null,
+    "copyTemplate": "Explore the {name} Knowledge Pack to examine {diagnosticValue} in more depth."
+  },
+  "teamMates": [
+    {
+      "id": "executive",
+      "order": 1,
+      "name": "Executive TeamMate",
+      "mapsFromRecommendations": [
+        "rec_decision_rights",
+        "rec_sponsor_contract",
+        "rec_benefits_ownership"
+      ],
+      "supportedOutcome": "prepare decisions, maintain executive accountability and track value"
+    },
+    {
+      "id": "pmo",
+      "order": 2,
+      "name": "PMO TeamMate",
+      "mapsFromRecommendations": ["rec_integrated_controls", "rec_improvement_cadence"],
+      "supportedOutcome": "maintain integrated controls and improvement actions"
+    },
+    {
+      "id": "portfolio",
+      "order": 3,
+      "name": "Portfolio TeamMate",
+      "mapsFromRecommendations": ["rec_portfolio_priorities"],
+      "supportedOutcome": "maintain transparent priorities and portfolio decisions"
+    },
+    {
+      "id": "reporting",
+      "order": 4,
+      "name": "Reporting TeamMate",
+      "mapsFromRecommendations": ["rec_delivery_insight", "rec_benefits_ownership"],
+      "supportedOutcome": "produce evidence-led reporting and track outcomes"
+    },
+    {
+      "id": "raid",
+      "order": 5,
+      "name": "RAID TeamMate",
+      "mapsFromRecommendations": ["rec_risk_assurance", "rec_integrated_controls"],
+      "supportedOutcome": "maintain risk, action, issue and dependency controls"
+    },
+    {
+      "id": "meeting",
+      "order": 6,
+      "name": "Meeting TeamMate",
+      "mapsFromRecommendations": ["rec_decision_rights", "rec_sponsor_contract"],
+      "supportedOutcome": "prepare governance meetings and track decisions and actions"
+    }
+  ],
+  "teamMatePolicy": {
+    "activationPrerequisites": [
+      "authenticated_workspace",
+      "accepted_mapped_recommendation",
+      "teammate.activate_permission"
+    ],
+    "availableEntitledCta": "review_activation",
+    "availableNotEntitledCta": "view_teammate",
+    "publicDisclosure": "none",
+    "copyTemplate": "The {name} can help your team {supportedOutcome}. Review its scope and permissions before activation."
+  },
+  "narrative": {
+    "workspaceWordLimit": 600,
+    "publicWordLimit": 80,
+    "sectionLimits": {
+      "overall_position": 45,
+      "confidence": 35,
+      "strength_item": 30,
+      "opportunity_item": 35,
+      "recommendation_item": 40
+    },
+    "templates": {
+      "overall_position": "Your overall delivery capability is {overallBand} at {overallDisplayScore}. {leadingFact} {priorityFact}",
+      "confidence": "Confidence in this result is {confidenceBand}. {confidenceLimitationSummary}",
+      "strength": "{capabilityLabel} is a relative strength, supported by a score of {displayScore} and {confidenceBand} evidence confidence.",
+      "opportunity": "{capabilityLabel} is a priority opportunity, with a score of {displayScore}. {opportunityReason}",
+      "recommendation": "{recommendationTitle}. This is recommended because {reasonText} Expected outcome: {expectedOutcome}",
+      "lowConfidenceCaveat": "This result is directional because the available evidence has low confidence. Validate the priority areas before committing material action.",
+      "overallUnavailableCaveat": "An overall delivery position is not available because fewer than nine capabilities have sufficient evidence."
+    },
+    "tone": ["executive", "neutral", "constructive", "concise", "evidence_led", "non_alarmist"],
+    "prohibitedClaims": [
+      "causal_certainty",
+      "guarantee",
+      "legal_compliance",
+      "regulatory_compliance",
+      "cross_organisation_comparison",
+      "predictive_success_or_failure",
+      "respondent_intent",
+      "untraced_root_cause"
+    ]
+  },
+  "explainability": {
+    "requiredFields": [
+      "outputId",
+      "outputType",
+      "reasonCode",
+      "reasonText",
+      "evidenceSummary",
+      "capabilityIds",
+      "confidenceBand",
+      "ruleId",
+      "ruleVersion",
+      "configurationSetId",
+      "analysisRunId",
+      "traceIds"
+    ],
+    "publicEvidenceFields": [],
+    "restricted": [
+      "source_code",
+      "sql",
+      "prompts",
+      "system_messages",
+      "secrets",
+      "internal_exceptions",
+      "rule_expression_text",
+      "other_tenant_data",
+      "public_rank_weights",
+      "security_reasons",
+      "entitlement_reasons",
+      "chain_of_thought"
+    ]
+  },
+  "publicDisclosure": {
+    "allowList": [
+      "schemaVersion",
+      "resultId",
+      "generatedAt",
+      "overall.displayScore",
+      "overall.band",
+      "confidence.band",
+      "confidence.caveat",
+      "summary",
+      "strengths[].title",
+      "strengths[].summary",
+      "opportunities[].title",
+      "opportunities[].summary",
+      "recommendationPreviews[].title",
+      "recommendationPreviews[].impact",
+      "recommendationPreviews[].summary",
+      "registrationPrompt.label",
+      "registrationPrompt.destination"
+    ],
+    "limits": { "strengths": 3, "opportunities": 3, "recommendationPreviews": 3 },
+    "token": {
+      "entropyBits": 256,
+      "stored": "hashed",
+      "audience": "delivery-dna-public-result",
+      "lifetimeSeconds": 86400
+    },
+    "cacheControl": "private, no-store",
+    "rateLimits": {
+      "perTokenPerMinute": 30,
+      "perTokenPer24Hours": 300,
+      "perIpPerMinute": 60,
+      "perIpPer24Hours": 1000
+    },
+    "registrationPrompt": "Create your free DeliveryIQ account to unlock your full report, improvement roadmap and recommended next steps.",
+    "registrationDestination": "/register?source=delivery-dna&result={publicResultId}",
+    "linking": "verified_authenticated_explicit_consent_single_tenant_workspace_immutable_run"
+  },
+  "analysisLifecycle": {
+    "states": ["queued", "running", "completed", "failed"],
+    "transitions": [
+      "queued:running",
+      "running:completed",
+      "queued:failed",
+      "running:failed",
+      "failed:queued"
+    ],
+    "completedTerminal": true,
+    "maximumAttempts": 3,
+    "retryBackoffSeconds": [5, 30],
+    "apiMode": "asynchronous_only",
+    "idempotencyMaterial": [
+      "tenantId",
+      "workspaceId",
+      "assessmentId",
+      "assessmentRevision",
+      "configurationSetId",
+      "requestedMode"
+    ],
+    "idempotencySeparator": "\n",
+    "idempotencyDigest": "sha256"
+  },
+  "traceability": {
+    "nodeTypes": [
+      "evidence",
+      "question",
+      "capability_contribution",
+      "capability_score",
+      "overall_score",
+      "confidence_factor",
+      "confidence_result",
+      "finding",
+      "pattern",
+      "recommendation",
+      "roadmap_item",
+      "knowledge_pack_recommendation",
+      "teammate_recommendation",
+      "narrative_fact",
+      "presentation_item"
+    ],
+    "edgeTypes": [
+      "answers",
+      "maps_to",
+      "contributes_to",
+      "aggregates_into",
+      "supports",
+      "limits",
+      "triggers",
+      "ranks",
+      "depends_on",
+      "scheduled_as",
+      "recommends",
+      "renders_as",
+      "supersedes"
+    ],
+    "requiredNodeFields": [
+      "tenantId",
+      "workspaceId",
+      "analysisRunId",
+      "domainId",
+      "domainVersion",
+      "configurationSetId",
+      "contentHash"
+    ],
+    "crossTenantEdgesAllowed": false,
+    "crossRunEdgesAllowed": false,
+    "visibleOutputRequiresEvidencePath": true
+  }
+}
