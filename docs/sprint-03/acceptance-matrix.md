@@ -19,6 +19,19 @@ Evidence baseline: branch `agent/sprint-03-foundation`, 2 August 2026.
 | S3-013 | PASS   | Trace generated at publication, typed nodes/edges, cross-scope/orphan detection and evidence path for every visible conclusion. Traceability tests.                                        |
 | S3-014 | PASS   | Shared canonical result, exact server-side allow-list, high-entropy hashed token, consent, expiry, rate limiting, no-store response and tenant-scoped revocation. Public disclosure tests. |
 
+## PDR-003-001 automatic analysis trigger
+
+| Criterion                   | Status          | Evidence                                                                                                                                                 |
+| --------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Automatic durable hand-off  | PASS            | Completion transition trigger writes a unique tenant-scoped outbox record in the completion transaction; runtime schedules processing only after commit. |
+| Duplicate/concurrent safety | PASS            | Unique revision/configuration/mode key, `FOR UPDATE SKIP LOCKED`, locked DIQ-203 derived idempotency key and double-click tests.                         |
+| Completion durability       | PASS            | Hand-off processing is separate and failure updates only the outbox; completed assessment rows are never rolled back.                                    |
+| Reconciliation              | PASS            | Native one-minute Nitro task and generated Cloudflare cron trigger, protected operational endpoint and bounded database reconciliation function.         |
+| UX states                   | PASS            | Accessible preparing, queued/running, completed, retryable failure, non-retryable failure and missing-after-15s states; no normal-path generate action.  |
+| Authorised retry            | PASS            | Tenant-scoped write context, same idempotent request contract, atomic failed-run retry and disabled in-flight button.                                    |
+| Audit and redaction         | PASS            | Append-only tenant-scoped hand-off events contain IDs, versions, correlation and safe codes only; no raw evidence.                                       |
+| Hosted completion-to-result | DEPLOYMENT GATE | Run after the new migration, minute schedule and application revision are published.                                                                     |
+
 ## Golden fixture register
 
 All 52 locked DIQ-203B fixtures execute by identifier in `tests/sprint03-golden.test.ts`. Ordering is preserved and expected projections are unmodified: **52/52 PASS**.
@@ -29,7 +42,7 @@ All 52 locked DIQ-203B fixtures execute by identifier in `tests/sprint03-golden.
 | ----------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------- |
 | Locked configuration and golden data      | PASS            | Central Zod validation and digest; 52/52 locked fixtures                                          |
 | Formatting, lint and type checking        | PASS            | Changed-file Prettier/ESLint and TypeScript `--noEmit`                                            |
-| Unit, integration, failure and edge cases | PASS            | 24 files, 251 tests                                                                               |
+| Unit, integration, failure and edge cases | PASS            | 26 files, 267 tests                                                                               |
 | Determinism and immutability              | PASS            | Ordering-invariance, immutable result publication and database mutation triggers                  |
 | Idempotency, concurrency and retry        | PASS            | Unique idempotency key, atomic claim/lease, retry cap and approved backoff tests                  |
 | Tenant/workspace isolation                | PASS            | Tenant-bound API/service/repository queries and cross-scope trace rejection                       |

@@ -36,6 +36,17 @@ const finalHardening = readFileSync(
   ),
   "utf8",
 );
+const handoffMigration = readFileSync(
+  new URL("../supabase/migrations/20260802150000_analysis_handoff_outbox.sql", import.meta.url),
+  "utf8",
+);
+const handoffHardeningMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260802151000_harden_analysis_handoff_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -97,5 +108,38 @@ describe("Sprint 03 migration security", () => {
     expect(finalHardening).toContain("FROM PUBLIC, anon, authenticated");
     expect(finalHardening).toContain("REVOKE MAINTAIN ON TABLE");
     expect(finalHardening).toContain("FROM authenticated");
+  });
+
+  it("keeps the durable analysis hand-off service-role-only and tenant-scoped", () => {
+    expect(handoffMigration).toContain("AFTER INSERT OR UPDATE OF status, completed_at");
+    expect(handoffMigration).toContain(
+      "UNIQUE (assessment_session_id, assessment_revision, configuration_set_id, requested_mode)",
+    );
+    expect(handoffMigration).toContain("FOR UPDATE SKIP LOCKED");
+    expect(handoffMigration).toContain("claimed_at <= now() - interval '2 minutes'");
+    expect(handoffMigration).toContain(
+      "ALTER TABLE public.assessment_analysis_handoffs ENABLE ROW LEVEL SECURITY",
+    );
+    expect(handoffMigration).toContain(
+      "REVOKE ALL ON public.assessment_analysis_handoffs FROM PUBLIC, anon, authenticated",
+    );
+    expect(handoffMigration).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer) FROM PUBLIC, anon, authenticated",
+    );
+    expect(handoffMigration).toContain("s.organisation_id, s.workspace_id");
+    expect(handoffMigration).not.toContain("canonical_input");
+    expect(handoffMigration).not.toContain("assessment_responses");
+    expect(handoffHardeningMigration).toContain(
+      "REVOKE ALL ON public.assessment_analysis_handoffs FROM PUBLIC, anon, authenticated",
+    );
+    expect(handoffHardeningMigration).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.reconcile_assessment_analysis_handoffs(integer)",
+    );
+    expect(handoffHardeningMigration).toContain(
+      "REVOKE MAINTAIN ON public.assessment_analysis_handoffs FROM authenticated",
+    );
+    expect(handoffHardeningMigration).toContain(
+      "GRANT EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer) TO service_role",
+    );
   });
 });
