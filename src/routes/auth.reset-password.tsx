@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { GENERIC_LINK_ERROR, parseAuthCallback } from "@/lib/identity/auth-callback";
 import { changePassword } from "@/lib/identity/client";
+
 
 export const Route = createFileRoute("/auth/reset-password")({
   ssr: false,
