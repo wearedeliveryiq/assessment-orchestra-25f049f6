@@ -46,9 +46,53 @@ export async function assessmentAuthHeaders(): Promise<Record<string, string>> {
 
 /** Downloads a protected artefact without placing credentials in the URL. */
 export async function openAuthenticatedDownload(path: string): Promise<void> {
-  const response = await fetch(path, { headers: await assessmentAuthHeaders() });
-  if (!response.ok) throw new Error(`Download failed (${response.status})`);
-  const url = URL.createObjectURL(await response.blob());
-  window.open(url, "_blank", "noopener,noreferrer");
-  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  // Reserve the tab while the click still has browser user activation. Opening
+  // it after the authenticated fetch is complete is blocked by some browsers.
+  const preview = window.open("about:blank", "_blank");
+  if (preview) preview.opener = null;
+
+  try {
+    const response = await fetch(path, { headers: await assessmentAuthHeaders() });
+    if (!response.ok) throw new Error(`Download failed (${response.status})`);
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const contentType = response.headers.get("content-type") ?? blob.type;
+
+    if (contentType.includes("text/html") && preview) {
+      preview.location.href = url;
+    } else {
+      preview?.close();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = downloadFilename(response.headers.get("content-disposition"), path, contentType);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  } catch (error) {
+    preview?.close();
+    throw error;
+  }
+}
+
+function downloadFilename(disposition: string | null, path: string, contentType: string): string {
+  const utf8 = disposition?.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
+  const plain = disposition?.match(/filename="?([^";]+)"?/i)?.[1];
+  const supplied = utf8 ? decodeURIComponent(utf8) : plain;
+  if (supplied) return supplied;
+
+  const routeName = path.split("?")[0].split("/").filter(Boolean).at(-1) ?? "deliveryiq-export";
+  const extension = contentType.includes("pdf")
+    ? "pdf"
+    : contentType.includes("presentation")
+      ? "pptx"
+      : contentType.includes("json")
+        ? "json"
+        : contentType.includes("html")
+          ? "html"
+          : "bin";
+  return `${routeName}.${extension}`;
 }

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -146,6 +147,9 @@ function CreateOrganisationDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create an organisation</DialogTitle>
+          <DialogDescription>
+            Set up the organisation that will own your DeliveryIQ workspaces and assessments.
+          </DialogDescription>
         </DialogHeader>
         <form
           className="space-y-4"

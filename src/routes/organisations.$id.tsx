@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -295,6 +296,9 @@ function CreateWorkspaceDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a workspace</DialogTitle>
+          <DialogDescription>
+            Create a home for this organisation's assessments, members and delivery activity.
+          </DialogDescription>
         </DialogHeader>
         <form
           className="space-y-4"
@@ -359,6 +363,9 @@ function InviteDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invite someone to this organisation</DialogTitle>
+          <DialogDescription>
+            Choose their organisation role and optionally add them to a workspace.
+          </DialogDescription>
         </DialogHeader>
         <form
           className="space-y-4"
