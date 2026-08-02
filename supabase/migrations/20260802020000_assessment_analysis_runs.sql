@@ -170,6 +170,19 @@ CREATE POLICY "Members can read tenant analysis events"
       WHERE run.id = assessment_analysis_events.analysis_run_id
         AND run.organisation_id = assessment_analysis_events.organisation_id
         AND run.workspace_id = assessment_analysis_events.workspace_id
+        AND EXISTS (
+          SELECT 1 FROM public.organisation_memberships membership
+          WHERE membership.organisation_id = run.organisation_id
+            AND membership.user_id = auth.uid()
+            AND membership.status = 'active'
+            AND membership.is_deleted = false
+        )
+        AND EXISTS (
+          SELECT 1 FROM public.workspaces workspace
+          WHERE workspace.id = run.workspace_id
+            AND workspace.organisation_id = run.organisation_id
+            AND workspace.is_deleted = false
+        )
     )
   );
 
