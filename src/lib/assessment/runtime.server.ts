@@ -17,6 +17,7 @@ import {
   lifecycleEvent,
   scheduleGraphRefresh,
 } from "../audit/runtime-audit.server";
+import { scheduleAnalysisHandoff } from "../analysis/handoff-service.server";
 
 export class RuntimeError extends Error {
   constructor(
@@ -209,6 +210,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
       results,
       completed_at: new Date().toISOString(),
     });
+    scheduleAnalysisHandoff();
     return getStatus(id, ownerKey);
   }
 
@@ -262,6 +264,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
     lifecycleEvent(session, ownerKey, "assessment.completed", {
       stages: after.length,
     });
+    scheduleAnalysisHandoff();
     scheduleGraphRefresh(id);
   }
 

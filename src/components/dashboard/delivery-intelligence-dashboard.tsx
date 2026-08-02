@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AlertTriangle, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
 import {
   fetchLatestIntelligence,
+  fetchAnalysisStatus,
+  retryAnalysis,
   acceptIntelligenceRecommendation,
   fetchIntelligenceExplanation,
   type WorkspaceIntelligenceResult,
@@ -13,11 +15,29 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
   const hydrated = useHydrated();
   const queryClient = useQueryClient();
   const [conclusionId, setConclusionId] = useState<string | null>(null);
+  const statusQuery = useQuery({
+    queryKey: ["delivery-intelligence-status", assessmentId],
+    queryFn: () => fetchAnalysisStatus(assessmentId),
+    enabled: hydrated,
+    refetchInterval: (query) => {
+      const state = query.state.data?.state;
+      return state === "completed" || state === "failed" || state === "missing" ? false : 2_000;
+    },
+  });
   const query = useQuery({
     queryKey: ["delivery-intelligence", assessmentId],
     queryFn: () => fetchLatestIntelligence(assessmentId),
-    enabled: hydrated,
+    enabled: hydrated && statusQuery.data?.state === "completed",
     staleTime: 60_000,
+  });
+  const retry = useMutation({
+    mutationFn: () => retryAnalysis(assessmentId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["delivery-intelligence-status", assessmentId],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] });
+    },
   });
   const acceptance = useMutation({
     mutationFn: (recommendationId: string) =>
@@ -30,13 +50,102 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
     queryFn: () => fetchIntelligenceExplanation(query.data!.analysisRunId, conclusionId!),
     enabled: Boolean(query.data && conclusionId),
   });
-  if (!hydrated || query.isPending)
+  useEffect(() => {
+    if (statusQuery.data?.state === "completed") {
+      void queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] });
+    }
+  }, [assessmentId, queryClient, statusQuery.data?.state]);
+
+  if (!hydrated || statusQuery.isPending)
     return (
       <div
         className="flex min-h-48 items-center justify-center gap-2 text-sm text-muted-foreground"
         aria-live="polite"
       >
-        <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading delivery intelligence…
+        <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Preparing your Delivery
+        Intelligence…
+      </div>
+    );
+
+  if (statusQuery.error)
+    return (
+      <section
+        role="alert"
+        className="rounded-xl border border-destructive/40 bg-destructive/10 p-5"
+      >
+        <h2 className="font-semibold">Delivery Intelligence is temporarily unavailable</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {statusQuery.error.message} Your assessment is safe.
+        </p>
+      </section>
+    );
+
+  const handoff = statusQuery.data;
+  if (handoff && handoff.state !== "completed") {
+    const processing = ["preparing", "queued", "running"].includes(handoff.state);
+    const canRetry =
+      handoff.retryable && (handoff.state === "failed" || handoff.state === "missing");
+    return (
+      <section
+        aria-live="polite"
+        aria-busy={processing}
+        className={`rounded-xl border p-6 ${
+          processing ? "border-primary/30 bg-primary/5" : "border-destructive/40 bg-destructive/10"
+        }`}
+      >
+        <div className="flex items-start gap-3">
+          {processing ? (
+            <Loader2 className="mt-0.5 h-5 w-5 shrink-0 animate-spin text-primary" aria-hidden />
+          ) : (
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden />
+          )}
+          <div>
+            <h2 className="font-semibold">
+              {processing ? handoff.safeMessage : "Delivery Intelligence needs attention"}
+            </h2>
+            {!processing && (
+              <p className="mt-2 text-sm text-muted-foreground">{handoff.safeMessage}</p>
+            )}
+            {handoff.state === "failed" && !handoff.retryable && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Please contact support
+                {handoff.supportReference ? ` and quote ${handoff.supportReference}` : ""}.
+              </p>
+            )}
+            {retry.error && (
+              <p role="alert" className="mt-3 text-sm text-destructive">
+                {retry.error.message}
+              </p>
+            )}
+            {canRetry && (
+              <button
+                type="button"
+                disabled={retry.isPending}
+                onClick={() => retry.mutate()}
+                className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {retry.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                ) : (
+                  <RefreshCw className="h-4 w-4" aria-hidden />
+                )}
+                Retry analysis
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (query.isPending)
+    return (
+      <div
+        className="flex min-h-48 items-center justify-center gap-2 text-sm text-muted-foreground"
+        aria-live="polite"
+      >
+        <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden /> Your Delivery Intelligence is
+        ready. Loading result…
       </div>
     );
   if (query.error || !query.data)
@@ -45,17 +154,10 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
         role="alert"
         className="rounded-xl border border-destructive/40 bg-destructive/10 p-5"
       >
-        <h2 className="font-semibold">Intelligence is not available</h2>
+        <h2 className="font-semibold">Delivery Intelligence result is temporarily unavailable</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          {query.error?.message ?? "No completed result was found."}
+          Your assessment and completed analysis are safe. Please refresh shortly.
         </p>
-        <button
-          type="button"
-          onClick={() => void query.refetch()}
-          className="mt-4 min-h-11 rounded-lg border border-border px-4 text-sm font-medium"
-        >
-          Try again
-        </button>
       </section>
     );
   const result = query.data;

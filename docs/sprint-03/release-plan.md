@@ -9,6 +9,13 @@
 5. Run authenticated cross-tenant tests, run creation through dashboard display, explanation redaction, public issue/read/expiry/rate/revoke journeys, and schema-leak comparison.
 6. Measure processing and result API latency against PB-003 targets using representative data.
 7. Deploy the application SHA, smoke test, then promote using the normal Lovable/GitHub release path.
+8. Apply `20260802150000_analysis_handoff_outbox.sql`, regenerate Supabase types, and verify the
+   completion trigger, outbox claim functions, append-only events and deny-by-default grants.
+9. Verify the deployed worker retained the generated `* * * * *` cron trigger for the bundled
+   `analysis:reconcile` task. As an operational fallback, set `ANALYSIS_RECONCILER_SECRET` and invoke
+   `POST /api/internal/analysis-handoffs/reconcile` every 60 seconds with its bearer token.
+10. Confirm the migration's bounded backfill creates hand-offs for completed assessments without a
+    Sprint 03 run, then verify queue age returns below 60 seconds.
 
 ## Rollback
 
@@ -17,3 +24,7 @@ Roll back the application to the recorded prior SHA first. The Sprint tables and
 ## Release acceptance
 
 Release only when staging migrations, tenant isolation, public disclosure, accessibility journeys, performance targets and the full regression suite pass with no high-severity security finding.
+
+PDR-003-001 additionally requires one hosted journey from assessment completion through automatic
+analysis to dashboard result, plus retryable and non-retryable failure checks. A deployed release is
+not accepted if the one-minute reconciler trigger is absent.

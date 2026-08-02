@@ -148,6 +148,12 @@ export async function getSession(id: string, ownerKey: string): Promise<Assessme
   return row ? toSession(row) : null;
 }
 
+/** Service-role lookup for trusted background workers; callers must enforce stored tenant scope. */
+export async function getSessionById(id: string): Promise<AssessmentSession | null> {
+  const row = unwrap<SessionRow | null>(await sessions().select("*").eq("id", id).maybeSingle());
+  return row ? toSession(row) : null;
+}
+
 export async function getSessionResults(
   id: string,
   ownerKey: string,

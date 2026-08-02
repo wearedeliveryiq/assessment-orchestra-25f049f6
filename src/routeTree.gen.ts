@@ -169,6 +169,8 @@ import { Route as ApiAssessmentIdResumeRouteImport } from './routes/api/assessme
 import { Route as ApiAssessmentIdSaveRouteImport } from './routes/api/assessment.$id.save'
 import { Route as ApiAssessmentIdSummaryRouteImport } from './routes/api/assessment.$id.summary'
 import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
+import { Route as ApiAssessmentsIdAnalysisRetryRouteImport } from './routes/api/assessments.$id.analysis-retry'
+import { Route as ApiAssessmentsIdAnalysisStatusRouteImport } from './routes/api/assessments.$id.analysis-status'
 import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
 import { Route as ApiAssessmentsIdIntelligenceResultRouteImport } from './routes/api/assessments.$id.intelligence-result'
 import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
@@ -183,6 +185,7 @@ import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
+import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
 import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport } from './routes/api/analysis-runs.$id.public-results.$publicResultId'
@@ -1018,6 +1021,18 @@ const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
   path: '/advance',
   getParentRoute: () => ApiAssessmentsIdRoute,
 } as any)
+const ApiAssessmentsIdAnalysisRetryRoute =
+  ApiAssessmentsIdAnalysisRetryRouteImport.update({
+    id: '/analysis-retry',
+    path: '/analysis-retry',
+    getParentRoute: () => ApiAssessmentsIdRoute,
+  } as any)
+const ApiAssessmentsIdAnalysisStatusRoute =
+  ApiAssessmentsIdAnalysisStatusRouteImport.update({
+    id: '/analysis-status',
+    path: '/analysis-status',
+    getParentRoute: () => ApiAssessmentsIdRoute,
+  } as any)
 const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
   id: '/execute',
   path: '/execute',
@@ -1091,6 +1106,12 @@ const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
   path: '/status',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiInternalAnalysisHandoffsReconcileRoute =
+  ApiInternalAnalysisHandoffsReconcileRouteImport.update({
+    id: '/api/internal/analysis-handoffs/reconcile',
+    path: '/api/internal/analysis-handoffs/reconcile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiReportingReportsIdRoute = ApiReportingReportsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -1300,6 +1321,8 @@ export interface FileRoutesByFullPath {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/analysis-retry': typeof ApiAssessmentsIdAnalysisRetryRoute
+  '/api/assessments/$id/analysis-status': typeof ApiAssessmentsIdAnalysisStatusRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/intelligence-result': typeof ApiAssessmentsIdIntelligenceResultRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -1314,6 +1337,7 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -1484,6 +1508,8 @@ export interface FileRoutesByTo {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/analysis-retry': typeof ApiAssessmentsIdAnalysisRetryRoute
+  '/api/assessments/$id/analysis-status': typeof ApiAssessmentsIdAnalysisStatusRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/intelligence-result': typeof ApiAssessmentsIdIntelligenceResultRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -1498,6 +1524,7 @@ export interface FileRoutesByTo {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -1669,6 +1696,8 @@ export interface FileRoutesById {
   '/api/assessment/$id/save': typeof ApiAssessmentIdSaveRoute
   '/api/assessment/$id/summary': typeof ApiAssessmentIdSummaryRoute
   '/api/assessments/$id/advance': typeof ApiAssessmentsIdAdvanceRoute
+  '/api/assessments/$id/analysis-retry': typeof ApiAssessmentsIdAnalysisRetryRoute
+  '/api/assessments/$id/analysis-status': typeof ApiAssessmentsIdAnalysisStatusRoute
   '/api/assessments/$id/execute': typeof ApiAssessmentsIdExecuteRoute
   '/api/assessments/$id/intelligence-result': typeof ApiAssessmentsIdIntelligenceResultRoute
   '/api/assessments/$id/results': typeof ApiAssessmentsIdResultsRoute
@@ -1683,6 +1712,7 @@ export interface FileRoutesById {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -1855,6 +1885,8 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/analysis-retry'
+    | '/api/assessments/$id/analysis-status'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/intelligence-result'
     | '/api/assessments/$id/results'
@@ -1869,6 +1901,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/internal/analysis-handoffs/reconcile'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2039,6 +2072,8 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/analysis-retry'
+    | '/api/assessments/$id/analysis-status'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/intelligence-result'
     | '/api/assessments/$id/results'
@@ -2053,6 +2088,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/internal/analysis-handoffs/reconcile'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2223,6 +2259,8 @@ export interface FileRouteTypes {
     | '/api/assessment/$id/save'
     | '/api/assessment/$id/summary'
     | '/api/assessments/$id/advance'
+    | '/api/assessments/$id/analysis-retry'
+    | '/api/assessments/$id/analysis-status'
     | '/api/assessments/$id/execute'
     | '/api/assessments/$id/intelligence-result'
     | '/api/assessments/$id/results'
@@ -2237,6 +2275,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/internal/analysis-handoffs/reconcile'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2376,6 +2415,7 @@ export interface RootRouteChildren {
   KnowledgePackIdIndexRoute: typeof KnowledgePackIdIndexRoute
   ApiAuthPasswordChangeRoute: typeof ApiAuthPasswordChangeRoute
   ApiAuthPasswordForgotRoute: typeof ApiAuthPasswordForgotRoute
+  ApiInternalAnalysisHandoffsReconcileRoute: typeof ApiInternalAnalysisHandoffsReconcileRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
 
@@ -3501,6 +3541,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssessmentsIdAdvanceRouteImport
       parentRoute: typeof ApiAssessmentsIdRoute
     }
+    '/api/assessments/$id/analysis-retry': {
+      id: '/api/assessments/$id/analysis-retry'
+      path: '/analysis-retry'
+      fullPath: '/api/assessments/$id/analysis-retry'
+      preLoaderRoute: typeof ApiAssessmentsIdAnalysisRetryRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/analysis-status': {
+      id: '/api/assessments/$id/analysis-status'
+      path: '/analysis-status'
+      fullPath: '/api/assessments/$id/analysis-status'
+      preLoaderRoute: typeof ApiAssessmentsIdAnalysisStatusRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
     '/api/assessments/$id/execute': {
       id: '/api/assessments/$id/execute'
       path: '/execute'
@@ -3598,6 +3652,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/executions/$id/status'
       preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
+    }
+    '/api/internal/analysis-handoffs/reconcile': {
+      id: '/api/internal/analysis-handoffs/reconcile'
+      path: '/api/internal/analysis-handoffs/reconcile'
+      fullPath: '/api/internal/analysis-handoffs/reconcile'
+      preLoaderRoute: typeof ApiInternalAnalysisHandoffsReconcileRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/reporting/reports/$id': {
       id: '/api/reporting/reports/$id'
@@ -3745,6 +3806,8 @@ const ApiAssessmentSessionsRouteWithChildren =
 
 interface ApiAssessmentsIdRouteChildren {
   ApiAssessmentsIdAdvanceRoute: typeof ApiAssessmentsIdAdvanceRoute
+  ApiAssessmentsIdAnalysisRetryRoute: typeof ApiAssessmentsIdAnalysisRetryRoute
+  ApiAssessmentsIdAnalysisStatusRoute: typeof ApiAssessmentsIdAnalysisStatusRoute
   ApiAssessmentsIdExecuteRoute: typeof ApiAssessmentsIdExecuteRoute
   ApiAssessmentsIdIntelligenceResultRoute: typeof ApiAssessmentsIdIntelligenceResultRoute
   ApiAssessmentsIdResultsRoute: typeof ApiAssessmentsIdResultsRoute
@@ -3755,6 +3818,8 @@ interface ApiAssessmentsIdRouteChildren {
 
 const ApiAssessmentsIdRouteChildren: ApiAssessmentsIdRouteChildren = {
   ApiAssessmentsIdAdvanceRoute: ApiAssessmentsIdAdvanceRoute,
+  ApiAssessmentsIdAnalysisRetryRoute: ApiAssessmentsIdAnalysisRetryRoute,
+  ApiAssessmentsIdAnalysisStatusRoute: ApiAssessmentsIdAnalysisStatusRoute,
   ApiAssessmentsIdExecuteRoute: ApiAssessmentsIdExecuteRoute,
   ApiAssessmentsIdIntelligenceResultRoute:
     ApiAssessmentsIdIntelligenceResultRoute,
@@ -4075,6 +4140,8 @@ const rootRouteChildren: RootRouteChildren = {
   KnowledgePackIdIndexRoute: KnowledgePackIdIndexRoute,
   ApiAuthPasswordChangeRoute: ApiAuthPasswordChangeRoute,
   ApiAuthPasswordForgotRoute: ApiAuthPasswordForgotRoute,
+  ApiInternalAnalysisHandoffsReconcileRoute:
+    ApiInternalAnalysisHandoffsReconcileRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }
 export const routeTree = rootRouteImport
