@@ -34,20 +34,28 @@ function ResetPasswordPage() {
   useEffect(() => {
     let active = true;
     (async () => {
-      const params = new URLSearchParams(window.location.hash.replace(/^#/, "") || window.location.search);
-      const tokenHash = params.get("token_hash");
-      if (tokenHash) {
-        await supabase.auth.verifyOtp({ type: "recovery", token_hash: tokenHash }).catch(() => undefined);
+      const callback = parseAuthCallback(window.location.hash, window.location.search, "recovery");
+      if (callback.error) {
+        if (!active) return;
+        setError(callback.error);
+        setReady(true);
+        return;
+      }
+      if (callback.tokenHash) {
+        await supabase.auth
+          .verifyOtp({ type: callback.otpType, token_hash: callback.tokenHash })
+          .catch(() => undefined);
       }
       const { data } = await supabase.auth.getSession();
       if (!active) return;
-      if (!data.session) setError("This reset link is invalid or has expired.");
+      if (!data.session) setError(GENERIC_LINK_ERROR);
       setReady(true);
     })();
     return () => {
       active = false;
     };
   }, []);
+
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
