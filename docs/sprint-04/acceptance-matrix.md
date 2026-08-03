@@ -172,21 +172,44 @@
 
 ## S4-007 quality gates
 
-| Gate                                | Evidence                                                                                           | Status                                                                  |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Deterministic domain/unit           | `tests/recommendation-portfolio.test.ts`                                                           | PASS                                                                    |
-| Integration/idempotency/failure     | immutable replay, cross-source reconciliation, worker ordering and non-rollback failure tests      | PASS                                                                    |
-| Tenant isolation/traceability       | service scope rejection, tenant-scoped ID lookup and database source-trace/run/catalogue checks    | PASS — live migration verification pending                              |
-| Permission/redaction                | public/workspace/audit schema-diff tests and deny-by-default migration contract                    | PASS — live privilege inspection pending                                |
-| Accessibility/copy                  | semantic group labels, explicit empty/partial states and textual why/confidence/dependency content | PASS                                                                    |
-| Performance                         | 250 governed recommendations classified inside the two-second portfolio target                     | PASS                                                                    |
-| Sprint 03 and S4-001–006 regression | complete DIQ-203B, catalogue, evaluation, confidence, resolution, priority and sequencing suites   | PASS                                                                    |
-| Type checking                       | `tsc --noEmit`                                                                                     | PASS                                                                    |
-| Changed-file lint/format            | ESLint and Prettier over every S4-007 application, route, generated-route and test file            | PASS                                                                    |
-| Full-repository lint                | inherited repository baseline                                                                      | RECORDED LIMITATION — 6,336 errors and 15 warnings outside S4-007 scope |
-| Full regression                     | 36 files / 424 tests                                                                               | PASS                                                                    |
-| Production build                    | Vite/Nitro production build                                                                        | PASS                                                                    |
-| Lovable Cloud migration execution   | `20260803070000` followed by `20260803071000`; schema, ACL and idempotency verification            | PENDING DEPLOYMENT                                                      |
+| Gate                                | Evidence                                                                                                    | Status                                                                  |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Deterministic domain/unit           | `tests/recommendation-portfolio.test.ts`                                                                    | PASS                                                                    |
+| Integration/idempotency/failure     | immutable replay, cross-source reconciliation, worker ordering and non-rollback failure tests               | PASS                                                                    |
+| Tenant isolation/traceability       | service scope rejection, tenant-scoped ID lookup and database source-trace/run/catalogue checks             | PASS — live schema and publisher verification complete                  |
+| Permission/redaction                | public/workspace/audit schema-diff tests and deny-by-default migration contract                             | PASS — live ACL and zero-row verification complete                      |
+| Accessibility/copy                  | semantic group labels, explicit empty/partial states and textual why/confidence/dependency content          | PASS                                                                    |
+| Performance                         | 250 governed recommendations classified inside the two-second portfolio target                              | PASS                                                                    |
+| Sprint 03 and S4-001–006 regression | complete DIQ-203B, catalogue, evaluation, confidence, resolution, priority and sequencing suites            | PASS                                                                    |
+| Type checking                       | `tsc --noEmit`                                                                                              | PASS                                                                    |
+| Changed-file lint/format            | ESLint and Prettier over every S4-007 application, route, generated-route and test file                     | PASS                                                                    |
+| Full-repository lint                | inherited repository baseline                                                                               | RECORDED LIMITATION — 6,336 errors and 15 warnings outside S4-007 scope |
+| Full regression                     | 36 files / 424 tests                                                                                        | PASS                                                                    |
+| Production build                    | Vite/Nitro production build                                                                                 | PASS                                                                    |
+| Lovable Cloud migration execution   | Schema plus digest-verified `20260803072000` publisher repair; live function, ACL and zero-row verification | PASS — live smoke unavailable because no eligible analysis exists       |
+
+## S4-008 — Customer Decision Workflow
+
+| Acceptance criterion                          | Implementation evidence                                                                                                                   | Test evidence                                                                  | Status |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------ |
+| AC1 locked transition matrix is exact         | pure state machine plus matching database enum/check/routine conditions; system-only irreversible supersession                            | every legal and illegal state/command pair; superseded terminal tests          | PASS   |
+| AC2 required command fields are validated     | accept acknowledgement, defer review date, reject locked reason and extraneous-field rejection in domain and database                     | missing acknowledgement/date/reason and exact six-category tests               | PASS   |
+| AC3 duplicate commands are idempotent         | tenant-scoped unique key, semantic payload hash, pre-transition replay and advisory-locked database replay                                | exact replay without second write; conflicting key/payload failure             | PASS   |
+| AC4 stale updates fail safely                 | current decision version checked under the item advisory lock and exposed as HTTP `409`                                                   | service version-conflict mapping and database migration contract               | PASS   |
+| AC5 permissions and tenant scope are enforced | authenticated read/write contexts, `assessment:submit`, active membership/workspace check, scoped item/portfolio queries, deny-by-default | cross-tenant `404`, write-permission source check and migration-security tests | PASS   |
+| AC6 generated baseline remains immutable      | separate append-only event/current overlay; existing S4-007 immutable tables untouched; generated advice and customer choice separated    | projection redaction/audit export, baseline-write absence and dashboard tests  | PASS   |
+
+## S4-008 quality gates
+
+| Gate                               | Evidence                                                                                      | Status                                     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Domain/transition/field validation | `tests/recommendation-decisions.test.ts`                                                      | PASS                                       |
+| Idempotency/concurrency/failure    | semantic replay, key conflict, stale version and immutable projection contracts               | PASS                                       |
+| Tenant isolation/permissions       | scoped repositories, authenticated permission boundary, DB membership and deny-by-default ACL | PASS — live migration verification pending |
+| Audit/disclosure/accessibility     | workspace redaction, audit history, generated/customer labels and explicit confirmation UX    | PASS                                       |
+| Performance                        | 10,000 pure transitions inside the 500 ms guard                                               | PASS                                       |
+| Full regression/type/lint/build    | 37 files / 446 tests; all 53 DIQ-203B fixtures; typecheck; changed-file lint/format; production build | PASS — full lint limitation remains inherited |
+| Lovable Cloud migration execution  | `20260803080000` then `20260803081000`                                                        | PENDING DEPLOYMENT                         |
 
 ## Quality gates
 

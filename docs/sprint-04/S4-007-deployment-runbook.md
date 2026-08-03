@@ -26,8 +26,11 @@ Apply separately and in order:
 
 1. `20260803070000_recommendation_portfolios.sql`
 2. `20260803071000_harden_recommendation_portfolio_permissions.sql`
+3. `20260803072000_repair_recommendation_portfolio_publisher.sql`
 
 Run the hardening migration immediately after the schema migration. Do not publish or perform other work between them.
+
+The repair migration is idempotent. On a fresh database the corrected source publisher already exists and the repair is a no-op. On the August 2026 Lovable deployment it verifies the exact staged source digest, applies only the parenthesised `CASE` syntax correction, verifies the corrected digest, removes the locked staging artefact, and reapplies least privilege.
 
 ## Verification
 

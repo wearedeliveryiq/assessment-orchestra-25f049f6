@@ -56,14 +56,6 @@ export async function retryAnalysis(assessmentId: string) {
   return body;
 }
 
-export async function acceptIntelligenceRecommendation(runId: string, recommendationId: string) {
-  const response = await fetch(
-    `/api/analysis-runs/${runId}/recommendations/${recommendationId}/accept`,
-    { method: "POST", headers: await assessmentAuthHeaders() },
-  );
-  if (!response.ok) throw new Error("The recommendation could not be accepted.");
-}
-
 export async function fetchIntelligenceExplanation(runId: string, conclusionId: string) {
   const response = await fetch(
     `/api/analysis-runs/${runId}/explanations?conclusionId=${encodeURIComponent(conclusionId)}`,
