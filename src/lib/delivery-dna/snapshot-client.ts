@@ -29,7 +29,11 @@ async function request<T>(path = "", init: RequestInit = {}): Promise<T> {
 
 export const deliveryDnaSnapshotApi = {
   get: () => request<{ snapshot: SnapshotState | null }>(),
-  start: () => request<{ snapshot: SnapshotState }>("", { method: "POST", body: "{}" }),
+  start: (restart = false) =>
+    request<{ snapshot: SnapshotState }>("", {
+      method: "POST",
+      body: JSON.stringify({ restart }),
+    }),
   save: (input: {
     questionId: string;
     status: "answered" | "not_applicable";

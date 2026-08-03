@@ -182,8 +182,11 @@ export async function getSnapshot(request: Request) {
   return { snapshot: project(resolved.session, await responsesFor(resolved.session.id)) };
 }
 
-export async function startSnapshot(request: Request): Promise<{ data: unknown; cookie: string }> {
-  const existing = await sessionForRequest(request);
+export async function startSnapshot(
+  request: Request,
+  restart = false,
+): Promise<{ data: unknown; cookie: string }> {
+  const existing = restart ? null : await sessionForRequest(request);
   if (existing) {
     return {
       data: { snapshot: project(existing.session, await responsesFor(existing.session.id)) },
