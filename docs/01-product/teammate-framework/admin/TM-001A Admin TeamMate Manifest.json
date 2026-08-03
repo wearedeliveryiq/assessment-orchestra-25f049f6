@@ -1,0 +1,670 @@
+{
+  "document": {
+    "id": "TM-001A",
+    "version": "1.0.0-rc2",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "subjectOwner": "Business Administration",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-02",
+    "specificationId": "TM-001",
+    "specificationVersion": "1.0-RC2",
+    "frameworkId": "DIQ-400",
+    "frameworkVersion": "1.0-RC3",
+    "commerceFrameworkId": "DIQ-401",
+    "commerceFrameworkVersion": "1.0-RC2",
+    "capabilityCatalogueId": "DIQ-400A",
+    "capabilityCatalogueVersion": "1.0.0-rc3",
+    "goldenFixtureId": "TM-001B",
+    "goldenFixtureVersion": "1.0.0-rc2"
+  },
+  "authorityNotice": "This release candidate is Product Owner-approved product definition but is not production activation authority until final approval, locking, taxonomy resolution and an applicable locked implementation playbook.",
+  "type": {
+    "typeId": "admin",
+    "typeVersion": "1.0.0-rc2",
+    "displayName": "Admin TeamMate",
+    "shortName": "Admin",
+    "category": "business_administration",
+    "market": "cross_industry_sme",
+    "digitalIdentityDisclosure": "DeliveryIQ digital TeamMate",
+    "definition": "A persistent digital administrative coordinator for a named SME organisation, workspace, function, team or business process that uses an approved work profile to organise meetings, tasks, records, schedules, documents and communications.",
+    "customerPromise": "Spend less time organising, preparing and following up routine administration while retaining complete control over decisions, communications and material changes.",
+    "notPlatformAdministrator": true,
+    "supportedScopes": ["organisation", "workspace", "function", "team", "business_process"],
+    "workProfileRequired": true,
+    "industryOverlayOptional": true,
+    "maximumRisk": "R2",
+    "selfExpansionAllowed": false,
+    "status": "candidate"
+  },
+  "customers": {
+    "buyers": [
+      "sme_founder_or_owner",
+      "managing_director",
+      "operations_office_or_practice_manager",
+      "functional_leader",
+      "professional_or_field_service_business_leader",
+      "delivery_or_pmo_leader"
+    ],
+    "dailyUsers": [
+      "sme_owner_or_manager",
+      "administrator",
+      "office_or_practice_manager",
+      "coordinator",
+      "team_lead",
+      "authorised_executive_or_personal_assistant",
+      "profile_specific_operator"
+    ],
+    "accountableOwnerRequired": true,
+    "ownershipTransferRequires": ["authorised_actor", "explicit_confirmation", "audited_transfer"]
+  },
+  "supportedOutcomes": [
+    {
+      "id": "meeting_and_event_readiness",
+      "statement": "Meetings and recurring administrative events are prepared with current authorised information."
+    },
+    {
+      "id": "task_action_and_decision_follow_through",
+      "statement": "Approved tasks, actions and decisions have visible owners, dates and follow-through."
+    },
+    {
+      "id": "business_record_freshness",
+      "statement": "Agreed business records are current enough to support human work and decisions."
+    },
+    {
+      "id": "traceable_administrative_outputs",
+      "statement": "Routine documents, updates and communications are prepared from traceable sources with limitations visible."
+    },
+    {
+      "id": "administrative_exception_visibility",
+      "statement": "Overdue, missing, conflicting or stale administrative information is surfaced to the right owner."
+    },
+    {
+      "id": "administrative_effort_reduction",
+      "statement": "Administrative effort is reduced without removing human accountability or creating hidden automation."
+    }
+  ],
+  "packaging": {
+    "deliveryiqCore": {
+      "entitlementId": "deliveryiq_core",
+      "includes": ["deliveryiq_contextual_guidance", "explanations", "labelled_drafts"],
+      "maximumRisk": "R1",
+      "persistentInstance": false,
+      "microsoftExtensions": false
+    },
+    "teammatePremium": {
+      "entitlementId": "teammate_premium",
+      "includes": [
+        "persistent_instance",
+        "approved_work_profile_selection",
+        "work_queue",
+        "governed_memory",
+        "scheduled_monitoring",
+        "deliveryiq_r2_coordination",
+        "outlook_in_context_extension",
+        "teams_personal_extension",
+        "premium_templates"
+      ],
+      "maximumRisk": "R2"
+    },
+    "teammateEnterprise": {
+      "entitlementId": "teammate_enterprise",
+      "includes": [
+        "organisation_deployment_controls",
+        "advanced_retention_and_redaction",
+        "custom_approved_connectors",
+        "separation_of_duties",
+        "audit_exports",
+        "enterprise_support"
+      ],
+      "maximumRisk": "R2",
+      "r3Included": false
+    }
+  },
+  "activationPolicy": {
+    "entryRoutes": ["accepted_mapped_recommendation", "approved_catalogue_direct_purpose"],
+    "required": [
+      "authenticated_workspace",
+      "active_locked_type_version",
+      "active_compatible_locked_work_profile",
+      "available_in_environment_and_region",
+      "valid_entitlement",
+      "teammate_activate_permission",
+      "accepted_mapped_recommendation_or_approved_direct_purpose",
+      "named_accountable_owner",
+      "reviewed_instance_scope",
+      "reviewed_capability_grants",
+      "valid_resource_scopes",
+      "reviewed_memory_and_retention",
+      "explicit_consent",
+      "immutable_activation_snapshot"
+    ],
+    "progressiveMicrosoftConsent": true,
+    "microsoftConnectionOptional": true,
+    "commercePurchaseSatisfiesActivation": false,
+    "readyToConfigureAllocationMayEnterActivationReview": true,
+    "automaticActivation": false,
+    "recommendationCreatesInstance": false,
+    "failureMode": "fail_closed"
+  },
+  "adaptationModel": {
+    "layers": [
+      "admin_type",
+      "approved_work_profile",
+      "optional_approved_industry_overlay",
+      "approved_customer_configuration",
+      "immutable_instance_grant"
+    ],
+    "sharedRuntimeRequired": true,
+    "industryRuntimeForkAllowed": false,
+    "lowerLayerMayWidenUpperLayer": false,
+    "workProfileRequired": true,
+    "profileProvides": [
+      "supported_outcomes",
+      "workflow_selection",
+      "terminology",
+      "record_semantics",
+      "templates",
+      "connector_resource_kinds",
+      "stricter_prohibitions",
+      "copy",
+      "measures",
+      "recommendation_or_direct_purpose_mappings"
+    ],
+    "industryOverlayProvides": [
+      "sector_terminology",
+      "templates",
+      "record_schemas",
+      "connector_mappings",
+      "classification",
+      "retention",
+      "disclaimers",
+      "stricter_prohibitions"
+    ],
+    "customerConfigurationProvides": [
+      "approved_terminology",
+      "named_processes",
+      "schedules",
+      "template_selection",
+      "resource_allow_lists",
+      "retention_options"
+    ],
+    "neverProvidedByProfileOverlayOrCustomer": [
+      "new_capability",
+      "higher_risk",
+      "unapproved_connector_action",
+      "executable_code",
+      "hidden_prompt",
+      "professional_decision_authority",
+      "weaker_security_or_privacy"
+    ]
+  },
+  "recommendationMappings": [],
+  "recommendationMappingsSuppliedByProfile": true,
+  "capabilityGrant": {
+    "maximumRisk": "R2",
+    "allowed": [
+      "context.read",
+      "intelligence.explain",
+      "evidence.summarise",
+      "guidance.provide",
+      "artifact.draft",
+      "scenario.compare",
+      "plan.propose",
+      "task.coordinate",
+      "reminder.schedule",
+      "decision.record",
+      "signal.monitor",
+      "exception.detect",
+      "escalation.propose",
+      "meeting.prepare",
+      "meeting.capture",
+      "communication.draft",
+      "communication.insert_draft",
+      "calendar.draft",
+      "artifact.save_draft",
+      "integration.read",
+      "outcome.observe",
+      "outcome.summarise",
+      "feedback.record"
+    ],
+    "explicitlyNotGranted": ["integration.write", "communication.send"],
+    "r2Requires": [
+      "explicit_user_command_or_approved_visible_standing_policy",
+      "current_authorisation",
+      "exact_resource_scope",
+      "idempotency",
+      "visible_reversible_result",
+      "complete_audit"
+    ],
+    "r3Policy": "not_permitted_in_type_version"
+  },
+  "engagementModes": [
+    {
+      "id": "ask",
+      "purpose": "Grounded contextual question and answer",
+      "maximumRisk": "R1"
+    },
+    {
+      "id": "prepare",
+      "purpose": "Create a labelled draft artifact for review",
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "coordinate",
+      "purpose": "Perform a reversible DeliveryIQ workflow update after explicit authority",
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "monitor",
+      "purpose": "Perform visible scheduled reads and propose exceptions or reminders",
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "review",
+      "purpose": "Inspect work, approvals, memory, permissions and history",
+      "maximumRisk": "R0"
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "deliveryiq_home",
+      "primary": true,
+      "route": "workspace/my-teammates/admin",
+      "features": [
+        "today",
+        "work_queue",
+        "conversation",
+        "activity",
+        "outcomes",
+        "memory",
+        "permissions",
+        "schedules",
+        "pause_and_revoke"
+      ]
+    },
+    {
+      "id": "deliveryiq_context_panel",
+      "primary": false,
+      "supportedObjects": [
+        "business_record",
+        "task_or_action",
+        "decision",
+        "meeting",
+        "document_or_draft",
+        "measure",
+        "intelligence_result",
+        "recommendation",
+        "profile_defined_record"
+      ],
+      "contextRule": "current_authorised_object_plus_explicitly_added_context"
+    },
+    {
+      "id": "outlook_addin",
+      "primary": false,
+      "supportedModes": [
+        "selected_message_read",
+        "message_compose",
+        "appointment_read",
+        "appointment_compose"
+      ],
+      "fullContextLinkTarget": "deliveryiq_home"
+    },
+    {
+      "id": "teams_personal_app",
+      "primary": false,
+      "supportedModes": ["personal_tab", "informational_card", "approval_link_card"],
+      "postingAllowed": false
+    },
+    {
+      "id": "digest_notification",
+      "primary": false,
+      "supportedCadence": ["daily", "weekly"],
+      "systemOfRecord": false
+    }
+  ],
+  "workQueue": {
+    "statuses": [
+      "proposed",
+      "draft_ready",
+      "awaiting_approval",
+      "approved",
+      "in_progress",
+      "completed",
+      "partially_failed",
+      "failed",
+      "cancelled",
+      "expired",
+      "superseded"
+    ],
+    "requiredFields": [
+      "purpose",
+      "source_context",
+      "origin",
+      "capability_id",
+      "risk_level",
+      "proposed_output_or_change",
+      "affected_resources",
+      "provenance",
+      "limitations",
+      "owner",
+      "expiry",
+      "status",
+      "approval_requirement",
+      "next_action",
+      "audit_reference"
+    ]
+  },
+  "workflows": [
+    {
+      "id": "daily_admin_briefing",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request", "approved_visible_schedule"],
+      "reads": [
+        "profile_selected_tasks",
+        "decisions",
+        "meetings",
+        "records",
+        "measures",
+        "schedules"
+      ],
+      "produces": ["prioritised_briefing", "source_references", "limitations"],
+      "maximumRisk": "R1",
+      "sideEffect": false
+    },
+    {
+      "id": "meeting_preparation",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request", "approved_visible_schedule"],
+      "reads": ["selected_meeting", "approved_profile_context"],
+      "produces": [
+        "agenda_draft",
+        "preparation_notes_draft",
+        "decisions_required",
+        "task_status",
+        "questions"
+      ],
+      "optionalR2": [
+        "insert_into_user_present_unsent_message",
+        "update_user_present_unsent_appointment"
+      ],
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "consented_meeting_follow_up",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request"],
+      "prerequisites": ["participant_notice", "capture_consent", "authorised_notes_or_transcript"],
+      "produces": ["draft_minutes", "proposed_decisions", "proposed_actions", "follow_up_draft"],
+      "humanConfirmationRequired": ["decision_record", "action_creation_or_update"],
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "action_follow_through",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request", "approved_visible_schedule"],
+      "produces": ["work_queue_exception", "proposed_reminder", "proposed_escalation"],
+      "optionalR2": ["schedule_internal_reminder", "update_allow_listed_deliveryiq_action_state"],
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "recurring_update_draft",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request", "approved_visible_schedule"],
+      "produces": [
+        "reconciled_update",
+        "missing_stale_or_conflicting_inputs",
+        "profile_defined_document_draft",
+        "audience_appropriate_narrative_draft",
+        "versioned_deliveryiq_draft"
+      ],
+      "finalApprovalOutsideTeamMate": true,
+      "maximumRisk": "R2"
+    },
+    {
+      "id": "record_exception_review",
+      "version": "1.0.0-rc2",
+      "trigger": ["explicit_user_request", "approved_visible_schedule"],
+      "produces": ["configured_exception", "decisive_facts", "proposed_escalation"],
+      "cannot": ["accept_risk", "close_material_record", "make_decision"],
+      "maximumRisk": "R1"
+    }
+  ],
+  "integrations": {
+    "deliveryiq": {
+      "authoritativeHome": true,
+      "read": [
+        "profile_defined_records",
+        "tasks",
+        "actions",
+        "measures",
+        "decisions",
+        "meetings",
+        "document_drafts",
+        "intelligence_where_applicable",
+        "recommendations_where_applicable",
+        "teammate_state"
+      ],
+      "write": [
+        "allow_listed_tasks_or_actions",
+        "human_confirmed_decisions",
+        "internal_reminders",
+        "draft_artifacts",
+        "outcome_observations",
+        "feedback"
+      ],
+      "maximumRisk": "R2"
+    },
+    "microsoft365": {
+      "optional": true,
+      "accessModel": "delegated_least_privilege_progressive_consent",
+      "applicationPermissionsAllowed": false,
+      "levels": [
+        {
+          "id": "M0",
+          "access": "none",
+          "behaviour": "deliveryiq_only"
+        },
+        {
+          "id": "M1",
+          "access": "outlook_current_item",
+          "behaviour": "user_invoked_selected_item_summary_or_visible_unsent_draft_insertion"
+        },
+        {
+          "id": "M2",
+          "access": "delegated_selected_calendar_read",
+          "behaviour": "briefing_preparation_and_monitoring_for_allow_listed_calendars"
+        },
+        {
+          "id": "M3",
+          "access": "approved_resource_change_notifications",
+          "behaviour": "event_driven_refresh_for_allow_listed_resources"
+        },
+        {
+          "id": "M4",
+          "access": "external_send_or_write",
+          "behaviour": "not_approved"
+        }
+      ],
+      "outlookMail": {
+        "wholeMailboxRead": false,
+        "currentSelectedItemRead": true,
+        "currentComposeDraftInsertion": true,
+        "send": false,
+        "selectedContentImplicitlyPersisted": false
+      },
+      "outlookCalendar": {
+        "selectedCalendarRead": true,
+        "allowListedResourceNotifications": true,
+        "currentAppointmentDraft": true,
+        "commitEvent": false,
+        "notifyAttendees": false
+      },
+      "teams": {
+        "personalTab": true,
+        "informationalAndApprovalLinkCards": true,
+        "postMessage": false,
+        "channelWideRead": false,
+        "meetingRecording": false
+      },
+      "prohibitedPermissions": [
+        "Mail.Send",
+        "whole_mailbox_default",
+        "application_permission_default"
+      ]
+    },
+    "sharepointAndOneDrive": {
+      "optional": true,
+      "accessModel": "delegated_explicit_file_or_folder_allow_list",
+      "read": true,
+      "write": false,
+      "share": false,
+      "changePermissions": false,
+      "broadSiteCrawl": false
+    },
+    "businessTools": {
+      "status": "future_separately_approved_connector_configuration",
+      "examples": [
+        "project_and_task",
+        "crm",
+        "practice_management",
+        "property_or_facilities",
+        "field_service",
+        "membership"
+      ],
+      "selectedRecordRead": true,
+      "externalMutation": false
+    }
+  },
+  "memoryPolicy": {
+    "allowedClasses": [
+      "approved_organisation_terminology_and_administrative_cadence",
+      "named_roles_and_operational_preferences",
+      "active_deliveryiq_work_draft_and_schedule_state",
+      "explicit_corrections_and_feedback",
+      "approved_outcome_observations",
+      "audit_references"
+    ],
+    "prohibitedClasses": [
+      "unrestricted_email_bodies",
+      "unrestricted_meeting_transcripts",
+      "credentials_or_tokens",
+      "private_correspondence",
+      "hidden_reasoning",
+      "employee_profiles",
+      "out_of_scope_data"
+    ],
+    "selectedMicrosoftContentDefault": "discard_after_task",
+    "explicitSaveRequires": [
+      "authorised_user",
+      "minimised_deliveryiq_record",
+      "purpose",
+      "retention_policy",
+      "provenance"
+    ],
+    "customerControls": [
+      "inspect",
+      "correct_or_supersede",
+      "export",
+      "request_deletion_subject_to_audit_retention"
+    ]
+  },
+  "prohibitedActions": [
+    "make_or_approve_accountable_professional_financial_legal_clinical_employment_or_regulatory_decision",
+    "accept_liability_or_close_material_issue_without_owner_confirmation",
+    "approve_contract_account_filing_report_minutes_advice_or_formal_record",
+    "identity_access_tenant_security_retention_billing_or_product_admin",
+    "whole_mailbox_or_document_estate_access_by_default",
+    "send_email_meeting_invitation_or_teams_message",
+    "commit_calendar_change_notifying_attendees",
+    "mutate_external_task_or_document_system",
+    "allocate_resource_funding_credit_treatment_legal_position_or_business_priority",
+    "employee_performance_sentiment_or_productivity_monitoring",
+    "hidden_user_profiling",
+    "activate_another_teammate",
+    "self_expand_permissions_or_capabilities"
+  ],
+  "explainability": {
+    "requiredFields": [
+      "source_record_ids_and_timestamps",
+      "capability_and_workflow_versions",
+      "reason_code",
+      "customer_safe_rationale",
+      "assumptions_missing_data_and_conflicts",
+      "content_status",
+      "approval_or_command_reference_when_applicable",
+      "side_effect_result_when_applicable",
+      "audit_correlation_reference"
+    ],
+    "contentStatuses": [
+      "source_fact",
+      "teammate_inference",
+      "proposal",
+      "draft",
+      "human_confirmed_record"
+    ],
+    "hiddenChainOfThoughtExposed": false
+  },
+  "performance": {
+    "homeReadP95Ms": 800,
+    "dailyBriefingP95Ms": 10000,
+    "draftWithUpTo20SourcesP95Ms": 15000,
+    "outlookTaskPaneReadyP95MsExcludingAuthentication": 3000,
+    "insertApprovedDraftP95Ms": 2000,
+    "pauseOrRevokeBlocksNewWorkWithinMs": 5000
+  },
+  "successMeasures": [
+    "customer_confirmed_preparation_time_category",
+    "draft_adoption",
+    "action_completeness",
+    "follow_through",
+    "information_freshness",
+    "decision_readiness",
+    "safe_action_rate",
+    "explicit_customer_trust_feedback"
+  ],
+  "customerCopy": {
+    "catalogueSummary": "Your Admin TeamMate prepares routine work, coordinates approved follow-up and keeps selected business information organised—while you retain every decision and material action.",
+    "outlookSelectionNotice": "DeliveryIQ will use only this selected Outlook item for the task you choose. It will not read your whole mailbox.",
+    "draftNotice": "Draft only. Review before use. Admin cannot send this message or invite attendees.",
+    "meetingCaptureConsentMissing": "Meeting capture is unavailable because participant notice and consent have not been confirmed.",
+    "sendRefusal": "Admin can prepare this communication, but this version cannot send it. Review and send it yourself from Outlook or Teams.",
+    "riskDecisionRefusal": "Admin cannot accept liability, provide professional judgement or make the decision. It can prepare authorised information and record the accountable owner’s confirmed decision.",
+    "pauseConfirmation": "Admin is paused. No new work will start until an authorised owner resumes it."
+  },
+  "reasonCodes": [
+    "TM_ADMIN_ACTIVATION_ALLOWED",
+    "TM_ADMIN_ACTIVATION_PREREQUISITE_MISSING",
+    "TM_ADMIN_NOT_ENTITLED",
+    "TM_ADMIN_PERMISSION_DENIED",
+    "TM_ADMIN_RESOURCE_OUT_OF_SCOPE",
+    "TM_ADMIN_CAPABILITY_NOT_GRANTED",
+    "TM_ADMIN_EXPLICIT_COMMAND_REQUIRED",
+    "TM_ADMIN_STANDING_POLICY_REQUIRED",
+    "TM_ADMIN_MEETING_CONSENT_REQUIRED",
+    "TM_ADMIN_DRAFT_CREATED",
+    "TM_ADMIN_DRAFT_INSERTED_UNSENT",
+    "TM_ADMIN_EXTERNAL_SEND_PROHIBITED",
+    "TM_ADMIN_EXTERNAL_WRITE_PROHIBITED",
+    "TM_ADMIN_ACCOUNTABLE_DECISION_REQUIRED",
+    "TM_ADMIN_EVIDENCE_MISSING",
+    "TM_ADMIN_EVIDENCE_STALE",
+    "TM_ADMIN_EVIDENCE_CONFLICT",
+    "TM_ADMIN_SENSITIVE_SOURCE_RESTRICTED",
+    "TM_ADMIN_INJECTION_REJECTED",
+    "TM_ADMIN_INSTANCE_PAUSED",
+    "TM_ADMIN_ACTION_REUSED",
+    "TM_ADMIN_ACTION_CONFLICT",
+    "TM_ADMIN_PARTIAL_FAILURE"
+  ],
+  "taxonomyDecision": {
+    "status": "final_approval_pending",
+    "recommendation": "Use Admin as the horizontal cross-industry SME TeamMate; supply Delivery Operations and future industry jobs through compatible governed profiles and overlays rather than runtime forks.",
+    "firstProfile": "delivery_operations",
+    "industryRuntimeForkAllowed": false,
+    "retainFutureSpecialists": ["executive", "pmo", "portfolio"],
+    "lockedPreviewIdsPreserved": ["meeting", "reporting", "raid"],
+    "silentRenameDeleteOrRemapAllowed": false,
+    "requiredControl": "locked_product_decision_record_or_versioned_DIQ_203_amendment"
+  }
+}

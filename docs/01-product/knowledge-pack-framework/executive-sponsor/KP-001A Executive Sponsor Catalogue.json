@@ -1,0 +1,530 @@
+{
+  "document": {
+    "id": "KP-001A",
+    "version": "1.0.0-rc1",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "configurationSetId": "kp001-executive-sponsor-1.0.0-rc1"
+  },
+  "manifest": {
+    "packId": "executive_sponsor",
+    "title": "Executive Sponsor Knowledge Pack",
+    "locale": "en-GB",
+    "schemaVersion": "knowledge-pack/1.0",
+    "estimatedMinutes": { "minimum": 15, "maximum": 20 },
+    "responseScale": {
+      "minimum": 1,
+      "maximum": 5,
+      "anchors": {
+        "1": "absent",
+        "2": "emerging",
+        "3": "defined",
+        "4": "embedded",
+        "5": "evidenced_and_improving"
+      }
+    },
+    "overallMinimumAvailableWeight": 0.7,
+    "minimumCapabilityQuestionCount": 2,
+    "minimumCapabilityEligibleWeight": 0.6
+  },
+  "capabilities": [
+    { "id": "strategic_alignment", "label": "Strategic Alignment", "weight": 0.15, "order": 1 },
+    {
+      "id": "sponsor_leadership",
+      "label": "Sponsorship and Leadership",
+      "weight": 0.2,
+      "order": 2
+    },
+    { "id": "governance", "label": "Governance", "weight": 0.15, "order": 3 },
+    { "id": "benefits_realisation", "label": "Benefits Realisation", "weight": 0.15, "order": 4 },
+    { "id": "risk_assurance", "label": "Risk and Assurance", "weight": 0.1, "order": 5 },
+    {
+      "id": "stakeholder_leadership",
+      "label": "Stakeholder Leadership",
+      "weight": 0.1,
+      "order": 6
+    },
+    { "id": "delivery_confidence", "label": "Delivery Confidence", "weight": 0.1, "order": 7 },
+    {
+      "id": "continuous_improvement",
+      "label": "Continuous Improvement",
+      "weight": 0.05,
+      "order": 8
+    }
+  ],
+  "questions": [
+    {
+      "id": "kp001.strategic_alignment.01",
+      "capabilityId": "strategic_alignment",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is there a clearly defined business case with measurable outcomes?"
+    },
+    {
+      "id": "kp001.strategic_alignment.02",
+      "capabilityId": "strategic_alignment",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are the initiative’s objectives aligned to organisational strategy?"
+    },
+    {
+      "id": "kp001.strategic_alignment.03",
+      "capabilityId": "strategic_alignment",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are the expected benefits understood and agreed by accountable stakeholders?"
+    },
+    {
+      "id": "kp001.strategic_alignment.04",
+      "capabilityId": "strategic_alignment",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is there a clear and measurable definition of success?"
+    },
+    {
+      "id": "kp001.strategic_alignment.05",
+      "capabilityId": "strategic_alignment",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are priorities reviewed when business needs change?"
+    },
+    {
+      "id": "kp001.sponsor_leadership.01",
+      "capabilityId": "sponsor_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the executive sponsor actively champion the initiative?"
+    },
+    {
+      "id": "kp001.sponsor_leadership.02",
+      "capabilityId": "sponsor_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the executive sponsor make required decisions within agreed timescales?"
+    },
+    {
+      "id": "kp001.sponsor_leadership.03",
+      "capabilityId": "sponsor_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is executive commitment visible to delivery teams and stakeholders?"
+    },
+    {
+      "id": "kp001.sponsor_leadership.04",
+      "capabilityId": "sponsor_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the sponsor act to remove organisational barriers?"
+    },
+    {
+      "id": "kp001.sponsor_leadership.05",
+      "capabilityId": "sponsor_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are sponsor and delivery accountabilities explicitly understood?"
+    },
+    {
+      "id": "kp001.governance.01",
+      "capabilityId": "governance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are governance arrangements clearly defined?"
+    },
+    {
+      "id": "kp001.governance.02",
+      "capabilityId": "governance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does governance focus on decisions and interventions rather than status reporting?"
+    },
+    {
+      "id": "kp001.governance.03",
+      "capabilityId": "governance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are key decisions recorded with owners and follow-up actions?"
+    },
+    {
+      "id": "kp001.governance.04",
+      "capabilityId": "governance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are escalation routes and thresholds understood?"
+    },
+    {
+      "id": "kp001.governance.05",
+      "capabilityId": "governance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Do governance forums resolve the matters brought to them effectively?"
+    },
+    {
+      "id": "kp001.benefits_realisation.01",
+      "capabilityId": "benefits_realisation",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are expected benefits clearly defined and measurable?"
+    },
+    {
+      "id": "kp001.benefits_realisation.02",
+      "capabilityId": "benefits_realisation",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does every priority benefit have an accountable owner?"
+    },
+    {
+      "id": "kp001.benefits_realisation.03",
+      "capabilityId": "benefits_realisation",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are benefit baselines, targets and progress reviewed during delivery?"
+    },
+    {
+      "id": "kp001.benefits_realisation.04",
+      "capabilityId": "benefits_realisation",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are benefits reviewed after implementation?"
+    },
+    {
+      "id": "kp001.benefits_realisation.05",
+      "capabilityId": "benefits_realisation",
+      "weight": 0.2,
+      "required": true,
+      "text": "Do executive decisions consider expected business value?"
+    },
+    {
+      "id": "kp001.risk_assurance.01",
+      "capabilityId": "risk_assurance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the sponsor have current visibility of material delivery risks?"
+    },
+    {
+      "id": "kp001.risk_assurance.02",
+      "capabilityId": "risk_assurance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are significant risks and uncertainty discussed candidly?"
+    },
+    {
+      "id": "kp001.risk_assurance.03",
+      "capabilityId": "risk_assurance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is independent assurance used where the level of risk warrants it?"
+    },
+    {
+      "id": "kp001.risk_assurance.04",
+      "capabilityId": "risk_assurance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are material mitigation and assurance actions actively monitored?"
+    },
+    {
+      "id": "kp001.risk_assurance.05",
+      "capabilityId": "risk_assurance",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are executive intervention thresholds for risk and assurance clear?"
+    },
+    {
+      "id": "kp001.stakeholder_leadership.01",
+      "capabilityId": "stakeholder_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are senior stakeholders actively engaged in the initiative?"
+    },
+    {
+      "id": "kp001.stakeholder_leadership.02",
+      "capabilityId": "stakeholder_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is there alignment across business, delivery and technology leaders?"
+    },
+    {
+      "id": "kp001.stakeholder_leadership.03",
+      "capabilityId": "stakeholder_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are material stakeholder conflicts resolved promptly?"
+    },
+    {
+      "id": "kp001.stakeholder_leadership.04",
+      "capabilityId": "stakeholder_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Do stakeholders understand and support key delivery decisions?"
+    },
+    {
+      "id": "kp001.stakeholder_leadership.05",
+      "capabilityId": "stakeholder_leadership",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is organisational adoption visibly sponsored?"
+    },
+    {
+      "id": "kp001.delivery_confidence.01",
+      "capabilityId": "delivery_confidence",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the sponsor have evidence-based confidence in delivery capability?"
+    },
+    {
+      "id": "kp001.delivery_confidence.02",
+      "capabilityId": "delivery_confidence",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is progress reported clearly, consistently and candidly?"
+    },
+    {
+      "id": "kp001.delivery_confidence.03",
+      "capabilityId": "delivery_confidence",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are executive delivery decisions based on current evidence?"
+    },
+    {
+      "id": "kp001.delivery_confidence.04",
+      "capabilityId": "delivery_confidence",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are significant issues escalated early enough for effective intervention?"
+    },
+    {
+      "id": "kp001.delivery_confidence.05",
+      "capabilityId": "delivery_confidence",
+      "weight": 0.2,
+      "required": true,
+      "text": "Can the sponsor explain the current delivery position and its principal uncertainties?"
+    },
+    {
+      "id": "kp001.continuous_improvement.01",
+      "capabilityId": "continuous_improvement",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are lessons captured while delivery is in progress?"
+    },
+    {
+      "id": "kp001.continuous_improvement.02",
+      "capabilityId": "continuous_improvement",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are agreed improvement recommendations acted upon?"
+    },
+    {
+      "id": "kp001.continuous_improvement.03",
+      "capabilityId": "continuous_improvement",
+      "weight": 0.2,
+      "required": true,
+      "text": "Is delivery capability demonstrably improving over time?"
+    },
+    {
+      "id": "kp001.continuous_improvement.04",
+      "capabilityId": "continuous_improvement",
+      "weight": 0.2,
+      "required": true,
+      "text": "Are delivery measures used to guide improvement decisions?"
+    },
+    {
+      "id": "kp001.continuous_improvement.05",
+      "capabilityId": "continuous_improvement",
+      "weight": 0.2,
+      "required": true,
+      "text": "Does the sponsor actively promote better ways of delivering change?"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "kp001_strategy_sponsorship_disconnect",
+      "version": "1.0.0",
+      "priority": 80,
+      "severity": "high",
+      "predicates": [
+        ["strategic_alignment", "gte", 50],
+        ["sponsor_leadership", "lt", 50]
+      ],
+      "explanation": "Strategic intent is clearer than the active sponsorship needed to translate it into delivery."
+    },
+    {
+      "id": "kp001_governance_without_value",
+      "version": "1.0.0",
+      "priority": 80,
+      "severity": "high",
+      "predicates": [
+        ["governance", "gte", 50],
+        ["benefits_realisation", "lt", 50]
+      ],
+      "explanation": "Governance is more established than the ownership and measurement of value."
+    },
+    {
+      "id": "kp001_confidence_blind_spot",
+      "version": "1.0.0",
+      "priority": 100,
+      "severity": "critical",
+      "predicates": [
+        ["risk_assurance", "lt", 50],
+        ["delivery_confidence", "gte", 75]
+      ],
+      "explanation": "Reported delivery confidence is high while risk and assurance evidence remains weak."
+    },
+    {
+      "id": "kp001_passive_sponsorship",
+      "version": "1.0.0",
+      "priority": 100,
+      "severity": "critical",
+      "predicates": [
+        ["sponsor_leadership", "lt", 50],
+        ["stakeholder_leadership", "lt", 50]
+      ],
+      "explanation": "Sponsorship and stakeholder leadership both need active executive attention."
+    },
+    {
+      "id": "kp001_effective_executive_control",
+      "version": "1.0.0",
+      "priority": 40,
+      "severity": "positive",
+      "predicates": [
+        ["sponsor_leadership", "gte", 75],
+        ["governance", "gte", 75],
+        ["risk_assurance", "gte", 75],
+        ["delivery_confidence", "gte", 75]
+      ],
+      "explanation": "Leadership, governance, risk and confidence evidence indicate effective executive control."
+    },
+    {
+      "id": "kp001_learning_sponsor",
+      "version": "1.0.0",
+      "priority": 40,
+      "severity": "positive",
+      "predicates": [
+        ["benefits_realisation", "gte", 75],
+        ["continuous_improvement", "gte", 75]
+      ],
+      "explanation": "The sponsor connects value realisation with continuous learning and improvement."
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "kp001_rec_sponsor_contract",
+      "title": "Establish the sponsor contract",
+      "triggerCapabilities": ["sponsor_leadership"],
+      "impact": "high",
+      "effort": "medium",
+      "dependencies": [],
+      "outcome": "Sponsor accountabilities, availability, decisions and interventions are explicit.",
+      "successMeasures": [
+        "Sponsor contract is approved",
+        "Decision and intervention cadence is operating"
+      ],
+      "knowledgePacks": ["executive_sponsor"],
+      "teamMates": ["executive", "meeting"]
+    },
+    {
+      "id": "kp001_rec_success_definition",
+      "title": "Reconfirm strategic outcomes and success",
+      "triggerCapabilities": ["strategic_alignment"],
+      "impact": "high",
+      "effort": "medium",
+      "dependencies": ["kp001_rec_sponsor_contract"],
+      "outcome": "Leaders share a measurable definition of success.",
+      "successMeasures": [
+        "Outcomes and measures are approved",
+        "Priority decisions reference agreed outcomes"
+      ],
+      "knowledgePacks": ["portfolio", "benefits"],
+      "teamMates": ["executive", "reporting"]
+    },
+    {
+      "id": "kp001_rec_governance_reset",
+      "title": "Reset governance around decisions",
+      "triggerCapabilities": ["governance"],
+      "impact": "high",
+      "effort": "medium",
+      "dependencies": ["kp001_rec_sponsor_contract"],
+      "outcome": "Governance enables timely accountable decisions and escalation.",
+      "successMeasures": [
+        "Decision rights and thresholds are published",
+        "Overdue decisions are reviewed each forum"
+      ],
+      "knowledgePacks": ["governance"],
+      "teamMates": ["executive", "meeting"]
+    },
+    {
+      "id": "kp001_rec_benefits_ownership",
+      "title": "Establish benefits ownership",
+      "triggerCapabilities": ["benefits_realisation"],
+      "impact": "high",
+      "effort": "medium",
+      "dependencies": ["kp001_rec_success_definition"],
+      "outcome": "Benefits have owners, baselines, targets and reviews.",
+      "successMeasures": [
+        "Every priority benefit has an owner",
+        "Baseline, target and review date are recorded"
+      ],
+      "knowledgePacks": ["benefits"],
+      "teamMates": ["executive", "reporting"]
+    },
+    {
+      "id": "kp001_rec_risk_conversation",
+      "title": "Establish executive risk and assurance conversation",
+      "triggerCapabilities": ["risk_assurance"],
+      "impact": "high",
+      "effort": "medium",
+      "dependencies": ["kp001_rec_governance_reset"],
+      "outcome": "Material uncertainty reaches executives in time for intervention.",
+      "successMeasures": [
+        "Risk thresholds and owners are agreed",
+        "Material assurance actions are reviewed monthly"
+      ],
+      "knowledgePacks": ["risk_assurance"],
+      "teamMates": ["raid", "executive"]
+    },
+    {
+      "id": "kp001_rec_stakeholder_alignment",
+      "title": "Build senior stakeholder alignment",
+      "triggerCapabilities": ["stakeholder_leadership"],
+      "impact": "medium",
+      "effort": "medium",
+      "dependencies": ["kp001_rec_sponsor_contract"],
+      "outcome": "Senior stakeholders support key decisions and adoption.",
+      "successMeasures": [
+        "Priority stakeholders have owners/actions",
+        "Material conflicts have resolution plans"
+      ],
+      "knowledgePacks": ["stakeholder_change"],
+      "teamMates": ["executive", "meeting"]
+    },
+    {
+      "id": "kp001_rec_confidence_review",
+      "title": "Institute evidence-led delivery confidence review",
+      "triggerCapabilities": ["delivery_confidence"],
+      "impact": "high",
+      "effort": "low",
+      "dependencies": ["kp001_rec_risk_conversation"],
+      "outcome": "Executive confidence is current, candid and evidence-led.",
+      "successMeasures": [
+        "Confidence drivers and caveats are reviewed",
+        "Intervention triggers are recorded"
+      ],
+      "knowledgePacks": ["pmo_effectiveness", "risk_assurance"],
+      "teamMates": ["reporting", "raid"]
+    },
+    {
+      "id": "kp001_rec_learning_cadence",
+      "title": "Establish sponsor-led improvement cadence",
+      "triggerCapabilities": ["continuous_improvement"],
+      "impact": "medium",
+      "effort": "low",
+      "dependencies": ["kp001_rec_confidence_review"],
+      "outcome": "Lessons create owned, measurable improvements.",
+      "successMeasures": [
+        "Improvement actions have owners/dates",
+        "Completed improvements record effect evidence"
+      ],
+      "knowledgePacks": ["pmo_effectiveness"],
+      "teamMates": ["executive", "reporting"]
+    }
+  ]
+}

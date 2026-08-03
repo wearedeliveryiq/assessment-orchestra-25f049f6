@@ -1,0 +1,361 @@
+{
+  "document": {
+    "id": "TM-001P-001B",
+    "version": "1.0.0-rc1",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "subjectOwner": "Delivery Operations",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-02",
+    "specificationId": "TM-001P-001",
+    "specificationVersion": "1.0-RC1",
+    "manifestId": "TM-001P-001A",
+    "manifestVersion": "1.0.0-rc1",
+    "parentFixtureId": "TM-001B",
+    "parentFixtureVersion": "1.0.0-rc2",
+    "fixtureSetId": "admin-delivery-operations-profile-fixtures-1.0.0-rc1"
+  },
+  "productionRuleNotice": "Expected profile compatibility, capability, workflow, evidence, accountability, isolation and customer-copy outcomes are normative release-candidate rules. Identifiers and timestamps are illustrative.",
+  "fixtures": [
+    {
+      "id": "profile_compatible_with_admin_parent",
+      "stage": "profile_compatibility",
+      "input": {
+        "parentTypeId": "admin",
+        "parentTypeVersion": "1.0.0-rc2",
+        "profileId": "delivery_operations",
+        "allCapabilitiesSubset": true,
+        "maximumRiskWithinParent": true,
+        "sharedRuntime": "admin"
+      },
+      "expected": {
+        "compatible": true,
+        "separateRuntimeCreated": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "profile_cannot_add_send_capability",
+      "stage": "profile_compatibility",
+      "input": {
+        "parentTypeId": "admin",
+        "profileCapabilities": ["communication.draft", "communication.send"]
+      },
+      "expected": {
+        "compatible": false,
+        "communicationSendGranted": false,
+        "reasonCode": "ADMIN_PROFILE_CAPABILITY_NOT_ALLOWED"
+      }
+    },
+    {
+      "id": "recommendation_mapping_is_discovery_only",
+      "stage": "recommendation_handoff",
+      "input": {
+        "recommendationId": "rec_integrated_controls",
+        "mappingPresent": true,
+        "recommendationAccepted": true,
+        "entitled": false
+      },
+      "expected": {
+        "profileEligible": true,
+        "instanceCreated": false,
+        "runtimeActivated": false,
+        "cta": "review_admin_delivery_operations"
+      }
+    },
+    {
+      "id": "daily_delivery_briefing_complete",
+      "stage": "workflow",
+      "input": {
+        "workflow": "daily_delivery_briefing",
+        "parentWorkflow": "daily_admin_briefing",
+        "sources": {
+          "actions": "current",
+          "decisions": "current",
+          "meetings": "current",
+          "raid": "current",
+          "deliveryMeasures": "current"
+        }
+      },
+      "expected": {
+        "allowed": true,
+        "output": "sourced_prioritised_delivery_briefing",
+        "limitations": [],
+        "sideEffect": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "daily_briefing_missing_raid_visible",
+      "stage": "workflow",
+      "input": {
+        "workflow": "daily_delivery_briefing",
+        "sources": {
+          "actions": "current",
+          "decisions": "current",
+          "meetings": "current",
+          "raid": "missing"
+        }
+      },
+      "expected": {
+        "outputProducedWithCaveat": true,
+        "raidClaimOmitted": true,
+        "limitations": ["RAID information is unavailable."],
+        "reasonCode": "ADMIN_PROFILE_EVIDENCE_MISSING"
+      }
+    },
+    {
+      "id": "governance_meeting_preparation_allowed",
+      "stage": "workflow",
+      "input": {
+        "workflow": "governance_meeting_preparation",
+        "selectedMeetingAllowed": true,
+        "deliveryContextAllowed": true,
+        "explicitRequest": true
+      },
+      "expected": {
+        "allowed": true,
+        "outputs": [
+          "agenda_draft",
+          "pre_read_draft",
+          "decisions_required",
+          "action_status",
+          "questions"
+        ],
+        "invitationSent": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "governance_draft_insert_stays_unsent",
+      "stage": "workflow",
+      "input": {
+        "workflow": "governance_meeting_preparation",
+        "surface": "outlook_message_compose",
+        "explicitCommand": true,
+        "userPresent": true
+      },
+      "expected": {
+        "inserted": true,
+        "draftRemainsUnsent": true,
+        "messageSent": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "meeting_follow_up_requires_consent",
+      "stage": "workflow",
+      "input": {
+        "workflow": "consented_governance_follow_up",
+        "participantNotice": false,
+        "captureConsent": false
+      },
+      "expected": {
+        "allowed": false,
+        "notesCaptured": false,
+        "profileReason": "meeting_consent_required",
+        "parentReasonCode": "TM_ADMIN_MEETING_CONSENT_REQUIRED"
+      }
+    },
+    {
+      "id": "confirmed_meeting_decision_record_allowed",
+      "stage": "workflow",
+      "input": {
+        "workflow": "consented_governance_follow_up",
+        "decisionOwner": "programme_director_1",
+        "humanConfirmationReference": "approval_19",
+        "explicitCommand": true
+      },
+      "expected": {
+        "decisionMadeByTeamMate": false,
+        "decisionRecorded": true,
+        "confirmationReferenceStored": true,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "action_follow_through_standing_policy",
+      "stage": "workflow",
+      "input": {
+        "workflow": "delivery_action_follow_through",
+        "standingPolicyId": "overdue_action_followup_v1",
+        "standingPolicyActive": true,
+        "targetWithinScope": true
+      },
+      "expected": {
+        "workQueueExceptionCreated": true,
+        "internalReminderMayBeCreated": true,
+        "externalMessageSent": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "weekly_status_stale_measure_caveat",
+      "stage": "workflow",
+      "input": {
+        "workflow": "weekly_status_draft",
+        "measureId": "delivery_measure_4",
+        "freshnessPolicyDays": 7,
+        "sourceAgeDays": 12
+      },
+      "expected": {
+        "draftProduced": true,
+        "measureRepresentedAsCurrent": false,
+        "limitations": [
+          "Delivery measure delivery_measure_4 is 12 days old and exceeds the 7-day policy."
+        ],
+        "reasonCode": "ADMIN_PROFILE_EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "weekly_status_conflict_not_resolved",
+      "stage": "workflow",
+      "input": {
+        "workflow": "weekly_status_draft",
+        "field": "go_live_date",
+        "values": ["2026-09-15", "2026-09-30"]
+      },
+      "expected": {
+        "resolvedValue": null,
+        "conflictVisible": true,
+        "accountableResolutionRequired": true,
+        "reasonCode": "ADMIN_PROFILE_EVIDENCE_CONFLICT"
+      }
+    },
+    {
+      "id": "raid_exception_proposes_not_accepts",
+      "stage": "workflow",
+      "input": {
+        "workflow": "raid_and_decision_exception_review",
+        "recordId": "risk_014",
+        "approvedThresholdBreached": true
+      },
+      "expected": {
+        "exceptionProduced": true,
+        "escalationStatus": "proposal",
+        "riskAccepted": false,
+        "recordClosed": false,
+        "reasonCode": "ADMIN_PROFILE_ALLOWED"
+      }
+    },
+    {
+      "id": "risk_acceptance_remains_human",
+      "stage": "accountability",
+      "input": {
+        "operation": "accept_risk",
+        "recordId": "risk_014",
+        "requestedBy": "programme_director_1"
+      },
+      "expected": {
+        "allowed": false,
+        "riskAccepted": false,
+        "humanOwnerRequired": true,
+        "reasonCode": "ADMIN_PROFILE_ACCOUNTABLE_DECISION_REQUIRED"
+      }
+    },
+    {
+      "id": "customer_terminology_changes_label_only",
+      "stage": "customer_configuration",
+      "input": {
+        "semanticField": "governance_meeting",
+        "configuredLabel": "Programme Pulse",
+        "attemptedSemanticOverride": false
+      },
+      "expected": {
+        "displayLabel": "Programme Pulse",
+        "semanticField": "governance_meeting",
+        "workflowPolicyChanged": false,
+        "capabilityGrantChanged": false
+      }
+    },
+    {
+      "id": "customer_label_cannot_change_risk_semantics",
+      "stage": "customer_configuration",
+      "input": {
+        "semanticField": "risk",
+        "configuredLabel": "note",
+        "attemptedSemanticOverride": true
+      },
+      "expected": {
+        "allowed": false,
+        "effectiveSemanticField": "risk",
+        "riskPolicyChanged": false,
+        "reasonCode": "ADMIN_PROFILE_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "cross_tenant_delivery_record_denied",
+      "stage": "tenant_isolation",
+      "input": {
+        "instanceTenantId": "tenant_alpha",
+        "recordTenantId": "tenant_beta",
+        "recordId": "raid_beta_1"
+      },
+      "expected": {
+        "allowed": false,
+        "externalStatus": 404,
+        "recordExistenceDisclosed": false,
+        "reasonCode": "ADMIN_PROFILE_TENANT_DENIED"
+      }
+    },
+    {
+      "id": "profile_isolation_between_admin_instances",
+      "stage": "profile_isolation",
+      "input": {
+        "instanceOneProfile": "delivery_operations",
+        "instanceTwoProfile": "illustrative_property_admin",
+        "sameTenant": true,
+        "sharedResourceGrant": false
+      },
+      "expected": {
+        "crossProfileDataAccessible": false,
+        "sharedRuntime": true,
+        "separateInstanceScopesPreserved": true
+      }
+    },
+    {
+      "id": "retired_profile_blocks_new_activation",
+      "stage": "profile_lifecycle",
+      "input": {
+        "profileId": "delivery_operations",
+        "profileStatus": "retired",
+        "requestedAction": "new_activation"
+      },
+      "expected": {
+        "allowed": false,
+        "existingHistoryReadableIfAuthorised": true,
+        "reasonCode": "ADMIN_PROFILE_RETIRED"
+      }
+    },
+    {
+      "id": "profile_cannot_translate_legacy_assessment",
+      "stage": "evidence_boundary",
+      "input": {
+        "sourceAssessmentType": "delivery-maturity",
+        "sourceQuestionSet": "executive-sponsorship-1.4.0",
+        "requestedDestination": "delivery_operations_profile_context",
+        "approvedMapping": null
+      },
+      "expected": {
+        "allowed": false,
+        "responsesTranslated": false,
+        "evidenceCreated": false,
+        "reasonCode": "ADMIN_PROFILE_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "profile_copy_discloses_admin_core",
+      "stage": "customer_copy",
+      "input": {
+        "catalogueName": "Admin TeamMate — Delivery Operations",
+        "profileDisclosureVisible": true,
+        "digitalIdentityVisible": true
+      },
+      "expected": {
+        "accepted": true,
+        "customerUnderstandsCoreAndProfile": true,
+        "separateAgentClaimMade": false
+      }
+    }
+  ]
+}

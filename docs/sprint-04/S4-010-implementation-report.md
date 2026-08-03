@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented and deployed against locked PDR-004-001 v1.0. Local engineering gates and managed Lovable Cloud verification pass. Product Acceptance remains governed by SAR-004 until the remaining authorised export, measured recovery and superseding-review gates are recorded.
+Implemented and deployed against the S4-010 rules preserved unchanged in locked PDR-004-001 v1.1. Local engineering gates and managed Lovable Cloud verification pass. SAR-004 v1.2 records Sprint 04 Product Acceptance with recorded limitations. Authorised export and the genuine Delivery DNA journey remain separate capability/GA gates; no recovery restore is claimed.
 
 ## Architecture and reuse
 
@@ -76,4 +76,4 @@ Modified: action controls, executive experience/model, S4-013 analytics reposito
 
 - No production observation is manufactured. Live outcome smoke requires a genuine eligible Delivery DNA recommendation action.
 - Repository-wide lint debt remains the accepted SAR-004 baseline; changed files are clean.
-- Authorised audit-export evidence, a measured isolated Tier 1 recovery rehearsal and a superseding Product Owner acceptance decision remain release gates outside S4-010 implementation.
+- Authorised audit-export evidence remains an enablement gate outside S4-010, and live outcome smoke requires a genuine eligible Delivery DNA action. PB-004A/PDR-004-001 v1.1 remove the former isolated Tier 1 rehearsal requirement for the current product stage; no restore or fixed recovery objective is claimed.

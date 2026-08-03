@@ -1,0 +1,267 @@
+{
+  "document": {
+    "id": "KP-001B",
+    "version": "1.0.0-rc1",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "configurationSetId": "kp001-executive-sponsor-1.0.0-rc1"
+  },
+  "contract": { "exactWithinProjection": true, "illustrative": false, "orderSensitive": true },
+  "fixtures": [
+    {
+      "id": "all_minimum",
+      "projection": ["capabilityScores", "overall"],
+      "input": { "allAnswers": 1 },
+      "expected": {
+        "capabilityScores": {
+          "strategic_alignment": 0,
+          "sponsor_leadership": 0,
+          "governance": 0,
+          "benefits_realisation": 0,
+          "risk_assurance": 0,
+          "stakeholder_leadership": 0,
+          "delivery_confidence": 0,
+          "continuous_improvement": 0
+        },
+        "overall": { "score": 0, "band": "fragile" }
+      }
+    },
+    {
+      "id": "all_midpoint",
+      "projection": ["capabilityScores", "overall"],
+      "input": { "allAnswers": 3 },
+      "expected": {
+        "capabilityScores": {
+          "strategic_alignment": 50,
+          "sponsor_leadership": 50,
+          "governance": 50,
+          "benefits_realisation": 50,
+          "risk_assurance": 50,
+          "stakeholder_leadership": 50,
+          "delivery_confidence": 50,
+          "continuous_improvement": 50
+        },
+        "overall": { "score": 50, "band": "established" }
+      }
+    },
+    {
+      "id": "all_maximum",
+      "projection": ["capabilityScores", "overall"],
+      "input": { "allAnswers": 5 },
+      "expected": {
+        "capabilityScores": {
+          "strategic_alignment": 100,
+          "sponsor_leadership": 100,
+          "governance": 100,
+          "benefits_realisation": 100,
+          "risk_assurance": 100,
+          "stakeholder_leadership": 100,
+          "delivery_confidence": 100,
+          "continuous_improvement": 100
+        },
+        "overall": { "score": 100, "band": "leading" }
+      }
+    },
+    {
+      "id": "capability_missing_two_questions",
+      "projection": ["capability"],
+      "input": { "capability": "governance", "answeredValues": [3, 3, 3], "missingCount": 2 },
+      "expected": { "capability": { "available": true, "score": 50, "eligibleWeight": 0.6 } }
+    },
+    {
+      "id": "capability_missing_four_questions",
+      "projection": ["capability"],
+      "input": { "capability": "governance", "answeredValues": [5], "missingCount": 4 },
+      "expected": {
+        "capability": { "available": false, "score": null, "reason": "insufficient_evidence" }
+      }
+    },
+    {
+      "id": "overall_available_boundary",
+      "projection": ["overall"],
+      "input": {
+        "available": {
+          "strategic_alignment": 50,
+          "sponsor_leadership": 50,
+          "governance": 50,
+          "benefits_realisation": 50,
+          "risk_assurance": 50
+        },
+        "availableWeight": 0.75
+      },
+      "expected": { "overall": { "available": true, "score": 50, "band": "established" } }
+    },
+    {
+      "id": "overall_unavailable_below_weight",
+      "projection": ["overall"],
+      "input": {
+        "available": {
+          "strategic_alignment": 50,
+          "sponsor_leadership": 50,
+          "governance": 50,
+          "benefits_realisation": 50
+        },
+        "availableWeight": 0.65
+      },
+      "expected": {
+        "overall": {
+          "available": false,
+          "score": null,
+          "reason": "insufficient_capability_coverage"
+        }
+      }
+    },
+    {
+      "id": "confidence_independence",
+      "projection": ["confidenceA", "confidenceB", "equal"],
+      "input": {
+        "A": { "allAnswers": 1, "metadataProfile": "complete_current_three_groups" },
+        "B": { "allAnswers": 5, "metadataProfile": "complete_current_three_groups" }
+      },
+      "expected": { "confidenceA": 100, "confidenceB": 100, "equal": true }
+    },
+    {
+      "id": "pattern_strategy_disconnect_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "strategic_alignment": 75, "sponsor_leadership": 25 },
+        "confidence": { "strategic_alignment": 80, "sponsor_leadership": 80 }
+      },
+      "expected": { "patterns": ["kp001_strategy_sponsorship_disconnect"] }
+    },
+    {
+      "id": "pattern_strategy_disconnect_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "strategic_alignment": 49.999999, "sponsor_leadership": 25 },
+        "confidence": { "strategic_alignment": 80, "sponsor_leadership": 80 }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "pattern_governance_value_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "governance": 50, "benefits_realisation": 49.999999 },
+        "confidence": { "governance": 80, "benefits_realisation": 80 }
+      },
+      "expected": { "patterns": ["kp001_governance_without_value"] }
+    },
+    {
+      "id": "pattern_governance_value_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "governance": 50, "benefits_realisation": 50 },
+        "confidence": { "governance": 80, "benefits_realisation": 80 }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "pattern_confidence_blind_spot_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "risk_assurance": 49.999999, "delivery_confidence": 75 },
+        "confidence": { "risk_assurance": 80, "delivery_confidence": 80 }
+      },
+      "expected": { "patterns": ["kp001_confidence_blind_spot"] }
+    },
+    {
+      "id": "pattern_confidence_blind_spot_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "risk_assurance": 50, "delivery_confidence": 75 },
+        "confidence": { "risk_assurance": 80, "delivery_confidence": 80 }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "pattern_passive_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "sponsor_leadership": 25, "stakeholder_leadership": 25 },
+        "confidence": { "sponsor_leadership": 80, "stakeholder_leadership": 80 }
+      },
+      "expected": { "patterns": ["kp001_passive_sponsorship"] }
+    },
+    {
+      "id": "pattern_passive_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "sponsor_leadership": 50, "stakeholder_leadership": 25 },
+        "confidence": { "sponsor_leadership": 80, "stakeholder_leadership": 80 }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "pattern_control_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": {
+          "sponsor_leadership": 75,
+          "governance": 75,
+          "risk_assurance": 75,
+          "delivery_confidence": 75
+        },
+        "confidence": {
+          "sponsor_leadership": 80,
+          "governance": 80,
+          "risk_assurance": 80,
+          "delivery_confidence": 80
+        }
+      },
+      "expected": { "patterns": ["kp001_effective_executive_control"] }
+    },
+    {
+      "id": "pattern_control_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": {
+          "sponsor_leadership": 75,
+          "governance": 75,
+          "risk_assurance": 75,
+          "delivery_confidence": 74.999999
+        },
+        "confidence": {
+          "sponsor_leadership": 80,
+          "governance": 80,
+          "risk_assurance": 80,
+          "delivery_confidence": 80
+        }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "pattern_learning_positive",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "benefits_realisation": 75, "continuous_improvement": 75 },
+        "confidence": { "benefits_realisation": 80, "continuous_improvement": 80 }
+      },
+      "expected": { "patterns": ["kp001_learning_sponsor"] }
+    },
+    {
+      "id": "pattern_learning_negative",
+      "projection": ["patterns"],
+      "input": {
+        "scores": { "benefits_realisation": 75, "continuous_improvement": 74.999999 },
+        "confidence": { "benefits_realisation": 80, "continuous_improvement": 80 }
+      },
+      "expected": { "patterns": [] }
+    },
+    {
+      "id": "automatic_analysis",
+      "projection": ["runCount", "status"],
+      "input": { "completionEvents": 2, "userRetries": 1, "sameRevision": true },
+      "expected": { "runCount": 1, "status": "queued_or_running_or_completed" }
+    },
+    {
+      "id": "traceability_chain",
+      "projection": ["valid", "orphans"],
+      "input": {
+        "chain": "answer>question>capability_contribution>capability_score>finding>recommendation>roadmap>pack_or_teammate>narrative"
+      },
+      "expected": { "valid": true, "orphans": [] }
+    }
+  ]
+}

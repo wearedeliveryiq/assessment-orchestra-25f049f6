@@ -4,7 +4,7 @@
 
 Implemented through PR #24 and deployed from merge commit `98b30d9`. Application, managed migrations, live schema/ACL verification, security, resilience, performance, documentation and publication gates are complete.
 
-The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome evidence is deployed and included through an integrity-checked governed source. PDR-004-001 approves the recovery objectives; a measured isolated recovery rehearsal and authorised live export remain release gates.
+The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome evidence is deployed and included through an integrity-checked governed source. PB-004A and PDR-004-001 v1.1 approve a proportionate current-stage recovery policy with no fixed RPO/RTO and no isolated-rehearsal requirement. No restore occurred or is claimed. Authorised live export remains an enablement gate.
 
 ## Architecture and reuse
 
@@ -39,7 +39,7 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 - AC1: the existing S4-001 author/approver separation and immutable lifecycle remain executable regression tests; S4-014 feature changes require the isolated Product Governance role.
 - AC2: the versioned export reconciles catalogue, evaluation, confidence, resolution, priority, sequence, portfolio, decision, action, outcome snapshots, measure versions, observations, status history and hand-off records, with actor/raw evidence/internal-rule redaction. Outcome-source availability is integrity-gated rather than represented by an empty placeholder.
 - AC3: tenant, count, trace and overlay integrity checks run before queueing and again at publication scope; a failure produces no payload and is terminal/non-retryable.
-- AC4: state-machine, partial-failure, stale-lease, replay, retry, expiry and configuration rollback tests pass. PDR-004-001 Tier 1 RPO <=15 minutes and RTO <=4 hours are approved; a measured isolated platform restore remains outstanding.
+- AC4: state-machine, partial-failure, stale-lease, replay, retry, expiry and configuration rollback tests pass. The Lovable capability assessment, documented current controls, recovery runbook requirements, operational ownership and explicit residual-risk acceptance satisfy amended PB-004A AC4. No recovery restore, fixed RPO/RTO or isolated rehearsal is claimed.
 - AC5: the health contract covers every Section 20 alert code; structured operational metadata rejects prohibited fields.
 - AC6: authentication, authorisation, RLS, least privilege, bounded work, idempotency, performance and production-build gates pass. Full Sprint release remains blocked by the recorded authorities below.
 
@@ -78,7 +78,7 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 ## Known limitations and hard blockers
 
 - S4-010 is deployed; its managed Cloud schema, RLS, ACL, generated types, one-minute task, tests, build and live shell were verified on 3 August 2026.
-- A read-only platform assessment confirmed Lovable self-service recovery is limited to daily in-place snapshots and cannot meet or measure Tier 1 RPO <=15 minutes in an isolated target. A qualifying support-provisioned target or approved alternative architecture is required before the recovery gate can pass.
+- A read-only platform assessment confirmed Lovable self-service recovery is limited to daily in-place snapshots. PB-004A and PDR-004-001 v1.1 accept that current-stage control and its residual risks; no qualifying point-in-time or isolated target is claimed. Before customer enablement under the accepted Sprint 04 release, backup visibility and runbook accessibility must be recorded.
 - Audit export remains disabled by default; authorised export/redaction/expiry/access-log evidence is still required before release enablement.
 - The complete live journey requires a genuine eligible Delivery DNA analysis and portfolio; no customer evidence is manufactured for testing.
 - Existing repository-wide lint debt remains outside S4-014; changed files must remain clean.
