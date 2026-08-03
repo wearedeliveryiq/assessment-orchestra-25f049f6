@@ -9,6 +9,8 @@ import {
   type RecommendationPortfolioView,
 } from "@/lib/recommendation-decisions/client";
 import type { RecommendationDecisionReasonCategory } from "@/lib/recommendation-decisions/model";
+import { RecommendationActionControls } from "@/components/dashboard/recommendation-action-controls";
+import { fetchRecommendationPortfolioActions } from "@/lib/recommendation-actions/client";
 
 const reasonOptions: Array<{ value: RecommendationDecisionReasonCategory; label: string }> = [
   { value: "not_relevant", label: "Not relevant" },
@@ -27,6 +29,10 @@ export function RecommendationPortfolioSection({
   const query = useQuery({
     queryKey: ["recommendation-decisions", portfolio.portfolioId],
     queryFn: () => fetchRecommendationPortfolioDecisions(portfolio.portfolioId),
+  });
+  const actionsQuery = useQuery({
+    queryKey: ["recommendation-actions", portfolio.portfolioId],
+    queryFn: () => fetchRecommendationPortfolioActions(portfolio.portfolioId),
   });
   const decisions = new Map(
     query.data?.decisions.map((decision) => [decision.portfolioItemId, decision]) ?? [],
@@ -48,6 +54,11 @@ export function RecommendationPortfolioSection({
       {query.error && (
         <p role="alert" className="mt-4 text-sm text-destructive">
           {query.error.message}
+        </p>
+      )}
+      {actionsQuery.error && (
+        <p role="alert" className="mt-4 text-sm text-destructive">
+          {actionsQuery.error.message}
         </p>
       )}
       <div className="mt-5 space-y-6">
@@ -80,11 +91,26 @@ export function RecommendationPortfolioSection({
                       </span>
                     </div>
                     {query.data && (
-                      <RecommendationDecisionControls
-                        decision={decisions.get(item.portfolioItemId)}
-                        canDecide={query.data.canDecide}
-                        portfolioId={portfolio.portfolioId}
-                      />
+                      <>
+                        <RecommendationDecisionControls
+                          decision={decisions.get(item.portfolioItemId)}
+                          canDecide={query.data.canDecide}
+                          portfolioId={portfolio.portfolioId}
+                        />
+                        {actionsQuery.data && (
+                          <RecommendationActionControls
+                            portfolioId={portfolio.portfolioId}
+                            portfolioItemId={item.portfolioItemId}
+                            accepted={
+                              decisions.get(item.portfolioItemId)?.currentDecision === "accepted"
+                            }
+                            action={actionsQuery.data.actions.find(
+                              (action) => action.portfolioItemId === item.portfolioItemId,
+                            )}
+                            canManage={actionsQuery.data.canManageActions}
+                          />
+                        )}
+                      </>
                     )}
                   </li>
                 ))}

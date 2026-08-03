@@ -87,6 +87,7 @@ import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
+import { Route as ApiImprovementActionsIdRouteImport } from './routes/api/improvement-actions.$id'
 import { Route as ApiInternalRecommendationCataloguesRouteImport } from './routes/api/internal/recommendation-catalogues'
 import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
@@ -195,7 +196,9 @@ import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/execution
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
 import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
+import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
 import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
+import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
 import { Route as ApiRecommendationPortfoliosIdDecisionsRouteImport } from './routes/api/recommendation-portfolios.$id.decisions'
 import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
@@ -599,6 +602,11 @@ const ApiExecutionsHistoryRoute = ApiExecutionsHistoryRouteImport.update({
 const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
   id: '/api/executions/monitor',
   path: '/api/executions/monitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiImprovementActionsIdRoute = ApiImprovementActionsIdRouteImport.update({
+  id: '/api/improvement-actions/$id',
+  path: '/api/improvement-actions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiInternalRecommendationCataloguesRoute =
@@ -1178,11 +1186,23 @@ const ApiInternalRecommendationCataloguesIdRoute =
     path: '/$id',
     getParentRoute: () => ApiInternalRecommendationCataloguesRoute,
   } as any)
+const ApiPortfolioItemsIdActionsRoute =
+  ApiPortfolioItemsIdActionsRouteImport.update({
+    id: '/api/portfolio-items/$id/actions',
+    path: '/api/portfolio-items/$id/actions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPortfolioItemsIdDecisionsRoute =
   ApiPortfolioItemsIdDecisionsRouteImport.update({
     id: '/api/portfolio-items/$id/decisions',
     path: '/api/portfolio-items/$id/decisions',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiRecommendationPortfoliosIdActionsRoute =
+  ApiRecommendationPortfoliosIdActionsRouteImport.update({
+    id: '/actions',
+    path: '/actions',
+    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
   } as any)
 const ApiRecommendationPortfoliosIdDecisionsRoute =
   ApiRecommendationPortfoliosIdDecisionsRouteImport.update({
@@ -1323,6 +1343,7 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1431,7 +1452,9 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
@@ -1522,6 +1545,7 @@ export interface FileRoutesByTo {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1630,7 +1654,9 @@ export interface FileRoutesByTo {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
@@ -1722,6 +1748,7 @@ export interface FileRoutesById {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1830,7 +1857,9 @@ export interface FileRoutesById {
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
@@ -1923,6 +1952,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/improvement-actions/$id'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -2031,7 +2061,9 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
+    | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
@@ -2122,6 +2154,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/improvement-actions/$id'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -2230,7 +2263,9 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
+    | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
@@ -2321,6 +2356,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
+    | '/api/improvement-actions/$id'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -2429,7 +2465,9 @@ export interface FileRouteTypes {
     | '/api/executions/$id/status'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
+    | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
@@ -2517,6 +2555,7 @@ export interface RootRouteChildren {
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
+  ApiImprovementActionsIdRoute: typeof ApiImprovementActionsIdRoute
   ApiInternalRecommendationCataloguesRoute: typeof ApiInternalRecommendationCataloguesRouteWithChildren
   ApiPublicResultsTokenRoute: typeof ApiPublicResultsTokenRoute
   ApiRecommendationPortfoliosIdRoute: typeof ApiRecommendationPortfoliosIdRouteWithChildren
@@ -2574,6 +2613,7 @@ export interface RootRouteChildren {
   ApiAuthPasswordChangeRoute: typeof ApiAuthPasswordChangeRoute
   ApiAuthPasswordForgotRoute: typeof ApiAuthPasswordForgotRoute
   ApiInternalAnalysisHandoffsReconcileRoute: typeof ApiInternalAnalysisHandoffsReconcileRoute
+  ApiPortfolioItemsIdActionsRoute: typeof ApiPortfolioItemsIdActionsRoute
   ApiPortfolioItemsIdDecisionsRoute: typeof ApiPortfolioItemsIdDecisionsRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
 }
@@ -3124,6 +3164,13 @@ declare module '@tanstack/react-router' {
       path: '/api/executions/monitor'
       fullPath: '/api/executions/monitor'
       preLoaderRoute: typeof ApiExecutionsMonitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/improvement-actions/$id': {
+      id: '/api/improvement-actions/$id'
+      path: '/api/improvement-actions/$id'
+      fullPath: '/api/improvement-actions/$id'
+      preLoaderRoute: typeof ApiImprovementActionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/internal/recommendation-catalogues': {
@@ -3882,12 +3929,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiInternalRecommendationCataloguesIdRouteImport
       parentRoute: typeof ApiInternalRecommendationCataloguesRoute
     }
+    '/api/portfolio-items/$id/actions': {
+      id: '/api/portfolio-items/$id/actions'
+      path: '/api/portfolio-items/$id/actions'
+      fullPath: '/api/portfolio-items/$id/actions'
+      preLoaderRoute: typeof ApiPortfolioItemsIdActionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/portfolio-items/$id/decisions': {
       id: '/api/portfolio-items/$id/decisions'
       path: '/api/portfolio-items/$id/decisions'
       fullPath: '/api/portfolio-items/$id/decisions'
       preLoaderRoute: typeof ApiPortfolioItemsIdDecisionsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-portfolios/$id/actions': {
+      id: '/api/recommendation-portfolios/$id/actions'
+      path: '/actions'
+      fullPath: '/api/recommendation-portfolios/$id/actions'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdActionsRouteImport
+      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
     }
     '/api/recommendation-portfolios/$id/decisions': {
       id: '/api/recommendation-portfolios/$id/decisions'
@@ -4272,11 +4333,14 @@ const ApiInternalRecommendationCataloguesRouteWithChildren =
   )
 
 interface ApiRecommendationPortfoliosIdRouteChildren {
+  ApiRecommendationPortfoliosIdActionsRoute: typeof ApiRecommendationPortfoliosIdActionsRoute
   ApiRecommendationPortfoliosIdDecisionsRoute: typeof ApiRecommendationPortfoliosIdDecisionsRoute
 }
 
 const ApiRecommendationPortfoliosIdRouteChildren: ApiRecommendationPortfoliosIdRouteChildren =
   {
+    ApiRecommendationPortfoliosIdActionsRoute:
+      ApiRecommendationPortfoliosIdActionsRoute,
     ApiRecommendationPortfoliosIdDecisionsRoute:
       ApiRecommendationPortfoliosIdDecisionsRoute,
   }
@@ -4392,6 +4456,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
+  ApiImprovementActionsIdRoute: ApiImprovementActionsIdRoute,
   ApiInternalRecommendationCataloguesRoute:
     ApiInternalRecommendationCataloguesRouteWithChildren,
   ApiPublicResultsTokenRoute: ApiPublicResultsTokenRoute,
@@ -4452,6 +4517,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthPasswordForgotRoute: ApiAuthPasswordForgotRoute,
   ApiInternalAnalysisHandoffsReconcileRoute:
     ApiInternalAnalysisHandoffsReconcileRoute,
+  ApiPortfolioItemsIdActionsRoute: ApiPortfolioItemsIdActionsRoute,
   ApiPortfolioItemsIdDecisionsRoute: ApiPortfolioItemsIdDecisionsRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
 }

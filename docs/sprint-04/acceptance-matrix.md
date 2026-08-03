@@ -201,15 +201,38 @@
 
 ## S4-008 quality gates
 
-| Gate                               | Evidence                                                                                      | Status                                     |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Domain/transition/field validation | `tests/recommendation-decisions.test.ts`                                                      | PASS                                       |
-| Idempotency/concurrency/failure    | semantic replay, key conflict, stale version and immutable projection contracts               | PASS                                       |
-| Tenant isolation/permissions       | scoped repositories, authenticated permission boundary, DB membership and deny-by-default ACL | PASS — live migration verification pending |
-| Audit/disclosure/accessibility     | workspace redaction, audit history, generated/customer labels and explicit confirmation UX    | PASS                                       |
-| Performance                        | 10,000 pure transitions inside the 500 ms guard                                               | PASS                                       |
+| Gate                               | Evidence                                                                                              | Status                                        |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Domain/transition/field validation | `tests/recommendation-decisions.test.ts`                                                              | PASS                                          |
+| Idempotency/concurrency/failure    | semantic replay, key conflict, stale version and immutable projection contracts                       | PASS                                          |
+| Tenant isolation/permissions       | scoped repositories, authenticated permission boundary, DB membership and deny-by-default ACL         | PASS — live migration verification pending    |
+| Audit/disclosure/accessibility     | workspace redaction, audit history, generated/customer labels and explicit confirmation UX            | PASS                                          |
+| Performance                        | 10,000 pure transitions inside the 500 ms guard                                                       | PASS                                          |
 | Full regression/type/lint/build    | 37 files / 446 tests; all 53 DIQ-203B fixtures; typecheck; changed-file lint/format; production build | PASS — full lint limitation remains inherited |
-| Lovable Cloud migration execution  | `20260803080000` then `20260803081000`                                                        | PENDING DEPLOYMENT                         |
+| Lovable Cloud migration execution  | `20260803080000` then `20260803081000`                                                                | PENDING DEPLOYMENT                            |
+
+## S4-009 — Action Ownership and Improvement Plan
+
+| Acceptance criterion                      | Implementation evidence                                                                                                                        | Test evidence                                                                                     | Status |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------ |
+| AC1 create/reuse one action idempotently  | accepted-decision gate; unique plan/item key; advisory lock; semantic request replay; duplicate-notification suppression                       | accepted/rejected create, existing reuse, exact replay and conflicting-key tests                  | PASS   |
+| AC2 action state rules are enforced       | pure five-state transition model plus matching database transition, terminal-time, owner/date and completion-evidence constraints              | owner removal, missing date/evidence, legal start/block/resume/complete/cancel and terminal tests | PASS   |
+| AC3 ownership and permissions are valid   | `workspace:manage` write boundary; active actor/owner/contributor organisation and workspace checks; non-blocking assignment notifications     | permission-source, owner/contributor validation and inactive-assignee failure tests               | PASS   |
+| AC4 required dependencies block start     | deterministic required-dependency evaluation in service and governed routine; explicit acknowledged override with reason and recorded blockers | incomplete dependency denial, approved override and extraneous-override tests                     | PASS   |
+| AC5 full history is retained              | append-only event stream; governed one-version projection; source decision/action cancellation never deletes history                           | immutable migration contract, audit/workspace projection and terminal cancellation tests          | PASS   |
+| AC6 cross-tenant assignment is impossible | tenant-scoped reads and keys; DB actor and assignee membership/workspace checks; RLS zero policies and service-only command                    | missing/cross-tenant source `404`, inactive assignment and deny-by-default migration tests        | PASS   |
+
+## S4-009 quality gates
+
+| Gate                            | Evidence                                                                                              | Status                                        |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Domain/state/field validation   | `tests/recommendation-actions.test.ts`                                                                | PASS                                          |
+| Idempotency/concurrency/failure | pre-state replay, one action per item/plan, semantic-key conflict and optimistic version conflict     | PASS                                          |
+| Tenant isolation/permissions    | scoped repositories, authenticated permissions, DB active-member assignment and deny-by-default ACL   | PASS — live migration verification pending    |
+| Audit/disclosure/accessibility  | immutable blocker/evidence history; workspace redaction; labelled, keyboard-operable confirmations    | PASS                                          |
+| Performance                     | 10,000 pure transitions inside the 600 ms guard                                                       | PASS                                          |
+| Full regression/type/lint/build | 38 files / 464 tests; all 53 DIQ-203B fixtures; typecheck; changed-file lint/format; production build | PASS — full lint limitation remains inherited |
+| Lovable Cloud migration         | `20260803090000` then `20260803091000`                                                                | PENDING DEPLOYMENT                            |
 
 ## Quality gates
 
