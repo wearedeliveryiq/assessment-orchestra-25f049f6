@@ -42,7 +42,11 @@ function DeliveryDnaSnapshotPage() {
     retry: false,
   });
   const start = useMutation({
-    mutationFn: deliveryDnaSnapshotApi.start,
+    mutationFn: () => deliveryDnaSnapshotApi.start(),
+    onSuccess: (value) => queryClient.setQueryData(["delivery-dna-snapshot"], value),
+  });
+  const restart = useMutation({
+    mutationFn: () => deliveryDnaSnapshotApi.start(true),
     onSuccess: (value) => queryClient.setQueryData(["delivery-dna-snapshot"], value),
   });
 
@@ -68,6 +72,9 @@ function DeliveryDnaSnapshotPage() {
             snapshot={snapshot}
             isAuthenticated={isAuthenticated}
             identityLoading={identityLoading}
+            restarting={restart.isPending}
+            restartError={restart.error?.message}
+            onRestart={() => restart.mutate()}
           />
         ) : (
           <SnapshotQuestions snapshot={snapshot} />
@@ -299,10 +306,16 @@ function SnapshotResultView({
   snapshot,
   isAuthenticated,
   identityLoading,
+  restarting,
+  restartError,
+  onRestart,
 }: {
   snapshot: SnapshotState;
   isAuthenticated: boolean;
   identityLoading: boolean;
+  restarting: boolean;
+  restartError?: string;
+  onRestart: () => void;
 }) {
   const navigate = useNavigate();
   const [consent, setConsent] = useState(false);
@@ -394,6 +407,17 @@ function SnapshotResultView({
           </div>
         )}
       </section>
+      <div className="mt-6 border-t border-border pt-5">
+        <Button variant="secondary" disabled={restarting} onClick={onRestart}>
+          {restarting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+          Start a new Snapshot
+        </Button>
+        {restartError ? (
+          <p className="mt-3 text-sm text-destructive" role="alert">
+            {restartError}
+          </p>
+        ) : null}
+      </div>
     </section>
   );
 }

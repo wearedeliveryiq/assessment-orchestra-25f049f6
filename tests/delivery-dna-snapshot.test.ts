@@ -25,6 +25,8 @@ const linkValueFix = readFileSync(
   "utf8",
 );
 const route = readFileSync("src/routes/snapshot.tsx", "utf8");
+const apiRoute = readFileSync("src/routes/api/delivery-dna-snapshot.ts", "utf8");
+const client = readFileSync("src/lib/delivery-dna/snapshot-client.ts", "utf8");
 const server = readFileSync("src/lib/delivery-dna/snapshot.server.ts", "utf8");
 
 type Fixture = {
@@ -177,6 +179,15 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
     );
     expect(migration).toContain("ENABLE ROW LEVEL SECURITY");
     expect(hardening).toContain("FROM PUBLIC, anon, authenticated");
+  });
+
+  it("starts a fresh anonymous session without mutating a completed or linked Snapshot", () => {
+    expect(route).toContain("Start a new Snapshot");
+    expect(route).toContain("deliveryDnaSnapshotApi.start(true)");
+    expect(client).toContain("JSON.stringify({ restart })");
+    expect(apiRoute).toContain("body.restart === true");
+    expect(server).toContain("const existing = restart ? null : await sessionForRequest(request)");
+    expect(server).not.toMatch(/restart[\s\S]{0,500}\.update\(/);
   });
 
   it("limits analytics to approved event and step fields", () => {
