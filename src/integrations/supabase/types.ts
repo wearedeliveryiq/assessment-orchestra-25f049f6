@@ -4693,6 +4693,390 @@ export type Database = {
           },
         ]
       }
+      recommendation_sequence_dependencies: {
+        Row: {
+          created_at: string
+          dependant_recommendation_id: string
+          dependant_sequence_item_id: string
+          dependency_state: Database["public"]["Enums"]["recommendation_dependency_state"]
+          dependency_type: string
+          id: string
+          organisation_id: string
+          reason_code: string
+          resolution: Database["public"]["Enums"]["recommendation_dependency_resolution"]
+          resolved_dependency_id: string | null
+          resolved_sequence_item_id: string | null
+          semantic_hash: string
+          sequence_model_id: string
+          source_dependency_id: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          dependant_recommendation_id: string
+          dependant_sequence_item_id: string
+          dependency_state: Database["public"]["Enums"]["recommendation_dependency_state"]
+          dependency_type: string
+          id?: string
+          organisation_id: string
+          reason_code: string
+          resolution: Database["public"]["Enums"]["recommendation_dependency_resolution"]
+          resolved_dependency_id?: string | null
+          resolved_sequence_item_id?: string | null
+          semantic_hash: string
+          sequence_model_id: string
+          source_dependency_id: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          dependant_recommendation_id?: string
+          dependant_sequence_item_id?: string
+          dependency_state?: Database["public"]["Enums"]["recommendation_dependency_state"]
+          dependency_type?: string
+          id?: string
+          organisation_id?: string
+          reason_code?: string
+          resolution?: Database["public"]["Enums"]["recommendation_dependency_resolution"]
+          resolved_dependency_id?: string | null
+          resolved_sequence_item_id?: string | null
+          semantic_hash?: string
+          sequence_model_id?: string
+          source_dependency_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_sequence_depende_dependant_sequence_item_id_fkey"
+            columns: ["dependant_sequence_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_dependen_resolved_sequence_item_id_fkey"
+            columns: ["resolved_sequence_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_dependencies_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_dependencies_sequence_model_id_fkey"
+            columns: ["sequence_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_dependencies_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_sequence_items: {
+        Row: {
+          analysis_run_id: string
+          blocking_dependency_ids: Json
+          catalogue_order: number
+          caveats: Json
+          created_at: string
+          effort: string
+          generated_horizon:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank: number
+          generated_sequence: number | null
+          id: string
+          organisation_id: string
+          priority_item_id: string
+          reason_code: string
+          recommendation_id: string
+          recommendation_version: string
+          semantic_hash: string
+          sequence_model_id: string
+          sequence_state: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids: Json
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          blocking_dependency_ids: Json
+          catalogue_order: number
+          caveats: Json
+          created_at?: string
+          effort: string
+          generated_horizon?:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank: number
+          generated_sequence?: number | null
+          id?: string
+          organisation_id: string
+          priority_item_id: string
+          reason_code: string
+          recommendation_id: string
+          recommendation_version: string
+          semantic_hash: string
+          sequence_model_id: string
+          sequence_state: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids: Json
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          blocking_dependency_ids?: Json
+          catalogue_order?: number
+          caveats?: Json
+          created_at?: string
+          effort?: string
+          generated_horizon?:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank?: number
+          generated_sequence?: number | null
+          id?: string
+          organisation_id?: string
+          priority_item_id?: string
+          reason_code?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          semantic_hash?: string
+          sequence_model_id?: string
+          sequence_state?: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_sequence_items_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_items_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_items_priority_item_id_fkey"
+            columns: ["priority_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_items_sequence_model_id_fkey"
+            columns: ["sequence_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_sequence_models: {
+        Row: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_sequence: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          engine_version: string
+          id: string
+          input_hash: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          priority_model_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_sequence: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at?: string
+          engine_version: string
+          id?: string
+          input_hash: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          priority_model_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          canonical_input?: Json
+          canonical_sequence?: Json
+          catalogue_digest?: string
+          catalogue_id?: string
+          catalogue_version?: string
+          catalogue_version_id?: string
+          configuration_set_id?: string
+          conflict_resolution_id?: string
+          created_at?: string
+          engine_version?: string
+          id?: string
+          input_hash?: string
+          organisation_id?: string
+          output_hash?: string
+          policy_version?: string
+          priority_model_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_sequence_models_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_models_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_models_conflict_resolution_id_fkey"
+            columns: ["conflict_resolution_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_conflict_resolutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_models_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_models_priority_model_id_fkey"
+            columns: ["priority_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_models_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_sequence_overrides: {
+        Row: {
+          acknowledged_risk: boolean
+          actor_user_id: string
+          created_at: string
+          dependency_risks: Json
+          id: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_override_id: string | null
+          reason: string
+          sequence_model_id: string
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          acknowledged_risk: boolean
+          actor_user_id: string
+          created_at?: string
+          dependency_risks: Json
+          id?: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_override_id?: string | null
+          reason: string
+          sequence_model_id: string
+          version: number
+          workspace_id: string
+        }
+        Update: {
+          acknowledged_risk?: boolean
+          actor_user_id?: string
+          created_at?: string
+          dependency_risks?: Json
+          id?: string
+          idempotency_key?: string
+          ordered_recommendation_ids?: Json
+          organisation_id?: string
+          previous_override_id?: string | null
+          reason?: string
+          sequence_model_id?: string
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_sequence_overrides_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_overrides_previous_override_id_fkey"
+            columns: ["previous_override_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_overrides"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_overrides_sequence_model_id_fkey"
+            columns: ["sequence_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_sequence_overrides_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_stable_identities: {
         Row: {
           created_at: string
@@ -5979,6 +6363,35 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      publish_recommendation_sequence_model: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_sequence: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          engine_version: string
+          id: string
+          input_hash: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          priority_model_id: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_sequence_models"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       reconcile_assessment_analysis_handoffs: {
         Args: { p_limit?: number }
         Returns: number
@@ -6052,6 +6465,30 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "recommendation_priority_display_preferences"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_recommendation_sequence_override: {
+        Args: { p_input: Json }
+        Returns: {
+          acknowledged_risk: boolean
+          actor_user_id: string
+          created_at: string
+          dependency_risks: Json
+          id: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_override_id: string | null
+          reason: string
+          sequence_model_id: string
+          version: number
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_sequence_overrides"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -6132,6 +6569,12 @@ export type Database = {
         | "withheld"
         | "evidence_first"
       recommendation_confidence_state: "low" | "moderate" | "high"
+      recommendation_dependency_resolution:
+        | "direct"
+        | "superseded"
+        | "deduplicated"
+        | "unavailable"
+      recommendation_dependency_state: "available" | "blocked" | "unavailable"
       recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
       recommendation_priority_label: "critical" | "high" | "medium" | "low"
       recommendation_resolution_reason:
@@ -6140,6 +6583,11 @@ export type Database = {
         | "superseded"
         | "deduplicated"
       recommendation_resolution_result: "canonical" | "suppressed"
+      recommendation_sequence_horizon: "day30" | "day60" | "day90"
+      recommendation_sequence_state:
+        | "scheduled"
+        | "blocked_dependency"
+        | "capacity_exceeded"
       stage_status: "pending" | "running" | "completed" | "failed" | "skipped"
       workspace_status: "active" | "archived"
     }
@@ -6322,6 +6770,13 @@ export const Constants = {
         "evidence_first",
       ],
       recommendation_confidence_state: ["low", "moderate", "high"],
+      recommendation_dependency_resolution: [
+        "direct",
+        "superseded",
+        "deduplicated",
+        "unavailable",
+      ],
+      recommendation_dependency_state: ["available", "blocked", "unavailable"],
       recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
       recommendation_priority_label: ["critical", "high", "medium", "low"],
       recommendation_resolution_reason: [
@@ -6331,6 +6786,12 @@ export const Constants = {
         "deduplicated",
       ],
       recommendation_resolution_result: ["canonical", "suppressed"],
+      recommendation_sequence_horizon: ["day30", "day60", "day90"],
+      recommendation_sequence_state: [
+        "scheduled",
+        "blocked_dependency",
+        "capacity_exceeded",
+      ],
       stage_status: ["pending", "running", "completed", "failed", "skipped"],
       workspace_status: ["active", "archived"],
     },
