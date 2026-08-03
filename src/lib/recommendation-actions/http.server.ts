@@ -2,6 +2,7 @@ import { assessmentRequestContext } from "@/lib/identity/assessment-auth.server"
 import { IdentityError } from "@/lib/identity/errors";
 import { assertPermission } from "@/lib/identity/service.server";
 import { canViewRecommendationEvaluationAudit } from "@/lib/recommendation-evaluation/projection";
+import { captureRecommendationAnalyticsSafely } from "@/lib/recommendation-analytics/service.server";
 
 import { recommendationActionCommands } from "./model";
 import { projectRecommendationAction } from "./projection";
@@ -182,6 +183,26 @@ export async function patchRecommendationAction(request: Request, actionId: stri
       dependencyOverrideAcknowledged: body.dependencyOverrideAcknowledged === true,
       cancelAcknowledged: body.cancelAcknowledged === true,
     });
+    const analyticsEvent = {
+      started: "action_started",
+      blocked: "action_blocked",
+      completed: "action_completed",
+    }[command] as "action_started" | "action_blocked" | "action_completed" | undefined;
+    if (analyticsEvent) {
+      await captureRecommendationAnalyticsSafely({
+        eventId: `action:${result.id}:${result.version}`,
+        eventType: analyticsEvent,
+        objectType: "action",
+        objectId: result.id,
+        objectVersion: String(result.version),
+        mode: "workspace",
+        properties: { action_state: result.status },
+        occurredAt: result.updatedAt,
+        organisationId: verified.organisationId,
+        workspaceId: verified.workspaceId,
+        actorUserId: verified.identity.user.id,
+      });
+    }
     return json(projectRecommendationAction(result, "workspace"), 200);
   } catch (error) {
     return failure(error);

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Clock3, Printer, RotateCcw, X } from "lucide-react";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import {
   recordRecommendationDecision,
@@ -10,6 +10,12 @@ import {
 import type { RecommendationDecisionReasonCategory } from "@/lib/recommendation-decisions/model";
 import { RecommendationActionControls } from "@/components/dashboard/recommendation-action-controls";
 import { fetchRecommendationExperience } from "@/lib/recommendation-experience/client";
+import {
+  fetchRecommendationAnalyticsConsent,
+  sendRecommendationAnalyticsEvent,
+  setRecommendationAnalyticsConsent,
+  type RecommendationAnalyticsConsentView,
+} from "@/lib/recommendation-analytics/client";
 
 const reasonOptions: Array<{ value: RecommendationDecisionReasonCategory; label: string }> = [
   { value: "not_relevant", label: "Not relevant" },
@@ -29,6 +35,28 @@ export function RecommendationPortfolioSection({
     queryKey: ["recommendation-experience", portfolio.portfolioId],
     queryFn: () => fetchRecommendationExperience(portfolio.portfolioId),
   });
+  const consentQuery = useQuery({
+    queryKey: ["recommendation-analytics-consent", portfolio.portfolioId],
+    queryFn: fetchRecommendationAnalyticsConsent,
+  });
+  const viewedSnapshot = useRef<string | null>(null);
+  useEffect(() => {
+    if (
+      !query.data ||
+      consentQuery.data?.status !== "granted" ||
+      viewedSnapshot.current === query.data.snapshot.version
+    )
+      return;
+    viewedSnapshot.current = query.data.snapshot.version;
+    void sendRecommendationAnalyticsEvent({
+      eventId: `portfolio:${query.data.snapshot.version}:${query.data.portfolioId}`,
+      eventType: "portfolio_viewed",
+      objectType: "portfolio",
+      objectId: query.data.portfolioId,
+      objectVersion: query.data.snapshot.version,
+      mode: "workspace",
+    });
+  }, [consentQuery.data?.status, query.data]);
   if (query.isLoading) {
     return (
       <section aria-live="polite" className="rounded-2xl border border-border bg-card p-4 sm:p-6">
@@ -106,6 +134,12 @@ export function RecommendationPortfolioSection({
           </p>
           <p className="mt-2">{experience.report.associationNotice}</p>
         </div>
+        <RecommendationAnalyticsConsentControls
+          consent={consentQuery.data}
+          loading={consentQuery.isLoading}
+          error={consentQuery.error}
+          portfolioId={portfolio.portfolioId}
+        />
       </header>
       <div className="mt-6 space-y-7">
         {experience.groups
@@ -142,6 +176,17 @@ export function RecommendationPortfolioSection({
                     <details
                       className="mt-4 rounded-lg border border-border/70 p-3 print:block"
                       open
+                      onToggle={(event) => {
+                        if (event.currentTarget.open && consentQuery.data?.status === "granted") {
+                          void sendRecommendationAnalyticsEvent({
+                            eventId: `explanation:${experience.snapshot.version}:${item.portfolioItemId}`,
+                            eventType: "explanation_opened",
+                            objectType: "portfolio_item",
+                            objectId: item.portfolioItemId,
+                            objectVersion: item.sourceVersions.recommendation,
+                          });
+                        }
+                      }}
                     >
                       <summary className="min-h-11 cursor-pointer py-2 text-sm font-medium">
                         Why this was generated
@@ -189,6 +234,13 @@ export function RecommendationPortfolioSection({
                             Governed audit detail is available to your auditor role.
                           </p>
                         )}
+                        {consentQuery.data?.status === "granted" && (
+                          <UsefulnessControls
+                            portfolioItemId={item.portfolioItemId}
+                            recommendationVersion={item.sourceVersions.recommendation}
+                            snapshotVersion={experience.snapshot.version}
+                          />
+                        )}
                       </div>
                     </details>
                     <div className="mt-4 border-t border-border/70 pt-4">
@@ -221,6 +273,108 @@ export function RecommendationPortfolioSection({
         )}
       </div>
     </article>
+  );
+}
+
+function RecommendationAnalyticsConsentControls({
+  consent,
+  loading,
+  error,
+  portfolioId,
+}: {
+  consent: RecommendationAnalyticsConsentView | undefined;
+  loading: boolean;
+  error: Error | null;
+  portfolioId: string;
+}) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: setRecommendationAnalyticsConsent,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["recommendation-analytics-consent", portfolioId],
+      }),
+  });
+  return (
+    <section aria-labelledby="recommendation-analytics-consent" className="mt-4 print:hidden">
+      <h3 id="recommendation-analytics-consent" className="text-sm font-medium">
+        Privacy-safe product improvement
+      </h3>
+      <p className="mt-1 text-xs text-muted-foreground">
+        You can share pseudonymous usage categories to help improve DeliveryIQ. Raw answers, notes,
+        evidence and free text are never included. This never changes product rules automatically.
+      </p>
+      {loading && (
+        <p aria-live="polite" className="mt-2 text-xs text-muted-foreground">
+          Loading privacy preference…
+        </p>
+      )}
+      {(error || mutation.error) && (
+        <p role="alert" className="mt-2 text-xs text-destructive">
+          {(error ?? mutation.error)?.message}
+        </p>
+      )}
+      {!loading && !error && (
+        <button
+          type="button"
+          disabled={mutation.isPending}
+          onClick={() => mutation.mutate(consent?.status === "granted" ? "withdrawn" : "granted")}
+          className="mt-3 min-h-11 rounded-lg border border-border px-3 text-sm font-medium"
+        >
+          {consent?.status === "granted" ? "Stop sharing usage signals" : "Share usage signals"}
+        </button>
+      )}
+    </section>
+  );
+}
+
+function UsefulnessControls({
+  portfolioItemId,
+  recommendationVersion,
+  snapshotVersion,
+}: {
+  portfolioItemId: string;
+  recommendationVersion: string;
+  snapshotVersion: string;
+}) {
+  const [submitted, setSubmitted] = useState<"helpful" | "not_helpful" | null>(null);
+  const submit = async (usefulness: "helpful" | "not_helpful") => {
+    const result = await sendRecommendationAnalyticsEvent({
+      eventId: `usefulness:${snapshotVersion}:${portfolioItemId}`,
+      eventType: "usefulness_submitted",
+      objectType: "portfolio_item",
+      objectId: portfolioItemId,
+      objectVersion: recommendationVersion,
+      properties: { usefulness },
+    });
+    if (result.recorded) setSubmitted(usefulness);
+  };
+  return (
+    <div className="print:hidden">
+      <p className="font-medium">Was this explanation useful?</p>
+      {submitted ? (
+        <p role="status" className="mt-1 text-muted-foreground">
+          Thank you. Your privacy-safe response was recorded.
+        </p>
+      ) : (
+        <div className="mt-2 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => void submit("helpful")}
+            className="min-h-11 rounded-lg border border-border px-3"
+          >
+            Helpful
+          </button>
+          <button
+            type="button"
+            onClick={() => void submit("not_helpful")}
+            className="min-h-11 rounded-lg border border-border px-3"
+          >
+            Not helpful
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
