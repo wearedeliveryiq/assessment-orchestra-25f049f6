@@ -17,6 +17,9 @@ const recommendationAuditExportTask = fileURLToPath(
 const recommendationOutcomeReconcileTask = fileURLToPath(
   new URL("./tasks/recommendation-outcomes/reconcile.ts", import.meta.url),
 );
+const deliveryDnaSnapshotCleanupTask = fileURLToPath(
+  new URL("./tasks/delivery-dna-snapshot/cleanup.ts", import.meta.url),
+);
 
 export default defineConfig({
   nitro: {
@@ -37,6 +40,10 @@ export default defineConfig({
         handler: recommendationOutcomeReconcileTask,
         description: "Reconcile time-based recommendation outcome status transitions",
       },
+      "delivery-dna-snapshot:cleanup": {
+        handler: deliveryDnaSnapshotCleanupTask,
+        description: "Delete expired unlinked Delivery DNA Snapshot responses",
+      },
     },
     scheduledTasks: {
       "* * * * *": [
@@ -44,6 +51,7 @@ export default defineConfig({
         "recommendation-governance:exports",
         "recommendation-outcomes:reconcile",
       ],
+      "0 * * * *": ["delivery-dna-snapshot:cleanup"],
     },
   },
   tanstackStart: {

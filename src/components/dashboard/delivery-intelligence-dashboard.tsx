@@ -43,7 +43,8 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
   const portfolioQuery = useQuery({
     queryKey: ["recommendation-portfolio", query.data?.analysisRunId],
     queryFn: () => fetchRecommendationPortfolio(query.data!.analysisRunId),
-    enabled: Boolean(query.data?.analysisRunId),
+    enabled:
+      Boolean(query.data?.analysisRunId) && query.data?.commercialAccess.accessTier === "entitled",
     staleTime: 60_000,
   });
   const explanation = useQuery({
@@ -280,37 +281,46 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           empty="No capability meets the approved priority threshold."
         />
       </div>
-      <section className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="text-xl font-semibold">Detected patterns</h2>
-        {result.patterns.length ? (
-          <ul className="mt-4 space-y-3">
-            {result.patterns.map((pattern) => (
-              <li key={pattern.id} className="rounded-xl border border-border/70 p-4">
-                <h3 className="font-medium">{pattern.id.replaceAll("_", " ")}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {pattern.explanation}
-                </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-sm text-muted-foreground">
-            No approved pattern matched the available evidence.
-          </p>
-        )}
-      </section>
-      {portfolioQuery.data ? (
-        <RecommendationPortfolioSection portfolio={portfolioQuery.data} />
-      ) : (
-        <section aria-live="polite" className="rounded-2xl border border-border bg-card p-6">
-          <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
-          <p className="mt-3 text-sm text-muted-foreground">
-            {portfolioQuery.error
-              ? "The governed recommendation portfolio is temporarily unavailable. No customer decision has been changed."
-              : "Preparing your governed recommendation portfolio…"}
-          </p>
+      {result.commercialAccess.accessTier === "entitled" && (
+        <section className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-xl font-semibold">Detected patterns</h2>
+          {(result.patterns ?? []).length ? (
+            <ul className="mt-4 space-y-3">
+              {(result.patterns ?? []).map((pattern) => (
+                <li key={pattern.id} className="rounded-xl border border-border/70 p-4">
+                  <h3 className="font-medium">{pattern.id.replaceAll("_", " ")}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {pattern.explanation}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              No approved pattern matched the available evidence.
+            </p>
+          )}
         </section>
       )}
+      <CommercialAccessPanel access={result.commercialAccess} />
+      {result.commercialAccess.accessTier === "free" && (
+        <FreeRecommendationPreview recommendations={result.recommendations} />
+      )}
+      {result.commercialAccess.accessTier === "entitled" &&
+        (portfolioQuery.data ? (
+          <div id="delivery-dna-improvement-plan">
+            <RecommendationPortfolioSection portfolio={portfolioQuery.data} />
+          </div>
+        ) : (
+          <section aria-live="polite" className="rounded-2xl border border-border bg-card p-6">
+            <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {portfolioQuery.error
+                ? "The governed recommendation portfolio is temporarily unavailable. No customer decision has been changed."
+                : "Preparing your governed recommendation portfolio…"}
+            </p>
+          </section>
+        ))}
       <ProductPanel
         title="Recommended Knowledge Packs"
         items={result.productRecommendations.knowledgePacks}
@@ -321,43 +331,167 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
         items={result.productRecommendations.teamMates}
         empty="Accept a recommendation to review an available Team Mate."
       />
-      <section className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="text-xl font-semibold">Explainable intelligence</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Review the governed evidence and rule lineage behind a published conclusion.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {result.explanations.slice(0, 12).map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="min-h-11 rounded-lg border border-border px-3 text-sm"
-              onClick={() => setConclusionId(item.id)}
-            >
-              Explain {item.domainId.replaceAll("_", " ")}
-            </button>
-          ))}
-        </div>
-        {explanation.data && (
-          <div className="mt-4 rounded-xl border border-border/70 p-4" aria-live="polite">
-            <h3 className="font-medium">{explanation.data.conclusion.domainId}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Version {explanation.data.conclusion.domainVersion} · {explanation.data.nodes.length}
-              {" governed lineage items"}
-            </p>
-            {explanation.data.evidenceRestricted && (
-              <p className="mt-2 text-sm">Raw evidence is restricted for your role.</p>
-            )}
-          </div>
-        )}
-        {explanation.error && (
-          <p role="alert" className="mt-4 text-sm text-destructive">
-            {explanation.error.message}
+      {result.commercialAccess.accessTier === "entitled" && (
+        <section className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-xl font-semibold">Explainable intelligence</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Review the governed evidence and rule lineage behind a published conclusion.
           </p>
-        )}
-      </section>
-      <Roadmap result={result.roadmap} />
+          <div className="mt-4 flex flex-wrap gap-2">
+            {result.explanations.slice(0, 12).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="min-h-11 rounded-lg border border-border px-3 text-sm"
+                onClick={() => setConclusionId(item.id)}
+              >
+                Explain {item.domainId.replaceAll("_", " ")}
+              </button>
+            ))}
+          </div>
+          {explanation.data && (
+            <div className="mt-4 rounded-xl border border-border/70 p-4" aria-live="polite">
+              <h3 className="font-medium">{explanation.data.conclusion.domainId}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Version {explanation.data.conclusion.domainVersion} ·{" "}
+                {explanation.data.nodes.length}
+                {" governed lineage items"}
+              </p>
+              {explanation.data.evidenceRestricted && (
+                <p className="mt-2 text-sm">Raw evidence is restricted for your role.</p>
+              )}
+            </div>
+          )}
+          {explanation.error && (
+            <p role="alert" className="mt-4 text-sm text-destructive">
+              {explanation.error.message}
+            </p>
+          )}
+        </section>
+      )}
+      {result.commercialAccess.accessTier === "entitled" && result.roadmap ? (
+        <Roadmap result={result.roadmap} />
+      ) : result.roadmapPreview ? (
+        <RoadmapPreview result={result.roadmapPreview} />
+      ) : null}
     </div>
+  );
+}
+
+function CommercialAccessPanel({
+  access,
+}: {
+  access: WorkspaceIntelligenceResult["commercialAccess"];
+}) {
+  return (
+    <section
+      aria-labelledby="delivery-dna-action-title"
+      className="rounded-2xl border border-primary/30 bg-primary/5 p-6"
+    >
+      <h2 id="delivery-dna-action-title" className="text-xl font-semibold">
+        {access.panel.heading}
+      </h2>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{access.panel.body}</p>
+      {access.panel.message && <p className="mt-3 text-sm font-medium">{access.panel.message}</p>}
+      {access.panel.action && (
+        <a
+          href={access.panel.action.destination}
+          className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
+        >
+          {access.panel.action.label}
+        </a>
+      )}
+    </section>
+  );
+}
+
+function FreeRecommendationPreview({
+  recommendations,
+}: {
+  recommendations: Array<{
+    title: string;
+    priorityLabel?: string;
+    impact: string;
+    effort: string;
+    safeReason?: string;
+    expectedOutcome?: string;
+  }>;
+}) {
+  return (
+    <section
+      aria-labelledby="priority-recommendations-title"
+      className="rounded-2xl border border-border bg-card p-6"
+    >
+      <h2 id="priority-recommendations-title" className="text-xl font-semibold">
+        Priority recommendations
+      </h2>
+      {recommendations.length ? (
+        <ol className="mt-4 space-y-3">
+          {recommendations.map((item) => (
+            <li
+              key={`${item.title}:${item.priorityLabel}`}
+              className="rounded-xl border border-border/70 p-4"
+            >
+              <h3 className="font-medium">{item.title}</h3>
+              <p className="mt-1 text-xs capitalize text-muted-foreground">
+                {item.priorityLabel ?? "priority"} · {item.impact} impact · {item.effort} effort
+              </p>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                {item.safeReason ?? ""}
+              </p>
+              <p className="mt-2 text-sm">Expected outcome: {item.expectedOutcome ?? ""}</p>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="mt-3 text-sm text-muted-foreground">
+          No recommendation meets the approved presentation rules for this result.
+        </p>
+      )}
+    </section>
+  );
+}
+
+function RoadmapPreview({
+  result,
+}: {
+  result: {
+    day30: Array<{ title: string; horizon: string; priorityLabel: string }>;
+    day60: Array<{ title: string; horizon: string; priorityLabel: string }>;
+    day90: Array<{ title: string; horizon: string; priorityLabel: string }>;
+  };
+}) {
+  return (
+    <section
+      aria-labelledby="roadmap-preview-title"
+      className="rounded-2xl border border-border bg-card p-6"
+    >
+      <h2 id="roadmap-preview-title" className="text-xl font-semibold">
+        Personalised roadmap preview
+      </h2>
+      <div className="mt-4 grid gap-4 md:grid-cols-3">
+        {(["day30", "day60", "day90"] as const).map((horizon) => {
+          const item = result[horizon][0];
+          const label =
+            horizon === "day30" ? "30 days" : horizon === "day60" ? "60 days" : "90 days";
+          return (
+            <div key={horizon} className="rounded-xl border border-border/70 p-4">
+              <h3 className="font-medium">{label}</h3>
+              {item ? (
+                <div className="mt-3 text-sm">
+                  <p>{item.title}</p>
+                  <p className="mt-1 capitalize text-muted-foreground">
+                    {item.priorityLabel} priority
+                  </p>
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-muted-foreground">No item scheduled.</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -421,7 +555,7 @@ function ListPanel({
     </section>
   );
 }
-function Roadmap({ result }: { result: WorkspaceIntelligenceResult["roadmap"] }) {
+function Roadmap({ result }: { result: NonNullable<WorkspaceIntelligenceResult["roadmap"]> }) {
   if (!("day30" in result))
     return (
       <section role="alert" className="rounded-2xl border border-warning/40 bg-warning/10 p-6">

@@ -46,8 +46,12 @@ export async function registerAccount(input: {
   password: string;
   firstName: string;
   lastName: string;
+  redirectTo?: string;
 }): Promise<{ email: string; verificationRequired: boolean }> {
-  return post("register", { ...input, redirectTo: `${window.location.origin}/auth/verify-email` });
+  return post("register", {
+    ...input,
+    redirectTo: input.redirectTo ?? `${window.location.origin}/auth/verify-email`,
+  });
 }
 
 export async function signIn(input: {
@@ -96,10 +100,13 @@ export function confirmVerification(): Promise<UserProfile> {
   return post("verify-email", {});
 }
 
-export function resendVerification(email: string): Promise<{ sent: boolean }> {
+export function resendVerification(
+  email: string,
+  redirectTo = `${window.location.origin}/auth/verify-email`,
+): Promise<{ sent: boolean }> {
   return post("verify-email/resend", {
     email,
-    redirectTo: `${window.location.origin}/auth/verify-email`,
+    redirectTo,
   });
 }
 

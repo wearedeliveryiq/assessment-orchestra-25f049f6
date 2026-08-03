@@ -1,13 +1,23 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { AuthLayout, FormError, FormNotice, PasswordStrength } from "@/components/identity/auth-layout";
+import {
+  AuthLayout,
+  FormError,
+  FormNotice,
+  PasswordStrength,
+} from "@/components/identity/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerAccount, resendVerification } from "@/lib/identity/client";
 
 export const Route = createFileRoute("/auth/register")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    snapshot: search.snapshot === "continue" ? ("continue" as const) : undefined,
+    source: search.source === "delivery-dna" ? ("delivery-dna" as const) : undefined,
+    result: typeof search.result === "string" ? search.result : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Create your account — DeliveryIQ" },
@@ -26,6 +36,9 @@ export const Route = createFileRoute("/auth/register")({
 });
 
 function RegisterPage() {
+  const search = useSearch({ from: "/auth/register" });
+  const continuingSnapshot = search.snapshot === "continue";
+  const continuingPublicResult = search.source === "delivery-dna" && Boolean(search.result);
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", password: "" });
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +58,12 @@ function RegisterPage() {
     setBusy(true);
     setError(null);
     try {
-      await registerAccount(form);
+      await registerAccount({
+        ...form,
+        redirectTo: continuingSnapshot
+          ? `${window.location.origin}/auth/verify-email?snapshot=continue`
+          : undefined,
+      });
       setSubmitted(true);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to create your account.");
@@ -60,7 +78,11 @@ function RegisterPage() {
         title="Verify your email"
         subtitle={`We've sent a verification link to ${form.email}. Confirm it to activate your account.`}
         footer={
-          <Link to="/auth/login" className="text-foreground underline underline-offset-4">
+          <Link
+            to="/auth/login"
+            search={continuingSnapshot ? { redirect: "/snapshot?continue=1" } : {}}
+            className="text-foreground underline underline-offset-4"
+          >
             Back to sign in
           </Link>
         }
@@ -71,7 +93,12 @@ function RegisterPage() {
             variant="secondary"
             className="w-full"
             onClick={async () => {
-              await resendVerification(form.email).catch(() => undefined);
+              await resendVerification(
+                form.email,
+                continuingSnapshot
+                  ? `${window.location.origin}/auth/verify-email?snapshot=continue`
+                  : undefined,
+              ).catch(() => undefined);
               setNotice("Verification email sent again.");
             }}
           >
@@ -85,11 +112,21 @@ function RegisterPage() {
   return (
     <AuthLayout
       title="Create your account"
-      subtitle="Set up secure access to the DeliveryIQ intelligence runtime."
+      subtitle={
+        continuingSnapshot
+          ? "Create your free DeliveryIQ account to continue with the remaining 26 questions. Your 13 Snapshot responses will be carried forward unchanged for you to review."
+          : continuingPublicResult
+            ? "Create your free DeliveryIQ account to explore your complete Delivery DNA profile, priority recommendations and personalised roadmap preview."
+            : "Set up secure access to the DeliveryIQ intelligence runtime."
+      }
       footer={
         <>
           Already registered?{" "}
-          <Link to="/auth/login" className="text-foreground underline underline-offset-4">
+          <Link
+            to="/auth/login"
+            search={continuingSnapshot ? { redirect: "/snapshot?continue=1" } : {}}
+            className="text-foreground underline underline-offset-4"
+          >
             Sign in
           </Link>
         </>

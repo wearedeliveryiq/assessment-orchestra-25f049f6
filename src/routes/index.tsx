@@ -86,6 +86,14 @@ function LandingPage() {
           Complete the 39-question Delivery DNA assessment to receive evidence-backed delivery
           intelligence, priorities and practical next steps.
         </p>
+        <Link
+          to="/snapshot"
+          search={{ continue: false }}
+          className="ribbon-bar mt-6 inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-semibold text-primary-foreground"
+        >
+          Get your free DNA Snapshot
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
       </section>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-3">

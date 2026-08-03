@@ -1,6 +1,7 @@
 import { assessmentRequestContext } from "@/lib/identity/assessment-auth.server";
 import { IdentityError } from "@/lib/identity/errors";
 import { assertPermission } from "@/lib/identity/service.server";
+import { assertDeliveryDnaActionAccess } from "@/lib/delivery-intelligence/commercial-access.server";
 import { canViewRecommendationEvaluationAudit } from "@/lib/recommendation-evaluation/projection";
 import { captureRecommendationAnalyticsSafely } from "@/lib/recommendation-analytics/service.server";
 
@@ -50,6 +51,11 @@ export async function getRecommendationAction(request: Request, actionId: string
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const audit = auditAllowed(verified.identity.permissions);
     const result = await recommendationActionService.get(
       actionId,
@@ -72,6 +78,11 @@ export async function getRecommendationPortfolioActions(request: Request, portfo
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const records = await recommendationActionService.list(portfolioId, {
       organisationId: verified.organisationId,
       workspaceId: verified.workspaceId,
@@ -93,6 +104,11 @@ export async function postRecommendationAction(request: Request, portfolioItemId
   try {
     const verified = await assessmentRequestContext(request, { write: true });
     assertPermission(verified.identity, "workspace:manage");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const body = (await request.json()) as Record<string, unknown>;
     const expectedVersion = body.expectedVersion ?? 0;
     if (
@@ -125,6 +141,11 @@ export async function patchRecommendationAction(request: Request, actionId: stri
   try {
     const verified = await assessmentRequestContext(request, { write: true });
     assertPermission(verified.identity, "workspace:manage");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const body = (await request.json()) as Record<string, unknown>;
     const command = body.command;
     if (

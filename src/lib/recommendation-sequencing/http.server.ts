@@ -2,6 +2,7 @@ import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/ser
 import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
+import { assertDeliveryDnaActionAccess } from "../delivery-intelligence/commercial-access.server";
 import { canViewRecommendationEvaluationAudit } from "../recommendation-evaluation/projection";
 import { projectRecommendationSequence } from "./projection";
 import {
@@ -23,6 +24,11 @@ async function context(request: Request, runId: string, write = false) {
     organisationId: verified.organisationId,
     workspaceId: verified.workspaceId,
     userId: verified.identity.user.id,
+  });
+  await assertDeliveryDnaActionAccess({
+    organisationId: verified.organisationId,
+    workspaceId: verified.workspaceId,
+    permitted: true,
   });
   return { verified, run };
 }

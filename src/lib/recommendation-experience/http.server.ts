@@ -1,6 +1,7 @@
 import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
+import { assertDeliveryDnaActionAccess } from "../delivery-intelligence/commercial-access.server";
 import { RecommendationExperienceError } from "./model";
 import { recommendationExperienceService } from "./service.server";
 
@@ -44,6 +45,11 @@ export async function getRecommendationExperience(request: Request, portfolioId:
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const projection = await recommendationExperienceService.get({
       portfolioId,
       organisationId: verified.organisationId,

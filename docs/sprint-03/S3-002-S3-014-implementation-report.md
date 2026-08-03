@@ -23,13 +23,13 @@ Authenticated operations resolve organisation/workspace access before data acces
 
 ## Test evidence
 
-The final local regression contains 251 passing tests across 24 files, including 52/52 locked golden fixtures. Type checking, changed-file lint/format checks and the production client/server build pass.
+The current local regression contains 606 passing tests across 46 files, including 53/53 locked golden fixtures. Type checking, changed-file lint/format checks and the production client/server build pass.
 
 ## Limitations and technical debt
 
-- Operational catalogue and entitlement tables intentionally ship without invented seed data; authorised operations must configure real product availability.
-- Hosted database migration rehearsal, adversarial authenticated browser E2E and production latency measurement are deployment gates because local Supabase tooling/target credentials are not available in this checkout.
-- Generated Supabase TypeScript types should be refreshed after migrations are applied; repository adapters temporarily isolate pending tables from generated types.
+- Operational catalogue, availability and entitlement tables intentionally ship without invented commercial seed data; authorised operations must configure real product availability.
+- The new PDR-003-004/005 migration rehearsal and focused hosted journeys remain deployment gates because local Lovable Cloud credentials are not exposed to this checkout.
+- Generated Supabase TypeScript types must be refreshed by Lovable after the new migrations are applied; repository adapters isolate pending fields until then.
 
 No unresolved product decision or conflict with DIQ-002/PB-003 remains.
 
@@ -59,6 +59,37 @@ The legacy 16-question delivery-maturity journey is unchanged and remains termin
 - Production Vite/Nitro build: pass.
 - Local browser smoke: the signed-out production shell renders the new Delivery DNA value proposition and start action with correct semantic structure.
 
-### Deployment status and limitation
+### Hosted evidence
 
-The code and migrations are ready for review and merge. The two new migrations have not been applied to Lovable Cloud, the build has not yet been published, and no real customer assessment was manufactured locally. Final hosted acceptance therefore still requires: apply both migrations in order, regenerate Supabase types, publish, and record one authorised Delivery DNA completion reaching eligible analysis and a published intelligence result. The authenticated questionnaire and narrow-screen checks must be included in that focused deployment smoke test.
+The genuine production journey is now verified. Session `d09c51a3-2af8-4283-9b98-4cc1d53a1c93` completed automatically through eligibility and the durable hand-off into run `0958ab19-814e-4de1-beb6-2d13dc7530e3`. The run completed on its first analysis attempt and published one immutable result, 64 trace nodes and 259 trace edges. No user retry event exists.
+
+## PDR-003-004/005 delivery update — 3 August 2026
+
+### Customer value delivered
+
+DeliveryIQ now has a low-friction public **Delivery DNA Snapshot** entry journey and a clear free-versus-entitled result boundary. A visitor can answer the exact 13 existing practice questions without an account or PII, receive the approved directional view, then create and verify an account and explicitly carry the same responses into the remaining 26-question Delivery DNA Assessment. Authenticated free users receive a useful complete capability profile, bounded recommendations and roadmap preview; `delivery_dna_action` entitlement unlocks the existing full improvement workflow without recalculating the result.
+
+### Architecture and data
+
+- Snapshot calculation is a small deterministic presentation policy over raw 1–5 responses. It does not invoke or duplicate the Delivery Intelligence Engine.
+- Anonymous state uses a 256-bit opaque token held in an HTTP-only SameSite cookie; the database stores only its SHA-256 hash. RLS is deny-by-default and client roles receive no table, sequence or function grants.
+- Unlinked responses expire after exactly 24 hours and are removed by a bounded hourly cleanup. Funnel events contain only an approved event name, optional step number and timestamp.
+- Continuation is one atomic tenant-scoped operation requiring a verified user and explicit consent. It preserves IDs, values, evidence status/reason and original timestamps with immutable provenance, creates only an in-progress full draft and requests no analysis.
+- Commercial access reuses the existing product availability and organisation entitlement boundary. Availability, entitlement version/window/revocation, tenant/workspace and existing user permission are evaluated independently for every protected read or mutation.
+- The complete recommendation portfolio remains generated and persisted independently of access tier. Projection and workflow authorisation are the only commercial differences.
+- Production preflight found zero existing customer decisions, actions or outcomes; no grandfathering insert is required or included.
+
+### Verification actually run
+
+- Full Vitest regression: 606/606 tests across 46 files pass.
+- Locked DIQ-203B regression: 53/53 fixtures pass unchanged.
+- Locked PDR-003-005A regression: 8/8 fixtures pass.
+- TypeScript `--noEmit`: pass.
+- Changed-file ESLint: pass after clearing one local hook dependency warning.
+- Changed-file Prettier: pass.
+- Production Vite/Nitro client/server build: pass, including the hourly Snapshot cleanup task.
+- Focused security checks cover client grant revocation, RLS, exact token hashing, expiry, analytics exclusion, tenant/workspace membership, idempotent linking, free-field leakage and all paid API guards.
+
+### Deployment status and limitations
+
+The application changes and three new managed-migration source files are ready to merge. Lovable Cloud must apply the migrations in timestamp order, regenerate generated Supabase types and publish the build. Final hosted evidence must then record one anonymous Snapshot completion and one consented continuation into a 13-response full draft, plus free and unavailable commercial projections. No commercial contact route is configured, so the locked fail-safe behaviour suppresses the `Talk to DeliveryIQ` action. Pricing, checkout and subscription packaging remain out of scope.

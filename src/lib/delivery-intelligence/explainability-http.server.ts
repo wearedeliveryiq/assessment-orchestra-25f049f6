@@ -3,6 +3,7 @@ import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { explainConclusion } from "./explainability";
 import { getTrace } from "./trace-repository.server";
+import { assertDeliveryDnaActionAccess } from "./commercial-access.server";
 
 const response = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), {
@@ -24,6 +25,10 @@ export async function getExplanation(request: Request, runId: string): Promise<R
       );
     }
     const tenant = { organisationId: verified.organisationId, workspaceId: verified.workspaceId };
+    await assertDeliveryDnaActionAccess({
+      ...tenant,
+      permitted: verified.identity.permissions.includes("assessment:read"),
+    });
     await assessmentAnalysisService.get(runId, {
       ...tenant,
       ownerKey: verified.ownerKey,
