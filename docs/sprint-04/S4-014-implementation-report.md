@@ -4,7 +4,7 @@
 
 Implemented through PR #24 and deployed from merge commit `98b30d9`. Application, managed migrations, live schema/ACL verification, security, resilience, performance, documentation and publication gates are complete.
 
-The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome evidence is now included through an integrity-checked governed source. PDR-004-001 approves the recovery objectives; a measured isolated recovery rehearsal and authorised live export remain release gates.
+The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome evidence is deployed and included through an integrity-checked governed source. PDR-004-001 approves the recovery objectives; a measured isolated recovery rehearsal and authorised live export remain release gates.
 
 ## Architecture and reuse
 
@@ -77,8 +77,8 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 
 ## Known limitations and hard blockers
 
-- S4-010 is implemented locally; its managed Cloud migrations and live ACL/type verification remain deployment gates.
-- A live restore rehearsal needs an isolated Lovable recovery target and must demonstrate the approved Tier 1 RPO <=15 minutes and RTO <=4 hours.
+- S4-010 is deployed; its managed Cloud schema, RLS, ACL, generated types, one-minute task, tests, build and live shell were verified on 3 August 2026.
+- A read-only platform assessment confirmed Lovable self-service recovery is limited to daily in-place snapshots and cannot meet or measure Tier 1 RPO <=15 minutes in an isolated target. A qualifying support-provisioned target or approved alternative architecture is required before the recovery gate can pass.
 - Audit export remains disabled by default; authorised export/redaction/expiry/access-log evidence is still required before release enablement.
 - The complete live journey requires a genuine eligible Delivery DNA analysis and portfolio; no customer evidence is manufactured for testing.
 - Existing repository-wide lint debt remains outside S4-014; changed files must remain clean.

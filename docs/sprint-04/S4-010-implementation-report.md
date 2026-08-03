@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented against locked PDR-004-001 v1.0. Local engineering gates pass. The three additive Lovable Cloud migrations and live verification remain deployment gates until this branch is merged.
+Implemented and deployed against locked PDR-004-001 v1.0. Local engineering gates and managed Lovable Cloud verification pass. Product Acceptance remains governed by SAR-004 until the remaining authorised export, measured recovery and superseding-review gates are recorded.
 
 ## Architecture and reuse
 
@@ -55,14 +55,25 @@ Local evidence on 3 August 2026:
 - Production client, server and scheduled-task build passed; the outcome reconciler artifact is present.
 - `git diff --check` passed.
 
+Managed deployment evidence on 3 August 2026:
+
+- GitHub main and Lovable content identity: `00373f0a5f9f3ccfabaebd0aea0f8c900a0d350f`; Lovable recorded the generated migrations and Supabase types in `6cb567b10c93602f2dce1a7a196c731f940e6952`.
+- Source `20260803150000_recommendation_outcome_measurement.sql` was applied as `20260803154536_5ab1e1a7-e982-4f1f-b201-c8f9d39402aa.sql`.
+- Source `20260803151000_harden_recommendation_outcome_permissions.sql` was applied as `20260803154612_1fcc9b40-a159-404e-bdeb-d64e1819e59d.sql`.
+- Source `20260803152000_enable_governed_outcome_analytics.sql` was applied as `20260803154643_2245f262-dfb5-4994-9952-2a738b21d3a1.sql`.
+- Cloud-default service-role grants were narrowed in `20260803154747_f8019ceb-25b5-4393-937d-8efb166fa2f3.sql` without changing product behaviour: the four stores retain `SELECT, INSERT` only for `service_role`, while the two internal helpers are not directly executable.
+- Live verification found the exact two enums, four RLS-enabled stores with zero client policies, 14 indexes, 72 constraints, five enabled triggers and seven governed routines. `PUBLIC`, `anon` and `authenticated` have no table, `MAINTAIN` or routine privileges.
+- All four stores contain zero rows because production contains zero improvement actions; the bounded backfill therefore changed zero customer rows. Catalogue versions remain 3, portfolios 0, assessment sessions 27 and analysis runs 1. No analytics, feature-flag or audit-export records were manufactured.
+- Lovable reran 43 test files / 564 tests, all 53 DIQ-203B fixtures, all 37 PDR-004-001 fixture IDs, type checking, changed-file lint/format, the production build, the security scan and a home-page smoke test. The build contains the one-minute reconciler; the home page returned HTTP 200; the scan reported 14 pre-existing warnings and no critical finding.
+
 ## Files
 
 Created: `src/lib/recommendation-outcomes/*`, the two outcome API routes, outcome controls, the reconciler task, three managed migration sources and `tests/recommendation-outcomes.test.ts`.
 
 Modified: action controls, executive experience/model, S4-013 analytics repository, S4-014 governance export model/repository/types, task registration, generated route tree and related regression tests.
 
-## Limitations and deployment gate
+## Limitations and remaining release gates
 
 - No production observation is manufactured. Live outcome smoke requires a genuine eligible Delivery DNA recommendation action.
-- Migrations `20260803150000`, `20260803151000` and `20260803152000` require Lovable-managed application and post-migration RLS/ACL/type verification after merge.
 - Repository-wide lint debt remains the accepted SAR-004 baseline; changed files are clean.
+- Authorised audit-export evidence, a measured isolated Tier 1 recovery rehearsal and a superseding Product Owner acceptance decision remain release gates outside S4-010 implementation.
