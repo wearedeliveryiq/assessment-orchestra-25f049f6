@@ -20,6 +20,10 @@ const hardening = readFileSync(
   "supabase/migrations/20260803211000_harden_delivery_dna_snapshot_permissions.sql",
   "utf8",
 );
+const linkValueFix = readFileSync(
+  "supabase/migrations/20260803212000_fix_delivery_dna_snapshot_link_value.sql",
+  "utf8",
+);
 const route = readFileSync("src/routes/snapshot.tsx", "utf8");
 const server = readFileSync("src/lib/delivery-dna/snapshot.server.ts", "utf8");
 
@@ -89,7 +93,13 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
         });
         expect(transferred).toMatchObject(rawFixture.expected);
         expect(migration).toContain("'delivery-dna-snapshot', '1.0.0', responded_at");
-        expect(migration).toContain("v_assessment_id, question_id, capability_id, answer, answer");
+        expect(migration).toContain(
+          "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
+        );
+        expect(linkValueFix).toContain(
+          "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
+        );
+        expect(linkValueFix).toContain("REVOKE ALL ON FUNCTION public.link_delivery_dna_snapshot");
         expect(migration).toContain("status = 'linked'");
         expect(migration).not.toContain("status = 'completed', progress = 100");
         expect(migration).not.toContain("assessment_analysis_runs");
