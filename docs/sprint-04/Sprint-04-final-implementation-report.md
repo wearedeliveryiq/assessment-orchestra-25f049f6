@@ -2,45 +2,58 @@
 
 ## Outcome
 
-Sprint 04 engineering is complete for every story with sufficient locked product authority. S4-001–S4-009 and S4-011–S4-014 are implemented with deterministic, immutable, tenant-isolated and governed paths. S4-010 remains correctly blocked rather than guessed.
+Sprint 04 application engineering now covers S4-001 through S4-014. S4-010 is implemented against locked PDR-004-001 v1.0 with deterministic canonical-decimal evaluation, immutable evidence, append-only status history, tenant isolation, customer-safe projections and all 37 mandatory fixtures.
 
-Sprint 04 is **not production-release ready** until all of the following are resolved:
-
-1. Product Ownership locks the S4-010 maintain and observation-date policy with golden boundaries.
-2. The platform recovery-point and recovery-time policy is approved and a backup/restore rehearsal is measured against it.
-3. A genuine eligible Delivery DNA result completes the live analysis-to-portfolio, decision, action, outcome, report, hand-off, analytics and audit-export smoke journey.
-4. Product Owner and Matt Prust record Sprint 04 release acceptance.
+Local remediation gates pass. Product Acceptance remains `REMEDIATION REQUIRED` under SAR-004 until the managed migrations, deployment verification, authorised audit-export test, measured isolated recovery rehearsal and superseding Product Owner decision are recorded.
 
 ## Story status
 
-| Story                                              | Outcome                                                                                          |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| S4-001 Catalogue and Versioning                    | Complete; production catalogue activated with two distinct genuine Product Governance identities |
-| S4-002 Eligibility and Trigger Evaluation          | Complete                                                                                         |
-| S4-003 Confidence Gates                            | Complete                                                                                         |
-| S4-004 Conflict Resolution                         | Complete                                                                                         |
-| S4-005 Priority Scoring                            | Complete                                                                                         |
-| S4-006 Dependency Sequencing                       | Complete                                                                                         |
-| S4-007 Recommendation Portfolio                    | Complete                                                                                         |
-| S4-008 Customer Decisions                          | Complete                                                                                         |
-| S4-009 Actions and Improvement Plan                | Complete                                                                                         |
-| S4-010 Outcomes and Success Measures               | Blocked on locked customer-visible comparison/date rules; source outcome text retained           |
-| S4-011 Knowledge Pack and TeamMate Hand-offs       | Complete; never auto-activates a product                                                         |
-| S4-012 Experience and Executive Reporting          | Complete                                                                                         |
-| S4-013 Analytics and Learning Signals              | Complete; outcome capture remains fail closed while S4-010 is blocked                            |
-| S4-014 Governance, Audit and Operational Readiness | Implemented and deployed; feature remains off pending release gates and live recovery evidence   |
+| Story                                              | Engineering status                                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| S4-001 Catalogue and Versioning                    | Complete and deployed; production catalogue governed by two genuine identities                  |
+| S4-002 Eligibility and Trigger Evaluation          | Complete and deployed                                                                           |
+| S4-003 Confidence Gates                            | Complete and deployed                                                                           |
+| S4-004 Conflict Resolution                         | Complete and deployed                                                                           |
+| S4-005 Priority Scoring                            | Complete and deployed                                                                           |
+| S4-006 Dependency Sequencing                       | Complete and deployed                                                                           |
+| S4-007 Recommendation Portfolio                    | Complete and deployed                                                                           |
+| S4-008 Customer Decisions                          | Complete and deployed                                                                           |
+| S4-009 Actions and Improvement Plan                | Complete and deployed                                                                           |
+| S4-010 Outcomes and Success Measures               | Complete locally; managed migration/live verification pending                                   |
+| S4-011 Knowledge Pack and TeamMate Hand-offs       | Complete and deployed; never auto-activates a product                                           |
+| S4-012 Experience and Executive Reporting          | Complete; current outcome status added to the governed report snapshot                          |
+| S4-013 Analytics and Learning Signals              | Complete; consented categorical outcome capture is governed and non-blocking                    |
+| S4-014 Governance, Audit and Operational Readiness | Complete in code; outcome export reconciled; recovery evidence remains an external release gate |
 
 ## Architecture confirmation
 
-The sprint preserves the locked architecture: one governed recommendation pipeline consumes the canonical Delivery Intelligence result; product logic remains deterministic, versioned and presentation-independent; generated baselines are immutable; customer choices and progress are audited overlays; Pack/TeamMate handling is a consented hand-off only; analytics cannot change rules; and every client boundary re-authorises tenant/workspace scope.
+One governed recommendation pipeline consumes the canonical Delivery Intelligence result. Deterministic product logic stays versioned and separate from orchestration and presentation. Generated baselines are immutable; customer decisions, actions and observations are audited overlays. Delivery DNA, Knowledge Packs and Team Mates retain their locked boundaries. No presentation layer duplicates scoring, confidence, recommendation or outcome logic.
+
+S4-010 uses PDR-004-001/1.0 and `deliveryiq.outcome-measurement/1.0.0`. Exact BigInt-backed decimal comparison prevents display rounding from changing a result. Deadline, late evidence, restoration, regression and supersession policies are versioned and traceable. The minute reconciler persists time-driven transitions.
+
+## Verification
+
+Local remediation run on 3 August 2026:
+
+- 43 test files / 564 tests passed.
+- all 53 locked DIQ-203B executions passed unchanged;
+- all 37 PDR-004-001 outcome fixtures passed;
+- TypeScript static checking passed;
+- changed-file ESLint and supported-file Prettier checks passed;
+- production client, server and scheduled-task build passed;
+- 10,000 outcome evaluations remained inside the controlled performance guard;
+- tenant, RLS/ACL source contract, idempotency, concurrency, correction, accessibility, executive-report and audit-export tests passed.
+
+Repository-wide lint remains the accepted SAR-004 inherited baseline and was not represented as clean.
 
 ## Release and rollback
 
-Release uses additive, separately transactional migrations followed immediately by Cloud permission-hardening migrations. Generated Lovable migration records and live Supabase types are retained. Features default off where required. Rollback moves governed activation/feature pointers or reverts application code without rewriting published Git history; immutable histories are never dropped during incident response.
+Release uses three additive, separately transactional migrations followed by live RLS, ACL, immutability, function and generated-type verification. Audit export remains disabled by default until an authorised Product Governance enablement and export/redaction test. Rollback disables optional features through governed events or restores the prior application revision; immutable histories are preserved and corrected only through superseding records.
 
-## Recorded limitations
+## Remaining controlled gates
 
-- S4-010 and approved RPO/RTO remain genuine product/platform authority blockers.
-- Live customer smoke tests are unavailable until genuine eligible evidence exists; synthetic production customer data is prohibited.
-- Live cross-tenant analytics requires ten genuine consented organisations and is not manufactured.
-- Repository-wide lint debt is inherited; story-changed files are held to a clean lint/format gate.
+- Apply and verify the S4-010 migrations in Lovable Cloud and publish the merged application.
+- Perform the authorised audit-export/redaction/expiry/access-log test without manufacturing customer evidence.
+- Perform a measured isolated Tier 1 recovery rehearsal and demonstrate RPO <=15 minutes and RTO <=4 hours. If the managed platform cannot supply an isolated restore target, record that exact external blocker; do not claim a pass.
+- File the six reconciled records in the Product Owner review mirror and request a superseding acceptance review.
+- The absent genuine eligible Delivery DNA collection journey remains a general-availability limitation under SAR-004 L-004-01, not an S4-010 implementation defect.

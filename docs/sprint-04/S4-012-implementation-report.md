@@ -4,7 +4,7 @@
 
 Implemented on `agent/s4-012-recommendation-experience`. Application verification is complete; deployment and live authenticated smoke verification remain release gates.
 
-S4-012 is a read-model and presentation story. It changes no product rule, generated recommendation, customer decision, action, outcome or hand-off record. S4-010 remains independently blocked by the locked outcome/date-policy gap recorded in `S4-010-product-rule-blocker.md`.
+S4-012 is a read-model and presentation story. It changes no product rule, generated recommendation, customer decision, action, outcome or hand-off record. The later PDR-004-001 remediation composes current S4-010 outcome status into the same governed executive snapshot without changing this separation.
 
 ## Architecture and reuse
 
@@ -79,7 +79,7 @@ The UI uses semantic `article`, `header`, `section`, ordered-list, definition-li
 
 - The browser print path creates print/PDF-ready semantic output; managed server-side PDF generation is not part of the existing stack.
 - The first production Delivery DNA portfolio remains the prerequisite for a genuine live report smoke test. No synthetic customer evidence will be manufactured.
-- S4-010 remains blocked by absent locked maintain/date-policy definitions and is not inferred by this experience.
+- PDR-004-001 now governs S4-010; its current outcome status is included by the remediation while the genuine eligible production journey remains unavailable.
 - Existing repository-wide lint debt remains outside this story; changed files are clean.
 
 ## Product decisions required

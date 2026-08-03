@@ -4,7 +4,7 @@
 
 Implemented through PR #24 and deployed from merge commit `98b30d9`. Application, managed migrations, live schema/ACL verification, security, resilience, performance, documentation and publication gates are complete.
 
-The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome observations remain explicitly unavailable and platform RPO/RTO is not yet approved, so Sprint 04 production release remains blocked independently of this implementation.
+The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome evidence is now included through an integrity-checked governed source. PDR-004-001 approves the recovery objectives; a measured isolated recovery rehearsal and authorised live export remain release gates.
 
 ## Architecture and reuse
 
@@ -37,9 +37,9 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 ## Acceptance evidence
 
 - AC1: the existing S4-001 author/approver separation and immutable lifecycle remain executable regression tests; S4-014 feature changes require the isolated Product Governance role.
-- AC2: the versioned export reconciles catalogue, evaluation, confidence, resolution, priority, sequence, portfolio, decision, action and hand-off records, with actor/evidence redaction. Outcome is empty and explicitly limited pending S4-010.
+- AC2: the versioned export reconciles catalogue, evaluation, confidence, resolution, priority, sequence, portfolio, decision, action, outcome snapshots, measure versions, observations, status history and hand-off records, with actor/raw evidence/internal-rule redaction. Outcome-source availability is integrity-gated rather than represented by an empty placeholder.
 - AC3: tenant, count, trace and overlay integrity checks run before queueing and again at publication scope; a failure produces no payload and is terminal/non-retryable.
-- AC4: state-machine, partial-failure, stale-lease, replay, retry, expiry and configuration rollback tests pass. Live backup restoration remains tied to the missing platform RPO/RTO policy.
+- AC4: state-machine, partial-failure, stale-lease, replay, retry, expiry and configuration rollback tests pass. PDR-004-001 Tier 1 RPO <=15 minutes and RTO <=4 hours are approved; a measured isolated platform restore remains outstanding.
 - AC5: the health contract covers every Section 20 alert code; structured operational metadata rejects prohibited fields.
 - AC6: authentication, authorisation, RLS, least privilege, bounded work, idempotency, performance and production-build gates pass. Full Sprint release remains blocked by the recorded authorities below.
 
@@ -47,7 +47,7 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 
 - Focused S4-014 tests cover feature fail-safe behaviour, tenant denial, export/redaction, integrity failure, partial job failure, idempotency, retry, expiry/access logging, 10,000-event performance, over-limit rejection, configuration diff, alert coverage, immutable controls and scheduled execution.
 - Existing catalogue tests retain self-approval denial, atomic activation and rollback evidence.
-- Full regression: 42 files / 522 tests passed, including all 53 unchanged DIQ-203B fixtures.
+- Full remediation regression: 43 files / 564 tests passed, including all 53 unchanged DIQ-203B fixtures and all 37 PDR-004-001 fixtures.
 - Type checking, changed-file ESLint/Prettier and the production build passed. The build contains both one-minute server tasks, including `_tasks/process-exports.mjs`.
 - Full-repository lint remains inherited debt: 613 errors and 15 warnings outside the S4-014 changed-file gate.
 
@@ -77,8 +77,8 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 
 ## Known limitations and hard blockers
 
-- S4-010 lacks locked maintain/date-policy rules. Outcome observations are not fabricated and the export identifies that source as unavailable.
-- An approved platform RPO/RTO policy is absent. PB-004 declares this a production-release blocker, not an implementation blocker.
-- A live restore rehearsal needs an isolated Lovable recovery target and must be evaluated against that future RPO/RTO policy.
+- S4-010 is implemented locally; its managed Cloud migrations and live ACL/type verification remain deployment gates.
+- A live restore rehearsal needs an isolated Lovable recovery target and must demonstrate the approved Tier 1 RPO <=15 minutes and RTO <=4 hours.
+- Audit export remains disabled by default; authorised export/redaction/expiry/access-log evidence is still required before release enablement.
 - The complete live journey requires a genuine eligible Delivery DNA analysis and portfolio; no customer evidence is manufactured for testing.
 - Existing repository-wide lint debt remains outside S4-014; changed files must remain clean.

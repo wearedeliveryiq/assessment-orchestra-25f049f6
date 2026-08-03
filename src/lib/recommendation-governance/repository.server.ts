@@ -245,6 +245,58 @@ export async function loadAuditSource(input: {
     if (result.error) throw new Error(result.error.message);
     handoffEvents = result.data ?? [];
   }
+  const actionIds = actions.map((row) => String(row.id));
+  let actionOutcomes: Record<string, unknown>[] = [];
+  if (actionIds.length) {
+    const result = await database
+      .from("recommendation_action_outcomes")
+      .select("*")
+      .in("action_id", actionIds)
+      .eq("organisation_id", scope.organisationId)
+      .eq("workspace_id", scope.workspaceId)
+      .limit(10_000);
+    if (result.error) throw new Error(result.error.message);
+    actionOutcomes = result.data ?? [];
+  }
+  const outcomeIds = actionOutcomes.map((row) => String(row.id));
+  let outcomeMeasureVersions: Record<string, unknown>[] = [];
+  if (outcomeIds.length) {
+    const result = await database
+      .from("recommendation_outcome_measure_versions")
+      .select("*")
+      .in("outcome_id", outcomeIds)
+      .eq("organisation_id", scope.organisationId)
+      .eq("workspace_id", scope.workspaceId)
+      .limit(10_000);
+    if (result.error) throw new Error(result.error.message);
+    outcomeMeasureVersions = result.data ?? [];
+  }
+  const measureVersionIds = outcomeMeasureVersions.map((row) => String(row.id));
+  let outcomeObservations: Record<string, unknown>[] = [];
+  let outcomeStatusEvents: Record<string, unknown>[] = [];
+  if (measureVersionIds.length) {
+    const [observationsResult, eventsResult] = await Promise.all([
+      database
+        .from("recommendation_outcome_observations")
+        .select("*")
+        .in("measure_version_id", measureVersionIds)
+        .eq("organisation_id", scope.organisationId)
+        .eq("workspace_id", scope.workspaceId)
+        .limit(10_000),
+      database
+        .from("recommendation_outcome_status_events")
+        .select("*")
+        .in("measure_version_id", measureVersionIds)
+        .eq("organisation_id", scope.organisationId)
+        .eq("workspace_id", scope.workspaceId)
+        .limit(10_000),
+    ]);
+    if (observationsResult.error || eventsResult.error) {
+      throw new Error(observationsResult.error?.message ?? eventsResult.error?.message);
+    }
+    outcomeObservations = observationsResult.data ?? [];
+    outcomeStatusEvents = eventsResult.data ?? [];
+  }
   return {
     portfolio,
     portfolioItems,
@@ -268,6 +320,10 @@ export async function loadAuditSource(input: {
     plans,
     actionEvents,
     actions,
+    actionOutcomes,
+    outcomeMeasureVersions,
+    outcomeObservations,
+    outcomeStatusEvents,
     handoffs,
     handoffEvents,
   };

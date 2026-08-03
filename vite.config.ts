@@ -14,6 +14,9 @@ const analysisReconcilerTask = fileURLToPath(
 const recommendationAuditExportTask = fileURLToPath(
   new URL("./tasks/recommendation-governance/process-exports.ts", import.meta.url),
 );
+const recommendationOutcomeReconcileTask = fileURLToPath(
+  new URL("./tasks/recommendation-outcomes/reconcile.ts", import.meta.url),
+);
 
 export default defineConfig({
   nitro: {
@@ -30,9 +33,17 @@ export default defineConfig({
         handler: recommendationAuditExportTask,
         description: "Process bounded recommendation audit exports",
       },
+      "recommendation-outcomes:reconcile": {
+        handler: recommendationOutcomeReconcileTask,
+        description: "Reconcile time-based recommendation outcome status transitions",
+      },
     },
     scheduledTasks: {
-      "* * * * *": ["analysis:reconcile", "recommendation-governance:exports"],
+      "* * * * *": [
+        "analysis:reconcile",
+        "recommendation-governance:exports",
+        "recommendation-outcomes:reconcile",
+      ],
     },
   },
   tanstackStart: {
