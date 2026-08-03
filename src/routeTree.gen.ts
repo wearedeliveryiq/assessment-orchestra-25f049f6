@@ -9,230 +9,210 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as DesignSystemRouteImport } from './routes/design-system'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as ApiAnalysisRunsRouteImport } from './routes/api/analysis-runs'
-import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
-import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
-import { Route as ApiMembersRouteImport } from './routes/api/members'
-import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
-import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
-import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
-import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
-import { Route as AssessIndexRouteImport } from './routes/assess.index'
-import { Route as AssessIdRouteImport } from './routes/assess.$id'
-import { Route as AuditAssessmentIdRouteImport } from './routes/audit.$assessmentId'
-import { Route as AuditDashboardRouteImport } from './routes/audit.dashboard'
-import { Route as AuditEventsRouteImport } from './routes/audit.events'
-import { Route as AuditHealthRouteImport } from './routes/audit.health'
-import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
-import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
-import { Route as AuthInvitationRouteImport } from './routes/auth.invitation'
-import { Route as AuthLoginRouteImport } from './routes/auth.login'
-import { Route as AuthRegisterRouteImport } from './routes/auth.register'
-import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
-import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
-import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
-import { Route as ErrorCodeRouteImport } from './routes/error.$code'
-import { Route as InternalGithubSyncRouteImport } from './routes/internal.github-sync'
-import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
-import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
-import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
-import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
-import { Route as ObservationIdRouteImport } from './routes/observation.$id'
-import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
-import { Route as OrganisationsIdRouteImport } from './routes/organisations.$id'
-import { Route as PatternIdRouteImport } from './routes/pattern.$id'
-import { Route as ReportIdRouteImport } from './routes/report.$id'
-import { Route as ReportsIndexRouteImport } from './routes/reports.index'
-import { Route as RuleIdRouteImport } from './routes/rule.$id'
-import { Route as RuntimeNarrativeRouteImport } from './routes/runtime.narrative'
-import { Route as RuntimeObservationsRouteImport } from './routes/runtime.observations'
-import { Route as RuntimePatternsRouteImport } from './routes/runtime.patterns'
-import { Route as RuntimeRulesRouteImport } from './routes/runtime.rules'
-import { Route as RuntimeScoresRouteImport } from './routes/runtime.scores'
-import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
-import { Route as ScoreIdRouteImport } from './routes/score.$id'
-import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
-import { Route as SessionsIdRouteImport } from './routes/sessions.$id'
-import { Route as SessionsNewRouteImport } from './routes/sessions.new'
-import { Route as SignalIdRouteImport } from './routes/signal.$id'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
+import { Route as AccountRouteImport } from './routes/account'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspacesIndexRouteImport } from './routes/workspaces.index'
+import { Route as SessionsIndexRouteImport } from './routes/sessions.index'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
+import { Route as OrganisationsIndexRouteImport } from './routes/organisations.index'
+import { Route as KnowledgePacksIndexRouteImport } from './routes/knowledge-packs.index'
+import { Route as AssessIndexRouteImport } from './routes/assess.index'
 import { Route as WorkspacesIdRouteImport } from './routes/workspaces.$id'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
-import { Route as ApiAnalysisRunsIdRouteImport } from './routes/api/analysis-runs.$id'
-import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
-import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
-import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id'
-import { Route as ApiAssessmentCatalogueRouteImport } from './routes/api/assessment.catalogue'
-import { Route as ApiAssessmentStartRouteImport } from './routes/api/assessment.start'
-import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
-import { Route as ApiAuthActivityRouteImport } from './routes/api/auth.activity'
-import { Route as ApiAuthInvitationsRouteImport } from './routes/api/auth.invitations'
-import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
-import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
-import { Route as ApiAuthProfileRouteImport } from './routes/api/auth.profile'
-import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
-import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
-import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
-import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify-email'
-import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
-import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
-import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
-import { Route as ApiImprovementActionsIdRouteImport } from './routes/api/improvement-actions.$id'
-import { Route as ApiInternalRecommendationCataloguesRouteImport } from './routes/api/internal/recommendation-catalogues'
-import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
-import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
-import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
-import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
-import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
-import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
-import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
-import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
-import { Route as ApiReportingHistoryRouteImport } from './routes/api/reporting.history'
-import { Route as ApiReportingPreviewRouteImport } from './routes/api/reporting.preview'
-import { Route as ApiReportingQueueRouteImport } from './routes/api/reporting.queue'
-import { Route as ApiReportingReportsRouteImport } from './routes/api/reporting.reports'
-import { Route as ApiReportingTemplatesRouteImport } from './routes/api/reporting.templates'
-import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
-import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
-import { Route as ApiShellAuditRouteImport } from './routes/api/shell.audit'
-import { Route as ApiTenancySearchRouteImport } from './routes/api/tenancy.search'
-import { Route as ApiUserPreferencesRouteImport } from './routes/api/user.preferences'
-import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
-import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
-import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
-import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
-import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
-import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
-import { Route as AssessmentIdObservationsRouteImport } from './routes/assessment.$id.observations'
-import { Route as AssessmentIdPatternsRouteImport } from './routes/assessment.$id.patterns'
-import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.$id.processing'
-import { Route as AssessmentIdReportsRouteImport } from './routes/assessment.$id.reports'
-import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
-import { Route as AssessmentIdRulesRouteImport } from './routes/assessment.$id.rules'
-import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
-import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
-import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
-import { Route as AuditEventIdRouteImport } from './routes/audit.event.$id'
-import { Route as EvidenceEntityTypeEntityIdRouteImport } from './routes/evidence.$entityType.$entityId'
-import { Route as ExplainEntityTypeEntityIdRouteImport } from './routes/explain.$entityType.$entityId'
-import { Route as InternalAuditIndexRouteImport } from './routes/internal.audit.index'
-import { Route as InternalAuditIdRouteImport } from './routes/internal.audit.$id'
-import { Route as InternalKnowledgePacksIndexRouteImport } from './routes/internal.knowledge-packs.index'
-import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
-import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.narratives.index'
-import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
-import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
-import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
-import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
-import { Route as InternalPatternsIdRouteImport } from './routes/internal.patterns.$id'
-import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
-import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
-import { Route as InternalRuntimeIndexRouteImport } from './routes/internal.runtime.index'
-import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
-import { Route as InternalScoresIdRouteImport } from './routes/internal.scores.$id'
-import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
-import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
+import { Route as SignalIdRouteImport } from './routes/signal.$id'
+import { Route as SessionsNewRouteImport } from './routes/sessions.new'
+import { Route as SessionsIdRouteImport } from './routes/sessions.$id'
+import { Route as ScoreIdRouteImport } from './routes/score.$id'
+import { Route as RuntimeSignalsRouteImport } from './routes/runtime.signals'
+import { Route as RuntimeScoresRouteImport } from './routes/runtime.scores'
+import { Route as RuntimeRulesRouteImport } from './routes/runtime.rules'
+import { Route as RuntimePatternsRouteImport } from './routes/runtime.patterns'
+import { Route as RuntimeObservationsRouteImport } from './routes/runtime.observations'
+import { Route as RuntimeNarrativeRouteImport } from './routes/runtime.narrative'
+import { Route as RuleIdRouteImport } from './routes/rule.$id'
+import { Route as ReportIdRouteImport } from './routes/report.$id'
+import { Route as PatternIdRouteImport } from './routes/pattern.$id'
+import { Route as OrganisationsIdRouteImport } from './routes/organisations.$id'
+import { Route as ObservationIdRouteImport } from './routes/observation.$id'
+import { Route as NarrativeIdRouteImport } from './routes/narrative.$id'
+import { Route as KnowledgePacksValidateRouteImport } from './routes/knowledge-packs.validate'
+import { Route as KnowledgePacksReloadRouteImport } from './routes/knowledge-packs.reload'
+import { Route as InternalGithubSyncRouteImport } from './routes/internal.github-sync'
+import { Route as ErrorCodeRouteImport } from './routes/error.$code'
+import { Route as DashboardIdRouteImport } from './routes/dashboard.$id'
+import { Route as AuthVerifyEmailRouteImport } from './routes/auth.verify-email'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
+import { Route as AuthRegisterRouteImport } from './routes/auth.register'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthInvitationRouteImport } from './routes/auth.invitation'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
+import { Route as AuditRetentionRouteImport } from './routes/audit.retention'
+import { Route as AuditHealthRouteImport } from './routes/audit.health'
+import { Route as AuditEventsRouteImport } from './routes/audit.events'
+import { Route as AuditDashboardRouteImport } from './routes/audit.dashboard'
+import { Route as AuditAssessmentIdRouteImport } from './routes/audit.$assessmentId'
+import { Route as AssessIdRouteImport } from './routes/assess.$id'
+import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
+import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
+import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
+import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
+import { Route as ApiMembersRouteImport } from './routes/api/members'
+import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
+import { Route as ApiAnalysisRunsRouteImport } from './routes/api/analysis-runs'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as KnowledgePackIdIndexRouteImport } from './routes/knowledge-pack.$id.index'
-import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
-import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
-import { Route as PublicResultsTokenRouteImport } from './routes/public/results.$token'
-import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
+import { Route as InternalSignalsIndexRouteImport } from './routes/internal.signals.index'
+import { Route as InternalScoresIndexRouteImport } from './routes/internal.scores.index'
+import { Route as InternalRuntimeIndexRouteImport } from './routes/internal.runtime.index'
+import { Route as InternalRulesIndexRouteImport } from './routes/internal.rules.index'
+import { Route as InternalPatternsIndexRouteImport } from './routes/internal.patterns.index'
+import { Route as InternalObservationsIndexRouteImport } from './routes/internal.observations.index'
+import { Route as InternalNarrativesIndexRouteImport } from './routes/internal.narratives.index'
+import { Route as InternalKnowledgePacksIndexRouteImport } from './routes/internal.knowledge-packs.index'
+import { Route as InternalAuditIndexRouteImport } from './routes/internal.audit.index'
+import { Route as AssessmentIdIndexRouteImport } from './routes/assessment.$id.index'
 import { Route as TraceEntityTypeEntityIdRouteImport } from './routes/trace.$entityType.$entityId'
-import { Route as ApiAnalysisRunsIdExplanationsRouteImport } from './routes/api/analysis-runs.$id.explanations'
-import { Route as ApiAnalysisRunsIdPublicResultRouteImport } from './routes/api/analysis-runs.$id.public-result'
-import { Route as ApiAnalysisRunsIdRecommendationConfidenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-confidence'
-import { Route as ApiAnalysisRunsIdRecommendationEvaluationRouteImport } from './routes/api/analysis-runs.$id.recommendation-evaluation'
-import { Route as ApiAnalysisRunsIdRecommendationPortfolioRouteImport } from './routes/api/analysis-runs.$id.recommendation-portfolio'
-import { Route as ApiAnalysisRunsIdRecommendationPriorityRouteImport } from './routes/api/analysis-runs.$id.recommendation-priority'
-import { Route as ApiAnalysisRunsIdRecommendationResolutionRouteImport } from './routes/api/analysis-runs.$id.recommendation-resolution'
-import { Route as ApiAnalysisRunsIdRecommendationSequenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-sequence'
-import { Route as ApiAnalysisRunsIdResultRouteImport } from './routes/api/analysis-runs.$id.result'
-import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
-import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
-import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/api/assessment-sessions.$id.complete'
-import { Route as ApiAssessmentSessionsIdHistoryRouteImport } from './routes/api/assessment-sessions.$id.history'
-import { Route as ApiAssessmentSessionsIdOwnerRouteImport } from './routes/api/assessment-sessions.$id.owner'
-import { Route as ApiAssessmentSessionsIdParticipantsRouteImport } from './routes/api/assessment-sessions.$id.participants'
-import { Route as ApiAssessmentSessionsIdPauseRouteImport } from './routes/api/assessment-sessions.$id.pause'
-import { Route as ApiAssessmentSessionsIdReassessRouteImport } from './routes/api/assessment-sessions.$id.reassess'
-import { Route as ApiAssessmentSessionsIdResumeRouteImport } from './routes/api/assessment-sessions.$id.resume'
-import { Route as ApiAssessmentSessionsIdReviewRouteImport } from './routes/api/assessment-sessions.$id.review'
-import { Route as ApiAssessmentSessionsIdStartRouteImport } from './routes/api/assessment-sessions.$id.start'
-import { Route as ApiAssessmentSessionsIdTimelineRouteImport } from './routes/api/assessment-sessions.$id.timeline'
-import { Route as ApiAssessmentIdCompleteRouteImport } from './routes/api/assessment.$id.complete'
-import { Route as ApiAssessmentIdNavigateRouteImport } from './routes/api/assessment.$id.navigate'
-import { Route as ApiAssessmentIdPauseRouteImport } from './routes/api/assessment.$id.pause'
-import { Route as ApiAssessmentIdProgressRouteImport } from './routes/api/assessment.$id.progress'
-import { Route as ApiAssessmentIdResponseRouteImport } from './routes/api/assessment.$id.response'
-import { Route as ApiAssessmentIdResumeRouteImport } from './routes/api/assessment.$id.resume'
-import { Route as ApiAssessmentIdSaveRouteImport } from './routes/api/assessment.$id.save'
-import { Route as ApiAssessmentIdSummaryRouteImport } from './routes/api/assessment.$id.summary'
-import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
-import { Route as ApiAssessmentsIdAnalysisRetryRouteImport } from './routes/api/assessments.$id.analysis-retry'
-import { Route as ApiAssessmentsIdAnalysisStatusRouteImport } from './routes/api/assessments.$id.analysis-status'
-import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
-import { Route as ApiAssessmentsIdIntelligenceResultRouteImport } from './routes/api/assessments.$id.intelligence-result'
-import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
-import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
-import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
-import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
-import { Route as ApiAuthInvitationsAcceptRouteImport } from './routes/api/auth.invitations.accept'
-import { Route as ApiAuthPasswordChangeRouteImport } from './routes/api/auth.password.change'
-import { Route as ApiAuthPasswordForgotRouteImport } from './routes/api/auth.password.forgot'
-import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
-import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.verify-email.resend'
-import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
-import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
-import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
-import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
-import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
-import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
-import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
-import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
-import { Route as ApiRecommendationPortfoliosIdDecisionsRouteImport } from './routes/api/recommendation-portfolios.$id.decisions'
-import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
+import { Route as ReportIdDownloadRouteImport } from './routes/report.$id.download'
+import { Route as PublicResultsTokenRouteImport } from './routes/public/results.$token'
+import { Route as KnowledgePackIdVersionsRouteImport } from './routes/knowledge-pack.$id.versions'
+import { Route as KnowledgePackIdActivateRouteImport } from './routes/knowledge-pack.$id.activate'
+import { Route as InternalSignalsIdRouteImport } from './routes/internal.signals.$id'
+import { Route as InternalScoresIdRouteImport } from './routes/internal.scores.$id'
+import { Route as InternalRulesIdRouteImport } from './routes/internal.rules.$id'
+import { Route as InternalPatternsIdRouteImport } from './routes/internal.patterns.$id'
+import { Route as InternalObservationsIdRouteImport } from './routes/internal.observations.$id'
+import { Route as InternalNarrativesIdRouteImport } from './routes/internal.narratives.$id'
+import { Route as InternalKnowledgePacksIdRouteImport } from './routes/internal.knowledge-packs.$id'
+import { Route as InternalAuditIdRouteImport } from './routes/internal.audit.$id'
+import { Route as ExplainEntityTypeEntityIdRouteImport } from './routes/explain.$entityType.$entityId'
+import { Route as EvidenceEntityTypeEntityIdRouteImport } from './routes/evidence.$entityType.$entityId'
+import { Route as AuditEventIdRouteImport } from './routes/audit.event.$id'
+import { Route as AssessmentIdSummaryRouteImport } from './routes/assessment.$id.summary'
+import { Route as AssessmentIdSignalsRouteImport } from './routes/assessment.$id.signals'
+import { Route as AssessmentIdScoresRouteImport } from './routes/assessment.$id.scores'
+import { Route as AssessmentIdRulesRouteImport } from './routes/assessment.$id.rules'
+import { Route as AssessmentIdResultsRouteImport } from './routes/assessment.$id.results'
+import { Route as AssessmentIdReportsRouteImport } from './routes/assessment.$id.reports'
+import { Route as AssessmentIdProcessingRouteImport } from './routes/assessment.$id.processing'
+import { Route as AssessmentIdPatternsRouteImport } from './routes/assessment.$id.patterns'
+import { Route as AssessmentIdObservationsRouteImport } from './routes/assessment.$id.observations'
+import { Route as AssessmentIdNarrativeRouteImport } from './routes/assessment.$id.narrative'
+import { Route as AssessmentIdEvidenceGraphRouteImport } from './routes/assessment.$id.evidence-graph'
+import { Route as AssessmentIdDashboardRouteImport } from './routes/assessment.$id.dashboard'
+import { Route as ApiWorkspacesIdRouteImport } from './routes/api/workspaces.$id'
+import { Route as ApiWorkspaceSwitchRouteImport } from './routes/api/workspace.switch'
+import { Route as ApiUserPreferencesRouteImport } from './routes/api/user.preferences'
+import { Route as ApiTenancySearchRouteImport } from './routes/api/tenancy.search'
+import { Route as ApiShellAuditRouteImport } from './routes/api/shell.audit'
+import { Route as ApiSettingsWorkspaceRouteImport } from './routes/api/settings.workspace'
+import { Route as ApiSettingsOrganisationRouteImport } from './routes/api/settings.organisation'
+import { Route as ApiReportingTemplatesRouteImport } from './routes/api/reporting.templates'
+import { Route as ApiReportingReportsRouteImport } from './routes/api/reporting.reports'
+import { Route as ApiReportingQueueRouteImport } from './routes/api/reporting.queue'
+import { Route as ApiReportingPreviewRouteImport } from './routes/api/reporting.preview'
+import { Route as ApiReportingHistoryRouteImport } from './routes/api/reporting.history'
+import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
+import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
+import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
+import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
+import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
+import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
+import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
+import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
+import { Route as ApiInternalRecommendationCataloguesRouteImport } from './routes/api/internal/recommendation-catalogues'
+import { Route as ApiImprovementActionsIdRouteImport } from './routes/api/improvement-actions.$id'
+import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
+import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
+import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
+import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify-email'
+import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
+import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
+import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
+import { Route as ApiAuthProfileRouteImport } from './routes/api/auth.profile'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth.logout'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth.login'
+import { Route as ApiAuthInvitationsRouteImport } from './routes/api/auth.invitations'
+import { Route as ApiAuthActivityRouteImport } from './routes/api/auth.activity'
+import { Route as ApiAssessmentsIdRouteImport } from './routes/api/assessments.$id'
+import { Route as ApiAssessmentStartRouteImport } from './routes/api/assessment.start'
+import { Route as ApiAssessmentCatalogueRouteImport } from './routes/api/assessment.catalogue'
+import { Route as ApiAssessmentIdRouteImport } from './routes/api/assessment.$id'
+import { Route as ApiAssessmentSessionsDashboardRouteImport } from './routes/api/assessment-sessions.dashboard'
+import { Route as ApiAssessmentSessionsIdRouteImport } from './routes/api/assessment-sessions.$id'
+import { Route as ApiAnalysisRunsIdRouteImport } from './routes/api/analysis-runs.$id'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
-import { Route as ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport } from './routes/api/analysis-runs.$id.public-results.$publicResultId'
-import { Route as ApiInternalRecommendationCataloguesIdCommandRouteImport } from './routes/api/internal/recommendation-catalogues.$id.command'
-import { Route as ApiReportingReportsIdArchiveRouteImport } from './routes/api/reporting.reports.$id.archive'
-import { Route as ApiReportingReportsIdDownloadRouteImport } from './routes/api/reporting.reports.$id.download'
-import { Route as ApiReportingReportsIdRegenerateRouteImport } from './routes/api/reporting.reports.$id.regenerate'
+import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
+import { Route as ApiRecommendationPortfoliosIdDecisionsRouteImport } from './routes/api/recommendation-portfolios.$id.decisions'
+import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
+import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
+import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
+import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
+import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
+import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
+import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
+import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
+import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.verify-email.resend'
+import { Route as ApiAuthSessionsIdRouteImport } from './routes/api/auth.sessions.$id'
+import { Route as ApiAuthPasswordForgotRouteImport } from './routes/api/auth.password.forgot'
+import { Route as ApiAuthPasswordChangeRouteImport } from './routes/api/auth.password.change'
+import { Route as ApiAuthInvitationsAcceptRouteImport } from './routes/api/auth.invitations.accept'
+import { Route as ApiAssessmentsIdSubmitRouteImport } from './routes/api/assessments.$id.submit'
+import { Route as ApiAssessmentsIdStatusRouteImport } from './routes/api/assessments.$id.status'
+import { Route as ApiAssessmentsIdRetryRouteImport } from './routes/api/assessments.$id.retry'
+import { Route as ApiAssessmentsIdResultsRouteImport } from './routes/api/assessments.$id.results'
+import { Route as ApiAssessmentsIdIntelligenceResultRouteImport } from './routes/api/assessments.$id.intelligence-result'
+import { Route as ApiAssessmentsIdExecuteRouteImport } from './routes/api/assessments.$id.execute'
+import { Route as ApiAssessmentsIdAnalysisStatusRouteImport } from './routes/api/assessments.$id.analysis-status'
+import { Route as ApiAssessmentsIdAnalysisRetryRouteImport } from './routes/api/assessments.$id.analysis-retry'
+import { Route as ApiAssessmentsIdAdvanceRouteImport } from './routes/api/assessments.$id.advance'
+import { Route as ApiAssessmentIdSummaryRouteImport } from './routes/api/assessment.$id.summary'
+import { Route as ApiAssessmentIdSaveRouteImport } from './routes/api/assessment.$id.save'
+import { Route as ApiAssessmentIdResumeRouteImport } from './routes/api/assessment.$id.resume'
+import { Route as ApiAssessmentIdResponseRouteImport } from './routes/api/assessment.$id.response'
+import { Route as ApiAssessmentIdProgressRouteImport } from './routes/api/assessment.$id.progress'
+import { Route as ApiAssessmentIdPauseRouteImport } from './routes/api/assessment.$id.pause'
+import { Route as ApiAssessmentIdNavigateRouteImport } from './routes/api/assessment.$id.navigate'
+import { Route as ApiAssessmentIdCompleteRouteImport } from './routes/api/assessment.$id.complete'
+import { Route as ApiAssessmentSessionsIdTimelineRouteImport } from './routes/api/assessment-sessions.$id.timeline'
+import { Route as ApiAssessmentSessionsIdStartRouteImport } from './routes/api/assessment-sessions.$id.start'
+import { Route as ApiAssessmentSessionsIdReviewRouteImport } from './routes/api/assessment-sessions.$id.review'
+import { Route as ApiAssessmentSessionsIdResumeRouteImport } from './routes/api/assessment-sessions.$id.resume'
+import { Route as ApiAssessmentSessionsIdReassessRouteImport } from './routes/api/assessment-sessions.$id.reassess'
+import { Route as ApiAssessmentSessionsIdPauseRouteImport } from './routes/api/assessment-sessions.$id.pause'
+import { Route as ApiAssessmentSessionsIdParticipantsRouteImport } from './routes/api/assessment-sessions.$id.participants'
+import { Route as ApiAssessmentSessionsIdOwnerRouteImport } from './routes/api/assessment-sessions.$id.owner'
+import { Route as ApiAssessmentSessionsIdHistoryRouteImport } from './routes/api/assessment-sessions.$id.history'
+import { Route as ApiAssessmentSessionsIdCompleteRouteImport } from './routes/api/assessment-sessions.$id.complete'
+import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
+import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
+import { Route as ApiAnalysisRunsIdResultRouteImport } from './routes/api/analysis-runs.$id.result'
+import { Route as ApiAnalysisRunsIdRecommendationSequenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-sequence'
+import { Route as ApiAnalysisRunsIdRecommendationResolutionRouteImport } from './routes/api/analysis-runs.$id.recommendation-resolution'
+import { Route as ApiAnalysisRunsIdRecommendationPriorityRouteImport } from './routes/api/analysis-runs.$id.recommendation-priority'
+import { Route as ApiAnalysisRunsIdRecommendationPortfolioRouteImport } from './routes/api/analysis-runs.$id.recommendation-portfolio'
+import { Route as ApiAnalysisRunsIdRecommendationEvaluationRouteImport } from './routes/api/analysis-runs.$id.recommendation-evaluation'
+import { Route as ApiAnalysisRunsIdRecommendationConfidenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-confidence'
+import { Route as ApiAnalysisRunsIdPublicResultRouteImport } from './routes/api/analysis-runs.$id.public-result'
+import { Route as ApiAnalysisRunsIdExplanationsRouteImport } from './routes/api/analysis-runs.$id.explanations'
 import { Route as ApiReportingReportsIdRetryRouteImport } from './routes/api/reporting.reports.$id.retry'
+import { Route as ApiReportingReportsIdRegenerateRouteImport } from './routes/api/reporting.reports.$id.regenerate'
+import { Route as ApiReportingReportsIdDownloadRouteImport } from './routes/api/reporting.reports.$id.download'
+import { Route as ApiReportingReportsIdArchiveRouteImport } from './routes/api/reporting.reports.$id.archive'
+import { Route as ApiInternalRecommendationCataloguesIdCommandRouteImport } from './routes/api/internal/recommendation-catalogues.$id.command'
+import { Route as ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport } from './routes/api/analysis-runs.$id.public-results.$publicResultId'
 import { Route as ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRouteImport } from './routes/api/analysis-runs.$id.recommendations.$recommendationId.accept'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DesignSystemRoute = DesignSystemRouteImport.update({
-  id: '/design-system',
-  path: '/design-system',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -240,251 +220,29 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiAnalysisRunsRoute = ApiAnalysisRunsRouteImport.update({
-  id: '/api/analysis-runs',
-  path: '/api/analysis-runs',
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
-  id: '/api/assessment-sessions',
-  path: '/api/assessment-sessions',
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
-  id: '/api/assessments',
-  path: '/api/assessments',
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiMembersRoute = ApiMembersRouteImport.update({
-  id: '/api/members',
-  path: '/api/members',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiNavigationRoute = ApiNavigationRouteImport.update({
-  id: '/api/navigation',
-  path: '/api/navigation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
-  id: '/api/notifications',
-  path: '/api/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiOrganisationsRoute = ApiOrganisationsRouteImport.update({
-  id: '/api/organisations',
-  path: '/api/organisations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiWorkspacesRoute = ApiWorkspacesRouteImport.update({
-  id: '/api/workspaces',
-  path: '/api/workspaces',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessIndexRoute = AssessIndexRouteImport.update({
-  id: '/assess/',
-  path: '/assess/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessIdRoute = AssessIdRouteImport.update({
-  id: '/assess/$id',
-  path: '/assess/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditAssessmentIdRoute = AuditAssessmentIdRouteImport.update({
-  id: '/audit/$assessmentId',
-  path: '/audit/$assessmentId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditDashboardRoute = AuditDashboardRouteImport.update({
-  id: '/audit/dashboard',
-  path: '/audit/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditEventsRoute = AuditEventsRouteImport.update({
-  id: '/audit/events',
-  path: '/audit/events',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditHealthRoute = AuditHealthRouteImport.update({
-  id: '/audit/health',
-  path: '/audit/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditRetentionRoute = AuditRetentionRouteImport.update({
-  id: '/audit/retention',
-  path: '/audit/retention',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/auth/forgot-password',
-  path: '/auth/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthInvitationRoute = AuthInvitationRouteImport.update({
-  id: '/auth/invitation',
-  path: '/auth/invitation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: '/auth/register',
-  path: '/auth/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/auth/reset-password',
-  path: '/auth/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
-  id: '/auth/verify-email',
-  path: '/auth/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardIdRoute = DashboardIdRouteImport.update({
-  id: '/dashboard/$id',
-  path: '/dashboard/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ErrorCodeRoute = ErrorCodeRouteImport.update({
-  id: '/error/$code',
-  path: '/error/$code',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalGithubSyncRoute = InternalGithubSyncRouteImport.update({
-  id: '/internal/github-sync',
-  path: '/internal/github-sync',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
-  id: '/knowledge-packs/',
-  path: '/knowledge-packs/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
-  id: '/knowledge-packs/reload',
-  path: '/knowledge-packs/reload',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
-  id: '/knowledge-packs/validate',
-  path: '/knowledge-packs/validate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NarrativeIdRoute = NarrativeIdRouteImport.update({
-  id: '/narrative/$id',
-  path: '/narrative/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ObservationIdRoute = ObservationIdRouteImport.update({
-  id: '/observation/$id',
-  path: '/observation/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
-  id: '/organisations/',
-  path: '/organisations/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrganisationsIdRoute = OrganisationsIdRouteImport.update({
-  id: '/organisations/$id',
-  path: '/organisations/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PatternIdRoute = PatternIdRouteImport.update({
-  id: '/pattern/$id',
-  path: '/pattern/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportIdRoute = ReportIdRouteImport.update({
-  id: '/report/$id',
-  path: '/report/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportsIndexRoute = ReportsIndexRouteImport.update({
-  id: '/reports/',
-  path: '/reports/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuleIdRoute = RuleIdRouteImport.update({
-  id: '/rule/$id',
-  path: '/rule/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimeNarrativeRoute = RuntimeNarrativeRouteImport.update({
-  id: '/runtime/narrative',
-  path: '/runtime/narrative',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimeObservationsRoute = RuntimeObservationsRouteImport.update({
-  id: '/runtime/observations',
-  path: '/runtime/observations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimePatternsRoute = RuntimePatternsRouteImport.update({
-  id: '/runtime/patterns',
-  path: '/runtime/patterns',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimeRulesRoute = RuntimeRulesRouteImport.update({
-  id: '/runtime/rules',
-  path: '/runtime/rules',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimeScoresRoute = RuntimeScoresRouteImport.update({
-  id: '/runtime/scores',
-  path: '/runtime/scores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RuntimeSignalsRoute = RuntimeSignalsRouteImport.update({
-  id: '/runtime/signals',
-  path: '/runtime/signals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScoreIdRoute = ScoreIdRouteImport.update({
-  id: '/score/$id',
-  path: '/score/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SessionsIndexRoute = SessionsIndexRouteImport.update({
-  id: '/sessions/',
-  path: '/sessions/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SessionsIdRoute = SessionsIdRouteImport.update({
-  id: '/sessions/$id',
-  path: '/sessions/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SessionsNewRoute = SessionsNewRouteImport.update({
-  id: '/sessions/new',
-  path: '/sessions/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignalIdRoute = SignalIdRouteImport.update({
-  id: '/signal/$id',
-  path: '/signal/$id',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkspacesIndexRoute = WorkspacesIndexRouteImport.update({
@@ -492,345 +250,281 @@ const WorkspacesIndexRoute = WorkspacesIndexRouteImport.update({
   path: '/workspaces/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SessionsIndexRoute = SessionsIndexRouteImport.update({
+  id: '/sessions/',
+  path: '/sessions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganisationsIndexRoute = OrganisationsIndexRouteImport.update({
+  id: '/organisations/',
+  path: '/organisations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksIndexRoute = KnowledgePacksIndexRouteImport.update({
+  id: '/knowledge-packs/',
+  path: '/knowledge-packs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessIndexRoute = AssessIndexRouteImport.update({
+  id: '/assess/',
+  path: '/assess/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkspacesIdRoute = WorkspacesIdRouteImport.update({
   id: '/workspaces/$id',
   path: '/workspaces/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const SignalIdRoute = SignalIdRouteImport.update({
+  id: '/signal/$id',
+  path: '/signal/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
+const SessionsNewRoute = SessionsNewRouteImport.update({
+  id: '/sessions/new',
+  path: '/sessions/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsIdRoute = SessionsIdRouteImport.update({
+  id: '/sessions/$id',
+  path: '/sessions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScoreIdRoute = ScoreIdRouteImport.update({
+  id: '/score/$id',
+  path: '/score/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeSignalsRoute = RuntimeSignalsRouteImport.update({
+  id: '/runtime/signals',
+  path: '/runtime/signals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeScoresRoute = RuntimeScoresRouteImport.update({
+  id: '/runtime/scores',
+  path: '/runtime/scores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeRulesRoute = RuntimeRulesRouteImport.update({
+  id: '/runtime/rules',
+  path: '/runtime/rules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimePatternsRoute = RuntimePatternsRouteImport.update({
+  id: '/runtime/patterns',
+  path: '/runtime/patterns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeObservationsRoute = RuntimeObservationsRouteImport.update({
+  id: '/runtime/observations',
+  path: '/runtime/observations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuntimeNarrativeRoute = RuntimeNarrativeRouteImport.update({
+  id: '/runtime/narrative',
+  path: '/runtime/narrative',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RuleIdRoute = RuleIdRouteImport.update({
+  id: '/rule/$id',
+  path: '/rule/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportIdRoute = ReportIdRouteImport.update({
+  id: '/report/$id',
+  path: '/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatternIdRoute = PatternIdRouteImport.update({
+  id: '/pattern/$id',
+  path: '/pattern/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganisationsIdRoute = OrganisationsIdRouteImport.update({
+  id: '/organisations/$id',
+  path: '/organisations/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObservationIdRoute = ObservationIdRouteImport.update({
+  id: '/observation/$id',
+  path: '/observation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NarrativeIdRoute = NarrativeIdRouteImport.update({
+  id: '/narrative/$id',
+  path: '/narrative/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksValidateRoute = KnowledgePacksValidateRouteImport.update({
+  id: '/knowledge-packs/validate',
+  path: '/knowledge-packs/validate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgePacksReloadRoute = KnowledgePacksReloadRouteImport.update({
+  id: '/knowledge-packs/reload',
+  path: '/knowledge-packs/reload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalGithubSyncRoute = InternalGithubSyncRouteImport.update({
+  id: '/internal/github-sync',
+  path: '/internal/github-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ErrorCodeRoute = ErrorCodeRouteImport.update({
+  id: '/error/$code',
+  path: '/error/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIdRoute = DashboardIdRouteImport.update({
+  id: '/dashboard/$id',
+  path: '/dashboard/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
+  id: '/auth/verify-email',
+  path: '/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthInvitationRoute = AuthInvitationRouteImport.update({
+  id: '/auth/invitation',
+  path: '/auth/invitation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditRetentionRoute = AuditRetentionRouteImport.update({
+  id: '/audit/retention',
+  path: '/audit/retention',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditHealthRoute = AuditHealthRouteImport.update({
+  id: '/audit/health',
+  path: '/audit/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditEventsRoute = AuditEventsRouteImport.update({
+  id: '/audit/events',
+  path: '/audit/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditDashboardRoute = AuditDashboardRouteImport.update({
+  id: '/audit/dashboard',
+  path: '/audit/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditAssessmentIdRoute = AuditAssessmentIdRouteImport.update({
+  id: '/audit/$assessmentId',
+  path: '/audit/$assessmentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessIdRoute = AssessIdRouteImport.update({
+  id: '/assess/$id',
+  path: '/assess/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkspacesRoute = ApiWorkspacesRouteImport.update({
+  id: '/api/workspaces',
+  path: '/api/workspaces',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOrganisationsRoute = ApiOrganisationsRouteImport.update({
+  id: '/api/organisations',
+  path: '/api/organisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
+  id: '/api/notifications',
+  path: '/api/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiNavigationRoute = ApiNavigationRouteImport.update({
+  id: '/api/navigation',
+  path: '/api/navigation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMembersRoute = ApiMembersRouteImport.update({
+  id: '/api/members',
+  path: '/api/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
+  id: '/api/assessments',
+  path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
+  id: '/api/assessment-sessions',
+  path: '/api/assessment-sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalysisRunsRoute = ApiAnalysisRunsRouteImport.update({
+  id: '/api/analysis-runs',
+  path: '/api/analysis-runs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiAnalysisRunsIdRoute = ApiAnalysisRunsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiAnalysisRunsRoute,
-} as any)
-const ApiAssessmentSessionsIdRoute = ApiAssessmentSessionsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiAssessmentSessionsRoute,
-} as any)
-const ApiAssessmentSessionsDashboardRoute =
-  ApiAssessmentSessionsDashboardRouteImport.update({
-    id: '/dashboard',
-    path: '/dashboard',
-    getParentRoute: () => ApiAssessmentSessionsRoute,
-  } as any)
-const ApiAssessmentIdRoute = ApiAssessmentIdRouteImport.update({
-  id: '/api/assessment/$id',
-  path: '/api/assessment/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAssessmentCatalogueRoute = ApiAssessmentCatalogueRouteImport.update({
-  id: '/api/assessment/catalogue',
-  path: '/api/assessment/catalogue',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAssessmentStartRoute = ApiAssessmentStartRouteImport.update({
-  id: '/api/assessment/start',
-  path: '/api/assessment/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiAssessmentsRoute,
-} as any)
-const ApiAuthActivityRoute = ApiAuthActivityRouteImport.update({
-  id: '/api/auth/activity',
-  path: '/api/auth/activity',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthInvitationsRoute = ApiAuthInvitationsRouteImport.update({
-  id: '/api/auth/invitations',
-  path: '/api/auth/invitations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
-  id: '/api/auth/login',
-  path: '/api/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
-  id: '/api/auth/logout',
-  path: '/api/auth/logout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthProfileRoute = ApiAuthProfileRouteImport.update({
-  id: '/api/auth/profile',
-  path: '/api/auth/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
-  id: '/api/auth/register',
-  path: '/api/auth/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthSessionRoute = ApiAuthSessionRouteImport.update({
-  id: '/api/auth/session',
-  path: '/api/auth/session',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthSessionsRoute = ApiAuthSessionsRouteImport.update({
-  id: '/api/auth/sessions',
-  path: '/api/auth/sessions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
-  id: '/api/auth/verify-email',
-  path: '/api/auth/verify-email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
-  id: '/api/executions/$id',
-  path: '/api/executions/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiExecutionsHistoryRoute = ApiExecutionsHistoryRouteImport.update({
-  id: '/api/executions/history',
-  path: '/api/executions/history',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
-  id: '/api/executions/monitor',
-  path: '/api/executions/monitor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiImprovementActionsIdRoute = ApiImprovementActionsIdRouteImport.update({
-  id: '/api/improvement-actions/$id',
-  path: '/api/improvement-actions/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiInternalRecommendationCataloguesRoute =
-  ApiInternalRecommendationCataloguesRouteImport.update({
-    id: '/api/internal/recommendation-catalogues',
-    path: '/api/internal/recommendation-catalogues',
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiMembersIdRoute = ApiMembersIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiMembersRoute,
-} as any)
-const ApiMembersInviteRoute = ApiMembersInviteRouteImport.update({
-  id: '/invite',
-  path: '/invite',
-  getParentRoute: () => ApiMembersRoute,
-} as any)
-const ApiNotificationsReadRoute = ApiNotificationsReadRouteImport.update({
-  id: '/read',
-  path: '/read',
-  getParentRoute: () => ApiNotificationsRoute,
-} as any)
-const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiOrganisationsRoute,
-} as any)
-const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
-  id: '/api/public-results/$token',
-  path: '/api/public-results/$token',
+const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
+  id: '/knowledge-pack/$id/',
+  path: '/knowledge-pack/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiRecommendationPortfoliosIdRoute =
-  ApiRecommendationPortfoliosIdRouteImport.update({
-    id: '/api/recommendation-portfolios/$id',
-    path: '/api/recommendation-portfolios/$id',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiReportingBrandingRoute = ApiReportingBrandingRouteImport.update({
-  id: '/api/reporting/branding',
-  path: '/api/reporting/branding',
+const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
+  id: '/internal/signals/',
+  path: '/internal/signals/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReportingDownloadCentreRoute =
-  ApiReportingDownloadCentreRouteImport.update({
-    id: '/api/reporting/download-centre',
-    path: '/api/reporting/download-centre',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiReportingHistoryRoute = ApiReportingHistoryRouteImport.update({
-  id: '/api/reporting/history',
-  path: '/api/reporting/history',
+const InternalScoresIndexRoute = InternalScoresIndexRouteImport.update({
+  id: '/internal/scores/',
+  path: '/internal/scores/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReportingPreviewRoute = ApiReportingPreviewRouteImport.update({
-  id: '/api/reporting/preview',
-  path: '/api/reporting/preview',
+const InternalRuntimeIndexRoute = InternalRuntimeIndexRouteImport.update({
+  id: '/internal/runtime/',
+  path: '/internal/runtime/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReportingQueueRoute = ApiReportingQueueRouteImport.update({
-  id: '/api/reporting/queue',
-  path: '/api/reporting/queue',
+const InternalRulesIndexRoute = InternalRulesIndexRouteImport.update({
+  id: '/internal/rules/',
+  path: '/internal/rules/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReportingReportsRoute = ApiReportingReportsRouteImport.update({
-  id: '/api/reporting/reports',
-  path: '/api/reporting/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiReportingTemplatesRoute = ApiReportingTemplatesRouteImport.update({
-  id: '/api/reporting/templates',
-  path: '/api/reporting/templates',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSettingsOrganisationRoute = ApiSettingsOrganisationRouteImport.update({
-  id: '/api/settings/organisation',
-  path: '/api/settings/organisation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSettingsWorkspaceRoute = ApiSettingsWorkspaceRouteImport.update({
-  id: '/api/settings/workspace',
-  path: '/api/settings/workspace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiShellAuditRoute = ApiShellAuditRouteImport.update({
-  id: '/api/shell/audit',
-  path: '/api/shell/audit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiTenancySearchRoute = ApiTenancySearchRouteImport.update({
-  id: '/api/tenancy/search',
-  path: '/api/tenancy/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiUserPreferencesRoute = ApiUserPreferencesRouteImport.update({
-  id: '/api/user/preferences',
-  path: '/api/user/preferences',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
-  id: '/api/workspace/switch',
-  path: '/api/workspace/switch',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiWorkspacesIdRoute = ApiWorkspacesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiWorkspacesRoute,
-} as any)
-const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
-  id: '/assessment/$id/',
-  path: '/assessment/$id/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
-  id: '/assessment/$id/dashboard',
-  path: '/assessment/$id/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdEvidenceGraphRoute =
-  AssessmentIdEvidenceGraphRouteImport.update({
-    id: '/assessment/$id/evidence-graph',
-    path: '/assessment/$id/evidence-graph',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const AssessmentIdNarrativeRoute = AssessmentIdNarrativeRouteImport.update({
-  id: '/assessment/$id/narrative',
-  path: '/assessment/$id/narrative',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdObservationsRoute =
-  AssessmentIdObservationsRouteImport.update({
-    id: '/assessment/$id/observations',
-    path: '/assessment/$id/observations',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const AssessmentIdPatternsRoute = AssessmentIdPatternsRouteImport.update({
-  id: '/assessment/$id/patterns',
-  path: '/assessment/$id/patterns',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdProcessingRoute = AssessmentIdProcessingRouteImport.update({
-  id: '/assessment/$id/processing',
-  path: '/assessment/$id/processing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdReportsRoute = AssessmentIdReportsRouteImport.update({
-  id: '/assessment/$id/reports',
-  path: '/assessment/$id/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdResultsRoute = AssessmentIdResultsRouteImport.update({
-  id: '/assessment/$id/results',
-  path: '/assessment/$id/results',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdRulesRoute = AssessmentIdRulesRouteImport.update({
-  id: '/assessment/$id/rules',
-  path: '/assessment/$id/rules',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdScoresRoute = AssessmentIdScoresRouteImport.update({
-  id: '/assessment/$id/scores',
-  path: '/assessment/$id/scores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdSignalsRoute = AssessmentIdSignalsRouteImport.update({
-  id: '/assessment/$id/signals',
-  path: '/assessment/$id/signals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
-  id: '/assessment/$id/summary',
-  path: '/assessment/$id/summary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuditEventIdRoute = AuditEventIdRouteImport.update({
-  id: '/audit/event/$id',
-  path: '/audit/event/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EvidenceEntityTypeEntityIdRoute =
-  EvidenceEntityTypeEntityIdRouteImport.update({
-    id: '/evidence/$entityType/$entityId',
-    path: '/evidence/$entityType/$entityId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ExplainEntityTypeEntityIdRoute =
-  ExplainEntityTypeEntityIdRouteImport.update({
-    id: '/explain/$entityType/$entityId',
-    path: '/explain/$entityType/$entityId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const InternalAuditIndexRoute = InternalAuditIndexRouteImport.update({
-  id: '/internal/audit/',
-  path: '/internal/audit/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalAuditIdRoute = InternalAuditIdRouteImport.update({
-  id: '/internal/audit/$id',
-  path: '/internal/audit/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalKnowledgePacksIndexRoute =
-  InternalKnowledgePacksIndexRouteImport.update({
-    id: '/internal/knowledge-packs/',
-    path: '/internal/knowledge-packs/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const InternalKnowledgePacksIdRoute =
-  InternalKnowledgePacksIdRouteImport.update({
-    id: '/internal/knowledge-packs/$id',
-    path: '/internal/knowledge-packs/$id',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const InternalNarrativesIndexRoute = InternalNarrativesIndexRouteImport.update({
-  id: '/internal/narratives/',
-  path: '/internal/narratives/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalNarrativesIdRoute = InternalNarrativesIdRouteImport.update({
-  id: '/internal/narratives/$id',
-  path: '/internal/narratives/$id',
+const InternalPatternsIndexRoute = InternalPatternsIndexRouteImport.update({
+  id: '/internal/patterns/',
+  path: '/internal/patterns/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InternalObservationsIndexRoute =
@@ -839,74 +533,30 @@ const InternalObservationsIndexRoute =
     path: '/internal/observations/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const InternalObservationsIdRoute = InternalObservationsIdRouteImport.update({
-  id: '/internal/observations/$id',
-  path: '/internal/observations/$id',
+const InternalNarrativesIndexRoute = InternalNarrativesIndexRouteImport.update({
+  id: '/internal/narratives/',
+  path: '/internal/narratives/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InternalPatternsIndexRoute = InternalPatternsIndexRouteImport.update({
-  id: '/internal/patterns/',
-  path: '/internal/patterns/',
+const InternalKnowledgePacksIndexRoute =
+  InternalKnowledgePacksIndexRouteImport.update({
+    id: '/internal/knowledge-packs/',
+    path: '/internal/knowledge-packs/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const InternalAuditIndexRoute = InternalAuditIndexRouteImport.update({
+  id: '/internal/audit/',
+  path: '/internal/audit/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InternalPatternsIdRoute = InternalPatternsIdRouteImport.update({
-  id: '/internal/patterns/$id',
-  path: '/internal/patterns/$id',
+const AssessmentIdIndexRoute = AssessmentIdIndexRouteImport.update({
+  id: '/assessment/$id/',
+  path: '/assessment/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InternalRulesIndexRoute = InternalRulesIndexRouteImport.update({
-  id: '/internal/rules/',
-  path: '/internal/rules/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalRulesIdRoute = InternalRulesIdRouteImport.update({
-  id: '/internal/rules/$id',
-  path: '/internal/rules/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalRuntimeIndexRoute = InternalRuntimeIndexRouteImport.update({
-  id: '/internal/runtime/',
-  path: '/internal/runtime/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalScoresIndexRoute = InternalScoresIndexRouteImport.update({
-  id: '/internal/scores/',
-  path: '/internal/scores/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalScoresIdRoute = InternalScoresIdRouteImport.update({
-  id: '/internal/scores/$id',
-  path: '/internal/scores/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalSignalsIndexRoute = InternalSignalsIndexRouteImport.update({
-  id: '/internal/signals/',
-  path: '/internal/signals/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
-  id: '/internal/signals/$id',
-  path: '/internal/signals/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePackIdIndexRoute = KnowledgePackIdIndexRouteImport.update({
-  id: '/knowledge-pack/$id/',
-  path: '/knowledge-pack/$id/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePackIdActivateRoute = KnowledgePackIdActivateRouteImport.update({
-  id: '/knowledge-pack/$id/activate',
-  path: '/knowledge-pack/$id/activate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgePackIdVersionsRoute = KnowledgePackIdVersionsRouteImport.update({
-  id: '/knowledge-pack/$id/versions',
-  path: '/knowledge-pack/$id/versions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PublicResultsTokenRoute = PublicResultsTokenRouteImport.update({
-  id: '/public/results/$token',
-  path: '/public/results/$token',
+const TraceEntityTypeEntityIdRoute = TraceEntityTypeEntityIdRouteImport.update({
+  id: '/trace/$entityType/$entityId',
+  path: '/trace/$entityType/$entityId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
@@ -914,270 +564,394 @@ const ReportIdDownloadRoute = ReportIdDownloadRouteImport.update({
   path: '/download',
   getParentRoute: () => ReportIdRoute,
 } as any)
-const TraceEntityTypeEntityIdRoute = TraceEntityTypeEntityIdRouteImport.update({
-  id: '/trace/$entityType/$entityId',
-  path: '/trace/$entityType/$entityId',
+const PublicResultsTokenRoute = PublicResultsTokenRouteImport.update({
+  id: '/public/results/$token',
+  path: '/public/results/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAnalysisRunsIdExplanationsRoute =
-  ApiAnalysisRunsIdExplanationsRouteImport.update({
-    id: '/explanations',
-    path: '/explanations',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdPublicResultRoute =
-  ApiAnalysisRunsIdPublicResultRouteImport.update({
-    id: '/public-result',
-    path: '/public-result',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationConfidenceRoute =
-  ApiAnalysisRunsIdRecommendationConfidenceRouteImport.update({
-    id: '/recommendation-confidence',
-    path: '/recommendation-confidence',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationEvaluationRoute =
-  ApiAnalysisRunsIdRecommendationEvaluationRouteImport.update({
-    id: '/recommendation-evaluation',
-    path: '/recommendation-evaluation',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationPortfolioRoute =
-  ApiAnalysisRunsIdRecommendationPortfolioRouteImport.update({
-    id: '/recommendation-portfolio',
-    path: '/recommendation-portfolio',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationPriorityRoute =
-  ApiAnalysisRunsIdRecommendationPriorityRouteImport.update({
-    id: '/recommendation-priority',
-    path: '/recommendation-priority',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationResolutionRoute =
-  ApiAnalysisRunsIdRecommendationResolutionRouteImport.update({
-    id: '/recommendation-resolution',
-    path: '/recommendation-resolution',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdRecommendationSequenceRoute =
-  ApiAnalysisRunsIdRecommendationSequenceRouteImport.update({
-    id: '/recommendation-sequence',
-    path: '/recommendation-sequence',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
-  } as any)
-const ApiAnalysisRunsIdResultRoute = ApiAnalysisRunsIdResultRouteImport.update({
-  id: '/result',
-  path: '/result',
-  getParentRoute: () => ApiAnalysisRunsIdRoute,
-} as any)
-const ApiAssessmentSessionsIdArchiveRoute =
-  ApiAssessmentSessionsIdArchiveRouteImport.update({
-    id: '/archive',
-    path: '/archive',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdAssignRoute =
-  ApiAssessmentSessionsIdAssignRouteImport.update({
-    id: '/assign',
-    path: '/assign',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdCompleteRoute =
-  ApiAssessmentSessionsIdCompleteRouteImport.update({
-    id: '/complete',
-    path: '/complete',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdHistoryRoute =
-  ApiAssessmentSessionsIdHistoryRouteImport.update({
-    id: '/history',
-    path: '/history',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdOwnerRoute =
-  ApiAssessmentSessionsIdOwnerRouteImport.update({
-    id: '/owner',
-    path: '/owner',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdParticipantsRoute =
-  ApiAssessmentSessionsIdParticipantsRouteImport.update({
-    id: '/participants',
-    path: '/participants',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdPauseRoute =
-  ApiAssessmentSessionsIdPauseRouteImport.update({
-    id: '/pause',
-    path: '/pause',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdReassessRoute =
-  ApiAssessmentSessionsIdReassessRouteImport.update({
-    id: '/reassess',
-    path: '/reassess',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdResumeRoute =
-  ApiAssessmentSessionsIdResumeRouteImport.update({
-    id: '/resume',
-    path: '/resume',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdReviewRoute =
-  ApiAssessmentSessionsIdReviewRouteImport.update({
-    id: '/review',
-    path: '/review',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdStartRoute =
-  ApiAssessmentSessionsIdStartRouteImport.update({
-    id: '/start',
-    path: '/start',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentSessionsIdTimelineRoute =
-  ApiAssessmentSessionsIdTimelineRouteImport.update({
-    id: '/timeline',
-    path: '/timeline',
-    getParentRoute: () => ApiAssessmentSessionsIdRoute,
-  } as any)
-const ApiAssessmentIdCompleteRoute = ApiAssessmentIdCompleteRouteImport.update({
-  id: '/complete',
-  path: '/complete',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdNavigateRoute = ApiAssessmentIdNavigateRouteImport.update({
-  id: '/navigate',
-  path: '/navigate',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdPauseRoute = ApiAssessmentIdPauseRouteImport.update({
-  id: '/pause',
-  path: '/pause',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdProgressRoute = ApiAssessmentIdProgressRouteImport.update({
-  id: '/progress',
-  path: '/progress',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdResponseRoute = ApiAssessmentIdResponseRouteImport.update({
-  id: '/response',
-  path: '/response',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdResumeRoute = ApiAssessmentIdResumeRouteImport.update({
-  id: '/resume',
-  path: '/resume',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdSaveRoute = ApiAssessmentIdSaveRouteImport.update({
-  id: '/save',
-  path: '/save',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentIdSummaryRoute = ApiAssessmentIdSummaryRouteImport.update({
-  id: '/summary',
-  path: '/summary',
-  getParentRoute: () => ApiAssessmentIdRoute,
-} as any)
-const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
-  id: '/advance',
-  path: '/advance',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAssessmentsIdAnalysisRetryRoute =
-  ApiAssessmentsIdAnalysisRetryRouteImport.update({
-    id: '/analysis-retry',
-    path: '/analysis-retry',
-    getParentRoute: () => ApiAssessmentsIdRoute,
-  } as any)
-const ApiAssessmentsIdAnalysisStatusRoute =
-  ApiAssessmentsIdAnalysisStatusRouteImport.update({
-    id: '/analysis-status',
-    path: '/analysis-status',
-    getParentRoute: () => ApiAssessmentsIdRoute,
-  } as any)
-const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
-  id: '/execute',
-  path: '/execute',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAssessmentsIdIntelligenceResultRoute =
-  ApiAssessmentsIdIntelligenceResultRouteImport.update({
-    id: '/intelligence-result',
-    path: '/intelligence-result',
-    getParentRoute: () => ApiAssessmentsIdRoute,
-  } as any)
-const ApiAssessmentsIdResultsRoute = ApiAssessmentsIdResultsRouteImport.update({
-  id: '/results',
-  path: '/results',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAssessmentsIdRetryRoute = ApiAssessmentsIdRetryRouteImport.update({
-  id: '/retry',
-  path: '/retry',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAssessmentsIdStatusRoute = ApiAssessmentsIdStatusRouteImport.update({
-  id: '/status',
-  path: '/status',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
-  id: '/submit',
-  path: '/submit',
-  getParentRoute: () => ApiAssessmentsIdRoute,
-} as any)
-const ApiAuthInvitationsAcceptRoute =
-  ApiAuthInvitationsAcceptRouteImport.update({
-    id: '/accept',
-    path: '/accept',
-    getParentRoute: () => ApiAuthInvitationsRoute,
-  } as any)
-const ApiAuthPasswordChangeRoute = ApiAuthPasswordChangeRouteImport.update({
-  id: '/api/auth/password/change',
-  path: '/api/auth/password/change',
+const KnowledgePackIdVersionsRoute = KnowledgePackIdVersionsRouteImport.update({
+  id: '/knowledge-pack/$id/versions',
+  path: '/knowledge-pack/$id/versions',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthPasswordForgotRoute = ApiAuthPasswordForgotRouteImport.update({
-  id: '/api/auth/password/forgot',
-  path: '/api/auth/password/forgot',
+const KnowledgePackIdActivateRoute = KnowledgePackIdActivateRouteImport.update({
+  id: '/knowledge-pack/$id/activate',
+  path: '/knowledge-pack/$id/activate',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSessionsIdRoute = ApiAuthSessionsIdRouteImport.update({
+const InternalSignalsIdRoute = InternalSignalsIdRouteImport.update({
+  id: '/internal/signals/$id',
+  path: '/internal/signals/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalScoresIdRoute = InternalScoresIdRouteImport.update({
+  id: '/internal/scores/$id',
+  path: '/internal/scores/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalRulesIdRoute = InternalRulesIdRouteImport.update({
+  id: '/internal/rules/$id',
+  path: '/internal/rules/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalPatternsIdRoute = InternalPatternsIdRouteImport.update({
+  id: '/internal/patterns/$id',
+  path: '/internal/patterns/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalObservationsIdRoute = InternalObservationsIdRouteImport.update({
+  id: '/internal/observations/$id',
+  path: '/internal/observations/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalNarrativesIdRoute = InternalNarrativesIdRouteImport.update({
+  id: '/internal/narratives/$id',
+  path: '/internal/narratives/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InternalKnowledgePacksIdRoute =
+  InternalKnowledgePacksIdRouteImport.update({
+    id: '/internal/knowledge-packs/$id',
+    path: '/internal/knowledge-packs/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const InternalAuditIdRoute = InternalAuditIdRouteImport.update({
+  id: '/internal/audit/$id',
+  path: '/internal/audit/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExplainEntityTypeEntityIdRoute =
+  ExplainEntityTypeEntityIdRouteImport.update({
+    id: '/explain/$entityType/$entityId',
+    path: '/explain/$entityType/$entityId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EvidenceEntityTypeEntityIdRoute =
+  EvidenceEntityTypeEntityIdRouteImport.update({
+    id: '/evidence/$entityType/$entityId',
+    path: '/evidence/$entityType/$entityId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuditEventIdRoute = AuditEventIdRouteImport.update({
+  id: '/audit/event/$id',
+  path: '/audit/event/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdSummaryRoute = AssessmentIdSummaryRouteImport.update({
+  id: '/assessment/$id/summary',
+  path: '/assessment/$id/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdSignalsRoute = AssessmentIdSignalsRouteImport.update({
+  id: '/assessment/$id/signals',
+  path: '/assessment/$id/signals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdScoresRoute = AssessmentIdScoresRouteImport.update({
+  id: '/assessment/$id/scores',
+  path: '/assessment/$id/scores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdRulesRoute = AssessmentIdRulesRouteImport.update({
+  id: '/assessment/$id/rules',
+  path: '/assessment/$id/rules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdResultsRoute = AssessmentIdResultsRouteImport.update({
+  id: '/assessment/$id/results',
+  path: '/assessment/$id/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdReportsRoute = AssessmentIdReportsRouteImport.update({
+  id: '/assessment/$id/reports',
+  path: '/assessment/$id/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdProcessingRoute = AssessmentIdProcessingRouteImport.update({
+  id: '/assessment/$id/processing',
+  path: '/assessment/$id/processing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdPatternsRoute = AssessmentIdPatternsRouteImport.update({
+  id: '/assessment/$id/patterns',
+  path: '/assessment/$id/patterns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdObservationsRoute =
+  AssessmentIdObservationsRouteImport.update({
+    id: '/assessment/$id/observations',
+    path: '/assessment/$id/observations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AssessmentIdNarrativeRoute = AssessmentIdNarrativeRouteImport.update({
+  id: '/assessment/$id/narrative',
+  path: '/assessment/$id/narrative',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdEvidenceGraphRoute =
+  AssessmentIdEvidenceGraphRouteImport.update({
+    id: '/assessment/$id/evidence-graph',
+    path: '/assessment/$id/evidence-graph',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AssessmentIdDashboardRoute = AssessmentIdDashboardRouteImport.update({
+  id: '/assessment/$id/dashboard',
+  path: '/assessment/$id/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkspacesIdRoute = ApiWorkspacesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => ApiAuthSessionsRoute,
+  getParentRoute: () => ApiWorkspacesRoute,
 } as any)
-const ApiAuthVerifyEmailResendRoute =
-  ApiAuthVerifyEmailResendRouteImport.update({
-    id: '/resend',
-    path: '/resend',
-    getParentRoute: () => ApiAuthVerifyEmailRoute,
+const ApiWorkspaceSwitchRoute = ApiWorkspaceSwitchRouteImport.update({
+  id: '/api/workspace/switch',
+  path: '/api/workspace/switch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUserPreferencesRoute = ApiUserPreferencesRouteImport.update({
+  id: '/api/user/preferences',
+  path: '/api/user/preferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTenancySearchRoute = ApiTenancySearchRouteImport.update({
+  id: '/api/tenancy/search',
+  path: '/api/tenancy/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiShellAuditRoute = ApiShellAuditRouteImport.update({
+  id: '/api/shell/audit',
+  path: '/api/shell/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSettingsWorkspaceRoute = ApiSettingsWorkspaceRouteImport.update({
+  id: '/api/settings/workspace',
+  path: '/api/settings/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSettingsOrganisationRoute = ApiSettingsOrganisationRouteImport.update({
+  id: '/api/settings/organisation',
+  path: '/api/settings/organisation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingTemplatesRoute = ApiReportingTemplatesRouteImport.update({
+  id: '/api/reporting/templates',
+  path: '/api/reporting/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingReportsRoute = ApiReportingReportsRouteImport.update({
+  id: '/api/reporting/reports',
+  path: '/api/reporting/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingQueueRoute = ApiReportingQueueRouteImport.update({
+  id: '/api/reporting/queue',
+  path: '/api/reporting/queue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingPreviewRoute = ApiReportingPreviewRouteImport.update({
+  id: '/api/reporting/preview',
+  path: '/api/reporting/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingHistoryRoute = ApiReportingHistoryRouteImport.update({
+  id: '/api/reporting/history',
+  path: '/api/reporting/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiReportingDownloadCentreRoute =
+  ApiReportingDownloadCentreRouteImport.update({
+    id: '/api/reporting/download-centre',
+    path: '/api/reporting/download-centre',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
-  id: '/cancel',
-  path: '/cancel',
-  getParentRoute: () => ApiExecutionsIdRoute,
+const ApiReportingBrandingRoute = ApiReportingBrandingRouteImport.update({
+  id: '/api/reporting/branding',
+  path: '/api/reporting/branding',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiExecutionsIdRetryRoute = ApiExecutionsIdRetryRouteImport.update({
-  id: '/retry',
-  path: '/retry',
-  getParentRoute: () => ApiExecutionsIdRoute,
+const ApiRecommendationPortfoliosIdRoute =
+  ApiRecommendationPortfoliosIdRouteImport.update({
+    id: '/api/recommendation-portfolios/$id',
+    path: '/api/recommendation-portfolios/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
+  id: '/api/public-results/$token',
+  path: '/api/public-results/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
-  id: '/status',
-  path: '/status',
-  getParentRoute: () => ApiExecutionsIdRoute,
+const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiOrganisationsRoute,
 } as any)
-const ApiInternalAnalysisHandoffsReconcileRoute =
-  ApiInternalAnalysisHandoffsReconcileRouteImport.update({
-    id: '/api/internal/analysis-handoffs/reconcile',
-    path: '/api/internal/analysis-handoffs/reconcile',
+const ApiNotificationsReadRoute = ApiNotificationsReadRouteImport.update({
+  id: '/read',
+  path: '/read',
+  getParentRoute: () => ApiNotificationsRoute,
+} as any)
+const ApiMembersInviteRoute = ApiMembersInviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
+  getParentRoute: () => ApiMembersRoute,
+} as any)
+const ApiMembersIdRoute = ApiMembersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiMembersRoute,
+} as any)
+const ApiInternalRecommendationCataloguesRoute =
+  ApiInternalRecommendationCataloguesRouteImport.update({
+    id: '/api/internal/recommendation-catalogues',
+    path: '/api/internal/recommendation-catalogues',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiImprovementActionsIdRoute = ApiImprovementActionsIdRouteImport.update({
+  id: '/api/improvement-actions/$id',
+  path: '/api/improvement-actions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExecutionsMonitorRoute = ApiExecutionsMonitorRouteImport.update({
+  id: '/api/executions/monitor',
+  path: '/api/executions/monitor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExecutionsHistoryRoute = ApiExecutionsHistoryRouteImport.update({
+  id: '/api/executions/history',
+  path: '/api/executions/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
+  id: '/api/executions/$id',
+  path: '/api/executions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
+  id: '/api/auth/verify-email',
+  path: '/api/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSessionsRoute = ApiAuthSessionsRouteImport.update({
+  id: '/api/auth/sessions',
+  path: '/api/auth/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSessionRoute = ApiAuthSessionRouteImport.update({
+  id: '/api/auth/session',
+  path: '/api/auth/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
+  id: '/api/auth/register',
+  path: '/api/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthProfileRoute = ApiAuthProfileRouteImport.update({
+  id: '/api/auth/profile',
+  path: '/api/auth/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthInvitationsRoute = ApiAuthInvitationsRouteImport.update({
+  id: '/api/auth/invitations',
+  path: '/api/auth/invitations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthActivityRoute = ApiAuthActivityRouteImport.update({
+  id: '/api/auth/activity',
+  path: '/api/auth/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentsIdRoute = ApiAssessmentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAssessmentsRoute,
+} as any)
+const ApiAssessmentStartRoute = ApiAssessmentStartRouteImport.update({
+  id: '/api/assessment/start',
+  path: '/api/assessment/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentCatalogueRoute = ApiAssessmentCatalogueRouteImport.update({
+  id: '/api/assessment/catalogue',
+  path: '/api/assessment/catalogue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentIdRoute = ApiAssessmentIdRouteImport.update({
+  id: '/api/assessment/$id',
+  path: '/api/assessment/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssessmentSessionsDashboardRoute =
+  ApiAssessmentSessionsDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => ApiAssessmentSessionsRoute,
+  } as any)
+const ApiAssessmentSessionsIdRoute = ApiAssessmentSessionsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAssessmentSessionsRoute,
+} as any)
+const ApiAnalysisRunsIdRoute = ApiAnalysisRunsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAnalysisRunsRoute,
+} as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentIdExportFormatRoute =
+  AssessmentIdExportFormatRouteImport.update({
+    id: '/assessment/$id/export/$format',
+    path: '/assessment/$id/export/$format',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiReportingReportsIdRoute = ApiReportingReportsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiReportingReportsRoute,
+} as any)
+const ApiRecommendationPortfoliosIdDecisionsRoute =
+  ApiRecommendationPortfoliosIdDecisionsRouteImport.update({
+    id: '/decisions',
+    path: '/decisions',
+    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
+  } as any)
+const ApiRecommendationPortfoliosIdActionsRoute =
+  ApiRecommendationPortfoliosIdActionsRouteImport.update({
+    id: '/actions',
+    path: '/actions',
+    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
+  } as any)
+const ApiPortfolioItemsIdDecisionsRoute =
+  ApiPortfolioItemsIdDecisionsRouteImport.update({
+    id: '/api/portfolio-items/$id/decisions',
+    path: '/api/portfolio-items/$id/decisions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPortfolioItemsIdActionsRoute =
+  ApiPortfolioItemsIdActionsRouteImport.update({
+    id: '/api/portfolio-items/$id/actions',
+    path: '/api/portfolio-items/$id/actions',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiInternalRecommendationCataloguesIdRoute =
@@ -1186,63 +960,271 @@ const ApiInternalRecommendationCataloguesIdRoute =
     path: '/$id',
     getParentRoute: () => ApiInternalRecommendationCataloguesRoute,
   } as any)
-const ApiPortfolioItemsIdActionsRoute =
-  ApiPortfolioItemsIdActionsRouteImport.update({
-    id: '/api/portfolio-items/$id/actions',
-    path: '/api/portfolio-items/$id/actions',
+const ApiInternalAnalysisHandoffsReconcileRoute =
+  ApiInternalAnalysisHandoffsReconcileRouteImport.update({
+    id: '/api/internal/analysis-handoffs/reconcile',
+    path: '/api/internal/analysis-handoffs/reconcile',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPortfolioItemsIdDecisionsRoute =
-  ApiPortfolioItemsIdDecisionsRouteImport.update({
-    id: '/api/portfolio-items/$id/decisions',
-    path: '/api/portfolio-items/$id/decisions',
-    getParentRoute: () => rootRouteImport,
+const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
+const ApiExecutionsIdRetryRoute = ApiExecutionsIdRetryRouteImport.update({
+  id: '/retry',
+  path: '/retry',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
+const ApiExecutionsIdCancelRoute = ApiExecutionsIdCancelRouteImport.update({
+  id: '/cancel',
+  path: '/cancel',
+  getParentRoute: () => ApiExecutionsIdRoute,
+} as any)
+const ApiAuthVerifyEmailResendRoute =
+  ApiAuthVerifyEmailResendRouteImport.update({
+    id: '/resend',
+    path: '/resend',
+    getParentRoute: () => ApiAuthVerifyEmailRoute,
   } as any)
-const ApiRecommendationPortfoliosIdActionsRoute =
-  ApiRecommendationPortfoliosIdActionsRouteImport.update({
-    id: '/actions',
-    path: '/actions',
-    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
-  } as any)
-const ApiRecommendationPortfoliosIdDecisionsRoute =
-  ApiRecommendationPortfoliosIdDecisionsRouteImport.update({
-    id: '/decisions',
-    path: '/decisions',
-    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
-  } as any)
-const ApiReportingReportsIdRoute = ApiReportingReportsIdRouteImport.update({
+const ApiAuthSessionsIdRoute = ApiAuthSessionsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => ApiReportingReportsRoute,
+  getParentRoute: () => ApiAuthSessionsRoute,
 } as any)
-const AssessmentIdExportFormatRoute =
-  AssessmentIdExportFormatRouteImport.update({
-    id: '/assessment/$id/export/$format',
-    path: '/assessment/$id/export/$format',
-    getParentRoute: () => rootRouteImport,
+const ApiAuthPasswordForgotRoute = ApiAuthPasswordForgotRouteImport.update({
+  id: '/api/auth/password/forgot',
+  path: '/api/auth/password/forgot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthPasswordChangeRoute = ApiAuthPasswordChangeRouteImport.update({
+  id: '/api/auth/password/change',
+  path: '/api/auth/password/change',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthInvitationsAcceptRoute =
+  ApiAuthInvitationsAcceptRouteImport.update({
+    id: '/accept',
+    path: '/accept',
+    getParentRoute: () => ApiAuthInvitationsRoute,
   } as any)
-const ApiAnalysisRunsIdPublicResultsPublicResultIdRoute =
-  ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport.update({
-    id: '/public-results/$publicResultId',
-    path: '/public-results/$publicResultId',
-    getParentRoute: () => ApiAnalysisRunsIdRoute,
+const ApiAssessmentsIdSubmitRoute = ApiAssessmentsIdSubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdStatusRoute = ApiAssessmentsIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdRetryRoute = ApiAssessmentsIdRetryRouteImport.update({
+  id: '/retry',
+  path: '/retry',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdResultsRoute = ApiAssessmentsIdResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdIntelligenceResultRoute =
+  ApiAssessmentsIdIntelligenceResultRouteImport.update({
+    id: '/intelligence-result',
+    path: '/intelligence-result',
+    getParentRoute: () => ApiAssessmentsIdRoute,
   } as any)
-const ApiInternalRecommendationCataloguesIdCommandRoute =
-  ApiInternalRecommendationCataloguesIdCommandRouteImport.update({
-    id: '/command',
-    path: '/command',
-    getParentRoute: () => ApiInternalRecommendationCataloguesIdRoute,
+const ApiAssessmentsIdExecuteRoute = ApiAssessmentsIdExecuteRouteImport.update({
+  id: '/execute',
+  path: '/execute',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentsIdAnalysisStatusRoute =
+  ApiAssessmentsIdAnalysisStatusRouteImport.update({
+    id: '/analysis-status',
+    path: '/analysis-status',
+    getParentRoute: () => ApiAssessmentsIdRoute,
   } as any)
-const ApiReportingReportsIdArchiveRoute =
-  ApiReportingReportsIdArchiveRouteImport.update({
+const ApiAssessmentsIdAnalysisRetryRoute =
+  ApiAssessmentsIdAnalysisRetryRouteImport.update({
+    id: '/analysis-retry',
+    path: '/analysis-retry',
+    getParentRoute: () => ApiAssessmentsIdRoute,
+  } as any)
+const ApiAssessmentsIdAdvanceRoute = ApiAssessmentsIdAdvanceRouteImport.update({
+  id: '/advance',
+  path: '/advance',
+  getParentRoute: () => ApiAssessmentsIdRoute,
+} as any)
+const ApiAssessmentIdSummaryRoute = ApiAssessmentIdSummaryRouteImport.update({
+  id: '/summary',
+  path: '/summary',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdSaveRoute = ApiAssessmentIdSaveRouteImport.update({
+  id: '/save',
+  path: '/save',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdResumeRoute = ApiAssessmentIdResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdResponseRoute = ApiAssessmentIdResponseRouteImport.update({
+  id: '/response',
+  path: '/response',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdProgressRoute = ApiAssessmentIdProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdPauseRoute = ApiAssessmentIdPauseRouteImport.update({
+  id: '/pause',
+  path: '/pause',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdNavigateRoute = ApiAssessmentIdNavigateRouteImport.update({
+  id: '/navigate',
+  path: '/navigate',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentIdCompleteRoute = ApiAssessmentIdCompleteRouteImport.update({
+  id: '/complete',
+  path: '/complete',
+  getParentRoute: () => ApiAssessmentIdRoute,
+} as any)
+const ApiAssessmentSessionsIdTimelineRoute =
+  ApiAssessmentSessionsIdTimelineRouteImport.update({
+    id: '/timeline',
+    path: '/timeline',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdStartRoute =
+  ApiAssessmentSessionsIdStartRouteImport.update({
+    id: '/start',
+    path: '/start',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdReviewRoute =
+  ApiAssessmentSessionsIdReviewRouteImport.update({
+    id: '/review',
+    path: '/review',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdResumeRoute =
+  ApiAssessmentSessionsIdResumeRouteImport.update({
+    id: '/resume',
+    path: '/resume',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdReassessRoute =
+  ApiAssessmentSessionsIdReassessRouteImport.update({
+    id: '/reassess',
+    path: '/reassess',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdPauseRoute =
+  ApiAssessmentSessionsIdPauseRouteImport.update({
+    id: '/pause',
+    path: '/pause',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdParticipantsRoute =
+  ApiAssessmentSessionsIdParticipantsRouteImport.update({
+    id: '/participants',
+    path: '/participants',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdOwnerRoute =
+  ApiAssessmentSessionsIdOwnerRouteImport.update({
+    id: '/owner',
+    path: '/owner',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdHistoryRoute =
+  ApiAssessmentSessionsIdHistoryRouteImport.update({
+    id: '/history',
+    path: '/history',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdCompleteRoute =
+  ApiAssessmentSessionsIdCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdAssignRoute =
+  ApiAssessmentSessionsIdAssignRouteImport.update({
+    id: '/assign',
+    path: '/assign',
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
+  } as any)
+const ApiAssessmentSessionsIdArchiveRoute =
+  ApiAssessmentSessionsIdArchiveRouteImport.update({
     id: '/archive',
     path: '/archive',
-    getParentRoute: () => ApiReportingReportsIdRoute,
+    getParentRoute: () => ApiAssessmentSessionsIdRoute,
   } as any)
-const ApiReportingReportsIdDownloadRoute =
-  ApiReportingReportsIdDownloadRouteImport.update({
-    id: '/download',
-    path: '/download',
+const ApiAnalysisRunsIdResultRoute = ApiAnalysisRunsIdResultRouteImport.update({
+  id: '/result',
+  path: '/result',
+  getParentRoute: () => ApiAnalysisRunsIdRoute,
+} as any)
+const ApiAnalysisRunsIdRecommendationSequenceRoute =
+  ApiAnalysisRunsIdRecommendationSequenceRouteImport.update({
+    id: '/recommendation-sequence',
+    path: '/recommendation-sequence',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationResolutionRoute =
+  ApiAnalysisRunsIdRecommendationResolutionRouteImport.update({
+    id: '/recommendation-resolution',
+    path: '/recommendation-resolution',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationPriorityRoute =
+  ApiAnalysisRunsIdRecommendationPriorityRouteImport.update({
+    id: '/recommendation-priority',
+    path: '/recommendation-priority',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationPortfolioRoute =
+  ApiAnalysisRunsIdRecommendationPortfolioRouteImport.update({
+    id: '/recommendation-portfolio',
+    path: '/recommendation-portfolio',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationEvaluationRoute =
+  ApiAnalysisRunsIdRecommendationEvaluationRouteImport.update({
+    id: '/recommendation-evaluation',
+    path: '/recommendation-evaluation',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationConfidenceRoute =
+  ApiAnalysisRunsIdRecommendationConfidenceRouteImport.update({
+    id: '/recommendation-confidence',
+    path: '/recommendation-confidence',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdPublicResultRoute =
+  ApiAnalysisRunsIdPublicResultRouteImport.update({
+    id: '/public-result',
+    path: '/public-result',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdExplanationsRoute =
+  ApiAnalysisRunsIdExplanationsRouteImport.update({
+    id: '/explanations',
+    path: '/explanations',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiReportingReportsIdRetryRoute =
+  ApiReportingReportsIdRetryRouteImport.update({
+    id: '/retry',
+    path: '/retry',
     getParentRoute: () => ApiReportingReportsIdRoute,
   } as any)
 const ApiReportingReportsIdRegenerateRoute =
@@ -1251,11 +1233,29 @@ const ApiReportingReportsIdRegenerateRoute =
     path: '/regenerate',
     getParentRoute: () => ApiReportingReportsIdRoute,
   } as any)
-const ApiReportingReportsIdRetryRoute =
-  ApiReportingReportsIdRetryRouteImport.update({
-    id: '/retry',
-    path: '/retry',
+const ApiReportingReportsIdDownloadRoute =
+  ApiReportingReportsIdDownloadRouteImport.update({
+    id: '/download',
+    path: '/download',
     getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
+const ApiReportingReportsIdArchiveRoute =
+  ApiReportingReportsIdArchiveRouteImport.update({
+    id: '/archive',
+    path: '/archive',
+    getParentRoute: () => ApiReportingReportsIdRoute,
+  } as any)
+const ApiInternalRecommendationCataloguesIdCommandRoute =
+  ApiInternalRecommendationCataloguesIdCommandRouteImport.update({
+    id: '/command',
+    path: '/command',
+    getParentRoute: () => ApiInternalRecommendationCataloguesIdRoute,
+  } as any)
+const ApiAnalysisRunsIdPublicResultsPublicResultIdRoute =
+  ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport.update({
+    id: '/public-results/$publicResultId',
+    path: '/public-results/$publicResultId',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
   } as any)
 const ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute =
   ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRouteImport.update({
@@ -2620,39 +2620,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/design-system': {
-      id: '/design-system'
-      path: '/design-system'
-      fullPath: '/design-system'
-      preLoaderRoute: typeof DesignSystemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -2662,347 +2634,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/analysis-runs': {
-      id: '/api/analysis-runs'
-      path: '/api/analysis-runs'
-      fullPath: '/api/analysis-runs'
-      preLoaderRoute: typeof ApiAnalysisRunsRouteImport
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/assessment-sessions': {
-      id: '/api/assessment-sessions'
-      path: '/api/assessment-sessions'
-      fullPath: '/api/assessment-sessions'
-      preLoaderRoute: typeof ApiAssessmentSessionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/assessments': {
-      id: '/api/assessments'
-      path: '/api/assessments'
-      fullPath: '/api/assessments'
-      preLoaderRoute: typeof ApiAssessmentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/members': {
-      id: '/api/members'
-      path: '/api/members'
-      fullPath: '/api/members'
-      preLoaderRoute: typeof ApiMembersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/navigation': {
-      id: '/api/navigation'
-      path: '/api/navigation'
-      fullPath: '/api/navigation'
-      preLoaderRoute: typeof ApiNavigationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/notifications': {
-      id: '/api/notifications'
-      path: '/api/notifications'
-      fullPath: '/api/notifications'
-      preLoaderRoute: typeof ApiNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/organisations': {
-      id: '/api/organisations'
-      path: '/api/organisations'
-      fullPath: '/api/organisations'
-      preLoaderRoute: typeof ApiOrganisationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/workspaces': {
-      id: '/api/workspaces'
-      path: '/api/workspaces'
-      fullPath: '/api/workspaces'
-      preLoaderRoute: typeof ApiWorkspacesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/assess/': {
-      id: '/assess/'
-      path: '/assess'
-      fullPath: '/assess/'
-      preLoaderRoute: typeof AssessIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/assess/$id': {
-      id: '/assess/$id'
-      path: '/assess/$id'
-      fullPath: '/assess/$id'
-      preLoaderRoute: typeof AssessIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit/$assessmentId': {
-      id: '/audit/$assessmentId'
-      path: '/audit/$assessmentId'
-      fullPath: '/audit/$assessmentId'
-      preLoaderRoute: typeof AuditAssessmentIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit/dashboard': {
-      id: '/audit/dashboard'
-      path: '/audit/dashboard'
-      fullPath: '/audit/dashboard'
-      preLoaderRoute: typeof AuditDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit/events': {
-      id: '/audit/events'
-      path: '/audit/events'
-      fullPath: '/audit/events'
-      preLoaderRoute: typeof AuditEventsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit/health': {
-      id: '/audit/health'
-      path: '/audit/health'
-      fullPath: '/audit/health'
-      preLoaderRoute: typeof AuditHealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/audit/retention': {
-      id: '/audit/retention'
-      path: '/audit/retention'
-      fullPath: '/audit/retention'
-      preLoaderRoute: typeof AuditRetentionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/forgot-password': {
-      id: '/auth/forgot-password'
-      path: '/auth/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/invitation': {
-      id: '/auth/invitation'
-      path: '/auth/invitation'
-      fullPath: '/auth/invitation'
-      preLoaderRoute: typeof AuthInvitationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/register': {
-      id: '/auth/register'
-      path: '/auth/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/reset-password': {
-      id: '/auth/reset-password'
-      path: '/auth/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/verify-email': {
-      id: '/auth/verify-email'
-      path: '/auth/verify-email'
-      fullPath: '/auth/verify-email'
-      preLoaderRoute: typeof AuthVerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/$id': {
-      id: '/dashboard/$id'
-      path: '/dashboard/$id'
-      fullPath: '/dashboard/$id'
-      preLoaderRoute: typeof DashboardIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/error/$code': {
-      id: '/error/$code'
-      path: '/error/$code'
-      fullPath: '/error/$code'
-      preLoaderRoute: typeof ErrorCodeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/internal/github-sync': {
-      id: '/internal/github-sync'
-      path: '/internal/github-sync'
-      fullPath: '/internal/github-sync'
-      preLoaderRoute: typeof InternalGithubSyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge-packs/': {
-      id: '/knowledge-packs/'
-      path: '/knowledge-packs'
-      fullPath: '/knowledge-packs/'
-      preLoaderRoute: typeof KnowledgePacksIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge-packs/reload': {
-      id: '/knowledge-packs/reload'
-      path: '/knowledge-packs/reload'
-      fullPath: '/knowledge-packs/reload'
-      preLoaderRoute: typeof KnowledgePacksReloadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge-packs/validate': {
-      id: '/knowledge-packs/validate'
-      path: '/knowledge-packs/validate'
-      fullPath: '/knowledge-packs/validate'
-      preLoaderRoute: typeof KnowledgePacksValidateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/narrative/$id': {
-      id: '/narrative/$id'
-      path: '/narrative/$id'
-      fullPath: '/narrative/$id'
-      preLoaderRoute: typeof NarrativeIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/observation/$id': {
-      id: '/observation/$id'
-      path: '/observation/$id'
-      fullPath: '/observation/$id'
-      preLoaderRoute: typeof ObservationIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/organisations/': {
-      id: '/organisations/'
-      path: '/organisations'
-      fullPath: '/organisations/'
-      preLoaderRoute: typeof OrganisationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/organisations/$id': {
-      id: '/organisations/$id'
-      path: '/organisations/$id'
-      fullPath: '/organisations/$id'
-      preLoaderRoute: typeof OrganisationsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pattern/$id': {
-      id: '/pattern/$id'
-      path: '/pattern/$id'
-      fullPath: '/pattern/$id'
-      preLoaderRoute: typeof PatternIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/report/$id': {
-      id: '/report/$id'
-      path: '/report/$id'
-      fullPath: '/report/$id'
-      preLoaderRoute: typeof ReportIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reports/': {
-      id: '/reports/'
-      path: '/reports'
-      fullPath: '/reports/'
-      preLoaderRoute: typeof ReportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rule/$id': {
-      id: '/rule/$id'
-      path: '/rule/$id'
-      fullPath: '/rule/$id'
-      preLoaderRoute: typeof RuleIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/narrative': {
-      id: '/runtime/narrative'
-      path: '/runtime/narrative'
-      fullPath: '/runtime/narrative'
-      preLoaderRoute: typeof RuntimeNarrativeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/observations': {
-      id: '/runtime/observations'
-      path: '/runtime/observations'
-      fullPath: '/runtime/observations'
-      preLoaderRoute: typeof RuntimeObservationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/patterns': {
-      id: '/runtime/patterns'
-      path: '/runtime/patterns'
-      fullPath: '/runtime/patterns'
-      preLoaderRoute: typeof RuntimePatternsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/rules': {
-      id: '/runtime/rules'
-      path: '/runtime/rules'
-      fullPath: '/runtime/rules'
-      preLoaderRoute: typeof RuntimeRulesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/scores': {
-      id: '/runtime/scores'
-      path: '/runtime/scores'
-      fullPath: '/runtime/scores'
-      preLoaderRoute: typeof RuntimeScoresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/runtime/signals': {
-      id: '/runtime/signals'
-      path: '/runtime/signals'
-      fullPath: '/runtime/signals'
-      preLoaderRoute: typeof RuntimeSignalsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/score/$id': {
-      id: '/score/$id'
-      path: '/score/$id'
-      fullPath: '/score/$id'
-      preLoaderRoute: typeof ScoreIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sessions/': {
-      id: '/sessions/'
-      path: '/sessions'
-      fullPath: '/sessions/'
-      preLoaderRoute: typeof SessionsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sessions/$id': {
-      id: '/sessions/$id'
-      path: '/sessions/$id'
-      fullPath: '/sessions/$id'
-      preLoaderRoute: typeof SessionsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sessions/new': {
-      id: '/sessions/new'
-      path: '/sessions/new'
-      fullPath: '/sessions/new'
-      preLoaderRoute: typeof SessionsNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signal/$id': {
-      id: '/signal/$id'
-      path: '/signal/$id'
-      fullPath: '/signal/$id'
-      preLoaderRoute: typeof SignalIdRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/workspaces/': {
@@ -3012,6 +2676,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspacesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sessions/': {
+      id: '/sessions/'
+      path: '/sessions'
+      fullPath: '/sessions/'
+      preLoaderRoute: typeof SessionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organisations/': {
+      id: '/organisations/'
+      path: '/organisations'
+      fullPath: '/organisations/'
+      preLoaderRoute: typeof OrganisationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge-packs/': {
+      id: '/knowledge-packs/'
+      path: '/knowledge-packs'
+      fullPath: '/knowledge-packs/'
+      preLoaderRoute: typeof KnowledgePacksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assess/': {
+      id: '/assess/'
+      path: '/assess'
+      fullPath: '/assess/'
+      preLoaderRoute: typeof AssessIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workspaces/$id': {
       id: '/workspaces/$id'
       path: '/workspaces/$id'
@@ -3019,536 +2718,305 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspacesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+    '/signal/$id': {
+      id: '/signal/$id'
+      path: '/signal/$id'
+      fullPath: '/signal/$id'
+      preLoaderRoute: typeof SignalIdRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/api/analysis-runs/$id': {
-      id: '/api/analysis-runs/$id'
-      path: '/$id'
-      fullPath: '/api/analysis-runs/$id'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRouteImport
-      parentRoute: typeof ApiAnalysisRunsRoute
     }
-    '/api/assessment-sessions/$id': {
-      id: '/api/assessment-sessions/$id'
-      path: '/$id'
-      fullPath: '/api/assessment-sessions/$id'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdRouteImport
-      parentRoute: typeof ApiAssessmentSessionsRoute
-    }
-    '/api/assessment-sessions/dashboard': {
-      id: '/api/assessment-sessions/dashboard'
-      path: '/dashboard'
-      fullPath: '/api/assessment-sessions/dashboard'
-      preLoaderRoute: typeof ApiAssessmentSessionsDashboardRouteImport
-      parentRoute: typeof ApiAssessmentSessionsRoute
-    }
-    '/api/assessment/$id': {
-      id: '/api/assessment/$id'
-      path: '/api/assessment/$id'
-      fullPath: '/api/assessment/$id'
-      preLoaderRoute: typeof ApiAssessmentIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/assessment/catalogue': {
-      id: '/api/assessment/catalogue'
-      path: '/api/assessment/catalogue'
-      fullPath: '/api/assessment/catalogue'
-      preLoaderRoute: typeof ApiAssessmentCatalogueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/assessment/start': {
-      id: '/api/assessment/start'
-      path: '/api/assessment/start'
-      fullPath: '/api/assessment/start'
-      preLoaderRoute: typeof ApiAssessmentStartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/assessments/$id': {
-      id: '/api/assessments/$id'
-      path: '/$id'
-      fullPath: '/api/assessments/$id'
-      preLoaderRoute: typeof ApiAssessmentsIdRouteImport
-      parentRoute: typeof ApiAssessmentsRoute
-    }
-    '/api/auth/activity': {
-      id: '/api/auth/activity'
-      path: '/api/auth/activity'
-      fullPath: '/api/auth/activity'
-      preLoaderRoute: typeof ApiAuthActivityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/invitations': {
-      id: '/api/auth/invitations'
-      path: '/api/auth/invitations'
-      fullPath: '/api/auth/invitations'
-      preLoaderRoute: typeof ApiAuthInvitationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/login': {
-      id: '/api/auth/login'
-      path: '/api/auth/login'
-      fullPath: '/api/auth/login'
-      preLoaderRoute: typeof ApiAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/logout': {
-      id: '/api/auth/logout'
-      path: '/api/auth/logout'
-      fullPath: '/api/auth/logout'
-      preLoaderRoute: typeof ApiAuthLogoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/profile': {
-      id: '/api/auth/profile'
-      path: '/api/auth/profile'
-      fullPath: '/api/auth/profile'
-      preLoaderRoute: typeof ApiAuthProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/register': {
-      id: '/api/auth/register'
-      path: '/api/auth/register'
-      fullPath: '/api/auth/register'
-      preLoaderRoute: typeof ApiAuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/session': {
-      id: '/api/auth/session'
-      path: '/api/auth/session'
-      fullPath: '/api/auth/session'
-      preLoaderRoute: typeof ApiAuthSessionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/sessions': {
-      id: '/api/auth/sessions'
-      path: '/api/auth/sessions'
-      fullPath: '/api/auth/sessions'
-      preLoaderRoute: typeof ApiAuthSessionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/verify-email': {
-      id: '/api/auth/verify-email'
-      path: '/api/auth/verify-email'
-      fullPath: '/api/auth/verify-email'
-      preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/executions/$id': {
-      id: '/api/executions/$id'
-      path: '/api/executions/$id'
-      fullPath: '/api/executions/$id'
-      preLoaderRoute: typeof ApiExecutionsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/executions/history': {
-      id: '/api/executions/history'
-      path: '/api/executions/history'
-      fullPath: '/api/executions/history'
-      preLoaderRoute: typeof ApiExecutionsHistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/executions/monitor': {
-      id: '/api/executions/monitor'
-      path: '/api/executions/monitor'
-      fullPath: '/api/executions/monitor'
-      preLoaderRoute: typeof ApiExecutionsMonitorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/improvement-actions/$id': {
-      id: '/api/improvement-actions/$id'
-      path: '/api/improvement-actions/$id'
-      fullPath: '/api/improvement-actions/$id'
-      preLoaderRoute: typeof ApiImprovementActionsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/internal/recommendation-catalogues': {
-      id: '/api/internal/recommendation-catalogues'
-      path: '/api/internal/recommendation-catalogues'
-      fullPath: '/api/internal/recommendation-catalogues'
-      preLoaderRoute: typeof ApiInternalRecommendationCataloguesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/members/$id': {
-      id: '/api/members/$id'
-      path: '/$id'
-      fullPath: '/api/members/$id'
-      preLoaderRoute: typeof ApiMembersIdRouteImport
-      parentRoute: typeof ApiMembersRoute
-    }
-    '/api/members/invite': {
-      id: '/api/members/invite'
-      path: '/invite'
-      fullPath: '/api/members/invite'
-      preLoaderRoute: typeof ApiMembersInviteRouteImport
-      parentRoute: typeof ApiMembersRoute
-    }
-    '/api/notifications/read': {
-      id: '/api/notifications/read'
-      path: '/read'
-      fullPath: '/api/notifications/read'
-      preLoaderRoute: typeof ApiNotificationsReadRouteImport
-      parentRoute: typeof ApiNotificationsRoute
-    }
-    '/api/organisations/$id': {
-      id: '/api/organisations/$id'
-      path: '/$id'
-      fullPath: '/api/organisations/$id'
-      preLoaderRoute: typeof ApiOrganisationsIdRouteImport
-      parentRoute: typeof ApiOrganisationsRoute
-    }
-    '/api/public-results/$token': {
-      id: '/api/public-results/$token'
-      path: '/api/public-results/$token'
-      fullPath: '/api/public-results/$token'
-      preLoaderRoute: typeof ApiPublicResultsTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/recommendation-portfolios/$id': {
-      id: '/api/recommendation-portfolios/$id'
-      path: '/api/recommendation-portfolios/$id'
-      fullPath: '/api/recommendation-portfolios/$id'
-      preLoaderRoute: typeof ApiRecommendationPortfoliosIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/reporting/branding': {
-      id: '/api/reporting/branding'
-      path: '/api/reporting/branding'
-      fullPath: '/api/reporting/branding'
-      preLoaderRoute: typeof ApiReportingBrandingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/reporting/download-centre': {
-      id: '/api/reporting/download-centre'
-      path: '/api/reporting/download-centre'
-      fullPath: '/api/reporting/download-centre'
-      preLoaderRoute: typeof ApiReportingDownloadCentreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/reporting/history': {
-      id: '/api/reporting/history'
-      path: '/api/reporting/history'
-      fullPath: '/api/reporting/history'
-      preLoaderRoute: typeof ApiReportingHistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/reporting/preview': {
-      id: '/api/reporting/preview'
-      path: '/api/reporting/preview'
-      fullPath: '/api/reporting/preview'
-      preLoaderRoute: typeof ApiReportingPreviewRouteImport
+    '/sessions/new': {
+      id: '/sessions/new'
+      path: '/sessions/new'
+      fullPath: '/sessions/new'
+      preLoaderRoute: typeof SessionsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/reporting/queue': {
-      id: '/api/reporting/queue'
-      path: '/api/reporting/queue'
-      fullPath: '/api/reporting/queue'
-      preLoaderRoute: typeof ApiReportingQueueRouteImport
+    '/sessions/$id': {
+      id: '/sessions/$id'
+      path: '/sessions/$id'
+      fullPath: '/sessions/$id'
+      preLoaderRoute: typeof SessionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/reporting/reports': {
-      id: '/api/reporting/reports'
-      path: '/api/reporting/reports'
-      fullPath: '/api/reporting/reports'
-      preLoaderRoute: typeof ApiReportingReportsRouteImport
+    '/score/$id': {
+      id: '/score/$id'
+      path: '/score/$id'
+      fullPath: '/score/$id'
+      preLoaderRoute: typeof ScoreIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/reporting/templates': {
-      id: '/api/reporting/templates'
-      path: '/api/reporting/templates'
-      fullPath: '/api/reporting/templates'
-      preLoaderRoute: typeof ApiReportingTemplatesRouteImport
+    '/runtime/signals': {
+      id: '/runtime/signals'
+      path: '/runtime/signals'
+      fullPath: '/runtime/signals'
+      preLoaderRoute: typeof RuntimeSignalsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/settings/organisation': {
-      id: '/api/settings/organisation'
-      path: '/api/settings/organisation'
-      fullPath: '/api/settings/organisation'
-      preLoaderRoute: typeof ApiSettingsOrganisationRouteImport
+    '/runtime/scores': {
+      id: '/runtime/scores'
+      path: '/runtime/scores'
+      fullPath: '/runtime/scores'
+      preLoaderRoute: typeof RuntimeScoresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/settings/workspace': {
-      id: '/api/settings/workspace'
-      path: '/api/settings/workspace'
-      fullPath: '/api/settings/workspace'
-      preLoaderRoute: typeof ApiSettingsWorkspaceRouteImport
+    '/runtime/rules': {
+      id: '/runtime/rules'
+      path: '/runtime/rules'
+      fullPath: '/runtime/rules'
+      preLoaderRoute: typeof RuntimeRulesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/shell/audit': {
-      id: '/api/shell/audit'
-      path: '/api/shell/audit'
-      fullPath: '/api/shell/audit'
-      preLoaderRoute: typeof ApiShellAuditRouteImport
+    '/runtime/patterns': {
+      id: '/runtime/patterns'
+      path: '/runtime/patterns'
+      fullPath: '/runtime/patterns'
+      preLoaderRoute: typeof RuntimePatternsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/tenancy/search': {
-      id: '/api/tenancy/search'
-      path: '/api/tenancy/search'
-      fullPath: '/api/tenancy/search'
-      preLoaderRoute: typeof ApiTenancySearchRouteImport
+    '/runtime/observations': {
+      id: '/runtime/observations'
+      path: '/runtime/observations'
+      fullPath: '/runtime/observations'
+      preLoaderRoute: typeof RuntimeObservationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/user/preferences': {
-      id: '/api/user/preferences'
-      path: '/api/user/preferences'
-      fullPath: '/api/user/preferences'
-      preLoaderRoute: typeof ApiUserPreferencesRouteImport
+    '/runtime/narrative': {
+      id: '/runtime/narrative'
+      path: '/runtime/narrative'
+      fullPath: '/runtime/narrative'
+      preLoaderRoute: typeof RuntimeNarrativeRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/api/workspace/switch': {
-      id: '/api/workspace/switch'
-      path: '/api/workspace/switch'
-      fullPath: '/api/workspace/switch'
-      preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/workspaces/$id': {
-      id: '/api/workspaces/$id'
-      path: '/$id'
-      fullPath: '/api/workspaces/$id'
-      preLoaderRoute: typeof ApiWorkspacesIdRouteImport
-      parentRoute: typeof ApiWorkspacesRoute
     }
-    '/assessment/$id/': {
-      id: '/assessment/$id/'
-      path: '/assessment/$id'
-      fullPath: '/assessment/$id/'
-      preLoaderRoute: typeof AssessmentIdIndexRouteImport
+    '/rule/$id': {
+      id: '/rule/$id'
+      path: '/rule/$id'
+      fullPath: '/rule/$id'
+      preLoaderRoute: typeof RuleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/dashboard': {
-      id: '/assessment/$id/dashboard'
-      path: '/assessment/$id/dashboard'
-      fullPath: '/assessment/$id/dashboard'
-      preLoaderRoute: typeof AssessmentIdDashboardRouteImport
+    '/report/$id': {
+      id: '/report/$id'
+      path: '/report/$id'
+      fullPath: '/report/$id'
+      preLoaderRoute: typeof ReportIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/evidence-graph': {
-      id: '/assessment/$id/evidence-graph'
-      path: '/assessment/$id/evidence-graph'
-      fullPath: '/assessment/$id/evidence-graph'
-      preLoaderRoute: typeof AssessmentIdEvidenceGraphRouteImport
+    '/pattern/$id': {
+      id: '/pattern/$id'
+      path: '/pattern/$id'
+      fullPath: '/pattern/$id'
+      preLoaderRoute: typeof PatternIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/narrative': {
-      id: '/assessment/$id/narrative'
-      path: '/assessment/$id/narrative'
-      fullPath: '/assessment/$id/narrative'
-      preLoaderRoute: typeof AssessmentIdNarrativeRouteImport
+    '/organisations/$id': {
+      id: '/organisations/$id'
+      path: '/organisations/$id'
+      fullPath: '/organisations/$id'
+      preLoaderRoute: typeof OrganisationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/observations': {
-      id: '/assessment/$id/observations'
-      path: '/assessment/$id/observations'
-      fullPath: '/assessment/$id/observations'
-      preLoaderRoute: typeof AssessmentIdObservationsRouteImport
+    '/observation/$id': {
+      id: '/observation/$id'
+      path: '/observation/$id'
+      fullPath: '/observation/$id'
+      preLoaderRoute: typeof ObservationIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/patterns': {
-      id: '/assessment/$id/patterns'
-      path: '/assessment/$id/patterns'
-      fullPath: '/assessment/$id/patterns'
-      preLoaderRoute: typeof AssessmentIdPatternsRouteImport
+    '/narrative/$id': {
+      id: '/narrative/$id'
+      path: '/narrative/$id'
+      fullPath: '/narrative/$id'
+      preLoaderRoute: typeof NarrativeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/processing': {
-      id: '/assessment/$id/processing'
-      path: '/assessment/$id/processing'
-      fullPath: '/assessment/$id/processing'
-      preLoaderRoute: typeof AssessmentIdProcessingRouteImport
+    '/knowledge-packs/validate': {
+      id: '/knowledge-packs/validate'
+      path: '/knowledge-packs/validate'
+      fullPath: '/knowledge-packs/validate'
+      preLoaderRoute: typeof KnowledgePacksValidateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/reports': {
-      id: '/assessment/$id/reports'
-      path: '/assessment/$id/reports'
-      fullPath: '/assessment/$id/reports'
-      preLoaderRoute: typeof AssessmentIdReportsRouteImport
+    '/knowledge-packs/reload': {
+      id: '/knowledge-packs/reload'
+      path: '/knowledge-packs/reload'
+      fullPath: '/knowledge-packs/reload'
+      preLoaderRoute: typeof KnowledgePacksReloadRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/results': {
-      id: '/assessment/$id/results'
-      path: '/assessment/$id/results'
-      fullPath: '/assessment/$id/results'
-      preLoaderRoute: typeof AssessmentIdResultsRouteImport
+    '/internal/github-sync': {
+      id: '/internal/github-sync'
+      path: '/internal/github-sync'
+      fullPath: '/internal/github-sync'
+      preLoaderRoute: typeof InternalGithubSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/rules': {
-      id: '/assessment/$id/rules'
-      path: '/assessment/$id/rules'
-      fullPath: '/assessment/$id/rules'
-      preLoaderRoute: typeof AssessmentIdRulesRouteImport
+    '/error/$code': {
+      id: '/error/$code'
+      path: '/error/$code'
+      fullPath: '/error/$code'
+      preLoaderRoute: typeof ErrorCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/scores': {
-      id: '/assessment/$id/scores'
-      path: '/assessment/$id/scores'
-      fullPath: '/assessment/$id/scores'
-      preLoaderRoute: typeof AssessmentIdScoresRouteImport
+    '/dashboard/$id': {
+      id: '/dashboard/$id'
+      path: '/dashboard/$id'
+      fullPath: '/dashboard/$id'
+      preLoaderRoute: typeof DashboardIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/signals': {
-      id: '/assessment/$id/signals'
-      path: '/assessment/$id/signals'
-      fullPath: '/assessment/$id/signals'
-      preLoaderRoute: typeof AssessmentIdSignalsRouteImport
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assessment/$id/summary': {
-      id: '/assessment/$id/summary'
-      path: '/assessment/$id/summary'
-      fullPath: '/assessment/$id/summary'
-      preLoaderRoute: typeof AssessmentIdSummaryRouteImport
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/audit/event/$id': {
-      id: '/audit/event/$id'
-      path: '/audit/event/$id'
-      fullPath: '/audit/event/$id'
-      preLoaderRoute: typeof AuditEventIdRouteImport
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/evidence/$entityType/$entityId': {
-      id: '/evidence/$entityType/$entityId'
-      path: '/evidence/$entityType/$entityId'
-      fullPath: '/evidence/$entityType/$entityId'
-      preLoaderRoute: typeof EvidenceEntityTypeEntityIdRouteImport
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/explain/$entityType/$entityId': {
-      id: '/explain/$entityType/$entityId'
-      path: '/explain/$entityType/$entityId'
-      fullPath: '/explain/$entityType/$entityId'
-      preLoaderRoute: typeof ExplainEntityTypeEntityIdRouteImport
+    '/auth/invitation': {
+      id: '/auth/invitation'
+      path: '/auth/invitation'
+      fullPath: '/auth/invitation'
+      preLoaderRoute: typeof AuthInvitationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/audit/': {
-      id: '/internal/audit/'
-      path: '/internal/audit'
-      fullPath: '/internal/audit/'
-      preLoaderRoute: typeof InternalAuditIndexRouteImport
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/audit/$id': {
-      id: '/internal/audit/$id'
-      path: '/internal/audit/$id'
-      fullPath: '/internal/audit/$id'
-      preLoaderRoute: typeof InternalAuditIdRouteImport
+    '/audit/retention': {
+      id: '/audit/retention'
+      path: '/audit/retention'
+      fullPath: '/audit/retention'
+      preLoaderRoute: typeof AuditRetentionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/knowledge-packs/': {
-      id: '/internal/knowledge-packs/'
-      path: '/internal/knowledge-packs'
-      fullPath: '/internal/knowledge-packs/'
-      preLoaderRoute: typeof InternalKnowledgePacksIndexRouteImport
+    '/audit/health': {
+      id: '/audit/health'
+      path: '/audit/health'
+      fullPath: '/audit/health'
+      preLoaderRoute: typeof AuditHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/knowledge-packs/$id': {
-      id: '/internal/knowledge-packs/$id'
-      path: '/internal/knowledge-packs/$id'
-      fullPath: '/internal/knowledge-packs/$id'
-      preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
+    '/audit/events': {
+      id: '/audit/events'
+      path: '/audit/events'
+      fullPath: '/audit/events'
+      preLoaderRoute: typeof AuditEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/narratives/': {
-      id: '/internal/narratives/'
-      path: '/internal/narratives'
-      fullPath: '/internal/narratives/'
-      preLoaderRoute: typeof InternalNarrativesIndexRouteImport
+    '/audit/dashboard': {
+      id: '/audit/dashboard'
+      path: '/audit/dashboard'
+      fullPath: '/audit/dashboard'
+      preLoaderRoute: typeof AuditDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/narratives/$id': {
-      id: '/internal/narratives/$id'
-      path: '/internal/narratives/$id'
-      fullPath: '/internal/narratives/$id'
-      preLoaderRoute: typeof InternalNarrativesIdRouteImport
+    '/audit/$assessmentId': {
+      id: '/audit/$assessmentId'
+      path: '/audit/$assessmentId'
+      fullPath: '/audit/$assessmentId'
+      preLoaderRoute: typeof AuditAssessmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/observations/': {
-      id: '/internal/observations/'
-      path: '/internal/observations'
-      fullPath: '/internal/observations/'
-      preLoaderRoute: typeof InternalObservationsIndexRouteImport
+    '/assess/$id': {
+      id: '/assess/$id'
+      path: '/assess/$id'
+      fullPath: '/assess/$id'
+      preLoaderRoute: typeof AssessIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/observations/$id': {
-      id: '/internal/observations/$id'
-      path: '/internal/observations/$id'
-      fullPath: '/internal/observations/$id'
-      preLoaderRoute: typeof InternalObservationsIdRouteImport
+    '/api/workspaces': {
+      id: '/api/workspaces'
+      path: '/api/workspaces'
+      fullPath: '/api/workspaces'
+      preLoaderRoute: typeof ApiWorkspacesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/patterns/': {
-      id: '/internal/patterns/'
-      path: '/internal/patterns'
-      fullPath: '/internal/patterns/'
-      preLoaderRoute: typeof InternalPatternsIndexRouteImport
+    '/api/organisations': {
+      id: '/api/organisations'
+      path: '/api/organisations'
+      fullPath: '/api/organisations'
+      preLoaderRoute: typeof ApiOrganisationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/patterns/$id': {
-      id: '/internal/patterns/$id'
-      path: '/internal/patterns/$id'
-      fullPath: '/internal/patterns/$id'
-      preLoaderRoute: typeof InternalPatternsIdRouteImport
+    '/api/notifications': {
+      id: '/api/notifications'
+      path: '/api/notifications'
+      fullPath: '/api/notifications'
+      preLoaderRoute: typeof ApiNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/rules/': {
-      id: '/internal/rules/'
-      path: '/internal/rules'
-      fullPath: '/internal/rules/'
-      preLoaderRoute: typeof InternalRulesIndexRouteImport
+    '/api/navigation': {
+      id: '/api/navigation'
+      path: '/api/navigation'
+      fullPath: '/api/navigation'
+      preLoaderRoute: typeof ApiNavigationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/rules/$id': {
-      id: '/internal/rules/$id'
-      path: '/internal/rules/$id'
-      fullPath: '/internal/rules/$id'
-      preLoaderRoute: typeof InternalRulesIdRouteImport
+    '/api/members': {
+      id: '/api/members'
+      path: '/api/members'
+      fullPath: '/api/members'
+      preLoaderRoute: typeof ApiMembersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/runtime/': {
-      id: '/internal/runtime/'
-      path: '/internal/runtime'
-      fullPath: '/internal/runtime/'
-      preLoaderRoute: typeof InternalRuntimeIndexRouteImport
+    '/api/assessments': {
+      id: '/api/assessments'
+      path: '/api/assessments'
+      fullPath: '/api/assessments'
+      preLoaderRoute: typeof ApiAssessmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/scores/': {
-      id: '/internal/scores/'
-      path: '/internal/scores'
-      fullPath: '/internal/scores/'
-      preLoaderRoute: typeof InternalScoresIndexRouteImport
+    '/api/assessment-sessions': {
+      id: '/api/assessment-sessions'
+      path: '/api/assessment-sessions'
+      fullPath: '/api/assessment-sessions'
+      preLoaderRoute: typeof ApiAssessmentSessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/scores/$id': {
-      id: '/internal/scores/$id'
-      path: '/internal/scores/$id'
-      fullPath: '/internal/scores/$id'
-      preLoaderRoute: typeof InternalScoresIdRouteImport
+    '/api/analysis-runs': {
+      id: '/api/analysis-runs'
+      path: '/api/analysis-runs'
+      fullPath: '/api/analysis-runs'
+      preLoaderRoute: typeof ApiAnalysisRunsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/signals/': {
-      id: '/internal/signals/'
-      path: '/internal/signals'
-      fullPath: '/internal/signals/'
-      preLoaderRoute: typeof InternalSignalsIndexRouteImport
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/internal/signals/$id': {
-      id: '/internal/signals/$id'
-      path: '/internal/signals/$id'
-      fullPath: '/internal/signals/$id'
-      preLoaderRoute: typeof InternalSignalsIdRouteImport
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge-pack/$id/': {
@@ -3558,25 +3026,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KnowledgePackIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/knowledge-pack/$id/activate': {
-      id: '/knowledge-pack/$id/activate'
-      path: '/knowledge-pack/$id/activate'
-      fullPath: '/knowledge-pack/$id/activate'
-      preLoaderRoute: typeof KnowledgePackIdActivateRouteImport
+    '/internal/signals/': {
+      id: '/internal/signals/'
+      path: '/internal/signals'
+      fullPath: '/internal/signals/'
+      preLoaderRoute: typeof InternalSignalsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/knowledge-pack/$id/versions': {
-      id: '/knowledge-pack/$id/versions'
-      path: '/knowledge-pack/$id/versions'
-      fullPath: '/knowledge-pack/$id/versions'
-      preLoaderRoute: typeof KnowledgePackIdVersionsRouteImport
+    '/internal/scores/': {
+      id: '/internal/scores/'
+      path: '/internal/scores'
+      fullPath: '/internal/scores/'
+      preLoaderRoute: typeof InternalScoresIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/public/results/$token': {
-      id: '/public/results/$token'
-      path: '/public/results/$token'
-      fullPath: '/public/results/$token'
-      preLoaderRoute: typeof PublicResultsTokenRouteImport
+    '/internal/runtime/': {
+      id: '/internal/runtime/'
+      path: '/internal/runtime'
+      fullPath: '/internal/runtime/'
+      preLoaderRoute: typeof InternalRuntimeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/rules/': {
+      id: '/internal/rules/'
+      path: '/internal/rules'
+      fullPath: '/internal/rules/'
+      preLoaderRoute: typeof InternalRulesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/patterns/': {
+      id: '/internal/patterns/'
+      path: '/internal/patterns'
+      fullPath: '/internal/patterns/'
+      preLoaderRoute: typeof InternalPatternsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/observations/': {
+      id: '/internal/observations/'
+      path: '/internal/observations'
+      fullPath: '/internal/observations/'
+      preLoaderRoute: typeof InternalObservationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/narratives/': {
+      id: '/internal/narratives/'
+      path: '/internal/narratives'
+      fullPath: '/internal/narratives/'
+      preLoaderRoute: typeof InternalNarrativesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/knowledge-packs/': {
+      id: '/internal/knowledge-packs/'
+      path: '/internal/knowledge-packs'
+      fullPath: '/internal/knowledge-packs/'
+      preLoaderRoute: typeof InternalKnowledgePacksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/audit/': {
+      id: '/internal/audit/'
+      path: '/internal/audit'
+      fullPath: '/internal/audit/'
+      preLoaderRoute: typeof InternalAuditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/': {
+      id: '/assessment/$id/'
+      path: '/assessment/$id'
+      fullPath: '/assessment/$id/'
+      preLoaderRoute: typeof AssessmentIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trace/$entityType/$entityId': {
+      id: '/trace/$entityType/$entityId'
+      path: '/trace/$entityType/$entityId'
+      fullPath: '/trace/$entityType/$entityId'
+      preLoaderRoute: typeof TraceEntityTypeEntityIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report/$id/download': {
@@ -3586,340 +3110,529 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportIdDownloadRouteImport
       parentRoute: typeof ReportIdRoute
     }
-    '/trace/$entityType/$entityId': {
-      id: '/trace/$entityType/$entityId'
-      path: '/trace/$entityType/$entityId'
-      fullPath: '/trace/$entityType/$entityId'
-      preLoaderRoute: typeof TraceEntityTypeEntityIdRouteImport
+    '/public/results/$token': {
+      id: '/public/results/$token'
+      path: '/public/results/$token'
+      fullPath: '/public/results/$token'
+      preLoaderRoute: typeof PublicResultsTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/analysis-runs/$id/explanations': {
-      id: '/api/analysis-runs/$id/explanations'
-      path: '/explanations'
-      fullPath: '/api/analysis-runs/$id/explanations'
-      preLoaderRoute: typeof ApiAnalysisRunsIdExplanationsRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/public-result': {
-      id: '/api/analysis-runs/$id/public-result'
-      path: '/public-result'
-      fullPath: '/api/analysis-runs/$id/public-result'
-      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-confidence': {
-      id: '/api/analysis-runs/$id/recommendation-confidence'
-      path: '/recommendation-confidence'
-      fullPath: '/api/analysis-runs/$id/recommendation-confidence'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationConfidenceRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-evaluation': {
-      id: '/api/analysis-runs/$id/recommendation-evaluation'
-      path: '/recommendation-evaluation'
-      fullPath: '/api/analysis-runs/$id/recommendation-evaluation'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-portfolio': {
-      id: '/api/analysis-runs/$id/recommendation-portfolio'
-      path: '/recommendation-portfolio'
-      fullPath: '/api/analysis-runs/$id/recommendation-portfolio'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationPortfolioRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-priority': {
-      id: '/api/analysis-runs/$id/recommendation-priority'
-      path: '/recommendation-priority'
-      fullPath: '/api/analysis-runs/$id/recommendation-priority'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationPriorityRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-resolution': {
-      id: '/api/analysis-runs/$id/recommendation-resolution'
-      path: '/recommendation-resolution'
-      fullPath: '/api/analysis-runs/$id/recommendation-resolution'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationResolutionRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/recommendation-sequence': {
-      id: '/api/analysis-runs/$id/recommendation-sequence'
-      path: '/recommendation-sequence'
-      fullPath: '/api/analysis-runs/$id/recommendation-sequence'
-      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationSequenceRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/analysis-runs/$id/result': {
-      id: '/api/analysis-runs/$id/result'
-      path: '/result'
-      fullPath: '/api/analysis-runs/$id/result'
-      preLoaderRoute: typeof ApiAnalysisRunsIdResultRouteImport
-      parentRoute: typeof ApiAnalysisRunsIdRoute
-    }
-    '/api/assessment-sessions/$id/archive': {
-      id: '/api/assessment-sessions/$id/archive'
-      path: '/archive'
-      fullPath: '/api/assessment-sessions/$id/archive'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdArchiveRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/assign': {
-      id: '/api/assessment-sessions/$id/assign'
-      path: '/assign'
-      fullPath: '/api/assessment-sessions/$id/assign'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdAssignRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/complete': {
-      id: '/api/assessment-sessions/$id/complete'
-      path: '/complete'
-      fullPath: '/api/assessment-sessions/$id/complete'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdCompleteRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/history': {
-      id: '/api/assessment-sessions/$id/history'
-      path: '/history'
-      fullPath: '/api/assessment-sessions/$id/history'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdHistoryRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/owner': {
-      id: '/api/assessment-sessions/$id/owner'
-      path: '/owner'
-      fullPath: '/api/assessment-sessions/$id/owner'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdOwnerRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/participants': {
-      id: '/api/assessment-sessions/$id/participants'
-      path: '/participants'
-      fullPath: '/api/assessment-sessions/$id/participants'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdParticipantsRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/pause': {
-      id: '/api/assessment-sessions/$id/pause'
-      path: '/pause'
-      fullPath: '/api/assessment-sessions/$id/pause'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdPauseRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/reassess': {
-      id: '/api/assessment-sessions/$id/reassess'
-      path: '/reassess'
-      fullPath: '/api/assessment-sessions/$id/reassess'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdReassessRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/resume': {
-      id: '/api/assessment-sessions/$id/resume'
-      path: '/resume'
-      fullPath: '/api/assessment-sessions/$id/resume'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdResumeRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/review': {
-      id: '/api/assessment-sessions/$id/review'
-      path: '/review'
-      fullPath: '/api/assessment-sessions/$id/review'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdReviewRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/start': {
-      id: '/api/assessment-sessions/$id/start'
-      path: '/start'
-      fullPath: '/api/assessment-sessions/$id/start'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdStartRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment-sessions/$id/timeline': {
-      id: '/api/assessment-sessions/$id/timeline'
-      path: '/timeline'
-      fullPath: '/api/assessment-sessions/$id/timeline'
-      preLoaderRoute: typeof ApiAssessmentSessionsIdTimelineRouteImport
-      parentRoute: typeof ApiAssessmentSessionsIdRoute
-    }
-    '/api/assessment/$id/complete': {
-      id: '/api/assessment/$id/complete'
-      path: '/complete'
-      fullPath: '/api/assessment/$id/complete'
-      preLoaderRoute: typeof ApiAssessmentIdCompleteRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/navigate': {
-      id: '/api/assessment/$id/navigate'
-      path: '/navigate'
-      fullPath: '/api/assessment/$id/navigate'
-      preLoaderRoute: typeof ApiAssessmentIdNavigateRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/pause': {
-      id: '/api/assessment/$id/pause'
-      path: '/pause'
-      fullPath: '/api/assessment/$id/pause'
-      preLoaderRoute: typeof ApiAssessmentIdPauseRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/progress': {
-      id: '/api/assessment/$id/progress'
-      path: '/progress'
-      fullPath: '/api/assessment/$id/progress'
-      preLoaderRoute: typeof ApiAssessmentIdProgressRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/response': {
-      id: '/api/assessment/$id/response'
-      path: '/response'
-      fullPath: '/api/assessment/$id/response'
-      preLoaderRoute: typeof ApiAssessmentIdResponseRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/resume': {
-      id: '/api/assessment/$id/resume'
-      path: '/resume'
-      fullPath: '/api/assessment/$id/resume'
-      preLoaderRoute: typeof ApiAssessmentIdResumeRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/save': {
-      id: '/api/assessment/$id/save'
-      path: '/save'
-      fullPath: '/api/assessment/$id/save'
-      preLoaderRoute: typeof ApiAssessmentIdSaveRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessment/$id/summary': {
-      id: '/api/assessment/$id/summary'
-      path: '/summary'
-      fullPath: '/api/assessment/$id/summary'
-      preLoaderRoute: typeof ApiAssessmentIdSummaryRouteImport
-      parentRoute: typeof ApiAssessmentIdRoute
-    }
-    '/api/assessments/$id/advance': {
-      id: '/api/assessments/$id/advance'
-      path: '/advance'
-      fullPath: '/api/assessments/$id/advance'
-      preLoaderRoute: typeof ApiAssessmentsIdAdvanceRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/analysis-retry': {
-      id: '/api/assessments/$id/analysis-retry'
-      path: '/analysis-retry'
-      fullPath: '/api/assessments/$id/analysis-retry'
-      preLoaderRoute: typeof ApiAssessmentsIdAnalysisRetryRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/analysis-status': {
-      id: '/api/assessments/$id/analysis-status'
-      path: '/analysis-status'
-      fullPath: '/api/assessments/$id/analysis-status'
-      preLoaderRoute: typeof ApiAssessmentsIdAnalysisStatusRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/execute': {
-      id: '/api/assessments/$id/execute'
-      path: '/execute'
-      fullPath: '/api/assessments/$id/execute'
-      preLoaderRoute: typeof ApiAssessmentsIdExecuteRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/intelligence-result': {
-      id: '/api/assessments/$id/intelligence-result'
-      path: '/intelligence-result'
-      fullPath: '/api/assessments/$id/intelligence-result'
-      preLoaderRoute: typeof ApiAssessmentsIdIntelligenceResultRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/results': {
-      id: '/api/assessments/$id/results'
-      path: '/results'
-      fullPath: '/api/assessments/$id/results'
-      preLoaderRoute: typeof ApiAssessmentsIdResultsRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/retry': {
-      id: '/api/assessments/$id/retry'
-      path: '/retry'
-      fullPath: '/api/assessments/$id/retry'
-      preLoaderRoute: typeof ApiAssessmentsIdRetryRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/status': {
-      id: '/api/assessments/$id/status'
-      path: '/status'
-      fullPath: '/api/assessments/$id/status'
-      preLoaderRoute: typeof ApiAssessmentsIdStatusRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/assessments/$id/submit': {
-      id: '/api/assessments/$id/submit'
-      path: '/submit'
-      fullPath: '/api/assessments/$id/submit'
-      preLoaderRoute: typeof ApiAssessmentsIdSubmitRouteImport
-      parentRoute: typeof ApiAssessmentsIdRoute
-    }
-    '/api/auth/invitations/accept': {
-      id: '/api/auth/invitations/accept'
-      path: '/accept'
-      fullPath: '/api/auth/invitations/accept'
-      preLoaderRoute: typeof ApiAuthInvitationsAcceptRouteImport
-      parentRoute: typeof ApiAuthInvitationsRoute
-    }
-    '/api/auth/password/change': {
-      id: '/api/auth/password/change'
-      path: '/api/auth/password/change'
-      fullPath: '/api/auth/password/change'
-      preLoaderRoute: typeof ApiAuthPasswordChangeRouteImport
+    '/knowledge-pack/$id/versions': {
+      id: '/knowledge-pack/$id/versions'
+      path: '/knowledge-pack/$id/versions'
+      fullPath: '/knowledge-pack/$id/versions'
+      preLoaderRoute: typeof KnowledgePackIdVersionsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/password/forgot': {
-      id: '/api/auth/password/forgot'
-      path: '/api/auth/password/forgot'
-      fullPath: '/api/auth/password/forgot'
-      preLoaderRoute: typeof ApiAuthPasswordForgotRouteImport
+    '/knowledge-pack/$id/activate': {
+      id: '/knowledge-pack/$id/activate'
+      path: '/knowledge-pack/$id/activate'
+      fullPath: '/knowledge-pack/$id/activate'
+      preLoaderRoute: typeof KnowledgePackIdActivateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/sessions/$id': {
-      id: '/api/auth/sessions/$id'
+    '/internal/signals/$id': {
+      id: '/internal/signals/$id'
+      path: '/internal/signals/$id'
+      fullPath: '/internal/signals/$id'
+      preLoaderRoute: typeof InternalSignalsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/scores/$id': {
+      id: '/internal/scores/$id'
+      path: '/internal/scores/$id'
+      fullPath: '/internal/scores/$id'
+      preLoaderRoute: typeof InternalScoresIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/rules/$id': {
+      id: '/internal/rules/$id'
+      path: '/internal/rules/$id'
+      fullPath: '/internal/rules/$id'
+      preLoaderRoute: typeof InternalRulesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/patterns/$id': {
+      id: '/internal/patterns/$id'
+      path: '/internal/patterns/$id'
+      fullPath: '/internal/patterns/$id'
+      preLoaderRoute: typeof InternalPatternsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/observations/$id': {
+      id: '/internal/observations/$id'
+      path: '/internal/observations/$id'
+      fullPath: '/internal/observations/$id'
+      preLoaderRoute: typeof InternalObservationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/narratives/$id': {
+      id: '/internal/narratives/$id'
+      path: '/internal/narratives/$id'
+      fullPath: '/internal/narratives/$id'
+      preLoaderRoute: typeof InternalNarrativesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/knowledge-packs/$id': {
+      id: '/internal/knowledge-packs/$id'
+      path: '/internal/knowledge-packs/$id'
+      fullPath: '/internal/knowledge-packs/$id'
+      preLoaderRoute: typeof InternalKnowledgePacksIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/internal/audit/$id': {
+      id: '/internal/audit/$id'
+      path: '/internal/audit/$id'
+      fullPath: '/internal/audit/$id'
+      preLoaderRoute: typeof InternalAuditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explain/$entityType/$entityId': {
+      id: '/explain/$entityType/$entityId'
+      path: '/explain/$entityType/$entityId'
+      fullPath: '/explain/$entityType/$entityId'
+      preLoaderRoute: typeof ExplainEntityTypeEntityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evidence/$entityType/$entityId': {
+      id: '/evidence/$entityType/$entityId'
+      path: '/evidence/$entityType/$entityId'
+      fullPath: '/evidence/$entityType/$entityId'
+      preLoaderRoute: typeof EvidenceEntityTypeEntityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit/event/$id': {
+      id: '/audit/event/$id'
+      path: '/audit/event/$id'
+      fullPath: '/audit/event/$id'
+      preLoaderRoute: typeof AuditEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/summary': {
+      id: '/assessment/$id/summary'
+      path: '/assessment/$id/summary'
+      fullPath: '/assessment/$id/summary'
+      preLoaderRoute: typeof AssessmentIdSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/signals': {
+      id: '/assessment/$id/signals'
+      path: '/assessment/$id/signals'
+      fullPath: '/assessment/$id/signals'
+      preLoaderRoute: typeof AssessmentIdSignalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/scores': {
+      id: '/assessment/$id/scores'
+      path: '/assessment/$id/scores'
+      fullPath: '/assessment/$id/scores'
+      preLoaderRoute: typeof AssessmentIdScoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/rules': {
+      id: '/assessment/$id/rules'
+      path: '/assessment/$id/rules'
+      fullPath: '/assessment/$id/rules'
+      preLoaderRoute: typeof AssessmentIdRulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/results': {
+      id: '/assessment/$id/results'
+      path: '/assessment/$id/results'
+      fullPath: '/assessment/$id/results'
+      preLoaderRoute: typeof AssessmentIdResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/reports': {
+      id: '/assessment/$id/reports'
+      path: '/assessment/$id/reports'
+      fullPath: '/assessment/$id/reports'
+      preLoaderRoute: typeof AssessmentIdReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/processing': {
+      id: '/assessment/$id/processing'
+      path: '/assessment/$id/processing'
+      fullPath: '/assessment/$id/processing'
+      preLoaderRoute: typeof AssessmentIdProcessingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/patterns': {
+      id: '/assessment/$id/patterns'
+      path: '/assessment/$id/patterns'
+      fullPath: '/assessment/$id/patterns'
+      preLoaderRoute: typeof AssessmentIdPatternsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/observations': {
+      id: '/assessment/$id/observations'
+      path: '/assessment/$id/observations'
+      fullPath: '/assessment/$id/observations'
+      preLoaderRoute: typeof AssessmentIdObservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/narrative': {
+      id: '/assessment/$id/narrative'
+      path: '/assessment/$id/narrative'
+      fullPath: '/assessment/$id/narrative'
+      preLoaderRoute: typeof AssessmentIdNarrativeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/evidence-graph': {
+      id: '/assessment/$id/evidence-graph'
+      path: '/assessment/$id/evidence-graph'
+      fullPath: '/assessment/$id/evidence-graph'
+      preLoaderRoute: typeof AssessmentIdEvidenceGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/dashboard': {
+      id: '/assessment/$id/dashboard'
+      path: '/assessment/$id/dashboard'
+      fullPath: '/assessment/$id/dashboard'
+      preLoaderRoute: typeof AssessmentIdDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspaces/$id': {
+      id: '/api/workspaces/$id'
       path: '/$id'
-      fullPath: '/api/auth/sessions/$id'
-      preLoaderRoute: typeof ApiAuthSessionsIdRouteImport
-      parentRoute: typeof ApiAuthSessionsRoute
+      fullPath: '/api/workspaces/$id'
+      preLoaderRoute: typeof ApiWorkspacesIdRouteImport
+      parentRoute: typeof ApiWorkspacesRoute
     }
-    '/api/auth/verify-email/resend': {
-      id: '/api/auth/verify-email/resend'
-      path: '/resend'
-      fullPath: '/api/auth/verify-email/resend'
-      preLoaderRoute: typeof ApiAuthVerifyEmailResendRouteImport
-      parentRoute: typeof ApiAuthVerifyEmailRoute
+    '/api/workspace/switch': {
+      id: '/api/workspace/switch'
+      path: '/api/workspace/switch'
+      fullPath: '/api/workspace/switch'
+      preLoaderRoute: typeof ApiWorkspaceSwitchRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/executions/$id/cancel': {
-      id: '/api/executions/$id/cancel'
-      path: '/cancel'
-      fullPath: '/api/executions/$id/cancel'
-      preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
-      parentRoute: typeof ApiExecutionsIdRoute
+    '/api/user/preferences': {
+      id: '/api/user/preferences'
+      path: '/api/user/preferences'
+      fullPath: '/api/user/preferences'
+      preLoaderRoute: typeof ApiUserPreferencesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/executions/$id/retry': {
-      id: '/api/executions/$id/retry'
-      path: '/retry'
-      fullPath: '/api/executions/$id/retry'
-      preLoaderRoute: typeof ApiExecutionsIdRetryRouteImport
-      parentRoute: typeof ApiExecutionsIdRoute
+    '/api/tenancy/search': {
+      id: '/api/tenancy/search'
+      path: '/api/tenancy/search'
+      fullPath: '/api/tenancy/search'
+      preLoaderRoute: typeof ApiTenancySearchRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/executions/$id/status': {
-      id: '/api/executions/$id/status'
-      path: '/status'
-      fullPath: '/api/executions/$id/status'
-      preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
-      parentRoute: typeof ApiExecutionsIdRoute
+    '/api/shell/audit': {
+      id: '/api/shell/audit'
+      path: '/api/shell/audit'
+      fullPath: '/api/shell/audit'
+      preLoaderRoute: typeof ApiShellAuditRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/internal/analysis-handoffs/reconcile': {
-      id: '/api/internal/analysis-handoffs/reconcile'
-      path: '/api/internal/analysis-handoffs/reconcile'
-      fullPath: '/api/internal/analysis-handoffs/reconcile'
-      preLoaderRoute: typeof ApiInternalAnalysisHandoffsReconcileRouteImport
+    '/api/settings/workspace': {
+      id: '/api/settings/workspace'
+      path: '/api/settings/workspace'
+      fullPath: '/api/settings/workspace'
+      preLoaderRoute: typeof ApiSettingsWorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/settings/organisation': {
+      id: '/api/settings/organisation'
+      path: '/api/settings/organisation'
+      fullPath: '/api/settings/organisation'
+      preLoaderRoute: typeof ApiSettingsOrganisationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/templates': {
+      id: '/api/reporting/templates'
+      path: '/api/reporting/templates'
+      fullPath: '/api/reporting/templates'
+      preLoaderRoute: typeof ApiReportingTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/reports': {
+      id: '/api/reporting/reports'
+      path: '/api/reporting/reports'
+      fullPath: '/api/reporting/reports'
+      preLoaderRoute: typeof ApiReportingReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/queue': {
+      id: '/api/reporting/queue'
+      path: '/api/reporting/queue'
+      fullPath: '/api/reporting/queue'
+      preLoaderRoute: typeof ApiReportingQueueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/preview': {
+      id: '/api/reporting/preview'
+      path: '/api/reporting/preview'
+      fullPath: '/api/reporting/preview'
+      preLoaderRoute: typeof ApiReportingPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/history': {
+      id: '/api/reporting/history'
+      path: '/api/reporting/history'
+      fullPath: '/api/reporting/history'
+      preLoaderRoute: typeof ApiReportingHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/download-centre': {
+      id: '/api/reporting/download-centre'
+      path: '/api/reporting/download-centre'
+      fullPath: '/api/reporting/download-centre'
+      preLoaderRoute: typeof ApiReportingDownloadCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/branding': {
+      id: '/api/reporting/branding'
+      path: '/api/reporting/branding'
+      fullPath: '/api/reporting/branding'
+      preLoaderRoute: typeof ApiReportingBrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-portfolios/$id': {
+      id: '/api/recommendation-portfolios/$id'
+      path: '/api/recommendation-portfolios/$id'
+      fullPath: '/api/recommendation-portfolios/$id'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public-results/$token': {
+      id: '/api/public-results/$token'
+      path: '/api/public-results/$token'
+      fullPath: '/api/public-results/$token'
+      preLoaderRoute: typeof ApiPublicResultsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/organisations/$id': {
+      id: '/api/organisations/$id'
+      path: '/$id'
+      fullPath: '/api/organisations/$id'
+      preLoaderRoute: typeof ApiOrganisationsIdRouteImport
+      parentRoute: typeof ApiOrganisationsRoute
+    }
+    '/api/notifications/read': {
+      id: '/api/notifications/read'
+      path: '/read'
+      fullPath: '/api/notifications/read'
+      preLoaderRoute: typeof ApiNotificationsReadRouteImport
+      parentRoute: typeof ApiNotificationsRoute
+    }
+    '/api/members/invite': {
+      id: '/api/members/invite'
+      path: '/invite'
+      fullPath: '/api/members/invite'
+      preLoaderRoute: typeof ApiMembersInviteRouteImport
+      parentRoute: typeof ApiMembersRoute
+    }
+    '/api/members/$id': {
+      id: '/api/members/$id'
+      path: '/$id'
+      fullPath: '/api/members/$id'
+      preLoaderRoute: typeof ApiMembersIdRouteImport
+      parentRoute: typeof ApiMembersRoute
+    }
+    '/api/internal/recommendation-catalogues': {
+      id: '/api/internal/recommendation-catalogues'
+      path: '/api/internal/recommendation-catalogues'
+      fullPath: '/api/internal/recommendation-catalogues'
+      preLoaderRoute: typeof ApiInternalRecommendationCataloguesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/improvement-actions/$id': {
+      id: '/api/improvement-actions/$id'
+      path: '/api/improvement-actions/$id'
+      fullPath: '/api/improvement-actions/$id'
+      preLoaderRoute: typeof ApiImprovementActionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/monitor': {
+      id: '/api/executions/monitor'
+      path: '/api/executions/monitor'
+      fullPath: '/api/executions/monitor'
+      preLoaderRoute: typeof ApiExecutionsMonitorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/history': {
+      id: '/api/executions/history'
+      path: '/api/executions/history'
+      fullPath: '/api/executions/history'
+      preLoaderRoute: typeof ApiExecutionsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/executions/$id': {
+      id: '/api/executions/$id'
+      path: '/api/executions/$id'
+      fullPath: '/api/executions/$id'
+      preLoaderRoute: typeof ApiExecutionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/verify-email': {
+      id: '/api/auth/verify-email'
+      path: '/api/auth/verify-email'
+      fullPath: '/api/auth/verify-email'
+      preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/sessions': {
+      id: '/api/auth/sessions'
+      path: '/api/auth/sessions'
+      fullPath: '/api/auth/sessions'
+      preLoaderRoute: typeof ApiAuthSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/session': {
+      id: '/api/auth/session'
+      path: '/api/auth/session'
+      fullPath: '/api/auth/session'
+      preLoaderRoute: typeof ApiAuthSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/register': {
+      id: '/api/auth/register'
+      path: '/api/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiAuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/profile': {
+      id: '/api/auth/profile'
+      path: '/api/auth/profile'
+      fullPath: '/api/auth/profile'
+      preLoaderRoute: typeof ApiAuthProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations': {
+      id: '/api/auth/invitations'
+      path: '/api/auth/invitations'
+      fullPath: '/api/auth/invitations'
+      preLoaderRoute: typeof ApiAuthInvitationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/activity': {
+      id: '/api/auth/activity'
+      path: '/api/auth/activity'
+      fullPath: '/api/auth/activity'
+      preLoaderRoute: typeof ApiAuthActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessments/$id': {
+      id: '/api/assessments/$id'
+      path: '/$id'
+      fullPath: '/api/assessments/$id'
+      preLoaderRoute: typeof ApiAssessmentsIdRouteImport
+      parentRoute: typeof ApiAssessmentsRoute
+    }
+    '/api/assessment/start': {
+      id: '/api/assessment/start'
+      path: '/api/assessment/start'
+      fullPath: '/api/assessment/start'
+      preLoaderRoute: typeof ApiAssessmentStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessment/catalogue': {
+      id: '/api/assessment/catalogue'
+      path: '/api/assessment/catalogue'
+      fullPath: '/api/assessment/catalogue'
+      preLoaderRoute: typeof ApiAssessmentCatalogueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessment/$id': {
+      id: '/api/assessment/$id'
+      path: '/api/assessment/$id'
+      fullPath: '/api/assessment/$id'
+      preLoaderRoute: typeof ApiAssessmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assessment-sessions/dashboard': {
+      id: '/api/assessment-sessions/dashboard'
+      path: '/dashboard'
+      fullPath: '/api/assessment-sessions/dashboard'
+      preLoaderRoute: typeof ApiAssessmentSessionsDashboardRouteImport
+      parentRoute: typeof ApiAssessmentSessionsRoute
+    }
+    '/api/assessment-sessions/$id': {
+      id: '/api/assessment-sessions/$id'
+      path: '/$id'
+      fullPath: '/api/assessment-sessions/$id'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdRouteImport
+      parentRoute: typeof ApiAssessmentSessionsRoute
+    }
+    '/api/analysis-runs/$id': {
+      id: '/api/analysis-runs/$id'
+      path: '/$id'
+      fullPath: '/api/analysis-runs/$id'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRouteImport
+      parentRoute: typeof ApiAnalysisRunsRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment/$id/export/$format': {
+      id: '/assessment/$id/export/$format'
+      path: '/assessment/$id/export/$format'
+      fullPath: '/assessment/$id/export/$format'
+      preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/reporting/reports/$id': {
+      id: '/api/reporting/reports/$id'
+      path: '/$id'
+      fullPath: '/api/reporting/reports/$id'
+      preLoaderRoute: typeof ApiReportingReportsIdRouteImport
+      parentRoute: typeof ApiReportingReportsRoute
+    }
+    '/api/recommendation-portfolios/$id/decisions': {
+      id: '/api/recommendation-portfolios/$id/decisions'
+      path: '/decisions'
+      fullPath: '/api/recommendation-portfolios/$id/decisions'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdDecisionsRouteImport
+      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
+    }
+    '/api/recommendation-portfolios/$id/actions': {
+      id: '/api/recommendation-portfolios/$id/actions'
+      path: '/actions'
+      fullPath: '/api/recommendation-portfolios/$id/actions'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdActionsRouteImport
+      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
+    }
+    '/api/portfolio-items/$id/decisions': {
+      id: '/api/portfolio-items/$id/decisions'
+      path: '/api/portfolio-items/$id/decisions'
+      fullPath: '/api/portfolio-items/$id/decisions'
+      preLoaderRoute: typeof ApiPortfolioItemsIdDecisionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/portfolio-items/$id/actions': {
+      id: '/api/portfolio-items/$id/actions'
+      path: '/api/portfolio-items/$id/actions'
+      fullPath: '/api/portfolio-items/$id/actions'
+      preLoaderRoute: typeof ApiPortfolioItemsIdActionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/internal/recommendation-catalogues/$id': {
@@ -3929,74 +3642,340 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiInternalRecommendationCataloguesIdRouteImport
       parentRoute: typeof ApiInternalRecommendationCataloguesRoute
     }
-    '/api/portfolio-items/$id/actions': {
-      id: '/api/portfolio-items/$id/actions'
-      path: '/api/portfolio-items/$id/actions'
-      fullPath: '/api/portfolio-items/$id/actions'
-      preLoaderRoute: typeof ApiPortfolioItemsIdActionsRouteImport
+    '/api/internal/analysis-handoffs/reconcile': {
+      id: '/api/internal/analysis-handoffs/reconcile'
+      path: '/api/internal/analysis-handoffs/reconcile'
+      fullPath: '/api/internal/analysis-handoffs/reconcile'
+      preLoaderRoute: typeof ApiInternalAnalysisHandoffsReconcileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/portfolio-items/$id/decisions': {
-      id: '/api/portfolio-items/$id/decisions'
-      path: '/api/portfolio-items/$id/decisions'
-      fullPath: '/api/portfolio-items/$id/decisions'
-      preLoaderRoute: typeof ApiPortfolioItemsIdDecisionsRouteImport
-      parentRoute: typeof rootRouteImport
+    '/api/executions/$id/status': {
+      id: '/api/executions/$id/status'
+      path: '/status'
+      fullPath: '/api/executions/$id/status'
+      preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
     }
-    '/api/recommendation-portfolios/$id/actions': {
-      id: '/api/recommendation-portfolios/$id/actions'
-      path: '/actions'
-      fullPath: '/api/recommendation-portfolios/$id/actions'
-      preLoaderRoute: typeof ApiRecommendationPortfoliosIdActionsRouteImport
-      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
+    '/api/executions/$id/retry': {
+      id: '/api/executions/$id/retry'
+      path: '/retry'
+      fullPath: '/api/executions/$id/retry'
+      preLoaderRoute: typeof ApiExecutionsIdRetryRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
     }
-    '/api/recommendation-portfolios/$id/decisions': {
-      id: '/api/recommendation-portfolios/$id/decisions'
-      path: '/decisions'
-      fullPath: '/api/recommendation-portfolios/$id/decisions'
-      preLoaderRoute: typeof ApiRecommendationPortfoliosIdDecisionsRouteImport
-      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
+    '/api/executions/$id/cancel': {
+      id: '/api/executions/$id/cancel'
+      path: '/cancel'
+      fullPath: '/api/executions/$id/cancel'
+      preLoaderRoute: typeof ApiExecutionsIdCancelRouteImport
+      parentRoute: typeof ApiExecutionsIdRoute
     }
-    '/api/reporting/reports/$id': {
-      id: '/api/reporting/reports/$id'
+    '/api/auth/verify-email/resend': {
+      id: '/api/auth/verify-email/resend'
+      path: '/resend'
+      fullPath: '/api/auth/verify-email/resend'
+      preLoaderRoute: typeof ApiAuthVerifyEmailResendRouteImport
+      parentRoute: typeof ApiAuthVerifyEmailRoute
+    }
+    '/api/auth/sessions/$id': {
+      id: '/api/auth/sessions/$id'
       path: '/$id'
-      fullPath: '/api/reporting/reports/$id'
-      preLoaderRoute: typeof ApiReportingReportsIdRouteImport
-      parentRoute: typeof ApiReportingReportsRoute
+      fullPath: '/api/auth/sessions/$id'
+      preLoaderRoute: typeof ApiAuthSessionsIdRouteImport
+      parentRoute: typeof ApiAuthSessionsRoute
     }
-    '/assessment/$id/export/$format': {
-      id: '/assessment/$id/export/$format'
-      path: '/assessment/$id/export/$format'
-      fullPath: '/assessment/$id/export/$format'
-      preLoaderRoute: typeof AssessmentIdExportFormatRouteImport
+    '/api/auth/password/forgot': {
+      id: '/api/auth/password/forgot'
+      path: '/api/auth/password/forgot'
+      fullPath: '/api/auth/password/forgot'
+      preLoaderRoute: typeof ApiAuthPasswordForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/analysis-runs/$id/public-results/$publicResultId': {
-      id: '/api/analysis-runs/$id/public-results/$publicResultId'
-      path: '/public-results/$publicResultId'
-      fullPath: '/api/analysis-runs/$id/public-results/$publicResultId'
-      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport
+    '/api/auth/password/change': {
+      id: '/api/auth/password/change'
+      path: '/api/auth/password/change'
+      fullPath: '/api/auth/password/change'
+      preLoaderRoute: typeof ApiAuthPasswordChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/invitations/accept': {
+      id: '/api/auth/invitations/accept'
+      path: '/accept'
+      fullPath: '/api/auth/invitations/accept'
+      preLoaderRoute: typeof ApiAuthInvitationsAcceptRouteImport
+      parentRoute: typeof ApiAuthInvitationsRoute
+    }
+    '/api/assessments/$id/submit': {
+      id: '/api/assessments/$id/submit'
+      path: '/submit'
+      fullPath: '/api/assessments/$id/submit'
+      preLoaderRoute: typeof ApiAssessmentsIdSubmitRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/status': {
+      id: '/api/assessments/$id/status'
+      path: '/status'
+      fullPath: '/api/assessments/$id/status'
+      preLoaderRoute: typeof ApiAssessmentsIdStatusRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/retry': {
+      id: '/api/assessments/$id/retry'
+      path: '/retry'
+      fullPath: '/api/assessments/$id/retry'
+      preLoaderRoute: typeof ApiAssessmentsIdRetryRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/results': {
+      id: '/api/assessments/$id/results'
+      path: '/results'
+      fullPath: '/api/assessments/$id/results'
+      preLoaderRoute: typeof ApiAssessmentsIdResultsRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/intelligence-result': {
+      id: '/api/assessments/$id/intelligence-result'
+      path: '/intelligence-result'
+      fullPath: '/api/assessments/$id/intelligence-result'
+      preLoaderRoute: typeof ApiAssessmentsIdIntelligenceResultRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/execute': {
+      id: '/api/assessments/$id/execute'
+      path: '/execute'
+      fullPath: '/api/assessments/$id/execute'
+      preLoaderRoute: typeof ApiAssessmentsIdExecuteRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/analysis-status': {
+      id: '/api/assessments/$id/analysis-status'
+      path: '/analysis-status'
+      fullPath: '/api/assessments/$id/analysis-status'
+      preLoaderRoute: typeof ApiAssessmentsIdAnalysisStatusRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/analysis-retry': {
+      id: '/api/assessments/$id/analysis-retry'
+      path: '/analysis-retry'
+      fullPath: '/api/assessments/$id/analysis-retry'
+      preLoaderRoute: typeof ApiAssessmentsIdAnalysisRetryRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessments/$id/advance': {
+      id: '/api/assessments/$id/advance'
+      path: '/advance'
+      fullPath: '/api/assessments/$id/advance'
+      preLoaderRoute: typeof ApiAssessmentsIdAdvanceRouteImport
+      parentRoute: typeof ApiAssessmentsIdRoute
+    }
+    '/api/assessment/$id/summary': {
+      id: '/api/assessment/$id/summary'
+      path: '/summary'
+      fullPath: '/api/assessment/$id/summary'
+      preLoaderRoute: typeof ApiAssessmentIdSummaryRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/save': {
+      id: '/api/assessment/$id/save'
+      path: '/save'
+      fullPath: '/api/assessment/$id/save'
+      preLoaderRoute: typeof ApiAssessmentIdSaveRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/resume': {
+      id: '/api/assessment/$id/resume'
+      path: '/resume'
+      fullPath: '/api/assessment/$id/resume'
+      preLoaderRoute: typeof ApiAssessmentIdResumeRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/response': {
+      id: '/api/assessment/$id/response'
+      path: '/response'
+      fullPath: '/api/assessment/$id/response'
+      preLoaderRoute: typeof ApiAssessmentIdResponseRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/progress': {
+      id: '/api/assessment/$id/progress'
+      path: '/progress'
+      fullPath: '/api/assessment/$id/progress'
+      preLoaderRoute: typeof ApiAssessmentIdProgressRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/pause': {
+      id: '/api/assessment/$id/pause'
+      path: '/pause'
+      fullPath: '/api/assessment/$id/pause'
+      preLoaderRoute: typeof ApiAssessmentIdPauseRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/navigate': {
+      id: '/api/assessment/$id/navigate'
+      path: '/navigate'
+      fullPath: '/api/assessment/$id/navigate'
+      preLoaderRoute: typeof ApiAssessmentIdNavigateRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment/$id/complete': {
+      id: '/api/assessment/$id/complete'
+      path: '/complete'
+      fullPath: '/api/assessment/$id/complete'
+      preLoaderRoute: typeof ApiAssessmentIdCompleteRouteImport
+      parentRoute: typeof ApiAssessmentIdRoute
+    }
+    '/api/assessment-sessions/$id/timeline': {
+      id: '/api/assessment-sessions/$id/timeline'
+      path: '/timeline'
+      fullPath: '/api/assessment-sessions/$id/timeline'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdTimelineRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/start': {
+      id: '/api/assessment-sessions/$id/start'
+      path: '/start'
+      fullPath: '/api/assessment-sessions/$id/start'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdStartRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/review': {
+      id: '/api/assessment-sessions/$id/review'
+      path: '/review'
+      fullPath: '/api/assessment-sessions/$id/review'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdReviewRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/resume': {
+      id: '/api/assessment-sessions/$id/resume'
+      path: '/resume'
+      fullPath: '/api/assessment-sessions/$id/resume'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdResumeRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/reassess': {
+      id: '/api/assessment-sessions/$id/reassess'
+      path: '/reassess'
+      fullPath: '/api/assessment-sessions/$id/reassess'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdReassessRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/pause': {
+      id: '/api/assessment-sessions/$id/pause'
+      path: '/pause'
+      fullPath: '/api/assessment-sessions/$id/pause'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdPauseRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/participants': {
+      id: '/api/assessment-sessions/$id/participants'
+      path: '/participants'
+      fullPath: '/api/assessment-sessions/$id/participants'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdParticipantsRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/owner': {
+      id: '/api/assessment-sessions/$id/owner'
+      path: '/owner'
+      fullPath: '/api/assessment-sessions/$id/owner'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdOwnerRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/history': {
+      id: '/api/assessment-sessions/$id/history'
+      path: '/history'
+      fullPath: '/api/assessment-sessions/$id/history'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdHistoryRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/complete': {
+      id: '/api/assessment-sessions/$id/complete'
+      path: '/complete'
+      fullPath: '/api/assessment-sessions/$id/complete'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdCompleteRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/assign': {
+      id: '/api/assessment-sessions/$id/assign'
+      path: '/assign'
+      fullPath: '/api/assessment-sessions/$id/assign'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdAssignRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/assessment-sessions/$id/archive': {
+      id: '/api/assessment-sessions/$id/archive'
+      path: '/archive'
+      fullPath: '/api/assessment-sessions/$id/archive'
+      preLoaderRoute: typeof ApiAssessmentSessionsIdArchiveRouteImport
+      parentRoute: typeof ApiAssessmentSessionsIdRoute
+    }
+    '/api/analysis-runs/$id/result': {
+      id: '/api/analysis-runs/$id/result'
+      path: '/result'
+      fullPath: '/api/analysis-runs/$id/result'
+      preLoaderRoute: typeof ApiAnalysisRunsIdResultRouteImport
       parentRoute: typeof ApiAnalysisRunsIdRoute
     }
-    '/api/internal/recommendation-catalogues/$id/command': {
-      id: '/api/internal/recommendation-catalogues/$id/command'
-      path: '/command'
-      fullPath: '/api/internal/recommendation-catalogues/$id/command'
-      preLoaderRoute: typeof ApiInternalRecommendationCataloguesIdCommandRouteImport
-      parentRoute: typeof ApiInternalRecommendationCataloguesIdRoute
+    '/api/analysis-runs/$id/recommendation-sequence': {
+      id: '/api/analysis-runs/$id/recommendation-sequence'
+      path: '/recommendation-sequence'
+      fullPath: '/api/analysis-runs/$id/recommendation-sequence'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationSequenceRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
     }
-    '/api/reporting/reports/$id/archive': {
-      id: '/api/reporting/reports/$id/archive'
-      path: '/archive'
-      fullPath: '/api/reporting/reports/$id/archive'
-      preLoaderRoute: typeof ApiReportingReportsIdArchiveRouteImport
-      parentRoute: typeof ApiReportingReportsIdRoute
+    '/api/analysis-runs/$id/recommendation-resolution': {
+      id: '/api/analysis-runs/$id/recommendation-resolution'
+      path: '/recommendation-resolution'
+      fullPath: '/api/analysis-runs/$id/recommendation-resolution'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationResolutionRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
     }
-    '/api/reporting/reports/$id/download': {
-      id: '/api/reporting/reports/$id/download'
-      path: '/download'
-      fullPath: '/api/reporting/reports/$id/download'
-      preLoaderRoute: typeof ApiReportingReportsIdDownloadRouteImport
+    '/api/analysis-runs/$id/recommendation-priority': {
+      id: '/api/analysis-runs/$id/recommendation-priority'
+      path: '/recommendation-priority'
+      fullPath: '/api/analysis-runs/$id/recommendation-priority'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationPriorityRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/recommendation-portfolio': {
+      id: '/api/analysis-runs/$id/recommendation-portfolio'
+      path: '/recommendation-portfolio'
+      fullPath: '/api/analysis-runs/$id/recommendation-portfolio'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationPortfolioRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/recommendation-evaluation': {
+      id: '/api/analysis-runs/$id/recommendation-evaluation'
+      path: '/recommendation-evaluation'
+      fullPath: '/api/analysis-runs/$id/recommendation-evaluation'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/recommendation-confidence': {
+      id: '/api/analysis-runs/$id/recommendation-confidence'
+      path: '/recommendation-confidence'
+      fullPath: '/api/analysis-runs/$id/recommendation-confidence'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationConfidenceRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/public-result': {
+      id: '/api/analysis-runs/$id/public-result'
+      path: '/public-result'
+      fullPath: '/api/analysis-runs/$id/public-result'
+      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/analysis-runs/$id/explanations': {
+      id: '/api/analysis-runs/$id/explanations'
+      path: '/explanations'
+      fullPath: '/api/analysis-runs/$id/explanations'
+      preLoaderRoute: typeof ApiAnalysisRunsIdExplanationsRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
+    '/api/reporting/reports/$id/retry': {
+      id: '/api/reporting/reports/$id/retry'
+      path: '/retry'
+      fullPath: '/api/reporting/reports/$id/retry'
+      preLoaderRoute: typeof ApiReportingReportsIdRetryRouteImport
       parentRoute: typeof ApiReportingReportsIdRoute
     }
     '/api/reporting/reports/$id/regenerate': {
@@ -4006,12 +3985,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiReportingReportsIdRegenerateRouteImport
       parentRoute: typeof ApiReportingReportsIdRoute
     }
-    '/api/reporting/reports/$id/retry': {
-      id: '/api/reporting/reports/$id/retry'
-      path: '/retry'
-      fullPath: '/api/reporting/reports/$id/retry'
-      preLoaderRoute: typeof ApiReportingReportsIdRetryRouteImport
+    '/api/reporting/reports/$id/download': {
+      id: '/api/reporting/reports/$id/download'
+      path: '/download'
+      fullPath: '/api/reporting/reports/$id/download'
+      preLoaderRoute: typeof ApiReportingReportsIdDownloadRouteImport
       parentRoute: typeof ApiReportingReportsIdRoute
+    }
+    '/api/reporting/reports/$id/archive': {
+      id: '/api/reporting/reports/$id/archive'
+      path: '/archive'
+      fullPath: '/api/reporting/reports/$id/archive'
+      preLoaderRoute: typeof ApiReportingReportsIdArchiveRouteImport
+      parentRoute: typeof ApiReportingReportsIdRoute
+    }
+    '/api/internal/recommendation-catalogues/$id/command': {
+      id: '/api/internal/recommendation-catalogues/$id/command'
+      path: '/command'
+      fullPath: '/api/internal/recommendation-catalogues/$id/command'
+      preLoaderRoute: typeof ApiInternalRecommendationCataloguesIdCommandRouteImport
+      parentRoute: typeof ApiInternalRecommendationCataloguesIdRoute
+    }
+    '/api/analysis-runs/$id/public-results/$publicResultId': {
+      id: '/api/analysis-runs/$id/public-results/$publicResultId'
+      path: '/public-results/$publicResultId'
+      fullPath: '/api/analysis-runs/$id/public-results/$publicResultId'
+      preLoaderRoute: typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
     }
     '/api/analysis-runs/$id/recommendations/$recommendationId/accept': {
       id: '/api/analysis-runs/$id/recommendations/$recommendationId/accept'

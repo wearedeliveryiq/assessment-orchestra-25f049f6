@@ -43,7 +43,8 @@ function key(scope: string, payload: Record<string, unknown>) {
 async function response<T>(request: Promise<Response>, fallback: string, semanticRequest: string) {
   const result = await request;
   const body = (await result.json().catch(() => null)) as
-    (T & { error?: string; code?: string }) | null;
+    | (T & { error?: string; code?: string })
+    | null;
   if (!result.ok) {
     const error = new Error(body?.error ?? fallback);
     Object.assign(error, { status: result.status, code: body?.code });
@@ -58,7 +59,8 @@ export async function fetchRecommendationPortfolioActions(portfolioId: string) {
     headers: await assessmentAuthHeaders(),
   });
   const body = (await result.json().catch(() => null)) as
-    (RecommendationPortfolioActionsView & { error?: string }) | null;
+    | (RecommendationPortfolioActionsView & { error?: string })
+    | null;
   if (!result.ok) throw new Error(body?.error ?? "Improvement actions are unavailable.");
   return body as RecommendationPortfolioActionsView;
 }
