@@ -4294,6 +4294,358 @@ export type Database = {
           },
         ]
       }
+      recommendation_improvement_action_events: {
+        Row: {
+          accountable_owner_id: string | null
+          action_id: string
+          action_version: number
+          actor_user_id: string
+          analysis_run_id: string
+          blocking_dependency_ids: string[]
+          command: Database["public"]["Enums"]["recommendation_action_command"]
+          completion_note: string | null
+          contributor_ids: string[]
+          current_state: Database["public"]["Enums"]["recommendation_action_status"]
+          dependency_override: boolean
+          dependency_override_acknowledged: boolean
+          dependency_override_reason: string | null
+          evidence_not_available_reason: string | null
+          evidence_references: string[]
+          id: string
+          idempotency_key: string
+          note: string | null
+          occurred_at: string
+          organisation_id: string
+          payload_hash: string
+          plan_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          previous_state:
+            | Database["public"]["Enums"]["recommendation_action_status"]
+            | null
+          target_date: string | null
+          workspace_id: string
+        }
+        Insert: {
+          accountable_owner_id?: string | null
+          action_id: string
+          action_version: number
+          actor_user_id: string
+          analysis_run_id: string
+          blocking_dependency_ids?: string[]
+          command: Database["public"]["Enums"]["recommendation_action_command"]
+          completion_note?: string | null
+          contributor_ids?: string[]
+          current_state: Database["public"]["Enums"]["recommendation_action_status"]
+          dependency_override?: boolean
+          dependency_override_acknowledged?: boolean
+          dependency_override_reason?: string | null
+          evidence_not_available_reason?: string | null
+          evidence_references?: string[]
+          id?: string
+          idempotency_key: string
+          note?: string | null
+          occurred_at?: string
+          organisation_id: string
+          payload_hash: string
+          plan_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          previous_state?:
+            | Database["public"]["Enums"]["recommendation_action_status"]
+            | null
+          target_date?: string | null
+          workspace_id: string
+        }
+        Update: {
+          accountable_owner_id?: string | null
+          action_id?: string
+          action_version?: number
+          actor_user_id?: string
+          analysis_run_id?: string
+          blocking_dependency_ids?: string[]
+          command?: Database["public"]["Enums"]["recommendation_action_command"]
+          completion_note?: string | null
+          contributor_ids?: string[]
+          current_state?: Database["public"]["Enums"]["recommendation_action_status"]
+          dependency_override?: boolean
+          dependency_override_acknowledged?: boolean
+          dependency_override_reason?: string | null
+          evidence_not_available_reason?: string | null
+          evidence_references?: string[]
+          id?: string
+          idempotency_key?: string
+          note?: string | null
+          occurred_at?: string
+          organisation_id?: string
+          payload_hash?: string
+          plan_id?: string
+          portfolio_id?: string
+          portfolio_item_id?: string
+          previous_state?:
+            | Database["public"]["Enums"]["recommendation_action_status"]
+            | null
+          target_date?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_improvement_action_events_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_improvement_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_improvement_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_action_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_improvement_actions: {
+        Row: {
+          accountable_owner_id: string | null
+          action_version: number
+          analysis_run_id: string
+          cancelled_at: string | null
+          completed_at: string | null
+          completion_note: string | null
+          contributor_ids: string[]
+          created_at: string
+          evidence_not_available_reason: string | null
+          evidence_references: string[]
+          id: string
+          latest_event_id: string
+          note: string | null
+          organisation_id: string
+          plan_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          recommendation_id: string
+          recommendation_version: string
+          source_decision_id: string
+          source_decision_version: number
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_action_status"]
+          target_date: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          accountable_owner_id?: string | null
+          action_version: number
+          analysis_run_id: string
+          cancelled_at?: string | null
+          completed_at?: string | null
+          completion_note?: string | null
+          contributor_ids?: string[]
+          created_at: string
+          evidence_not_available_reason?: string | null
+          evidence_references?: string[]
+          id: string
+          latest_event_id: string
+          note?: string | null
+          organisation_id: string
+          plan_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          recommendation_id: string
+          recommendation_version: string
+          source_decision_id: string
+          source_decision_version: number
+          started_at?: string | null
+          status: Database["public"]["Enums"]["recommendation_action_status"]
+          target_date?: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        Update: {
+          accountable_owner_id?: string | null
+          action_version?: number
+          analysis_run_id?: string
+          cancelled_at?: string | null
+          completed_at?: string | null
+          completion_note?: string | null
+          contributor_ids?: string[]
+          created_at?: string
+          evidence_not_available_reason?: string | null
+          evidence_references?: string[]
+          id?: string
+          latest_event_id?: string
+          note?: string | null
+          organisation_id?: string
+          plan_id?: string
+          portfolio_id?: string
+          portfolio_item_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          source_decision_id?: string
+          source_decision_version?: number
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["recommendation_action_status"]
+          target_date?: string | null
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_improvement_actions_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_latest_event_id_fkey"
+            columns: ["latest_event_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_improvement_action_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_improvement_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_source_decision_id_fkey"
+            columns: ["source_decision_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_item_decisions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_actions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_improvement_plans: {
+        Row: {
+          analysis_run_id: string
+          created_at: string
+          created_by_user_id: string
+          id: string
+          organisation_id: string
+          plan_version: number
+          portfolio_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          created_at?: string
+          created_by_user_id: string
+          id?: string
+          organisation_id: string
+          plan_version: number
+          portfolio_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          created_at?: string
+          created_by_user_id?: string
+          id?: string
+          organisation_id?: string
+          plan_version?: number
+          portfolio_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_improvement_plans_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_plans_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_plans_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_improvement_plans_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_item_decisions: {
         Row: {
           acknowledged: boolean
@@ -6992,6 +7344,43 @@ export type Database = {
         Args: { p_limit?: number }
         Returns: number
       }
+      record_recommendation_improvement_action: {
+        Args: { p_input: Json }
+        Returns: {
+          accountable_owner_id: string | null
+          action_version: number
+          analysis_run_id: string
+          cancelled_at: string | null
+          completed_at: string | null
+          completion_note: string | null
+          contributor_ids: string[]
+          created_at: string
+          evidence_not_available_reason: string | null
+          evidence_references: string[]
+          id: string
+          latest_event_id: string
+          note: string | null
+          organisation_id: string
+          plan_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          recommendation_id: string
+          recommendation_version: string
+          source_decision_id: string
+          source_decision_version: number
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_action_status"]
+          target_date: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_improvement_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       record_recommendation_item_decision: {
         Args: { p_input: Json }
         Returns: {
@@ -7183,6 +7572,19 @@ export type Database = {
         | "organisation_owner"
         | "workspace_manager"
         | "product_governance"
+      recommendation_action_command:
+        | "created"
+        | "updated"
+        | "started"
+        | "blocked"
+        | "completed"
+        | "cancelled"
+      recommendation_action_status:
+        | "not_started"
+        | "in_progress"
+        | "blocked"
+        | "completed"
+        | "cancelled"
       recommendation_catalogue_state:
         | "draft"
         | "in_review"
@@ -7408,6 +7810,21 @@ export const Constants = {
         "organisation_owner",
         "workspace_manager",
         "product_governance",
+      ],
+      recommendation_action_command: [
+        "created",
+        "updated",
+        "started",
+        "blocked",
+        "completed",
+        "cancelled",
+      ],
+      recommendation_action_status: [
+        "not_started",
+        "in_progress",
+        "blocked",
+        "completed",
+        "cancelled",
       ],
       recommendation_catalogue_state: [
         "draft",
