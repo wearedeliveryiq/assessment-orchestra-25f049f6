@@ -1,0 +1,165 @@
+import type {
+  AssessmentAnswerInput,
+  AssessmentResponse,
+  AssessmentSession,
+} from "../assessment/types";
+import { sprint03Configuration } from "../delivery-intelligence/config";
+import {
+  DELIVERY_DNA_ASSESSMENT_TYPE,
+  DELIVERY_DNA_NOT_APPLICABLE_REASON,
+  deliveryDnaCatalogue,
+  deliveryDnaQuestionManifest,
+} from "./catalogue";
+
+export interface DeliveryDnaIdentitySnapshot {
+  assessmentType: string;
+  knowledgePackId: string;
+  knowledgePackVersion: string;
+  questionSetId: string;
+  questionSetVersion: string;
+  configurationSetId: string;
+  questionManifest: string[];
+  questionManifestDigest: string;
+}
+
+export interface DeliveryDnaCompletionOptions {
+  reviewAcknowledged?: boolean;
+  missingAcknowledged?: boolean;
+}
+
+const questionById = new Map(
+  deliveryDnaCatalogue.capabilities.flatMap((capability) =>
+    capability.questions.map(
+      (question) => [question.id, { ...question, sectionId: capability.id }] as const,
+    ),
+  ),
+);
+
+export function deliveryDnaIdentityOf(session: AssessmentSession): DeliveryDnaIdentitySnapshot {
+  const snapshot = (session.metadata as { deliveryDna?: unknown }).deliveryDna;
+  if (!snapshot || typeof snapshot !== "object") throw new Error("DELIVERY_DNA_IDENTITY_INVALID");
+  const value = snapshot as Partial<DeliveryDnaIdentitySnapshot>;
+  const expected = deliveryDnaCatalogue.identity;
+  const rawManifest = Array.isArray(value.questionManifest) ? value.questionManifest : [];
+  const manifest = rawManifest.filter((item): item is string => typeof item === "string");
+  const exactManifest =
+    rawManifest.length === manifest.length &&
+    manifest.length === deliveryDnaQuestionManifest.length &&
+    new Set(manifest).size === manifest.length &&
+    [...manifest].sort().every((id, index) => id === deliveryDnaQuestionManifest[index]);
+  if (
+    session.assessmentType !== DELIVERY_DNA_ASSESSMENT_TYPE ||
+    value.assessmentType !== expected.assessmentType ||
+    value.knowledgePackId !== expected.knowledgePackId ||
+    value.knowledgePackVersion !== expected.knowledgePackVersion ||
+    value.questionSetId !== expected.questionSetId ||
+    value.questionSetVersion !== expected.questionSetVersion ||
+    value.configurationSetId !== deliveryDnaCatalogue.document.configurationSetId ||
+    typeof value.questionManifestDigest !== "string" ||
+    !/^[0-9a-f]{64}$/.test(value.questionManifestDigest) ||
+    !exactManifest
+  ) {
+    throw new Error("DELIVERY_DNA_IDENTITY_INVALID");
+  }
+  return value as DeliveryDnaIdentitySnapshot;
+}
+
+export function normaliseCustomerAnswer(answer: AssessmentAnswerInput) {
+  const question = questionById.get(answer.questionId);
+  if (!question) throw new Error("DELIVERY_DNA_QUESTION_INVALID");
+  const status = answer.evidenceStatus ?? "answered";
+  if (status === "not_applicable") {
+    const reason = answer.evidenceReasonText?.trim() ?? "";
+    if (!reason) throw new Error("DELIVERY_DNA_NOT_APPLICABLE_REASON_REQUIRED");
+    if (reason.length > 500) throw new Error("DELIVERY_DNA_NOT_APPLICABLE_REASON_TOO_LONG");
+    return {
+      questionId: answer.questionId,
+      sectionId: question.sectionId,
+      value: null,
+      notes: answer.notes ?? null,
+      evidenceStatus: status,
+      evidenceReasonCode: DELIVERY_DNA_NOT_APPLICABLE_REASON,
+      evidenceReasonText: reason,
+    } as const;
+  }
+  if (!Number.isInteger(answer.value) || Number(answer.value) < 1 || Number(answer.value) > 5) {
+    throw new Error("DELIVERY_DNA_ANSWER_INVALID");
+  }
+  return {
+    questionId: answer.questionId,
+    sectionId: question.sectionId,
+    value: Number(answer.value),
+    notes: answer.notes ?? null,
+    evidenceStatus: "answered" as const,
+    evidenceReasonCode: null,
+    evidenceReasonText: null,
+  };
+}
+
+export function prepareDeliveryDnaCompletion(
+  session: AssessmentSession,
+  responses: AssessmentResponse[],
+  options: DeliveryDnaCompletionOptions,
+) {
+  const identity = deliveryDnaIdentityOf(session);
+  if (!options.reviewAcknowledged) throw new Error("DELIVERY_DNA_REVIEW_REQUIRED");
+  const responseById = new Map<string, AssessmentResponse>();
+  for (const response of responses) {
+    if (!questionById.has(response.questionId) || responseById.has(response.questionId)) {
+      throw new Error("DELIVERY_DNA_MANIFEST_INVALID");
+    }
+    const status = response.evidenceStatus ?? "answered";
+    if (status === "answered") {
+      if (
+        !Number.isInteger(response.value) ||
+        Number(response.value) < 1 ||
+        Number(response.value) > 5
+      ) {
+        throw new Error("DELIVERY_DNA_ANSWER_INVALID");
+      }
+    } else if (status === "not_applicable") {
+      if (
+        response.value !== null ||
+        response.evidenceReasonCode !== DELIVERY_DNA_NOT_APPLICABLE_REASON ||
+        !response.evidenceReasonText?.trim()
+      ) {
+        throw new Error("DELIVERY_DNA_NOT_APPLICABLE_REASON_REQUIRED");
+      }
+    } else if (status === "excluded") {
+      if (
+        !response.exclusionReason ||
+        !sprint03Configuration.scoring.approvedExclusionReasons.includes(response.exclusionReason)
+      ) {
+        throw new Error("DELIVERY_DNA_EXCLUSION_INVALID");
+      }
+    } else if (status !== "missing") {
+      throw new Error("DELIVERY_DNA_EVIDENCE_STATUS_INVALID");
+    }
+    responseById.set(response.questionId, response);
+  }
+
+  const missingQuestionIds = deliveryDnaQuestionManifest.filter(
+    (id) => !responseById.has(id) || responseById.get(id)?.evidenceStatus === "missing",
+  );
+  if (missingQuestionIds.length && !options.missingAcknowledged) {
+    throw new Error("DELIVERY_DNA_MISSING_ACKNOWLEDGEMENT_REQUIRED");
+  }
+  const missingResponses = missingQuestionIds
+    .filter((questionId) => !responseById.has(questionId))
+    .map((questionId) => ({
+      questionId,
+      sectionId: questionById.get(questionId)!.sectionId,
+      value: null,
+      notes: null,
+      evidenceStatus: "missing" as const,
+      evidenceReasonCode: null,
+      evidenceReasonText: null,
+    }));
+  return { identity, missingResponses, missingCount: missingQuestionIds.length };
+}
+
+export function answeredEvidenceCount(responses: AssessmentResponse[]): number {
+  return responses.filter((response) =>
+    ["answered", "not_applicable", "excluded"].includes(response.evidenceStatus ?? "answered"),
+  ).length;
+}

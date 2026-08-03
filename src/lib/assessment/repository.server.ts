@@ -106,6 +106,7 @@ export async function createSession(input: {
   organisationName: string;
   contactName?: string | null;
   assessmentType?: string;
+  metadata?: Record<string, unknown>;
 }): Promise<AssessmentSession> {
   const row = unwrap<SessionRow>(
     await sessions()
@@ -117,6 +118,7 @@ export async function createSession(input: {
         organisation_name: input.organisationName,
         contact_name: input.contactName ?? null,
         assessment_type: input.assessmentType ?? "delivery-maturity",
+        metadata: input.metadata ?? {},
         status: "draft",
       })
       .select()
@@ -172,6 +174,29 @@ export async function updateSession(
   return toSession(row);
 }
 
+/** Complete a draft exactly once so concurrent customer submits cannot rewrite completion state. */
+export async function completeDeliveryDnaSession(
+  id: string,
+  patch: Record<string, unknown>,
+): Promise<{ session: AssessmentSession; transitioned: boolean }> {
+  const result = await sessions()
+    .update(patch)
+    .eq("id", id)
+    .in("status", ["draft", "in_progress"])
+    .select("*")
+    .maybeSingle();
+  if (result.error) throw new Error(result.error.message);
+  if (result.data) return { session: toSession(result.data as SessionRow), transitioned: true };
+
+  const current = unwrap<SessionRow | null>(
+    await sessions().select("*").eq("id", id).maybeSingle(),
+  );
+  if (current?.status === "completed") {
+    return { session: toSession(current), transitioned: false };
+  }
+  throw new Error("DELIVERY_DNA_COMPLETION_CONFLICT");
+}
+
 export async function getResponses(sessionId: string): Promise<AssessmentResponse[]> {
   const rows = unwrap<
     {
@@ -185,6 +210,8 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
       exclusion_reason?: string | null;
       respondent_group_id?: string | null;
       evidence_at?: string | null;
+      evidence_reason_code?: string | null;
+      evidence_reason_text?: string | null;
     }[]
   >(await responses().select("*").eq("session_id", sessionId));
 
@@ -199,6 +226,8 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
     exclusionReason: row.exclusion_reason ?? null,
     respondentGroupId: row.respondent_group_id ?? null,
     evidenceAt: row.evidence_at ?? null,
+    evidenceReasonCode: row.evidence_reason_code ?? null,
+    evidenceReasonText: row.evidence_reason_text ?? null,
   }));
 }
 
@@ -209,18 +238,30 @@ export async function upsertResponses(
     sectionId: string;
     value: number | string | null;
     notes?: string | null;
+    evidenceStatus?: "answered" | "not_applicable" | "excluded" | "missing";
+    evidenceReasonCode?: string | null;
+    evidenceReasonText?: string | null;
   }[],
 ): Promise<void> {
   if (items.length === 0) return;
-  const payload = items.map((item) => ({
-    session_id: sessionId,
-    question_id: item.questionId,
-    section_id: item.sectionId,
-    value: item.value,
-    score: typeof item.value === "number" ? item.value : null,
-    notes: item.notes ?? null,
-    answered_at: new Date().toISOString(),
-  }));
+  const now = new Date().toISOString();
+  const payload = items.map((item) => {
+    const evidenceStatus = item.evidenceStatus ?? "answered";
+    return {
+      session_id: sessionId,
+      question_id: item.questionId,
+      section_id: item.sectionId,
+      value: item.value,
+      score: typeof item.value === "number" ? item.value : null,
+      notes: item.notes ?? null,
+      answered_at: now,
+      evidence_at: evidenceStatus === "answered" ? now : null,
+      evidence_status: evidenceStatus,
+      evidence_reason_code: item.evidenceReasonCode ?? null,
+      evidence_reason_text: item.evidenceReasonText ?? null,
+      exclusion_reason: evidenceStatus === "excluded" ? (item.evidenceReasonCode ?? null) : null,
+    };
+  });
   const { error } = await responses().upsert(payload, { onConflict: "session_id,question_id" });
   if (error) throw new Error(error.message);
 }

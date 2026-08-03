@@ -1,6 +1,5 @@
 import type { AssessmentResponse, AssessmentSession } from "../assessment/types";
 import { SPRINT03_CONFIGURATION_SET_ID } from "../delivery-intelligence/config";
-import type { KnowledgePackDocument } from "../knowledge-packs/schema";
 import {
   ANALYSIS_ENGINE_VERSION,
   ANALYSIS_SCHEMA_VERSION,
@@ -19,10 +18,15 @@ export class AnalysisValidationError extends Error {
   }
 }
 
+export interface AnalysisQuestionSet {
+  manifest: { id: string; version: string; questionSetVersion?: string };
+  questions: { questions: Array<{ id: string; sectionId: string }> };
+}
+
 export function normaliseAnalysisInput(input: {
   session: AssessmentSession;
   responses: AssessmentResponse[];
-  pack: KnowledgePackDocument;
+  pack: AnalysisQuestionSet;
   requestedMode?: AnalysisRequestedMode;
 }): CanonicalAnalysisInput {
   const { session, responses, pack } = input;
@@ -66,7 +70,7 @@ export function normaliseAnalysisInput(input: {
     knowledgePack: {
       id: pack.manifest.id,
       version: pack.manifest.version,
-      questionSetVersion: pack.manifest.version,
+      questionSetVersion: pack.manifest.questionSetVersion ?? pack.manifest.version,
     },
     requestedMode: input.requestedMode ?? "workspace",
     responses: [...pack.questions.questions]
@@ -88,7 +92,7 @@ export function normaliseAnalysisInput(input: {
           sectionId: question.sectionId,
           value: status === "answered" ? response.value : null,
           status,
-          exclusionReason: response.exclusionReason ?? null,
+          exclusionReason: response.evidenceReasonCode ?? response.exclusionReason ?? null,
           respondentGroupId: response.respondentGroupId ?? null,
           evidenceAt: response.evidenceAt ?? null,
         };
