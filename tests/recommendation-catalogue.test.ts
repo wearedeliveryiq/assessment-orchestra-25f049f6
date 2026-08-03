@@ -71,7 +71,9 @@ describe("S4-001 recommendation catalogue governance", () => {
       version: item.version,
       id: item.id,
     }));
-    expect(await catalogueDigest(reordered)).toBe(await catalogueDigest(snapshot));
+    const digest = await catalogueDigest(snapshot);
+    expect(await catalogueDigest(reordered)).toBe(digest);
+    expect(digest).toBe("0d35fb4d682e0817741454bd730f9fc2aeffe6a762ca03c0d2c093251712f2dc");
   });
 
   it.each([
@@ -113,6 +115,28 @@ describe("S4-001 recommendation catalogue governance", () => {
       "unknown trigger",
       (value: ReturnType<typeof sprint03CatalogueSnapshot>) => {
         value.definitions[0].triggers.any = [{ pattern: "pat_unknown" }];
+      },
+    ],
+    [
+      "non-mutual conflict",
+      (value: ReturnType<typeof sprint03CatalogueSnapshot>) => {
+        value.definitions[0].conflicts.push(value.definitions[1].id);
+        value.definitions[0].conflictPriority = 10;
+      },
+    ],
+    [
+      "conflict without priority",
+      (value: ReturnType<typeof sprint03CatalogueSnapshot>) => {
+        value.definitions[0].conflicts.push(value.definitions[1].id);
+        value.definitions[1].conflicts.push(value.definitions[0].id);
+      },
+    ],
+    [
+      "supersession dependency",
+      (value: ReturnType<typeof sprint03CatalogueSnapshot>) => {
+        value.definitions[2].supersedes = [
+          { id: value.definitions[2].dependencies[0], version: "1.0.0" },
+        ];
       },
     ],
   ])("fails closed for %s", (_label, mutate) => {

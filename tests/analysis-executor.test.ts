@@ -127,6 +127,38 @@ describe("S3-001 analysis worker", () => {
     ]);
   });
 
+  it("runs conflict resolution only after confidence gating succeeds", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.gateRecommendations).toHaveBeenCalledBefore(
+      vi.mocked(dependencies.resolveRecommendationConflicts),
+    );
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_completed",
+      "recommendation.conflict_resolution_completed",
+    ]);
+  });
+
+  it("does not roll back completed analysis when conflict resolution fails", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => {
+      throw new Error("invalid conflict graph");
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(events).toContain("recommendation.conflict_resolution_failed");
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),

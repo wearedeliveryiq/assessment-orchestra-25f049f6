@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-003-confidence-gates`. Application verification is complete; Lovable Cloud migration execution and live API verification remain deployment gates.
+Deployed from merge commit `5b65bd5`. Lovable Cloud schema, RLS, privileges, regenerated types, regression tests and production build are verified.
 
 ## Architecture and reuse
 
@@ -113,7 +113,6 @@ The pure public projection exposes confidence copy and aggregate presented/evide
 
 ## Known limitations and deployment gates
 
-- Apply and verify both migrations through Lovable Cloud in timestamp order. Local CLI migration execution is not available for the Lovable-managed database.
 - The production database has no completed eligible Delivery DNA analysis or delivery-intelligence result, so a live tenant-scoped S4-002/S4-003 API smoke test cannot yet be run without manufacturing customer evidence.
 - Durable retries and operational alerting for evaluation/gate failures remain S4-014 scope; the authorised idempotent POST endpoint provides bounded recovery.
 - S4-012 owns customer presentation UI. S4-003 adds accessible textual API contracts and introduces no new UI control.

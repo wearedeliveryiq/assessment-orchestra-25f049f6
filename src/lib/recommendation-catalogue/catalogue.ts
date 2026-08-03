@@ -13,6 +13,10 @@ import type {
 
 const semver = /^\d+\.\d+\.\d+$/;
 const reference = z.record(z.string(), z.string().min(1));
+const versionedRecommendationReference = z.object({
+  id: z.string().regex(/^rec_[a-z0-9_]+$/),
+  version: z.string().regex(semver),
+});
 const definitionSchema = z.object({
   id: z.string().regex(/^rec_[a-z0-9_]+$/),
   version: z.string().regex(semver),
@@ -25,6 +29,9 @@ const definitionSchema = z.object({
   exclusions: z.array(reference),
   dependencies: z.array(z.string()),
   conflicts: z.array(z.string()),
+  conflictPriority: z.number().int().nonnegative().optional(),
+  canonicalRecommendation: versionedRecommendationReference.optional(),
+  supersedes: z.array(versionedRecommendationReference).optional(),
   outcome: z.string().trim().min(1).max(500),
   successMeasures: z.array(z.string().trim().min(1).max(300)).min(1),
 });
@@ -73,6 +80,101 @@ function assertAcyclic(definitions: CatalogueDefinition[]) {
     visited.add(id);
   };
   for (const id of graph.keys()) visit(id, []);
+}
+
+function referenceKey(value: { id: string; version: string }) {
+  return `${value.id}@${value.version}`;
+}
+
+function validateConflictMetadata(definitions: CatalogueDefinition[]) {
+  const byId = new Map(definitions.map((item) => [item.id, item]));
+  for (const item of definitions) {
+    if (item.conflicts.length && item.conflictPriority === undefined) {
+      throw new CatalogueValidationError(`${item.id} conflict priority is required`);
+    }
+    for (const conflictId of item.conflicts) {
+      const conflict = byId.get(conflictId);
+      if (!conflict?.conflicts.includes(item.id)) {
+        throw new CatalogueValidationError(`${item.id} conflict with ${conflictId} must be mutual`);
+      }
+    }
+  }
+}
+
+function validateSupersessionMetadata(definitions: CatalogueDefinition[]) {
+  const byId = new Map(definitions.map((item) => [item.id, item]));
+  const supersederByTarget = new Map<string, string>();
+  const graph = new Map<string, string[]>();
+  for (const item of definitions) {
+    const supersedes = item.supersedes ?? [];
+    assertUnique(supersedes.map(referenceKey), `${item.id} supersedes`);
+    graph.set(
+      item.id,
+      supersedes.map((target) => target.id),
+    );
+    for (const target of supersedes) {
+      const definition = byId.get(target.id);
+      if (!definition || definition.version !== target.version || definition.id === item.id) {
+        throw new CatalogueValidationError(`${item.id} contains an invalid supersession`);
+      }
+      if (item.dependencies.includes(target.id)) {
+        throw new CatalogueValidationError(`${item.id} cannot supersede its dependency`);
+      }
+      const existing = supersederByTarget.get(referenceKey(target));
+      if (existing && existing !== item.id) {
+        throw new CatalogueValidationError(`${target.id} has multiple superseding definitions`);
+      }
+      supersederByTarget.set(referenceKey(target), item.id);
+    }
+  }
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  const visit = (id: string) => {
+    if (visiting.has(id)) throw new CatalogueValidationError(`Supersession cycle at ${id}`);
+    if (visited.has(id)) return;
+    visiting.add(id);
+    for (const target of graph.get(id) ?? []) visit(target);
+    visiting.delete(id);
+    visited.add(id);
+  };
+  for (const id of graph.keys()) visit(id);
+}
+
+function validateCanonicalMetadata(definitions: CatalogueDefinition[]) {
+  const byId = new Map(definitions.map((item) => [item.id, item]));
+  const groups = new Map<string, CatalogueDefinition[]>();
+  for (const item of definitions) {
+    groups.set(item.dedupeGroup, [...(groups.get(item.dedupeGroup) ?? []), item]);
+  }
+  for (const [group, members] of groups) {
+    const references = new Map(
+      members
+        .filter((item) => item.canonicalRecommendation)
+        .map((item) => [
+          referenceKey(item.canonicalRecommendation!),
+          item.canonicalRecommendation!,
+        ]),
+    );
+    if (references.size > 1) {
+      throw new CatalogueValidationError(`${group} has conflicting canonical recommendations`);
+    }
+    const canonicalReference = [...references.values()][0];
+    const canonical = canonicalReference
+      ? byId.get(canonicalReference.id)
+      : [...members].sort(
+          (left, right) => left.order - right.order || left.id.localeCompare(right.id),
+        )[0];
+    if (
+      !canonical ||
+      (canonicalReference && canonical.version !== canonicalReference.version) ||
+      canonical.dedupeGroup !== group
+    ) {
+      throw new CatalogueValidationError(`${group} canonical recommendation is invalid`);
+    }
+    if (members.some((member) => canonical.dependencies.includes(member.id))) {
+      throw new CatalogueValidationError(`${canonical.id} cannot deduplicate its dependency`);
+    }
+  }
 }
 
 export function validateCatalogueSnapshot(value: unknown): CatalogueSnapshot {
@@ -126,6 +228,9 @@ export function validateCatalogueSnapshot(value: unknown): CatalogueSnapshot {
     }
   }
   assertAcyclic(snapshot.definitions);
+  validateConflictMetadata(snapshot.definitions);
+  validateSupersessionMetadata(snapshot.definitions);
+  validateCanonicalMetadata(snapshot.definitions);
   return snapshot;
 }
 

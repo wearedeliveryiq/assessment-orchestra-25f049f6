@@ -62,8 +62,8 @@
 | --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | Deterministic domain/unit         | `tests/recommendation-confidence-gate.test.ts`                                               | PASS                                                                          |
 | Integration/idempotency/failure   | immutable service replay, cross-scope failure and non-blocking analysis-worker tests         | PASS                                                                          |
-| Tenant isolation/traceability     | service scope checks, confidence-node lineage and database publication contract              | PASS — live migration verification pending                                    |
-| Permission/redaction              | public/workspace/audit projections and deny-by-default migration contract                    | PASS — live privilege inspection pending                                      |
+| Tenant isolation/traceability     | service scope checks, confidence-node lineage and database publication contract              | PASS — including live Lovable verification                                    |
+| Permission/redaction              | public/workspace/audit projections and deny-by-default migration contract                    | PASS — including live privilege inspection                                    |
 | Accessibility/copy                | textual status, reason and caveat contracts; exact locked-copy tests; no new presentation UI | PASS                                                                          |
 | Performance                       | 250 eligible candidates gated under the one-second test guard                                | PASS                                                                          |
 | Sprint 03 and S4-002 regression   | complete DIQ-203B and recommendation-evaluation suites                                       | PASS                                                                          |
@@ -72,8 +72,38 @@
 | Full-repository lint              | Existing repository formatting baseline                                                      | RECORDED LIMITATION — 5,070 inherited errors outside the S4-003 changed scope |
 | Full regression                   | 32 files / 347 tests                                                                         | PASS                                                                          |
 | Production build                  | Vite/Nitro production build                                                                  | PASS                                                                          |
-| Lovable Cloud migration execution | `20260803030000` followed by `20260803031000`; live schema, ACL and idempotency verification | PENDING DEPLOYMENT                                                            |
+| Lovable Cloud migration execution | `20260803030000` followed by `20260803031000`; live schema and ACL verification              | PASS — live smoke unavailable because no eligible analysis exists             |
+
+## S4-004 — Conflict Resolution and Deduplication
+
+| Acceptance criterion                          | Implementation evidence                                                                                                             | Test evidence                                                   | Status |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------ |
+| AC1 approved conflict/dedupe fixtures pass    | `resolveRecommendationConflicts` applies mutual exclusion, supersession and dedupe in locked order                                  | duplicate, canonical override, priority, tie and chain fixtures | PASS   |
+| AC2 aggregate evidence is preserved           | canonical candidate stores the stable union of every deduplicated source candidate and trace; immutable trace links preserve origin | exact candidate/trace union assertions                          | PASS   |
+| AC3 suppressed items remain auditable         | immutable candidate rows retain reason and winner; workspace/public projections expose canonical items and aggregate counts only    | workspace/public/audit schema-leakage tests                     | PASS   |
+| AC4 dependency suppression blocks publication | catalogue promotion, pure resolver and atomic publisher reject a winner that depends on the candidate it would suppress             | dependency collision and migration-security tests               | PASS   |
+| AC5 input order does not alter resolution     | candidates and evidence are canonically sorted; stable priority/order/ID comparators                                                | forward versus reversed input equality                          | PASS   |
+
+## S4-004 quality gates
+
+| Gate                                | Evidence                                                                                       | Status                                                                  |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Deterministic domain/unit           | `tests/recommendation-resolution.test.ts`                                                      | PASS                                                                    |
+| Catalogue promotion safety          | mutual conflict, priority, canonical, supersession and dependency graph validation             | PASS                                                                    |
+| Integration/idempotency/failure     | immutable service replay, cross-scope rejection and non-blocking worker sequencing             | PASS                                                                    |
+| Tenant isolation/traceability       | service scope checks and database relationship/dependency/trace contract                       | PASS — live migration verification pending                              |
+| Permission/redaction                | public/workspace/audit projections and deny-by-default migration contract                      | PASS — live privilege inspection pending                                |
+| Accessibility/copy                  | textual state/count contracts; no colour-only or interactive UI introduced                     | PASS                                                                    |
+| Performance                         | 1,000 governed candidates resolve inside the one-second test guard                             | PASS                                                                    |
+| Sprint 03 and S4-001–003 regression | complete DIQ-203B, catalogue, evaluation and confidence suites                                 | PASS                                                                    |
+| Type checking                       | `tsc --noEmit`                                                                                 | PASS                                                                    |
+| Changed-file lint/format            | ESLint and Prettier over every S4-004 application, route, generated-route and test file        | PASS                                                                    |
+| Full-repository lint                | inherited repository baseline                                                                  | RECORDED LIMITATION — 5,370 errors and 15 warnings outside S4-004 scope |
+| Full regression                     | 33 files / 367 tests                                                                           | PASS                                                                    |
+| Production build                    | Vite/Nitro production build                                                                    | PASS                                                                    |
+| Lovable Cloud migration execution   | `20260803040000` followed by `20260803041000`; schema, ACL and idempotency verification        | PENDING DEPLOYMENT                                                      |
+| Security-advisor classification     | classify the five Lovable findings by severity, rule and object; do not auto-apply broad fixes | PENDING DEPLOYMENT EVIDENCE                                             |
 
 ## Quality gates
 
-Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation is complete; S4-003 migration execution and live verification remain Lovable Cloud deployment gates.
+Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.

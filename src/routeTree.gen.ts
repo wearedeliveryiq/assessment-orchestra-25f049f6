@@ -150,6 +150,7 @@ import { Route as ApiAnalysisRunsIdExplanationsRouteImport } from './routes/api/
 import { Route as ApiAnalysisRunsIdPublicResultRouteImport } from './routes/api/analysis-runs.$id.public-result'
 import { Route as ApiAnalysisRunsIdRecommendationConfidenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-confidence'
 import { Route as ApiAnalysisRunsIdRecommendationEvaluationRouteImport } from './routes/api/analysis-runs.$id.recommendation-evaluation'
+import { Route as ApiAnalysisRunsIdRecommendationResolutionRouteImport } from './routes/api/analysis-runs.$id.recommendation-resolution'
 import { Route as ApiAnalysisRunsIdResultRouteImport } from './routes/api/analysis-runs.$id.result'
 import { Route as ApiAssessmentSessionsIdArchiveRouteImport } from './routes/api/assessment-sessions.$id.archive'
 import { Route as ApiAssessmentSessionsIdAssignRouteImport } from './routes/api/assessment-sessions.$id.assign'
@@ -922,6 +923,12 @@ const ApiAnalysisRunsIdRecommendationEvaluationRoute =
     path: '/recommendation-evaluation',
     getParentRoute: () => ApiAnalysisRunsIdRoute,
   } as any)
+const ApiAnalysisRunsIdRecommendationResolutionRoute =
+  ApiAnalysisRunsIdRecommendationResolutionRouteImport.update({
+    id: '/recommendation-resolution',
+    path: '/recommendation-resolution',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
 const ApiAnalysisRunsIdResultRoute = ApiAnalysisRunsIdResultRouteImport.update({
   id: '/result',
   path: '/result',
@@ -1337,6 +1344,7 @@ export interface FileRoutesByFullPath {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
@@ -1529,6 +1537,7 @@ export interface FileRoutesByTo {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
@@ -1722,6 +1731,7 @@ export interface FileRoutesById {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/result': typeof ApiAnalysisRunsIdResultRoute
   '/api/assessment-sessions/$id/archive': typeof ApiAssessmentSessionsIdArchiveRoute
   '/api/assessment-sessions/$id/assign': typeof ApiAssessmentSessionsIdAssignRoute
@@ -1916,6 +1926,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
@@ -2108,6 +2119,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
@@ -2300,6 +2312,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/result'
     | '/api/assessment-sessions/$id/archive'
     | '/api/assessment-sessions/$id/assign'
@@ -3474,6 +3487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRouteImport
       parentRoute: typeof ApiAnalysisRunsIdRoute
     }
+    '/api/analysis-runs/$id/recommendation-resolution': {
+      id: '/api/analysis-runs/$id/recommendation-resolution'
+      path: '/recommendation-resolution'
+      fullPath: '/api/analysis-runs/$id/recommendation-resolution'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationResolutionRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
     '/api/analysis-runs/$id/result': {
       id: '/api/analysis-runs/$id/result'
       path: '/result'
@@ -3825,6 +3845,7 @@ interface ApiAnalysisRunsIdRouteChildren {
   ApiAnalysisRunsIdPublicResultRoute: typeof ApiAnalysisRunsIdPublicResultRoute
   ApiAnalysisRunsIdRecommendationConfidenceRoute: typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   ApiAnalysisRunsIdRecommendationEvaluationRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  ApiAnalysisRunsIdRecommendationResolutionRoute: typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   ApiAnalysisRunsIdResultRoute: typeof ApiAnalysisRunsIdResultRoute
   ApiAnalysisRunsIdPublicResultsPublicResultIdRoute: typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
   ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute: typeof ApiAnalysisRunsIdRecommendationsRecommendationIdAcceptRoute
@@ -3837,6 +3858,8 @@ const ApiAnalysisRunsIdRouteChildren: ApiAnalysisRunsIdRouteChildren = {
     ApiAnalysisRunsIdRecommendationConfidenceRoute,
   ApiAnalysisRunsIdRecommendationEvaluationRoute:
     ApiAnalysisRunsIdRecommendationEvaluationRoute,
+  ApiAnalysisRunsIdRecommendationResolutionRoute:
+    ApiAnalysisRunsIdRecommendationResolutionRoute,
   ApiAnalysisRunsIdResultRoute: ApiAnalysisRunsIdResultRoute,
   ApiAnalysisRunsIdPublicResultsPublicResultIdRoute:
     ApiAnalysisRunsIdPublicResultsPublicResultIdRoute,
