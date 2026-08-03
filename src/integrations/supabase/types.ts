@@ -3386,6 +3386,100 @@ export type Database = {
           },
         ]
       }
+      recommendation_audit_export_jobs: {
+        Row: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        Insert: {
+          attempt?: number
+          available_until?: string | null
+          completed_at?: string | null
+          created_at?: string
+          export_payload?: Json | null
+          failure_code?: string | null
+          id?: string
+          idempotency_key: string
+          lease_expires_at?: string | null
+          lease_owner?: string | null
+          organisation_id: string
+          payload_hash?: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at?: string | null
+          retryable?: boolean
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        Update: {
+          attempt?: number
+          available_until?: string | null
+          completed_at?: string | null
+          created_at?: string
+          export_payload?: Json | null
+          failure_code?: string | null
+          id?: string
+          idempotency_key?: string
+          lease_expires_at?: string | null
+          lease_owner?: string | null
+          organisation_id?: string
+          payload_hash?: string | null
+          portfolio_id?: string
+          projection?: string
+          request_hash?: string
+          requested_by?: string
+          resolved_at?: string | null
+          retryable?: boolean
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_audit_export_jobs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_audit_export_jobs_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_audit_export_jobs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_candidate_confidence_gates: {
         Row: {
           analysis_run_id: string
@@ -4465,6 +4559,42 @@ export type Database = {
           },
         ]
       }
+      recommendation_feature_flag_events: {
+        Row: {
+          actor_user_id: string
+          enabled: boolean
+          feature_key: string
+          feature_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          reason_category: string
+          request_hash: string
+        }
+        Insert: {
+          actor_user_id: string
+          enabled: boolean
+          feature_key: string
+          feature_version: number
+          id?: string
+          idempotency_key: string
+          occurred_at?: string
+          reason_category: string
+          request_hash: string
+        }
+        Update: {
+          actor_user_id?: string
+          enabled?: boolean
+          feature_key?: string
+          feature_version?: number
+          id?: string
+          idempotency_key?: string
+          occurred_at?: string
+          reason_category?: string
+          request_hash?: string
+        }
+        Relationships: []
+      }
       recommendation_improvement_action_events: {
         Row: {
           accountable_owner_id: string | null
@@ -4817,6 +4947,74 @@ export type Database = {
           },
         ]
       }
+      recommendation_integrity_results: {
+        Row: {
+          checker_version: string
+          checks: Json
+          export_job_id: string
+          id: string
+          organisation_id: string
+          payload_hash: string
+          portfolio_id: string
+          recorded_at: string
+          status: Database["public"]["Enums"]["recommendation_integrity_status"]
+          workspace_id: string
+        }
+        Insert: {
+          checker_version: string
+          checks: Json
+          export_job_id: string
+          id?: string
+          organisation_id: string
+          payload_hash: string
+          portfolio_id: string
+          recorded_at?: string
+          status: Database["public"]["Enums"]["recommendation_integrity_status"]
+          workspace_id: string
+        }
+        Update: {
+          checker_version?: string
+          checks?: Json
+          export_job_id?: string
+          id?: string
+          organisation_id?: string
+          payload_hash?: string
+          portfolio_id?: string
+          recorded_at?: string
+          status?: Database["public"]["Enums"]["recommendation_integrity_status"]
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_integrity_results_export_job_id_fkey"
+            columns: ["export_job_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_audit_export_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_integrity_results_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_integrity_results_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_integrity_results_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_item_decisions: {
         Row: {
           acknowledged: boolean
@@ -4919,6 +5117,69 @@ export type Database = {
           },
           {
             foreignKeyName: "recommendation_item_decisions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_operational_events: {
+        Row: {
+          actor_user_id: string | null
+          alert_code: string | null
+          categorical_metadata: Json
+          correlation_id: string
+          event_type: string
+          id: number
+          object_id: string
+          object_type: string
+          object_version: string
+          occurred_at: string
+          organisation_id: string | null
+          severity: Database["public"]["Enums"]["recommendation_operational_severity"]
+          workspace_id: string | null
+        }
+        Insert: {
+          actor_user_id?: string | null
+          alert_code?: string | null
+          categorical_metadata?: Json
+          correlation_id?: string
+          event_type: string
+          id?: never
+          object_id: string
+          object_type: string
+          object_version: string
+          occurred_at?: string
+          organisation_id?: string | null
+          severity: Database["public"]["Enums"]["recommendation_operational_severity"]
+          workspace_id?: string | null
+        }
+        Update: {
+          actor_user_id?: string | null
+          alert_code?: string | null
+          categorical_metadata?: Json
+          correlation_id?: string
+          event_type?: string
+          id?: never
+          object_id?: string
+          object_type?: string
+          object_version?: string
+          occurred_at?: string
+          organisation_id?: string | null
+          severity?: Database["public"]["Enums"]["recommendation_operational_severity"]
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_operational_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_operational_events_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -7229,6 +7490,38 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      claim_recommendation_audit_exports: {
+        Args: { p_limit?: number }
+        Returns: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_audit_export_jobs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       complete_assessment_analysis_handoff: {
         Args: { p_analysis_run_id: string; p_handoff_id: string }
         Returns: {
@@ -7305,6 +7598,43 @@ export type Database = {
           to: "assessment_analysis_runs"
           isOneToOne: false
           isSetofReturn: true
+        }
+      }
+      complete_recommendation_audit_export: {
+        Args: {
+          p_id: string
+          p_lease_owner: string
+          p_payload: Json
+          p_payload_hash: string
+        }
+        Returns: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_audit_export_jobs"
+          isOneToOne: true
+          isSetofReturn: false
         }
       }
       consume_recommendation_product_handoff: {
@@ -7473,6 +7803,38 @@ export type Database = {
           to: "assessment_analysis_runs"
           isOneToOne: false
           isSetofReturn: true
+        }
+      }
+      fail_recommendation_audit_export: {
+        Args: { p_failure_code: string; p_id: string; p_lease_owner: string }
+        Returns: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_audit_export_jobs"
+          isOneToOne: true
+          isSetofReturn: false
         }
       }
       has_org_role: {
@@ -7776,9 +8138,33 @@ export type Database = {
           tenant_count: number
         }[]
       }
+      recommendation_operational_health: {
+        Args: never
+        Returns: {
+          alert_coverage: string[]
+          critical_integrity_failures: number
+          failed_exports: number
+          generated_at: string
+          oldest_queued_seconds: number
+          open_critical_alerts: number
+          processing_exports: number
+          queued_exports: number
+          status: string
+        }[]
+      }
       reconcile_assessment_analysis_handoffs: {
         Args: { p_limit?: number }
         Returns: number
+      }
+      record_recommendation_export_access: {
+        Args: {
+          p_actor_user_id: string
+          p_id: string
+          p_mode: string
+          p_organisation_id: string
+          p_workspace_id: string
+        }
+        Returns: undefined
       }
       record_recommendation_improvement_action: {
         Args: { p_input: Json }
@@ -7847,9 +8233,45 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      request_recommendation_audit_export: {
+        Args: { p_input: Json }
+        Returns: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_audit_export_jobs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       resolve_delivery_dna_public_result: {
         Args: { p_ip_hash: string; p_token_hash: string }
         Returns: Json
+      }
+      resolve_recommendation_feature_flag: {
+        Args: { p_feature_key: string }
+        Returns: boolean
       }
       retry_assessment_analysis_run: {
         Args: { p_run_id: string }
@@ -7899,6 +8321,42 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      retry_recommendation_audit_export: {
+        Args: {
+          p_id: string
+          p_organisation_id: string
+          p_workspace_id: string
+        }
+        Returns: {
+          attempt: number
+          available_until: string | null
+          completed_at: string | null
+          created_at: string
+          export_payload: Json | null
+          failure_code: string | null
+          id: string
+          idempotency_key: string
+          lease_expires_at: string | null
+          lease_owner: string | null
+          organisation_id: string
+          payload_hash: string | null
+          portfolio_id: string
+          projection: string
+          request_hash: string
+          requested_by: string
+          resolved_at: string | null
+          retryable: boolean
+          started_at: string | null
+          status: Database["public"]["Enums"]["recommendation_audit_export_status"]
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_audit_export_jobs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       set_recommendation_analytics_consent: {
         Args: { p_input: Json }
         Returns: {
@@ -7915,6 +8373,26 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "recommendation_analytics_consent_events"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_recommendation_feature_flag: {
+        Args: { p_input: Json }
+        Returns: {
+          actor_user_id: string
+          enabled: boolean
+          feature_key: string
+          feature_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          reason_category: string
+          request_hash: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_feature_flag_events"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -8067,6 +8545,12 @@ export type Database = {
         | "teammate_handoff"
         | "usefulness_submitted"
       recommendation_analytics_mode: "workspace" | "executive_report"
+      recommendation_audit_export_status:
+        | "queued"
+        | "processing"
+        | "completed"
+        | "failed"
+        | "expired"
       recommendation_catalogue_state:
         | "draft"
         | "in_review"
@@ -8106,6 +8590,8 @@ export type Database = {
         | "unavailable"
       recommendation_dependency_state: "available" | "blocked" | "unavailable"
       recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
+      recommendation_integrity_status: "passed" | "failed"
+      recommendation_operational_severity: "info" | "warning" | "critical"
       recommendation_portfolio_class:
         | "immediate_attention"
         | "foundation"
@@ -8329,6 +8815,13 @@ export const Constants = {
         "usefulness_submitted",
       ],
       recommendation_analytics_mode: ["workspace", "executive_report"],
+      recommendation_audit_export_status: [
+        "queued",
+        "processing",
+        "completed",
+        "failed",
+        "expired",
+      ],
       recommendation_catalogue_state: [
         "draft",
         "in_review",
@@ -8374,6 +8867,8 @@ export const Constants = {
       ],
       recommendation_dependency_state: ["available", "blocked", "unavailable"],
       recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
+      recommendation_integrity_status: ["passed", "failed"],
+      recommendation_operational_severity: ["info", "warning", "critical"],
       recommendation_portfolio_class: [
         "immediate_attention",
         "foundation",
