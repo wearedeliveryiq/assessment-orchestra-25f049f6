@@ -159,6 +159,41 @@ describe("S3-001 analysis worker", () => {
     expect(events).toContain("recommendation.conflict_resolution_failed");
   });
 
+  it("runs priority modelling only after conflict resolution succeeds", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => undefined);
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.resolveRecommendationConflicts).toHaveBeenCalledBefore(
+      vi.mocked(dependencies.prioritiseRecommendations),
+    );
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_completed",
+      "recommendation.conflict_resolution_completed",
+      "recommendation.priority_completed",
+    ]);
+  });
+
+  it("does not roll back completed analysis when priority modelling fails", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => {
+      throw new Error("priority inputs unavailable");
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(events).toContain("recommendation.priority_failed");
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),

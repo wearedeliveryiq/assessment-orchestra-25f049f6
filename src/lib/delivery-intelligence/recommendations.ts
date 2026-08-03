@@ -61,6 +61,41 @@ export interface RankedRecommendation {
   order: number;
 }
 
+export interface RecommendationRankComponents {
+  impact: number;
+  urgency: number;
+  confidence: number;
+  effortEase: number;
+  dependencyReadiness: number;
+}
+
+/**
+ * Shared DIQ-203 rank primitive. Consumers retain the unrounded score for
+ * ordering and use the six-decimal value only for the locked stored result.
+ */
+export function calculateRecommendationRankScore(components: RecommendationRankComponents) {
+  const values: RecommendationRankComponents = {
+    impact: components.impact,
+    urgency: components.urgency,
+    confidence: components.confidence,
+    effortEase: components.effortEase,
+    dependencyReadiness: components.dependencyReadiness,
+  };
+  for (const [name, value] of Object.entries(values)) {
+    if (!Number.isFinite(value) || value < 0 || value > 100) {
+      throw new Error(`Recommendation rank component ${name} is outside 0..100`);
+    }
+  }
+  const formula = sprint03Configuration.recommendationPolicy.rankFormula;
+  const raw =
+    values.impact * formula.impact +
+    values.urgency * formula.urgency +
+    values.confidence * formula.confidence +
+    values.effortEase * formula.effortEase +
+    values.dependencyReadiness * formula.dependencyReadiness;
+  return { raw, stored: roundHalfUp(raw, 6) };
+}
+
 export function sortRecommendations(items: RankedRecommendation[]): RankedRecommendation[] {
   return [...items].sort(
     (a, b) =>
@@ -121,14 +156,13 @@ export function rankRecommendations(input: {
     const impact = policy.impactValues[impactBand];
     const effortEase = policy.effortEaseValues[effortBand];
     const dependencyReadiness = eligibility.dependencyReadiness[definition.id];
-    const rankScore = roundHalfUp(
-      impact * policy.rankFormula.impact +
-        urgency * policy.rankFormula.urgency +
-        input.analysisConfidence * policy.rankFormula.confidence +
-        effortEase * policy.rankFormula.effortEase +
-        dependencyReadiness * policy.rankFormula.dependencyReadiness,
-      6,
-    );
+    const rankScore = calculateRecommendationRankScore({
+      impact,
+      urgency,
+      confidence: input.analysisConfidence,
+      effortEase,
+      dependencyReadiness,
+    });
     return {
       id: definition.id,
       title: definition.title,
@@ -137,7 +171,8 @@ export function rankRecommendations(input: {
       outcome: definition.outcome,
       successMeasures: definition.successMeasures,
       dependencies: definition.dependencies,
-      rankScore,
+      rankScore: rankScore.stored,
+      rawRankScore: rankScore.raw,
       urgency,
       impactValue: impact,
       effortEase,
@@ -146,15 +181,17 @@ export function rankRecommendations(input: {
     };
   });
   return {
-    ranked: [...ranked].sort(
-      (a, b) =>
-        b.rankScore - a.rankScore ||
-        b.impactValue - a.impactValue ||
-        b.urgency - a.urgency ||
-        b.effortEase - a.effortEase ||
-        a.order - b.order ||
-        a.id.localeCompare(b.id),
-    ),
+    ranked: [...ranked]
+      .sort(
+        (a, b) =>
+          b.rawRankScore - a.rawRankScore ||
+          b.impactValue - a.impactValue ||
+          b.urgency - a.urgency ||
+          b.effortEase - a.effortEase ||
+          a.order - b.order ||
+          a.id.localeCompare(b.id),
+      )
+      .map(({ rawRankScore: _rawRankScore, ...item }) => item),
     excluded: eligibility.excluded,
     withheld: eligibility.withheld,
   };
