@@ -39,6 +39,17 @@ Completed on 3 August 2026:
 4. Snapshot `51ae3877-ee7d-4df0-a265-59473ed4c7d9` completed anonymously; explicit consent created tenant-scoped full draft `47de0803-48e7-41ac-acda-4c97350e628d` with 13 exact provenance rows. It remains incomplete at 13/39 and has no analysis run or hand-off.
 5. Assessment `d09c51a3-2af8-4283-9b98-4cc1d53a1c93` served the authenticated free projection and unavailable commercial panel. No entitlement was manufactured for release testing; the entitled production smoke is deferred until the first authorised `delivery_dna_action` grant.
 
+### First `delivery_dna_action` activation condition
+
+Before `delivery_dna_action` 1.0.0 is first offered or granted to a customer, use an authorised tenant to verify that:
+
+1. the entitled projection retains the same immutable analysis result and run;
+2. one permitted customer decision, action and outcome write succeeds within that tenant;
+3. denied reads and writes do not expose data across tenant boundaries; and
+4. removing the entitlement removes access without deleting the retained history.
+
+Record the evidence against this release plan and the Sprint 03 acceptance matrix. This condition does not block the Snapshot, the authenticated free result, the current unavailable commercial state or continued delivery. Pricing, checkout and subscription packaging remain out of scope.
+
 Rollback is application-first: restore the prior published build. The additive columns/tables and inactive entitlement key may remain dormant. Stop the Snapshot cleanup schedule with the application rollback; do not drop linked provenance or customer responses. Any database object removal requires a separately reviewed forward migration.
 
 PDR-003-001 additionally requires one hosted journey from assessment completion through automatic
