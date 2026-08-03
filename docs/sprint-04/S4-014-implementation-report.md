@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-014-governance-readiness`. Application, database-contract, security, resilience, performance and documentation gates are complete. Managed migration execution and live ACL/schema verification remain deployment evidence until Lovable applies the two migrations.
+Implemented through PR #24 and deployed from merge commit `98b30d9`. Application, managed migrations, live schema/ACL verification, security, resilience, performance, documentation and publication gates are complete.
 
 The implementation is fail safe: audit export is disabled unless Product Governance appends an enabled feature event. S4-010 outcome observations remain explicitly unavailable and platform RPO/RTO is not yet approved, so Sprint 04 production release remains blocked independently of this implementation.
 
@@ -51,6 +51,15 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 - Type checking, changed-file ESLint/Prettier and the production build passed. The build contains both one-minute server tasks, including `_tasks/process-exports.mjs`.
 - Full-repository lint remains inherited debt: 613 errors and 15 warnings outside the S4-014 changed-file gate.
 
+## Live deployment evidence
+
+- Lovable applied the core, permission-hardening and Cloud-default-helper correction as managed migrations `20260803142324`, `20260803142414` and `20260803142618`.
+- Live schema contains three enums, four tables, five declared indexes, five triggers and ten functions with the expected state, lease, attempt, expiry and rate-limit contracts.
+- RLS is enabled with zero policies on all four tables. `PUBLIC`, `anon` and `authenticated` have no table, sequence, `MAINTAIN` or function access. `service_role` has table `SELECT` and nine governed routines only; the internal trigger helper is not executable.
+- All four tables contain zero rows, no feature event exists, and `audit_exports` resolves to false. Existing catalogue, tenant, assessment, analysis and recommendation data remained unchanged.
+- Lovable reran 42 files / 522 tests, all 53 DIQ-203B fixtures, type checking, changed-file lint/format, production build and security scan. The scan reported zero critical findings and 16 pre-existing warnings.
+- The application was published at `https://assessment-orchestra.lovable.app` with audit export disabled.
+
 ## Files created
 
 - `src/lib/recommendation-governance/{types,model,repository.server,service.server,http.server}.ts`
@@ -58,12 +67,13 @@ The implementation is fail safe: audit export is disabled unless Product Governa
 - `tasks/recommendation-governance/process-exports.ts`
 - `supabase/migrations/20260803140000_recommendation_governance_operations.sql`
 - `supabase/migrations/20260803141000_harden_recommendation_governance_permissions.sql`
+- Lovable-managed deployment records `20260803142324_d6870a3a-e4b5-4ecd-9765-e9ee71c6bd49.sql`, `20260803142414_b9748178-424f-4a31-8012-252c7740b5ed.sql` and `20260803142618_aa8b7b77-0f03-4973-ae8b-bfdd43c3843f.sql`
 - `tests/recommendation-governance.test.ts`
 - S4-014 monitoring, deployment/recovery and rehearsal documents
 
 ## Files modified
 
-- `vite.config.ts`, generated route tree and Sprint 04 acceptance/release reports.
+- `vite.config.ts`, generated route tree, generated Supabase types and Sprint 04 acceptance/release reports.
 
 ## Known limitations and hard blockers
 

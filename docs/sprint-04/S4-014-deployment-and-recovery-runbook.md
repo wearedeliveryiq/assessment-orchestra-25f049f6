@@ -13,7 +13,7 @@
 
 1. Apply `20260803140000_recommendation_governance_operations.sql` as one managed migration.
 2. Immediately apply `20260803141000_harden_recommendation_governance_permissions.sql` separately to remove Lovable Cloud default grants.
-3. Verify three enums, four tables, five indexes, four immutability/transition triggers and ten functions with their exact signatures.
+3. Verify three enums, four tables, five declared indexes, five immutability/transition/delete triggers and ten functions with their exact signatures.
 4. Verify RLS is enabled on all four tables with zero client policies.
 5. Verify `PUBLIC`, `anon` and `authenticated` have no table, sequence, `MAINTAIN` or function privilege.
 6. Verify `service_role` has table read and only the governed function execution paths; direct mutation remains unavailable.
