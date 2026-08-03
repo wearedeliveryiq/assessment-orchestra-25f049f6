@@ -562,7 +562,6 @@ export type Database = {
           archived_at: string | null
           assigned_to: string | null
           completed_at: string | null
-          configuration_version: string
           created_at: string
           description: string
           due_date: string | null
@@ -1956,6 +1955,7 @@ export type Database = {
         Row: {
           assessment_session_id: string | null
           completed_at: string | null
+          configuration_version: string
           created_at: string
           expires_at: string
           id: string
