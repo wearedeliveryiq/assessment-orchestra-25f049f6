@@ -47,6 +47,13 @@ const handoffHardeningMigration = readFileSync(
   ),
   "utf8",
 );
+const handoffRecoveryMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803193000_recover_stale_analysis_handoffs.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 const eligibilityMigration = readFileSync(
   new URL(
     "../supabase/migrations/20260802161000_analysis_eligibility_decisions.sql",
@@ -316,6 +323,19 @@ describe("Sprint 03 migration security", () => {
     );
     expect(handoffHardeningMigration).toContain(
       "GRANT EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer) TO service_role",
+    );
+  });
+
+  it("recovers a request-stalled hand-off inside the approved customer recovery window", () => {
+    expect(handoffRecoveryMigration).toContain("claimed_at <= now() - interval '15 seconds'");
+    expect(handoffRecoveryMigration).toContain("FOR UPDATE SKIP LOCKED");
+    expect(handoffRecoveryMigration).toContain("AND attempt < 10");
+    expect(handoffRecoveryMigration).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.claim_assessment_analysis_handoffs(integer)",
+    );
+    expect(handoffRecoveryMigration).toContain("FROM PUBLIC, anon, authenticated");
+    expect(handoffRecoveryMigration).toContain(
+      "GRANT EXECUTE ON FUNCTION public.claim_assessment_analysis_handoff(uuid) TO service_role",
     );
   });
 
