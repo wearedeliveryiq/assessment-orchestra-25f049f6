@@ -314,5 +314,44 @@ Actual command results are recorded in the story implementation reports. S4-001 
 | Accessibility/copy                   | labelled consent section, 44px controls, live status/error copy and categorical usefulness controls         | PASS                            |
 | Performance                          | 10,000 schema validations inside one second                                                                 | PASS                            |
 | Full regression/type/lint/build      | 41 files / 511 tests; all 53 DIQ-203B; typecheck; changed lint/format; production build                     | PASS — inherited full-lint debt |
-| Lovable Cloud migration              | `20260803130000` then `20260803131000`; ACL/schema/type verification                                        | PENDING DEPLOYMENT              |
+| Lovable Cloud migration              | managed S4-013 migrations plus helper-ACL correction; ACL/schema/type verification                          | PASS                            |
 | Live aggregate smoke                 | requires at least 10 genuine consented tenants; no customer data will be manufactured                       | RECORDED LIMITATION             |
+
+## S4-014 — Governance, Audit and Operational Readiness
+
+| Acceptance criterion                                   | Implementation evidence                                                                                                                                                       | Test evidence                                                                                 | Status                                         |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| AC1 separation of duties enforced                      | existing S4-001 atomic author/approver lifecycle; isolated Product Governance feature-control permission                                                                      | catalogue self-approval denial, role-isolation and feature-authorisation regressions          | PASS                                           |
+| AC2 complete redacted audit export                     | versioned allow-list across catalogue, evaluation, confidence, resolution, priority, sequence, portfolio, decisions, actions and hand-offs; actor/evidence/raw-rule redaction | exact projection, tenant-scope, redaction, 10,000-event and over-limit tests                  | PARTIAL — S4-010 outcome source is blocked     |
+| AC3 integrity failure blocks safely                    | pre-queue and atomic publication scope/count/trace/overlay checks; terminal non-retryable integrity result                                                                    | orphan lineage, count mismatch, cross-tenant, partial-job and no-payload tests                | PASS                                           |
+| AC4 rollback/recovery rehearsal passes                 | governed activation/configuration diff, feature rollback, stale-lease replay and immutable recovery contract                                                                  | catalogue rollback, feature replay, partial failure, retry and expiry tests                   | PARTIAL — live restore awaits approved RPO/RTO |
+| AC5 monitoring covers Section 20                       | health metrics and exact ten-code alert manifest; safe categorical operational events                                                                                         | exact alert coverage and prohibited-metadata migration assertions                             | PASS                                           |
+| AC6 security/performance/resilience/release gates pass | RLS zero-policy, client privilege revocation, scoped permission, rate/batch/attempt/lease/expiry bounds and one-minute task                                                   | security source, 10,000-event performance, 10,001 rejection, idempotency and production build | PARTIAL — Sprint release blockers remain       |
+
+## S4-014 quality gates
+
+| Gate                            | Evidence                                                                                                                              | Status                                                  |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Governance and configuration    | S4-001 separation regression; configuration diff; append-only feature events; absent flag resolves disabled                           | PASS                                                    |
+| Export and redaction            | `tests/recommendation-governance.test.ts`; versioned allow-list and access logging                                                    | PASS                                                    |
+| Idempotency/concurrency/failure | advisory lock, exact replay, SKIP LOCKED claims, stale lease, three attempts and per-job containment                                  | PASS                                                    |
+| Tenant/security/privacy         | authenticated scoped request, database membership/workspace checks, RLS zero policies, service-only functions and prohibited metadata | PASS — live ACL verification pending deployment         |
+| Performance                     | exactly 10,000 events projected inside the 60-second asynchronous target; over-bound fails closed                                     | PASS                                                    |
+| Recovery                        | implementation rehearsal and rollback runbook                                                                                         | PARTIAL — isolated live restore awaits approved RPO/RTO |
+| Outcome export                  | explicit empty outcome projection with safe limitation                                                                                | BLOCKED by S4-010 locked product-rule gap               |
+| Full regression/type/lint/build | 42 files / 522 tests; all 53 DIQ-203B; typecheck; changed lint/format; production build                                               | PASS — inherited full-lint debt                         |
+| Lovable Cloud migration/publish | `20260803140000` followed by `20260803141000`; feature remains disabled                                                               | PENDING DEPLOYMENT                                      |
+
+## Sprint 04 release acceptance
+
+| Requirement                                                    | Status                                                   |
+| -------------------------------------------------------------- | -------------------------------------------------------- |
+| S4-001–S4-009 and S4-011–S4-014 feasible implementation        | PASS                                                     |
+| S4-010 complete locked behaviour and golden fixtures           | BLOCKED — maintain/date policy absent                    |
+| DIQ-203B unchanged golden regression                           | PASS — all 53 fixtures                                   |
+| Generated baselines immutable and overlays audited             | PASS                                                     |
+| Tenant, access, idempotency, disclosure and export controls    | PASS — live S4-014 verification pending                  |
+| Accessibility, responsive, privacy, performance and resilience | PARTIAL — live restore and full customer journey pending |
+| Approved platform RPO/RTO                                      | BLOCKED — authority absent                               |
+| Genuine eligible Delivery DNA end-to-end smoke                 | PENDING genuine customer evidence                        |
+| Product Owner and Matt Prust release acceptance                | PENDING                                                  |
