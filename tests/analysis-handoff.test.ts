@@ -201,6 +201,35 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
     ]);
   });
 
+  it("awaits the tenant-scoped completion hand-off instead of floating a global claim", async () => {
+    const pending = { ...handoff, status: "pending" as const, attempt: 0, claimedAt: null };
+    const claimed = { ...handoff, status: "processing" as const, attempt: 1 };
+    const { service, dependencies } = harness({
+      ensureHandoff: vi.fn(async () => pending),
+      claimHandoff: vi.fn(async () => claimed),
+    });
+
+    await expect(service.processAssessmentCompletion(session.id, context)).resolves.toMatchObject({
+      id: run.id,
+    });
+
+    expect(dependencies.ensureHandoff).toHaveBeenCalledWith(session);
+    expect(dependencies.claimHandoff).toHaveBeenCalledWith(handoff.id);
+    expect(dependencies.claimHandoffs).not.toHaveBeenCalled();
+    expect(dependencies.completeHandoff).toHaveBeenCalledWith(handoff.id, run.id);
+  });
+
+  it("does not reclaim a completion hand-off already owned by another worker", async () => {
+    const { service, dependencies } = harness({
+      ensureHandoff: vi.fn(async () => handoff),
+    });
+
+    await expect(service.processAssessmentCompletion(session.id, context)).resolves.toBeNull();
+
+    expect(dependencies.claimHandoff).not.toHaveBeenCalled();
+    expect(dependencies.requestAnalysis).not.toHaveBeenCalled();
+  });
+
   it("records a retryable hand-off failure without changing assessment completion", async () => {
     const { service, dependencies, events } = harness({
       requestAnalysis: vi.fn(async () => {
@@ -340,6 +369,20 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
     expect(config).toContain('"recommendation-outcomes:reconcile"');
     expect(config).toContain("handler: analysisReconcilerTask");
     expect(task).toContain("analysisHandoffService.reconcile(100)");
+  });
+
+  it("keeps completion processing attached to the request until the durable hand-off is safe", () => {
+    const runtime = readFileSync(
+      resolve(process.cwd(), "src/lib/assessment/runtime.server.ts"),
+      "utf8",
+    );
+    const handoffService = readFileSync(
+      resolve(process.cwd(), "src/lib/analysis/handoff-service.server.ts"),
+      "utf8",
+    );
+    expect(runtime).toContain("await scheduleAnalysisHandoff(");
+    expect(handoffService).toContain("processAssessmentCompletion(assessmentId, context)");
+    expect(handoffService).not.toContain("void analysisHandoffService.processPending");
   });
 
   it("keeps generation automatic and exposes only the governed retry action", () => {
