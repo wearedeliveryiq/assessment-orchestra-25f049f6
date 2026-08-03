@@ -1,0 +1,824 @@
+{
+  "document": {
+    "id": "PDR-003-005A",
+    "version": "1.1.0",
+    "status": "locked",
+    "title": "Delivery DNA Snapshot Configuration",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-03",
+    "parentDecisionId": "PDR-003-005",
+    "parentDecisionVersion": "1.1",
+    "supersedes": "PDR-003-005A@1.0.0"
+  },
+  "identity": {
+    "productId": "delivery-dna-snapshot",
+    "productVersion": "1.1.0",
+    "formalName": "Delivery DNA Snapshot",
+    "shorthand": "DNA Snapshot",
+    "locale": "en-GB",
+    "questionSourceId": "DIQ-203C",
+    "questionSourceVersion": "1.0.0",
+    "questionCount": 13,
+    "outputType": "directional_snapshot",
+    "fullAssessmentId": "delivery-dna",
+    "fullAssessmentVersion": "1.0.0"
+  },
+  "brandPolicy": {
+    "sourceProjectId": "a3f77a8e-ca53-4497-8623-bd83d9046aa1",
+    "sourceCommit": "1dda1681edbc91b9365a6d857067015de8e81ebf",
+    "darkOnly": true,
+    "font": {
+      "family": "Manrope",
+      "minimumWeight": 400,
+      "maximumWeight": 800,
+      "selfHosted": true
+    },
+    "assets": {
+      "masterMarkSource": "src/assets/deliveryiq-mark.png.asset.json",
+      "horizontalLogoSource": "src/assets/deliveryiq-logo-horizontal.png.asset.json",
+      "approvedUsageSources": [
+        "src/components/logo.tsx",
+        "src/components/ribbon.tsx"
+      ],
+      "nonMasterAsset": "src/assets/deliveryiq-ribbon.png.asset.json",
+      "redrawAllowed": false,
+      "rotationAllowed": false,
+      "distortionAllowed": false
+    },
+    "tagline": "Smarter project delivery.",
+    "colours": {
+      "background": "#090E1A",
+      "panel": "#111827",
+      "card": "#182131",
+      "foreground": "#F8FAFC",
+      "mutedForeground": "#CBD5E1",
+      "subtleForeground": "#94A3B8",
+      "border": "rgba(255,255,255,0.08)",
+      "teal": "#14B8A6",
+      "blue": "#2563EB",
+      "purple": "#7C3AED"
+    },
+    "gradientDirection": "left_to_right_teal_blue_purple",
+    "publicShell": {
+      "dedicatedAcquisitionLayout": true,
+      "internalNavigationVisible": false,
+      "internalRoutesProhibited": [
+        "Workspace",
+        "GitHub Sync",
+        "runtime dashboards",
+        "design system",
+        "product administration"
+      ]
+    },
+    "reducedMotionRequired": true
+  },
+  "copy": {
+    "websiteCta": "Get your free DNA Snapshot",
+    "startHeading": "Discover your Delivery DNA Snapshot",
+    "introduction": "Answer 13 quick questions to see directional signals across your organisation's delivery practices. No account is required.",
+    "timeEstimate": "Approximately 3–5 minutes",
+    "instructions": "Choose the option that most closely reflects how your organisation usually works today. Use Not applicable only where a question genuinely does not apply.",
+    "preparationHeading": "Building your Delivery DNA Snapshot",
+    "preparationBody": "We’re reviewing the patterns across your 13 responses.",
+    "slowPreparationBody": "Still preparing your Snapshot",
+    "readyHeading": "Your Snapshot is ready",
+    "resultHeading": "Your indicative delivery maturity",
+    "profileHeading": "Your indicative delivery profile",
+    "profileBody": "Based on one practice signal from each Delivery DNA capability.",
+    "maturityLevels": {
+      "emerging": {
+        "label": "Emerging",
+        "interpretation": "Delivery practices appear to be at an early or inconsistent stage across the areas assessed."
+      },
+      "developing": {
+        "label": "Developing",
+        "interpretation": "Some delivery practices are taking shape, but consistency varies across the areas assessed."
+      },
+      "established": {
+        "label": "Established",
+        "interpretation": "Delivery practices appear consistently established across many of the areas assessed."
+      },
+      "leading": {
+        "label": "Leading",
+        "interpretation": "The responses indicate strong consistency across the delivery practices assessed."
+      }
+    },
+    "positiveHeading": "Positive signals",
+    "exploreHeading": "Areas to explore",
+    "positiveCardText": "Your response indicates this practice may be working consistently.",
+    "exploreCardText": "Your response indicates this practice may benefit from closer examination.",
+    "resultCaveat": "This is an indicative view based on the 13 practices covered by your Snapshot. It is not your complete Delivery DNA result and may change when foundations and supporting evidence are assessed.",
+    "insufficientHeading": "A Snapshot is not available yet",
+    "insufficientBody": "Answer at least nine applicable questions and provide a response or Not applicable status for all 13 questions.",
+    "continuationHeading": "Turn your Snapshot into your complete Delivery DNA",
+    "continuationBody": "You’ve already completed 13 of 39 questions. Create your free account to carry these answers forward and discover your complete capability profile, priority recommendations and personalised roadmap preview.",
+    "continuationCtaAnonymous": "Complete my Delivery DNA",
+    "continuationCtaLinked": "Continue my Delivery DNA",
+    "restartCta": "Start a new Snapshot",
+    "prohibitedTerms": [
+      "Delivery DNA score",
+      "quick Delivery DNA score",
+      "mini assessment",
+      "maturity score",
+      "authoritative maturity",
+      "benchmark",
+      "AI prediction"
+    ]
+  },
+  "questionIds": [
+    "ddna.strategy_alignment.p",
+    "ddna.governance.p",
+    "ddna.sponsorship.p",
+    "ddna.portfolio.p",
+    "ddna.programme_delivery.p",
+    "ddna.project_delivery.p",
+    "ddna.planning_controls.p",
+    "ddna.benefits.p",
+    "ddna.risk_assurance.p",
+    "ddna.stakeholder_change.p",
+    "ddna.pmo_enablement.p",
+    "ddna.reporting_insight.p",
+    "ddna.continuous_improvement.p"
+  ],
+  "responsePolicy": {
+    "answeredValues": [1, 2, 3, 4, 5],
+    "customerSelectableStatuses": ["answered", "not_applicable"],
+    "notApplicableReasonRequired": true,
+    "excludedCustomerSelectable": false,
+    "allQuestionsDeliberateStatusRequired": true,
+    "minimumAnsweredQuestions": 9
+  },
+  "interactionPolicy": {
+    "normalAnswerAutoAdvance": true,
+    "selectionConfirmationMilliseconds": 350,
+    "persistBeforeAdvance": true,
+    "advanceOnPersistenceFailure": false,
+    "backControlAlwaysAvailable": true,
+    "previousAnswersEditable": true,
+    "notApplicableRequiresExplicitReasonContinue": true,
+    "pointerAndTouchExplicitSelectionAutoAdvances": true,
+    "keyboardExplicitActivationAutoAdvances": true,
+    "keyboardNumberShortcuts": [1, 2, 3, 4, 5],
+    "radioArrowTraversalCommits": false,
+    "focusTargetAfterAdvance": "next_question_heading",
+    "announceQuestionNumberAfterAdvance": true,
+    "finalAnswerBehaviour": "enter_preparation_after_successful_persistence"
+  },
+  "preparationPolicy": {
+    "minimumVisibleMilliseconds": 4000,
+    "targetMaximumMilliseconds": 6000,
+    "slowStateAtMilliseconds": 6000,
+    "completionMode": "automatic_result_reveal",
+    "animationAsset": "deliveryiq_master_mark",
+    "animationStyle": "restrained_float_and_glow",
+    "reducedMotionStyle": "static_status_progression",
+    "steps": [
+      {
+        "id": "review_responses",
+        "copy": "Reviewing your delivery-practice responses"
+      },
+      {
+        "id": "identify_positive_signals",
+        "copy": "Identifying positive signals"
+      },
+      {
+        "id": "identify_areas_to_explore",
+        "copy": "Highlighting areas to explore"
+      },
+      {
+        "id": "determine_indicative_maturity",
+        "copy": "Determining your indicative maturity"
+      },
+      {
+        "id": "prepare_snapshot",
+        "copy": "Preparing your personalised Snapshot"
+      }
+    ],
+    "prohibitedClaims": [
+      "AI analysis",
+      "benchmarking",
+      "external data comparison",
+      "evidence validation",
+      "Delivery Intelligence Engine analysis"
+    ]
+  },
+  "selectionPolicy": {
+    "positiveSignalValues": [4, 5],
+    "areaToExploreValues": [1, 2],
+    "neutralValues": [3],
+    "maximumPositiveSignals": 2,
+    "maximumAreasToExplore": 2,
+    "positiveSort": [
+      "answer_desc",
+      "capability_order_asc",
+      "capability_id_asc"
+    ],
+    "areaToExploreSort": [
+      "answer_asc",
+      "capability_order_asc",
+      "capability_id_asc"
+    ],
+    "numericScoreDisplayed": false,
+    "percentageDisplayed": false,
+    "authoritativeBandDisplayed": false,
+    "indicativeMaturityDisplayed": true,
+    "confidenceDisplayed": false,
+    "patternsGenerated": false,
+    "recommendationsGenerated": false,
+    "roadmapGenerated": false,
+    "analysisRunCreated": false
+  },
+  "maturityPolicy": {
+    "id": "snapshot-indicative-maturity",
+    "version": "1.0.0",
+    "input": "answered_raw_values_only",
+    "notApplicableTreatment": "excluded",
+    "weighting": "equal_per_answered_question",
+    "calculation": "arithmetic_mean",
+    "calculationPrecisionMinimumDecimalPlaces": 6,
+    "boundaryInput": "unrounded_mean",
+    "underlyingValueCustomerVisible": false,
+    "authoritativeDeliveryDnaBand": false,
+    "bands": [
+      {
+        "id": "emerging",
+        "minimumInclusive": 1,
+        "maximumExclusive": 2.5
+      },
+      {
+        "id": "developing",
+        "minimumInclusive": 2.5,
+        "maximumExclusive": 3.5
+      },
+      {
+        "id": "established",
+        "minimumInclusive": 3.5,
+        "maximumExclusive": 4.25
+      },
+      {
+        "id": "leading",
+        "minimumInclusive": 4.25,
+        "maximumInclusive": 5
+      }
+    ]
+  },
+  "profileChartPolicy": {
+    "type": "radar",
+    "axisCount": 13,
+    "axisOrder": "questionIds",
+    "axisValue": "raw_answer_1_to_5",
+    "notApplicableValue": null,
+    "notApplicableRendering": "visible_gap_labelled_na",
+    "notApplicableNeverZero": true,
+    "numericCapabilityScoresDisplayed": false,
+    "benchmarkDisplayed": false,
+    "confidenceDisplayed": false,
+    "fullLabelOnInteraction": true,
+    "accessibleEquivalent": "ordered_capability_response_list",
+    "narrowScreenMode": "numbered_axes_with_ordered_legend_or_equivalent_profile",
+    "colourIndependentMeaningRequired": true
+  },
+  "resultLayout": {
+    "sectionOrder": [
+      "completion_hero",
+      "indicative_maturity",
+      "mandatory_caveat",
+      "indicative_delivery_profile",
+      "maturity_interpretation",
+      "positive_signals",
+      "areas_to_explore",
+      "continuation_panel",
+      "restart_tertiary_action"
+    ],
+    "continuationPrimary": true,
+    "restartVisualPriority": "tertiary"
+  },
+  "continuationPolicy": {
+    "registrationRequiredToContinue": true,
+    "explicitLinkingConsentRequired": true,
+    "transferMode": "exact_same_question_response",
+    "transferFields": [
+      "questionId",
+      "status",
+      "answer",
+      "notApplicableReasonCode",
+      "notApplicableReasonText",
+      "respondedAt"
+    ],
+    "provenance": {
+      "source": "delivery-dna-snapshot",
+      "version": "1.1.0"
+    },
+    "customerReviewBeforeFullCompletion": true,
+    "automaticFullCompletion": false,
+    "automaticAnalysisRequest": false,
+    "directFullAssessmentStartAllowed": true
+  },
+  "privacyPolicy": {
+    "accountRequiredForSnapshot": false,
+    "personallyIdentifiableInformationRequired": false,
+    "unlinkedRetentionSeconds": 86400,
+    "cacheControl": "private, no-store",
+    "analyticsAllowedEvents": [
+      "snapshot_landing_viewed",
+      "snapshot_started",
+      "snapshot_step_progressed",
+      "snapshot_completed",
+      "snapshot_continue_selected",
+      "snapshot_registration_completed"
+    ],
+    "analyticsProhibitedFields": [
+      "questionId",
+      "answer",
+      "status",
+      "reasonText",
+      "capabilityId",
+      "signalType",
+      "indicativeMaturityLevel",
+      "sessionToken",
+      "email",
+      "name",
+      "organisationName"
+    ]
+  },
+  "versioningPolicy": {
+    "newSessionConfigurationVersion": "1.1.0",
+    "preserveExistingResponses": true,
+    "preserveExistingLinksAndDrafts": true,
+    "existingCompletedSnapshotReprojectionAllowed": true,
+    "reprojectionRequiresSameStoredResponses": true,
+    "reprojectionRecordsPresentationPolicyVersion": true,
+    "reprojectionMayCreateAnalysisRun": false,
+    "reprojectionMayCompleteFullAssessment": false
+  },
+  "fixtures": [
+    {
+      "id": "snapshot_all_positive",
+      "input": {
+        "answersByCapabilityOrder": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 13,
+        "answerSum": 65,
+        "indicativeMaturityLevel": "leading",
+        "profileValuesByCapabilityOrder": [
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
+        ],
+        "positiveSignalCapabilityIds": ["strategy_alignment", "governance"],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_all_explore",
+      "input": {
+        "answersByCapabilityOrder": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 13,
+        "answerSum": 13,
+        "indicativeMaturityLevel": "emerging",
+        "profileValuesByCapabilityOrder": [
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        ],
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": ["strategy_alignment", "governance"],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_all_neutral",
+      "input": {
+        "answersByCapabilityOrder": [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 13,
+        "answerSum": 39,
+        "indicativeMaturityLevel": "developing",
+        "profileValuesByCapabilityOrder": [
+          3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+        ],
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_mixed_rank_and_ties",
+      "input": {
+        "answersByCapabilityOrder": [4, 5, 2, 1, 5, 3, 2, 4, 3, 3, 3, 3, 3]
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 13,
+        "answerSum": 41,
+        "indicativeMaturityLevel": "developing",
+        "profileValuesByCapabilityOrder": [
+          4, 5, 2, 1, 5, 3, 2, 4, 3, 3, 3, 3, 3
+        ],
+        "positiveSignalCapabilityIds": ["governance", "programme_delivery"],
+        "areaToExploreCapabilityIds": ["portfolio", "sponsorship"],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_nine_answered_four_not_applicable",
+      "input": {
+        "answersByCapabilityOrder": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          5,
+          4,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 9,
+        "answerSum": 29,
+        "indicativeMaturityLevel": "developing",
+        "profileValuesByCapabilityOrder": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          5,
+          4,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null
+        ],
+        "positiveSignalCapabilityIds": [
+          "strategy_alignment",
+          "project_delivery"
+        ],
+        "areaToExploreCapabilityIds": ["programme_delivery", "portfolio"],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_insufficient_answered",
+      "input": {
+        "answersByCapabilityOrder": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          5,
+          4,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": false,
+        "reasonCode": "SNAPSHOT_INSUFFICIENT_APPLICABLE_RESPONSES",
+        "indicativeMaturityLevel": null,
+        "profileValuesByCapabilityOrder": [],
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_incomplete_statuses",
+      "input": {
+        "answersByCapabilityOrder": [5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, null],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "missing"
+        ]
+      },
+      "expected": {
+        "available": false,
+        "reasonCode": "SNAPSHOT_INCOMPLETE",
+        "indicativeMaturityLevel": null,
+        "profileValuesByCapabilityOrder": [],
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "authoritativeBand": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_maturity_below_developing",
+      "input": {
+        "answersByCapabilityOrder": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 10,
+        "answerSum": 24,
+        "indicativeMaturityLevel": "emerging"
+      }
+    },
+    {
+      "id": "snapshot_maturity_exact_developing",
+      "input": {
+        "answersByCapabilityOrder": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 10,
+        "answerSum": 25,
+        "indicativeMaturityLevel": "developing"
+      }
+    },
+    {
+      "id": "snapshot_maturity_below_established",
+      "input": {
+        "answersByCapabilityOrder": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 10,
+        "answerSum": 34,
+        "indicativeMaturityLevel": "developing"
+      }
+    },
+    {
+      "id": "snapshot_maturity_exact_established",
+      "input": {
+        "answersByCapabilityOrder": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          null,
+          null,
+          null
+        ],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable",
+          "not_applicable",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 10,
+        "answerSum": 35,
+        "indicativeMaturityLevel": "established"
+      }
+    },
+    {
+      "id": "snapshot_maturity_below_leading",
+      "input": {
+        "answersByCapabilityOrder": [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, null],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 12,
+        "answerSum": 50,
+        "indicativeMaturityLevel": "established"
+      }
+    },
+    {
+      "id": "snapshot_maturity_exact_leading",
+      "input": {
+        "answersByCapabilityOrder": [4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, null],
+        "statusesByCapabilityOrder": [
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "answered",
+          "not_applicable"
+        ],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "answeredCount": 12,
+        "answerSum": 51,
+        "indicativeMaturityLevel": "leading"
+      }
+    },
+    {
+      "id": "snapshot_exact_transfer",
+      "input": {
+        "snapshotQuestionId": "ddna.governance.p",
+        "status": "answered",
+        "answer": 4,
+        "respondedAt": "2026-08-03T12:00:00Z",
+        "linkingConsent": true
+      },
+      "expected": {
+        "fullAssessmentQuestionId": "ddna.governance.p",
+        "status": "answered",
+        "answer": 4,
+        "respondedAt": "2026-08-03T12:00:00Z",
+        "provenance": "delivery-dna-snapshot@1.1.0",
+        "fullAssessmentCompleted": false,
+        "analysisRunCreated": false
+      }
+    }
+  ]
+}

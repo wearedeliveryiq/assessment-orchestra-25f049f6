@@ -1,16 +1,26 @@
 import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
 
-import type { SnapshotResponse } from "./snapshot";
+import type {
+  SnapshotConfigurationVersion,
+  SnapshotMaturityLevel,
+  SnapshotProfileAxis,
+  SnapshotResponse,
+} from "./snapshot";
 
 export type SnapshotResult = {
   available: boolean;
   reasonCode: string | null;
+  answeredCount: number;
+  indicativeMaturityLevel: SnapshotMaturityLevel | null;
+  profile: SnapshotProfileAxis[];
   positiveSignals: { capabilityId: string; capabilityLabel: string; text: string }[];
   areasToExplore: { capabilityId: string; capabilityLabel: string; text: string }[];
 };
 
 export type SnapshotState = {
   status: "in_progress" | "completed" | "linked";
+  configurationVersion: SnapshotConfigurationVersion;
+  presentationPolicyVersion: "1.0.0" | "1.1.0";
   expiresAt: string;
   responses: SnapshotResponse[];
   result: SnapshotResult | null;

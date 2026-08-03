@@ -99,3 +99,32 @@ Production Snapshot `51ae3877-ee7d-4df0-a265-59473ed4c7d9` completed with the ap
 The hosted authenticated-free result for assessment `d09c51a3-2af8-4283-9b98-4cc1d53a1c93` showed the complete free projection and exact unavailable copy. Because no commercial contact route is configured, the panel correctly contained no action element. No real customer holds the new entitlement, so an entitled production read/write smoke remains deferred until the first authorised entitlement is granted; automated policy fixtures are the current evidence. Pricing, checkout and subscription packaging remain out of scope.
 
 Post-correction verification ran 27 focused Snapshot/commercial tests, TypeScript checking and a production build successfully. The preceding complete release regression passed 606/606 tests across 46 files, including all 53 DIQ-203B and all eight PDR-003-005A fixtures.
+
+## PDR-003-005/A v1.1 premium Snapshot update — 3 August 2026
+
+### Customer value delivered
+
+The public Delivery DNA Snapshot now provides a premium, branded acquisition experience without changing the underlying 13 questions or creating intelligence. Ordinary answers save before advancing; Back/edit, explicit N/A reasoning and retry-safe failure handling remain available. Completion moves through a truthful four-to-six-second preparation state into an indicative maturity label, a 13-axis practice-signal profile, bounded positive signals and areas to explore, and the approved primary continuation journey.
+
+### Architecture and data
+
+- The deterministic v1.1 presentation policy is loaded from the locked machine-readable configuration. It calculates an unrounded equal-weight mean only to select the approved indicative label; the mean is never returned or displayed.
+- The radar plots only the raw selected practice response for each locked capability. N/A remains null and appears as a labelled gap, with an ordered text equivalent for assistive technology and narrow screens.
+- The public route uses a dedicated dark acquisition shell and imports the pinned Project Intelligence Hub mark manifests, logo/ribbon components, Manrope fonts and colour tokens rather than redrawing the brand.
+- New anonymous sessions pin collection and presentation version 1.1.0. The collection version is immutable; only the approved 1.0.0-to-1.1.0 presentation transition is accepted for admissible completed historical Snapshots. Exact stored answers, timestamps, links and analysis state are untouched.
+- Completion still calls only the Snapshot service. It creates no analysis run, score, benchmark, confidence, pattern, recommendation or roadmap.
+
+### Verification actually run
+
+- All 14 PDR-003-005A v1.1.0 fixtures: pass.
+- All eight historical PDR-003-005A v1.0 fixtures: pass unchanged.
+- All 53 DIQ-203B fixtures: pass unchanged.
+- Focused Snapshot, journey, commercial, eligibility, hand-off, analysis and public-disclosure regression: 127/127 pass.
+- Full Vitest regression: 609/609 tests across 46 files pass.
+- TypeScript `--noEmit`: pass.
+- Changed-file ESLint and Prettier: pass.
+- Production Vite/Nitro client/server build: pass.
+
+### Limitations
+
+Pricing, checkout and subscription packaging remain out of scope. The existing pre-first-entitlement activation condition for `delivery_dna_action` 1.0.0 is unchanged. No Snapshot result is presented as a complete Delivery DNA diagnosis or comparative benchmark.

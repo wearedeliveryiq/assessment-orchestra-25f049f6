@@ -12,6 +12,7 @@ import {
   normaliseSnapshotResponse,
   safeSnapshotAnalyticsEvent,
   snapshotContinuationRecord,
+  type SnapshotConfigurationVersion,
   type SnapshotResponse,
 } from "./snapshot";
 
@@ -29,9 +30,14 @@ const sb = supabaseAdmin as unknown as {
 type SessionRow = {
   id: string;
   status: "in_progress" | "completed" | "linked";
+  configuration_version: SnapshotConfigurationVersion;
+  presentation_policy_version: "1.0.0" | "1.1.0";
   expires_at: string;
   assessment_session_id: string | null;
 };
+
+const SESSION_PROJECTION =
+  "id,status,configuration_version,presentation_policy_version,expires_at,assessment_session_id";
 
 type ResponseRow = {
   question_id: string;
@@ -122,7 +128,7 @@ async function sessionForRequest(
   const session = unwrap<SessionRow | null>(
     await sb
       .from("delivery_dna_snapshot_sessions")
-      .select("id,status,expires_at,assessment_session_id")
+      .select(SESSION_PROJECTION)
       .eq("token_hash", tokenHash)
       .maybeSingle(),
   );
@@ -163,23 +169,42 @@ async function recordEvent(event: string, stepNumber?: number | null): Promise<v
     );
 }
 
-function project(session: SessionRow, responses: SnapshotResponse[]) {
+async function project(session: SessionRow, responses: SnapshotResponse[]) {
+  let projectedSession = session;
+  const result =
+    session.status === "completed" || session.status === "linked"
+      ? evaluateDeliveryDnaSnapshot(responses)
+      : null;
+  if (
+    result?.available &&
+    session.configuration_version === "1.0.0" &&
+    session.presentation_policy_version !== "1.1.0"
+  ) {
+    unwrap(
+      await sb
+        .from("delivery_dna_snapshot_sessions")
+        .update({ presentation_policy_version: "1.1.0" })
+        .eq("id", session.id)
+        .eq("presentation_policy_version", "1.0.0"),
+    );
+    projectedSession = { ...session, presentation_policy_version: "1.1.0" };
+  }
   return {
-    status: session.status,
-    expiresAt: session.expires_at,
+    status: projectedSession.status,
+    configurationVersion: projectedSession.configuration_version,
+    presentationPolicyVersion: projectedSession.presentation_policy_version,
+    expiresAt: projectedSession.expires_at,
     responses,
-    result:
-      session.status === "completed" || session.status === "linked"
-        ? evaluateDeliveryDnaSnapshot(responses)
-        : null,
-    linkedAssessmentId: session.status === "linked" ? session.assessment_session_id : null,
+    result,
+    linkedAssessmentId:
+      projectedSession.status === "linked" ? projectedSession.assessment_session_id : null,
   };
 }
 
 export async function getSnapshot(request: Request) {
   const resolved = await sessionForRequest(request);
   if (!resolved) return { snapshot: null };
-  return { snapshot: project(resolved.session, await responsesFor(resolved.session.id)) };
+  return { snapshot: await project(resolved.session, await responsesFor(resolved.session.id)) };
 }
 
 export async function startSnapshot(
@@ -189,7 +214,7 @@ export async function startSnapshot(
   const existing = restart ? null : await sessionForRequest(request);
   if (existing) {
     return {
-      data: { snapshot: project(existing.session, await responsesFor(existing.session.id)) },
+      data: { snapshot: await project(existing.session, await responsesFor(existing.session.id)) },
       cookie: "",
     };
   }
@@ -204,12 +229,12 @@ export async function startSnapshot(
   const session = unwrap<SessionRow>(
     await sb
       .from("delivery_dna_snapshot_sessions")
-      .select("id,status,expires_at,assessment_session_id")
+      .select(SESSION_PROJECTION)
       .eq("id", sessionId)
       .single(),
   );
   await Promise.all([recordEvent("snapshot_landing_viewed"), recordEvent("snapshot_started")]);
-  return { data: { snapshot: project(session, []) }, cookie: snapshotCookie(token) };
+  return { data: { snapshot: await project(session, []) }, cookie: snapshotCookie(token) };
 }
 
 export async function saveSnapshotResponse(request: Request, input: Record<string, unknown>) {
@@ -262,7 +287,7 @@ export async function saveSnapshotResponse(request: Request, input: Record<strin
   );
   const responses = await responsesFor(resolved.session.id);
   await recordEvent("snapshot_step_progressed", Math.min(responses.length, 13));
-  return { snapshot: project(resolved.session, responses) };
+  return { snapshot: await project(resolved.session, responses) };
 }
 
 export async function completeSnapshot(request: Request) {
@@ -275,7 +300,7 @@ export async function completeSnapshot(request: Request) {
     );
   const responses = await responsesFor(resolved.session.id);
   const result = evaluateDeliveryDnaSnapshot(responses);
-  if (!result.available) return { snapshot: project(resolved.session, responses), result };
+  if (!result.available) return { snapshot: await project(resolved.session, responses), result };
   if (resolved.session.status === "in_progress") {
     unwrap(
       await sb
@@ -289,11 +314,11 @@ export async function completeSnapshot(request: Request) {
   const session = unwrap<SessionRow>(
     await sb
       .from("delivery_dna_snapshot_sessions")
-      .select("id,status,expires_at,assessment_session_id")
+      .select(SESSION_PROJECTION)
       .eq("id", resolved.session.id)
       .single(),
   );
-  return { snapshot: project(session, responses), result };
+  return { snapshot: await project(session, responses), result };
 }
 
 export async function continueSnapshot(request: Request, input: Record<string, unknown>) {
@@ -314,7 +339,9 @@ export async function continueSnapshot(request: Request, input: Record<string, u
   );
   if (!organisation)
     throw new SnapshotError("SNAPSHOT_LINK_UNAVAILABLE", "This Snapshot cannot be continued.", 409);
-  const transfer = (await responsesFor(resolved.session.id)).map(snapshotContinuationRecord);
+  const transfer = (await responsesFor(resolved.session.id)).map((response) =>
+    snapshotContinuationRecord(response, resolved.session.configuration_version),
+  );
   if (transfer.length !== 13) {
     throw new SnapshotError("SNAPSHOT_INCOMPLETE", "This Snapshot cannot be continued.", 409);
   }
