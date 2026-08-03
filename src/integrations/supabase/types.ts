@@ -983,6 +983,9 @@ export type Database = {
           id: string
           is_deleted: boolean
           notes: string | null
+          original_responded_at: string | null
+          provenance_source: string | null
+          provenance_version: string | null
           question_id: string
           respondent_group_id: string | null
           score: number | null
@@ -1007,6 +1010,9 @@ export type Database = {
           id?: string
           is_deleted?: boolean
           notes?: string | null
+          original_responded_at?: string | null
+          provenance_source?: string | null
+          provenance_version?: string | null
           question_id: string
           respondent_group_id?: string | null
           score?: number | null
@@ -1031,6 +1037,9 @@ export type Database = {
           id?: string
           is_deleted?: boolean
           notes?: string | null
+          original_responded_at?: string | null
+          provenance_source?: string | null
+          provenance_version?: string | null
           question_id?: string
           respondent_group_id?: string | null
           score?: number | null
@@ -1853,6 +1862,165 @@ export type Database = {
           },
         ]
       }
+      delivery_dna_snapshot_access_events: {
+        Row: {
+          id: number
+          ip_hash: string
+          occurred_at: string
+        }
+        Insert: {
+          id?: never
+          ip_hash: string
+          occurred_at?: string
+        }
+        Update: {
+          id?: never
+          ip_hash?: string
+          occurred_at?: string
+        }
+        Relationships: []
+      }
+      delivery_dna_snapshot_funnel_events: {
+        Row: {
+          event_type: string
+          id: number
+          occurred_at: string
+          step_number: number | null
+        }
+        Insert: {
+          event_type: string
+          id?: never
+          occurred_at?: string
+          step_number?: number | null
+        }
+        Update: {
+          event_type?: string
+          id?: never
+          occurred_at?: string
+          step_number?: number | null
+        }
+        Relationships: []
+      }
+      delivery_dna_snapshot_responses: {
+        Row: {
+          answer: number | null
+          capability_id: string
+          capability_order: number
+          created_at: string
+          evidence_status: string
+          not_applicable_reason_code: string | null
+          not_applicable_reason_text: string | null
+          question_id: string
+          responded_at: string
+          snapshot_session_id: string
+          updated_at: string
+        }
+        Insert: {
+          answer?: number | null
+          capability_id: string
+          capability_order: number
+          created_at?: string
+          evidence_status: string
+          not_applicable_reason_code?: string | null
+          not_applicable_reason_text?: string | null
+          question_id: string
+          responded_at: string
+          snapshot_session_id: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: number | null
+          capability_id?: string
+          capability_order?: number
+          created_at?: string
+          evidence_status?: string
+          not_applicable_reason_code?: string | null
+          not_applicable_reason_text?: string | null
+          question_id?: string
+          responded_at?: string
+          snapshot_session_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_snapshot_responses_snapshot_session_id_fkey"
+            columns: ["snapshot_session_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_dna_snapshot_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_dna_snapshot_sessions: {
+        Row: {
+          assessment_session_id: string | null
+          completed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          linked_at: string | null
+          linked_user_id: string | null
+          linking_consent_at: string | null
+          organisation_id: string | null
+          status: string
+          token_hash: string
+          updated_at: string
+          workspace_id: string | null
+        }
+        Insert: {
+          assessment_session_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          linked_at?: string | null
+          linked_user_id?: string | null
+          linking_consent_at?: string | null
+          organisation_id?: string | null
+          status?: string
+          token_hash: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Update: {
+          assessment_session_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          linked_at?: string | null
+          linked_user_id?: string | null
+          linking_consent_at?: string | null
+          organisation_id?: string | null
+          status?: string
+          token_hash?: string
+          updated_at?: string
+          workspace_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_snapshot_sessions_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: true
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_snapshot_sessions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_snapshot_sessions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_intelligence_results: {
         Row: {
           analysis_run_id: string
@@ -2615,24 +2783,42 @@ export type Database = {
       organisation_product_entitlements: {
         Row: {
           entitled: boolean
+          entitlement_source: string
+          expires_at: string | null
           organisation_id: string
           product_id: string
           product_type: string
+          product_version: string | null
+          revoked_at: string | null
           updated_at: string
+          valid_from: string
+          workspace_id: string | null
         }
         Insert: {
           entitled?: boolean
+          entitlement_source?: string
+          expires_at?: string | null
           organisation_id: string
           product_id: string
           product_type: string
+          product_version?: string | null
+          revoked_at?: string | null
           updated_at?: string
+          valid_from?: string
+          workspace_id?: string | null
         }
         Update: {
           entitled?: boolean
+          entitlement_source?: string
+          expires_at?: string | null
           organisation_id?: string
           product_id?: string
           product_type?: string
+          product_version?: string | null
+          revoked_at?: string | null
           updated_at?: string
+          valid_from?: string
+          workspace_id?: string | null
         }
         Relationships: [
           {
@@ -2640,6 +2826,13 @@ export type Database = {
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organisation_product_entitlements_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
             referencedColumns: ["id"]
           },
         ]
@@ -8004,6 +8197,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      cleanup_expired_delivery_dna_snapshots: {
+        Args: { p_limit?: number }
+        Returns: number
+      }
       complete_assessment_analysis_handoff: {
         Args: { p_analysis_run_id: string; p_handoff_id: string }
         Returns: {
@@ -8149,6 +8346,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      create_delivery_dna_snapshot: {
+        Args: { p_ip_hash: string; p_token_hash: string }
+        Returns: string
       }
       create_recommendation_action_outcome: {
         Args: { p_input: Json }
@@ -8417,6 +8618,18 @@ export type Database = {
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
+      }
+      link_delivery_dna_snapshot: {
+        Args: {
+          p_consent: boolean
+          p_manifest_metadata: Json
+          p_organisation_id: string
+          p_organisation_name: string
+          p_token_hash: string
+          p_user_id: string
+          p_workspace_id: string
+        }
+        Returns: string
       }
       mark_assessment_analysis_handoff_ineligible: {
         Args: { p_eligibility_decision_id: string; p_handoff_id: string }
