@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Ban, CheckCircle2, Play, Plus } from "lucide-react";
 import { useId, useState } from "react";
 
+import { RecommendationHandoffControls } from "@/components/dashboard/recommendation-handoff-controls";
 import {
   createRecommendationAction,
   updateRecommendationAction,
@@ -329,6 +330,9 @@ export function RecommendationActionControls({
             <Ban className="h-4 w-4" aria-hidden /> Cancel action
           </button>
         </div>
+      )}
+      {action.status !== "cancelled" && (
+        <RecommendationHandoffControls actionId={action.actionId} />
       )}
     </div>
   );
