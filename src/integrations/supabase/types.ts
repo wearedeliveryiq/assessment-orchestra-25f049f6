@@ -3934,6 +3934,127 @@ export type Database = {
           },
         ]
       }
+      recommendation_decision_events: {
+        Row: {
+          acknowledged: boolean
+          actor_type: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          actor_user_id: string | null
+          analysis_run_id: string
+          catalogue_digest: string
+          catalogue_version_id: string
+          command: Database["public"]["Enums"]["recommendation_decision_command"]
+          current_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          organisation_id: string
+          payload_hash: string
+          portfolio_id: string
+          portfolio_item_id: string
+          portfolio_policy_version: string
+          previous_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          reason_category:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          review_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          acknowledged?: boolean
+          actor_type: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          actor_user_id?: string | null
+          analysis_run_id: string
+          catalogue_digest: string
+          catalogue_version_id: string
+          command: Database["public"]["Enums"]["recommendation_decision_command"]
+          current_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version: number
+          id?: string
+          idempotency_key: string
+          occurred_at?: string
+          organisation_id: string
+          payload_hash: string
+          portfolio_id: string
+          portfolio_item_id: string
+          portfolio_policy_version: string
+          previous_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          reason_category?:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          review_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          acknowledged?: boolean
+          actor_type?: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          actor_user_id?: string | null
+          analysis_run_id?: string
+          catalogue_digest?: string
+          catalogue_version_id?: string
+          command?: Database["public"]["Enums"]["recommendation_decision_command"]
+          current_state?: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version?: number
+          id?: string
+          idempotency_key?: string
+          occurred_at?: string
+          organisation_id?: string
+          payload_hash?: string
+          portfolio_id?: string
+          portfolio_item_id?: string
+          portfolio_policy_version?: string
+          previous_state?: Database["public"]["Enums"]["recommendation_decision_state"]
+          reason_category?:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          review_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_decision_events_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_decision_events_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_decision_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_decision_events_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_decision_events_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_decision_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_definitions: {
         Row: {
           catalogue_order: number
@@ -4166,6 +4287,115 @@ export type Database = {
           },
           {
             foreignKeyName: "recommendation_evaluations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_item_decisions: {
+        Row: {
+          acknowledged: boolean
+          analysis_run_id: string
+          current_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version: number
+          id: string
+          last_actor_type: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          last_actor_user_id: string | null
+          latest_event_id: string
+          organisation_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          reason_category:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          recommendation_id: string
+          recommendation_version: string
+          review_at: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          acknowledged?: boolean
+          analysis_run_id: string
+          current_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version: number
+          id?: string
+          last_actor_type: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          last_actor_user_id?: string | null
+          latest_event_id: string
+          organisation_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          reason_category?:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          recommendation_id: string
+          recommendation_version: string
+          review_at?: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        Update: {
+          acknowledged?: boolean
+          analysis_run_id?: string
+          current_state?: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version?: number
+          id?: string
+          last_actor_type?: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          last_actor_user_id?: string | null
+          latest_event_id?: string
+          organisation_id?: string
+          portfolio_id?: string
+          portfolio_item_id?: string
+          reason_category?:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          recommendation_id?: string
+          recommendation_version?: string
+          review_at?: string | null
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_item_decisions_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_item_decisions_latest_event_id_fkey"
+            columns: ["latest_event_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_decision_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_item_decisions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_item_decisions_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_item_decisions_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_item_decisions_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -6762,6 +6992,36 @@ export type Database = {
         Args: { p_limit?: number }
         Returns: number
       }
+      record_recommendation_item_decision: {
+        Args: { p_input: Json }
+        Returns: {
+          acknowledged: boolean
+          analysis_run_id: string
+          current_state: Database["public"]["Enums"]["recommendation_decision_state"]
+          decision_version: number
+          id: string
+          last_actor_type: Database["public"]["Enums"]["recommendation_decision_actor_type"]
+          last_actor_user_id: string | null
+          latest_event_id: string
+          organisation_id: string
+          portfolio_id: string
+          portfolio_item_id: string
+          reason_category:
+            | Database["public"]["Enums"]["recommendation_decision_reason_category"]
+            | null
+          recommendation_id: string
+          recommendation_version: string
+          review_at: string | null
+          updated_at: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_item_decisions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       resolve_delivery_dna_public_result: {
         Args: { p_ip_hash: string; p_token_hash: string }
         Returns: Json
@@ -6935,6 +7195,26 @@ export type Database = {
         | "withheld"
         | "evidence_first"
       recommendation_confidence_state: "low" | "moderate" | "high"
+      recommendation_decision_actor_type: "user" | "system"
+      recommendation_decision_command:
+        | "accepted"
+        | "deferred"
+        | "rejected"
+        | "restored"
+        | "superseded"
+      recommendation_decision_reason_category:
+        | "not_relevant"
+        | "already_addressed"
+        | "not_feasible"
+        | "wrong_timing"
+        | "insufficient_evidence"
+        | "other"
+      recommendation_decision_state:
+        | "undecided"
+        | "accepted"
+        | "deferred"
+        | "rejected"
+        | "superseded"
       recommendation_dependency_resolution:
         | "direct"
         | "superseded"
@@ -7143,6 +7423,29 @@ export const Constants = {
         "evidence_first",
       ],
       recommendation_confidence_state: ["low", "moderate", "high"],
+      recommendation_decision_actor_type: ["user", "system"],
+      recommendation_decision_command: [
+        "accepted",
+        "deferred",
+        "rejected",
+        "restored",
+        "superseded",
+      ],
+      recommendation_decision_reason_category: [
+        "not_relevant",
+        "already_addressed",
+        "not_feasible",
+        "wrong_timing",
+        "insufficient_evidence",
+        "other",
+      ],
+      recommendation_decision_state: [
+        "undecided",
+        "accepted",
+        "deferred",
+        "rejected",
+        "superseded",
+      ],
       recommendation_dependency_resolution: [
         "direct",
         "superseded",
