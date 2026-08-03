@@ -245,7 +245,7 @@ async function submitDeliveryDnaAssessment(
       assessmentRevision: session.assessmentRevision ?? 1,
       missingEvidence: completion.missingCount,
     });
-    scheduleAnalysisHandoff();
+    await scheduleAnalysisHandoff(id, analysisHandoffContext(session, ownerKey));
     return getStatus(id, ownerKey);
   } catch (error) {
     throw deliveryDnaRuntimeError(error);
@@ -349,7 +349,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
       results,
       completed_at: new Date().toISOString(),
     });
-    scheduleAnalysisHandoff();
+    await scheduleAnalysisHandoff(id, analysisHandoffContext(session, ownerKey));
     return getStatus(id, ownerKey);
   }
 
@@ -403,7 +403,7 @@ export async function advance(id: string, ownerKey: string): Promise<RuntimeStat
     lifecycleEvent(session, ownerKey, "assessment.completed", {
       stages: after.length,
     });
-    scheduleAnalysisHandoff();
+    await scheduleAnalysisHandoff(id, analysisHandoffContext(session, ownerKey));
     scheduleGraphRefresh(id);
   }
 
@@ -435,3 +435,12 @@ function assembleResults(rows: { stage: EngineStageId; output: unknown }[]): Ass
 }
 
 export const STAGE_COUNT = ENGINE_STAGES.length;
+
+function analysisHandoffContext(session: AssessmentSession, ownerKey: string) {
+  return {
+    ownerKey,
+    organisationId: session.organisationId,
+    workspaceId: session.workspaceId,
+    userId: session.createdByUserId,
+  };
+}

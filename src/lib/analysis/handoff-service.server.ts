@@ -15,6 +15,13 @@ import { AnalysisServiceError, assessmentAnalysisService } from "./service.serve
 
 const SAFE_HANDOFF_ERROR = "ANALYSIS_HANDOFF_FAILED";
 
+export interface AnalysisHandoffContext {
+  ownerKey: string;
+  organisationId: string;
+  workspaceId: string;
+  userId: string;
+}
+
 export interface HandoffDependencies {
   getSession: typeof assessmentRepo.getSession;
   getSessionById: typeof assessmentRepo.getSessionById;
@@ -70,15 +77,7 @@ function safeCode(error: unknown): string {
 export class AnalysisHandoffService {
   constructor(private readonly deps: HandoffDependencies = dependencies) {}
 
-  async ensureForAssessment(
-    assessmentId: string,
-    context: {
-      ownerKey: string;
-      organisationId: string;
-      workspaceId: string;
-      userId: string;
-    },
-  ) {
+  async ensureForAssessment(assessmentId: string, context: AnalysisHandoffContext) {
     const session = await this.deps.getSession(assessmentId, context.ownerKey);
     if (
       !session ||
@@ -99,6 +98,22 @@ export class AnalysisHandoffService {
       );
     }
     return this.deps.ensureHandoff(session);
+  }
+
+  /**
+   * Claims and processes only the hand-off created by this completion request.
+   *
+   * The caller awaits this method after the assessment transaction has committed.
+   * That prevents a serverless request from being torn down after it has claimed a
+   * durable outbox row but before it has created the analysis run. Concurrent
+   * completion requests remain safe because the database claim is atomic.
+   */
+  async processAssessmentCompletion(assessmentId: string, context: AnalysisHandoffContext) {
+    const handoff = await this.ensureForAssessment(assessmentId, context);
+    if (handoff.status !== "pending") return null;
+    const claimed = await this.deps.claimHandoff(handoff.id);
+    if (!claimed) return null;
+    return this.processClaimed(claimed);
   }
 
   async processClaimed(handoff: AssessmentAnalysisHandoff) {
@@ -391,8 +406,11 @@ export class AnalysisHandoffService {
 
 export const analysisHandoffService = new AnalysisHandoffService();
 
-export function scheduleAnalysisHandoff(): void {
-  void analysisHandoffService.processPending(10).catch((error) => {
+export async function scheduleAnalysisHandoff(
+  assessmentId: string,
+  context: AnalysisHandoffContext,
+): Promise<void> {
+  await analysisHandoffService.processAssessmentCompletion(assessmentId, context).catch((error) => {
     console.error("[analysis-handoff] automatic hand-off will be retried", safeCode(error));
   });
 }
