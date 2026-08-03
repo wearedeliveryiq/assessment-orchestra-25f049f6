@@ -198,7 +198,7 @@ BEGIN
     provenance_source, provenance_version, original_responded_at
   )
   SELECT
-    v_assessment_id, question_id, capability_id, answer, answer, NULL, responded_at,
+    v_assessment_id, question_id, capability_id, to_jsonb(answer), answer, NULL, responded_at,
     CASE WHEN evidence_status = 'answered' THEN responded_at ELSE NULL END,
     evidence_status, not_applicable_reason_code, not_applicable_reason_text,
     'delivery-dna-snapshot', '1.0.0', responded_at
