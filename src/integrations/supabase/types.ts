@@ -976,6 +976,8 @@ export type Database = {
           deleted_at: string | null
           deleted_by: string | null
           evidence_at: string | null
+          evidence_reason_code: string | null
+          evidence_reason_text: string | null
           evidence_status: string
           exclusion_reason: string | null
           id: string
@@ -988,7 +990,7 @@ export type Database = {
           session_id: string
           updated_at: string
           updated_by: string | null
-          value: Json
+          value: Json | null
           version: number
         }
         Insert: {
@@ -998,6 +1000,8 @@ export type Database = {
           deleted_at?: string | null
           deleted_by?: string | null
           evidence_at?: string | null
+          evidence_reason_code?: string | null
+          evidence_reason_text?: string | null
           evidence_status?: string
           exclusion_reason?: string | null
           id?: string
@@ -1010,7 +1014,7 @@ export type Database = {
           session_id: string
           updated_at?: string
           updated_by?: string | null
-          value?: Json
+          value?: Json | null
           version?: number
         }
         Update: {
@@ -1020,6 +1024,8 @@ export type Database = {
           deleted_at?: string | null
           deleted_by?: string | null
           evidence_at?: string | null
+          evidence_reason_code?: string | null
+          evidence_reason_text?: string | null
           evidence_status?: string
           exclusion_reason?: string | null
           id?: string
@@ -1032,7 +1038,7 @@ export type Database = {
           session_id?: string
           updated_at?: string
           updated_by?: string | null
-          value?: Json
+          value?: Json | null
           version?: number
         }
         Relationships: [
