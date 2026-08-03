@@ -160,6 +160,17 @@ const recommendationSequenceHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationPortfolioMigration = readFileSync(
+  new URL("../supabase/migrations/20260803070000_recommendation_portfolios.sql", import.meta.url),
+  "utf8",
+);
+const recommendationPortfolioHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803071000_harden_recommendation_portfolio_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -473,6 +484,31 @@ describe("Sprint 03 migration security", () => {
     );
     expect(recommendationSequenceHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.set_recommendation_sequence_override(jsonb) TO service_role",
+    );
+  });
+
+  it("publishes immutable tenant-scoped portfolios through a hardened governed routine", () => {
+    expect(recommendationPortfolioMigration).toContain("recommendation_portfolios_immutable");
+    expect(recommendationPortfolioMigration).toContain("recommendation_portfolio_items_immutable");
+    expect(recommendationPortfolioMigration).toContain(
+      "UNIQUE (sequence_model_id, policy_version)",
+    );
+    expect(recommendationPortfolioMigration).toContain(
+      "v_sequence.priority_model_id <> v_priority.id",
+    );
+    expect(recommendationPortfolioMigration).toContain(
+      "v_evaluation.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationPortfolioMigration).toContain(
+      "trace.organisation_id = v_run.organisation_id",
+    );
+    expect(recommendationPortfolioMigration).toContain("v_expected_class := CASE");
+    expect(recommendationPortfolioMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationPortfolioMigration).not.toContain("CREATE POLICY");
+    expect(recommendationPortfolioHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationPortfolioHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationPortfolioHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_portfolio(jsonb) TO service_role",
     );
   });
 });

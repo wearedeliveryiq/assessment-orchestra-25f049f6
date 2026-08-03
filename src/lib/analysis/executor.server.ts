@@ -6,6 +6,7 @@ import { validateTraceGraph } from "../delivery-intelligence/traceability";
 import { recommendationConfidenceGateService } from "../recommendation-confidence/service.server";
 import { recommendationEvaluationService } from "../recommendation-evaluation/service.server";
 import { recommendationPriorityService } from "../recommendation-priority/service.server";
+import { recommendationPortfolioService } from "../recommendation-portfolio/service.server";
 import { recommendationResolutionService } from "../recommendation-resolution/service.server";
 import { recommendationSequenceService } from "../recommendation-sequencing/service.server";
 import type { AssessmentAnalysisRun } from "./types";
@@ -31,6 +32,7 @@ export interface AnalysisExecutorDependencies {
   resolveRecommendationConflicts?(run: AssessmentAnalysisRun): Promise<void>;
   prioritiseRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
   sequenceRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
+  publishRecommendationPortfolio?(run: AssessmentAnalysisRun): Promise<void>;
   workerId(): string;
 }
 
@@ -66,6 +68,9 @@ const defaultDependencies: AnalysisExecutorDependencies = {
   },
   sequenceRecommendations: async (run) => {
     await recommendationSequenceService.sequence(run);
+  },
+  publishRecommendationPortfolio: async (run) => {
+    await recommendationPortfolioService.publish(run);
   },
   workerId: () => `analysis-worker:${crypto.randomUUID()}`,
 };
@@ -156,9 +161,11 @@ export class AnalysisRunExecutor {
           );
         }
       }
+      let recommendationSequenceCompleted = false;
       if (recommendationPriorityCompleted && this.deps.sequenceRecommendations) {
         try {
           await this.deps.sequenceRecommendations(completed);
+          recommendationSequenceCompleted = true;
           await this.deps.event(completed, "recommendation.sequence_completed", {
             policyVersion: "PB-004/S4-006/1.0.0",
           });
@@ -173,6 +180,21 @@ export class AnalysisRunExecutor {
             {
               code: code === "ROADMAP_DEPENDENCY_CYCLE" ? code : "RECOMMENDATION_SEQUENCE_INVALID",
             },
+            "error",
+          );
+        }
+      }
+      if (recommendationSequenceCompleted && this.deps.publishRecommendationPortfolio) {
+        try {
+          await this.deps.publishRecommendationPortfolio(completed);
+          await this.deps.event(completed, "recommendation.portfolio_completed", {
+            policyVersion: "PB-004/S4-007/1.0.0",
+          });
+        } catch {
+          await this.deps.event(
+            completed,
+            "recommendation.portfolio_failed",
+            { code: "PORTFOLIO_PUBLICATION_FAILED" },
             "error",
           );
         }
