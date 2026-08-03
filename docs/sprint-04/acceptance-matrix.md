@@ -292,3 +292,27 @@ Actual command results are recorded in the story implementation reports. S4-001 
 | Full regression/type/lint/build | 40 files / 491 tests; 53 DIQ-203B; typecheck; changed lint/format; build                                | PASS — full lint limitation remains inherited |
 | Database migration              | read-model/application-only story; no schema or data change                                             | NOT APPLICABLE                                |
 | Live report smoke               | requires first genuine eligible production Delivery DNA portfolio                                       | PENDING DEPLOYMENT                            |
+
+## S4-013 — Recommendation Analytics and Learning Signals
+
+| Acceptance criterion                         | Implementation evidence                                                                                                      | Test evidence                                                               | Status |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------ |
+| AC1 exact event allow-list is enforced       | shared ten-event schema, exact object contracts and matching PostgreSQL enum/checks                                          | every event and property contract executed; unknown keys rejected           | PASS   |
+| AC2 prohibited content cannot be captured    | exact categorical property keys/values; bounded token fields; no arbitrary text or evidence payload                          | raw answer, note, evidence, free text, secret and unknown-property attempts | PASS   |
+| AC3 duplicate events deduplicate safely      | immutable event ID plus semantic request hash; conflicting key reuse fails                                                   | exact replay and hash/idempotency migration contracts                       | PASS   |
+| AC4 analytics failure never breaks workflow  | server-authoritative decision/action/handoff capture uses safe adapter that catches failure without mutating source workflow | vendor-outage test and source integrations                                  | PASS   |
+| AC5 ten-tenant cohort threshold is enforced  | SQL `HAVING` threshold plus defensive service assertion; aggregate excludes all tenant/actor/object identifiers              | 9-tenant denial and 10-tenant acceptance                                    | PASS   |
+| AC6 rules change only through governed paths | no analytics-to-catalogue/rule write path; customer copy states that rules never change automatically                        | source inspection guards catalogue transition/rule writes                   | PASS   |
+
+## S4-013 quality gates
+
+| Gate                                 | Evidence                                                                                                    | Status                          |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Schema/privacy/consent               | `tests/recommendation-analytics.test.ts`; exact allow-list, prohibited fields, grant/withdraw and pseudonym | PASS                            |
+| Idempotency/failure/tenant scope     | replay, conflicting source, cross-tenant denial and vendor outage                                           | PASS                            |
+| Retention/monitoring/data dictionary | governed platform retention handler; runbook monitoring; `S4-013-data-dictionary.md`                        | PASS                            |
+| Accessibility/copy                   | labelled consent section, 44px controls, live status/error copy and categorical usefulness controls         | PASS                            |
+| Performance                          | 10,000 schema validations inside one second                                                                 | PASS                            |
+| Full regression/type/lint/build      | 41 files / 511 tests; all 53 DIQ-203B; typecheck; changed lint/format; production build                     | PASS — inherited full-lint debt |
+| Lovable Cloud migration              | `20260803130000` then `20260803131000`; ACL/schema/type verification                                        | PENDING DEPLOYMENT              |
+| Live aggregate smoke                 | requires at least 10 genuine consented tenants; no customer data will be manufactured                       | RECORDED LIMITATION             |

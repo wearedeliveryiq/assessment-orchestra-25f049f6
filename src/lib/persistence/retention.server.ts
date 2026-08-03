@@ -1,6 +1,7 @@
 import { CacheTags, invalidateTag } from "./cache";
 import type { PlatformRepositories } from "./repositories";
 import type { TenantContext } from "./types";
+import { applyAnalyticsRetention } from "../recommendation-analytics/repository.server";
 
 /**
  * Retention execution.
@@ -16,7 +17,12 @@ import type { TenantContext } from "./types";
  * purge policy pointed at an aggregate that carries business meaning.
  */
 
-const PURGEABLE = new Set(["notifications", "temporary_data", "login_attempts"]);
+const PURGEABLE = new Set([
+  "notifications",
+  "temporary_data",
+  "login_attempts",
+  "recommendation_analytics_events",
+]);
 
 export interface RetentionRunResult {
   entity: string;
@@ -73,10 +79,23 @@ export async function applyRetentionPolicies(
             notification.id,
           );
         } else {
-          await repos.notifications.softDeleteById({ ...context, crossTenant: true }, notification.id);
+          await repos.notifications.softDeleteById(
+            { ...context, crossTenant: true },
+            notification.id,
+          );
           affected += 1;
         }
       }
+      results.push({ entity: policy.entity, mode: policy.mode, affected });
+      continue;
+    }
+
+    if (policy.entity === "recommendation_analytics_events") {
+      const affected = await applyAnalyticsRetention({
+        organisationId: policy.organisationId,
+        mode: policy.mode === "archive" ? "archive" : "purge",
+        cutoff: horizon,
+      });
       results.push({ entity: policy.entity, mode: policy.mode, affected });
       continue;
     }

@@ -1,6 +1,7 @@
 import { assessmentRequestContext } from "@/lib/identity/assessment-auth.server";
 import { IdentityError } from "@/lib/identity/errors";
 import { assertPermission } from "@/lib/identity/service.server";
+import { captureRecommendationAnalyticsSafely } from "@/lib/recommendation-analytics/service.server";
 
 import { productHandoffCtas } from "./model";
 import { projectProductHandoff } from "./projection";
@@ -112,6 +113,20 @@ export async function postConsumeProductHandoff(request: Request) {
       workspaceId: verified.workspaceId,
       actorUserId: verified.identity.user.id,
       permissions: verified.identity.permissions,
+    });
+    await captureRecommendationAnalyticsSafely({
+      eventId: `handoff:${result.id}:consumed`,
+      eventType:
+        result.targetType === "knowledge_pack" ? "knowledge_pack_handoff" : "teammate_handoff",
+      objectType: "handoff",
+      objectId: result.id,
+      objectVersion: result.targetVersion,
+      mode: "workspace",
+      properties: { handoff_state: "consumed" },
+      occurredAt: result.consumedAt ?? new Date().toISOString(),
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      actorUserId: verified.identity.user.id,
     });
     return json(
       {

@@ -2,6 +2,7 @@ import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
 import { canViewRecommendationEvaluationAudit } from "../recommendation-evaluation/projection";
+import { captureRecommendationAnalyticsSafely } from "../recommendation-analytics/service.server";
 import {
   recommendationDecisionCommands,
   recommendationDecisionReasonCategories,
@@ -109,6 +110,19 @@ export async function postRecommendationDecision(request: Request, portfolioItem
       acknowledged: body.acknowledged === true,
       reasonCategory: reasonCategory as RecommendationDecisionReasonCategory | null,
       reviewAt: reviewAt as string | null,
+    });
+    await captureRecommendationAnalyticsSafely({
+      eventId: `decision:${result.id}:${result.version}`,
+      eventType: "decision_recorded",
+      objectType: "decision",
+      objectId: result.id!,
+      objectVersion: String(result.version),
+      mode: "workspace",
+      properties: { decision_state: result.currentState },
+      occurredAt: result.updatedAt ?? new Date().toISOString(),
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      actorUserId: verified.identity.user.id,
     });
     return json(
       {

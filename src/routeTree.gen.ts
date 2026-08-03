@@ -88,6 +88,7 @@ import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
 import { Route as ApiImprovementActionsIdRouteImport } from './routes/api/improvement-actions.$id'
+import { Route as ApiInternalRecommendationAnalyticsRouteImport } from './routes/api/internal/recommendation-analytics'
 import { Route as ApiInternalRecommendationCataloguesRouteImport } from './routes/api/internal/recommendation-catalogues'
 import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
@@ -95,6 +96,8 @@ import { Route as ApiNotificationsReadRouteImport } from './routes/api/notificat
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
 import { Route as ApiProductHandoffsConsumeRouteImport } from './routes/api/product-handoffs.consume'
 import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
+import { Route as ApiRecommendationAnalyticsConsentRouteImport } from './routes/api/recommendation-analytics.consent'
+import { Route as ApiRecommendationAnalyticsEventsRouteImport } from './routes/api/recommendation-analytics.events'
 import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
 import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
 import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
@@ -612,6 +615,12 @@ const ApiImprovementActionsIdRoute = ApiImprovementActionsIdRouteImport.update({
   path: '/api/improvement-actions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiInternalRecommendationAnalyticsRoute =
+  ApiInternalRecommendationAnalyticsRouteImport.update({
+    id: '/api/internal/recommendation-analytics',
+    path: '/api/internal/recommendation-analytics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiInternalRecommendationCataloguesRoute =
   ApiInternalRecommendationCataloguesRouteImport.update({
     id: '/api/internal/recommendation-catalogues',
@@ -649,6 +658,18 @@ const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
   path: '/api/public-results/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRecommendationAnalyticsConsentRoute =
+  ApiRecommendationAnalyticsConsentRouteImport.update({
+    id: '/api/recommendation-analytics/consent',
+    path: '/api/recommendation-analytics/consent',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiRecommendationAnalyticsEventsRoute =
+  ApiRecommendationAnalyticsEventsRouteImport.update({
+    id: '/api/recommendation-analytics/events',
+    path: '/api/recommendation-analytics/events',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiRecommendationPortfoliosIdRoute =
   ApiRecommendationPortfoliosIdRouteImport.update({
     id: '/api/recommendation-portfolios/$id',
@@ -1365,6 +1386,7 @@ export interface FileRoutesByFullPath {
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
+  '/api/internal/recommendation-analytics': typeof ApiInternalRecommendationAnalyticsRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1372,6 +1394,8 @@ export interface FileRoutesByFullPath {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
+  '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1570,6 +1594,7 @@ export interface FileRoutesByTo {
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
+  '/api/internal/recommendation-analytics': typeof ApiInternalRecommendationAnalyticsRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1577,6 +1602,8 @@ export interface FileRoutesByTo {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
+  '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1776,6 +1803,7 @@ export interface FileRoutesById {
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
   '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
+  '/api/internal/recommendation-analytics': typeof ApiInternalRecommendationAnalyticsRoute
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
@@ -1783,6 +1811,8 @@ export interface FileRoutesById {
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
+  '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1983,6 +2013,7 @@ export interface FileRouteTypes {
     | '/api/executions/history'
     | '/api/executions/monitor'
     | '/api/improvement-actions/$id'
+    | '/api/internal/recommendation-analytics'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -1990,6 +2021,8 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
+    | '/api/recommendation-analytics/consent'
+    | '/api/recommendation-analytics/events'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2097,6 +2130,7 @@ export interface FileRouteTypes {
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
+    | '/api/recommendation-portfolios/$id/experience'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2187,6 +2221,7 @@ export interface FileRouteTypes {
     | '/api/executions/history'
     | '/api/executions/monitor'
     | '/api/improvement-actions/$id'
+    | '/api/internal/recommendation-analytics'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -2194,6 +2229,8 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
+    | '/api/recommendation-analytics/consent'
+    | '/api/recommendation-analytics/events'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2301,6 +2338,7 @@ export interface FileRouteTypes {
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
+    | '/api/recommendation-portfolios/$id/experience'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2391,6 +2429,7 @@ export interface FileRouteTypes {
     | '/api/executions/history'
     | '/api/executions/monitor'
     | '/api/improvement-actions/$id'
+    | '/api/internal/recommendation-analytics'
     | '/api/internal/recommendation-catalogues'
     | '/api/members/$id'
     | '/api/members/invite'
@@ -2398,6 +2437,8 @@ export interface FileRouteTypes {
     | '/api/organisations/$id'
     | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
+    | '/api/recommendation-analytics/consent'
+    | '/api/recommendation-analytics/events'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2505,6 +2546,7 @@ export interface FileRouteTypes {
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
     | '/api/recommendation-portfolios/$id/decisions'
+    | '/api/recommendation-portfolios/$id/experience'
     | '/api/reporting/reports/$id'
     | '/assessment/$id/export/$format'
     | '/api/analysis-runs/$id/public-results/$publicResultId'
@@ -2592,9 +2634,12 @@ export interface RootRouteChildren {
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   ApiImprovementActionsIdRoute: typeof ApiImprovementActionsIdRouteWithChildren
+  ApiInternalRecommendationAnalyticsRoute: typeof ApiInternalRecommendationAnalyticsRoute
   ApiInternalRecommendationCataloguesRoute: typeof ApiInternalRecommendationCataloguesRouteWithChildren
   ApiProductHandoffsConsumeRoute: typeof ApiProductHandoffsConsumeRoute
   ApiPublicResultsTokenRoute: typeof ApiPublicResultsTokenRoute
+  ApiRecommendationAnalyticsConsentRoute: typeof ApiRecommendationAnalyticsConsentRoute
+  ApiRecommendationAnalyticsEventsRoute: typeof ApiRecommendationAnalyticsEventsRoute
   ApiRecommendationPortfoliosIdRoute: typeof ApiRecommendationPortfoliosIdRouteWithChildren
   ApiReportingBrandingRoute: typeof ApiReportingBrandingRoute
   ApiReportingDownloadCentreRoute: typeof ApiReportingDownloadCentreRoute
@@ -3210,6 +3255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiImprovementActionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/internal/recommendation-analytics': {
+      id: '/api/internal/recommendation-analytics'
+      path: '/api/internal/recommendation-analytics'
+      fullPath: '/api/internal/recommendation-analytics'
+      preLoaderRoute: typeof ApiInternalRecommendationAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/internal/recommendation-catalogues': {
       id: '/api/internal/recommendation-catalogues'
       path: '/api/internal/recommendation-catalogues'
@@ -3257,6 +3309,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public-results/$token'
       fullPath: '/api/public-results/$token'
       preLoaderRoute: typeof ApiPublicResultsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-analytics/consent': {
+      id: '/api/recommendation-analytics/consent'
+      path: '/api/recommendation-analytics/consent'
+      fullPath: '/api/recommendation-analytics/consent'
+      preLoaderRoute: typeof ApiRecommendationAnalyticsConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-analytics/events': {
+      id: '/api/recommendation-analytics/events'
+      path: '/api/recommendation-analytics/events'
+      fullPath: '/api/recommendation-analytics/events'
+      preLoaderRoute: typeof ApiRecommendationAnalyticsEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/recommendation-portfolios/$id': {
@@ -4532,10 +4598,15 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
   ApiImprovementActionsIdRoute: ApiImprovementActionsIdRouteWithChildren,
+  ApiInternalRecommendationAnalyticsRoute:
+    ApiInternalRecommendationAnalyticsRoute,
   ApiInternalRecommendationCataloguesRoute:
     ApiInternalRecommendationCataloguesRouteWithChildren,
   ApiProductHandoffsConsumeRoute: ApiProductHandoffsConsumeRoute,
   ApiPublicResultsTokenRoute: ApiPublicResultsTokenRoute,
+  ApiRecommendationAnalyticsConsentRoute:
+    ApiRecommendationAnalyticsConsentRoute,
+  ApiRecommendationAnalyticsEventsRoute: ApiRecommendationAnalyticsEventsRoute,
   ApiRecommendationPortfoliosIdRoute:
     ApiRecommendationPortfoliosIdRouteWithChildren,
   ApiReportingBrandingRoute: ApiReportingBrandingRoute,
