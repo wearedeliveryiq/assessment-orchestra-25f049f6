@@ -14,21 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      _s4_007_fn_parts: {
-        Row: {
-          i: number
-          s: string
-        }
-        Insert: {
-          i: number
-          s: string
-        }
-        Update: {
-          i?: number
-          s?: string
-        }
-        Relationships: []
-      }
       analysis_recommendation_acceptances: {
         Row: {
           accepted_at: string
@@ -6674,6 +6659,41 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "recommendation_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      publish_recommendation_portfolio: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_portfolio: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          id: string
+          input_hash: string
+          item_count: number
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          portfolio_state: Database["public"]["Enums"]["recommendation_portfolio_state"]
+          priority_model_id: string
+          projector_version: string
+          recommendation_evaluation_id: string
+          scheduled_count: number
+          sequence_model_id: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_portfolios"
           isOneToOne: true
           isSetofReturn: false
         }
