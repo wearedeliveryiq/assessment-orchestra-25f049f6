@@ -28,7 +28,7 @@ Sprint 04 is **not production-release ready** until all of the following are res
 | S4-011 Knowledge Pack and TeamMate Hand-offs       | Complete; never auto-activates a product                                                         |
 | S4-012 Experience and Executive Reporting          | Complete                                                                                         |
 | S4-013 Analytics and Learning Signals              | Complete; outcome capture remains fail closed while S4-010 is blocked                            |
-| S4-014 Governance, Audit and Operational Readiness | Implemented; feature defaults off pending release gates and live recovery evidence               |
+| S4-014 Governance, Audit and Operational Readiness | Implemented and deployed; feature remains off pending release gates and live recovery evidence   |
 
 ## Architecture confirmation
 

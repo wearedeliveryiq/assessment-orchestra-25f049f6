@@ -335,12 +335,12 @@ Actual command results are recorded in the story implementation reports. S4-001 
 | Governance and configuration    | S4-001 separation regression; configuration diff; append-only feature events; absent flag resolves disabled                           | PASS                                                    |
 | Export and redaction            | `tests/recommendation-governance.test.ts`; versioned allow-list and access logging                                                    | PASS                                                    |
 | Idempotency/concurrency/failure | advisory lock, exact replay, SKIP LOCKED claims, stale lease, three attempts and per-job containment                                  | PASS                                                    |
-| Tenant/security/privacy         | authenticated scoped request, database membership/workspace checks, RLS zero policies, service-only functions and prohibited metadata | PASS — live ACL verification pending deployment         |
+| Tenant/security/privacy         | authenticated scoped request, database membership/workspace checks, RLS zero policies, service-only functions and prohibited metadata | PASS — live ACL/schema verification complete            |
 | Performance                     | exactly 10,000 events projected inside the 60-second asynchronous target; over-bound fails closed                                     | PASS                                                    |
 | Recovery                        | implementation rehearsal and rollback runbook                                                                                         | PARTIAL — isolated live restore awaits approved RPO/RTO |
 | Outcome export                  | explicit empty outcome projection with safe limitation                                                                                | BLOCKED by S4-010 locked product-rule gap               |
 | Full regression/type/lint/build | 42 files / 522 tests; all 53 DIQ-203B; typecheck; changed lint/format; production build                                               | PASS — inherited full-lint debt                         |
-| Lovable Cloud migration/publish | `20260803140000` followed by `20260803141000`; feature remains disabled                                                               | PENDING DEPLOYMENT                                      |
+| Lovable Cloud migration/publish | managed core, hardening and Cloud-helper correction; feature remains disabled; application published                                  | PASS                                                    |
 
 ## Sprint 04 release acceptance
 
@@ -350,7 +350,7 @@ Actual command results are recorded in the story implementation reports. S4-001 
 | S4-010 complete locked behaviour and golden fixtures           | BLOCKED — maintain/date policy absent                    |
 | DIQ-203B unchanged golden regression                           | PASS — all 53 fixtures                                   |
 | Generated baselines immutable and overlays audited             | PASS                                                     |
-| Tenant, access, idempotency, disclosure and export controls    | PASS — live S4-014 verification pending                  |
+| Tenant, access, idempotency, disclosure and export controls    | PASS — live S4-014 verification complete                 |
 | Accessibility, responsive, privacy, performance and resilience | PARTIAL — live restore and full customer journey pending |
 | Approved platform RPO/RTO                                      | BLOCKED — authority absent                               |
 | Genuine eligible Delivery DNA end-to-end smoke                 | PENDING genuine customer evidence                        |
