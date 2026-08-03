@@ -132,6 +132,20 @@ const recommendationResolutionHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationPriorityMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803050000_recommendation_priority_models.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationPriorityHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803051000_harden_recommendation_priority_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -372,6 +386,38 @@ describe("Sprint 03 migration security", () => {
     expect(recommendationResolutionHardening).toContain("REVOKE MAINTAIN");
     expect(recommendationResolutionHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.publish_recommendation_conflict_resolution(jsonb) TO service_role",
+    );
+  });
+
+  it("publishes immutable priority baselines and append-only customer preferences", () => {
+    expect(recommendationPriorityMigration).toContain("recommendation_priority_models_immutable");
+    expect(recommendationPriorityMigration).toContain("recommendation_priority_items_immutable");
+    expect(recommendationPriorityMigration).toContain(
+      "recommendation_priority_preferences_immutable",
+    );
+    expect(recommendationPriorityMigration).toContain(
+      "UNIQUE (conflict_resolution_id, policy_version)",
+    );
+    expect(recommendationPriorityMigration).toContain(
+      "UNIQUE (organisation_id, workspace_id, idempotency_key)",
+    );
+    expect(recommendationPriorityMigration).toContain("v_result.analysis_run_id <> v_run.id");
+    expect(recommendationPriorityMigration).toContain(
+      "v_resolution.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationPriorityMigration).toContain(
+      "v_run.configuration_snapshot #> '{recommendationPolicy,rankFormula}'",
+    );
+    expect(recommendationPriorityMigration).toContain("RECOMMENDATION_PRIORITY_VERSION_CONFLICT");
+    expect(recommendationPriorityMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationPriorityMigration).not.toContain("CREATE POLICY");
+    expect(recommendationPriorityHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationPriorityHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationPriorityHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_priority_model(jsonb) TO service_role",
+    );
+    expect(recommendationPriorityHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.set_recommendation_priority_display_preference(jsonb) TO service_role",
     );
   });
 });

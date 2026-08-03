@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-004-conflict-resolution`. Application verification is complete; Lovable Cloud migration execution, security-advisor classification and live API verification remain deployment gates.
+Implemented, migrated and published. Lovable Cloud schema, RLS, privileges and the five warn-level security-advisor findings were verified; live API verification remains unavailable because production has no eligible completed analysis.
 
 ## Architecture and reuse
 
