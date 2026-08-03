@@ -1,0 +1,226 @@
+{
+  "document": {
+    "id": "TM-001P-001A",
+    "version": "1.0.0-rc1",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "subjectOwner": "Delivery Operations",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-02",
+    "specificationId": "TM-001P-001",
+    "specificationVersion": "1.0-RC1",
+    "parentTypeId": "TM-001",
+    "parentTypeVersion": "1.0-RC2",
+    "parentManifestId": "TM-001A",
+    "parentManifestVersion": "1.0.0-rc2",
+    "frameworkId": "DIQ-400",
+    "frameworkVersion": "1.0-RC3",
+    "fixtureId": "TM-001P-001B",
+    "fixtureVersion": "1.0.0-rc1"
+  },
+  "profile": {
+    "profileId": "delivery_operations",
+    "profileVersion": "1.0.0-rc1",
+    "displayName": "Admin TeamMate — Delivery Operations",
+    "parentTypeId": "admin",
+    "parentTypeVersion": "1.0.0-rc2",
+    "kind": "work_profile",
+    "industrySpecific": false,
+    "sharedRuntime": "admin",
+    "separateRuntimeAllowed": false,
+    "maximumRisk": "R2",
+    "status": "candidate"
+  },
+  "supportedOutcomes": [
+    "governance_meeting_readiness",
+    "delivery_action_and_decision_follow_through",
+    "raid_and_control_record_freshness",
+    "traceable_status_and_governance_drafts",
+    "delivery_exception_visibility",
+    "delivery_administration_effort_reduction"
+  ],
+  "applicability": {
+    "customerSegments": [
+      "pmo",
+      "transformation_office",
+      "project_or_programme_team",
+      "portfolio_team",
+      "professional_services_delivery"
+    ],
+    "supportedScopes": ["workspace", "portfolio", "programme", "project"],
+    "directPurposeAllowed": true,
+    "recommendationEligibilitySupported": true,
+    "automaticActivation": false
+  },
+  "terminology": {
+    "task_or_action": "delivery_action",
+    "record": "delivery_control_record",
+    "exception_record": "raid_or_decision_exception",
+    "recurring_update": "weekly_or_governance_status_update",
+    "meeting_preparation": "governance_meeting_preparation",
+    "measure": "delivery_or_outcome_measure",
+    "accountable_owner": "sponsor_programme_project_or_delegated_accountable_role"
+  },
+  "recordSemantics": [
+    "delivery_intelligence_result",
+    "recommendation_and_customer_decision",
+    "improvement_plan_and_delivery_action",
+    "dependency",
+    "risk_assumption_issue_dependency",
+    "human_confirmed_decision",
+    "governance_meeting",
+    "delivery_or_outcome_measure",
+    "status_or_report_draft"
+  ],
+  "capabilitySubset": [
+    "context.read",
+    "intelligence.explain",
+    "evidence.summarise",
+    "guidance.provide",
+    "artifact.draft",
+    "scenario.compare",
+    "plan.propose",
+    "task.coordinate",
+    "reminder.schedule",
+    "decision.record",
+    "signal.monitor",
+    "exception.detect",
+    "escalation.propose",
+    "meeting.prepare",
+    "meeting.capture",
+    "communication.draft",
+    "communication.insert_draft",
+    "calendar.draft",
+    "artifact.save_draft",
+    "integration.read",
+    "outcome.observe",
+    "outcome.summarise",
+    "feedback.record"
+  ],
+  "explicitlyNotGranted": ["integration.write", "communication.send"],
+  "recommendationMappings": [
+    "rec_decision_rights",
+    "rec_integrated_controls",
+    "rec_delivery_insight",
+    "rec_improvement_cadence",
+    "rec_sponsor_contract",
+    "rec_risk_assurance",
+    "rec_benefits_ownership"
+  ],
+  "workflows": [
+    {
+      "profileWorkflowId": "daily_delivery_briefing",
+      "parentWorkflowId": "daily_admin_briefing",
+      "reads": ["actions", "decisions", "meetings", "raid", "delivery_measures", "schedules"],
+      "produces": ["sourced_prioritised_delivery_briefing", "limitations"],
+      "maximumRisk": "R1"
+    },
+    {
+      "profileWorkflowId": "governance_meeting_preparation",
+      "parentWorkflowId": "meeting_preparation",
+      "reads": ["selected_governance_meeting", "approved_delivery_context"],
+      "produces": [
+        "agenda_draft",
+        "pre_read_draft",
+        "decisions_required",
+        "action_status",
+        "questions"
+      ],
+      "optionalR2": [
+        "insert_into_user_present_unsent_message",
+        "update_user_present_unsent_appointment"
+      ],
+      "maximumRisk": "R2"
+    },
+    {
+      "profileWorkflowId": "consented_governance_follow_up",
+      "parentWorkflowId": "consented_meeting_follow_up",
+      "prerequisites": ["participant_notice", "capture_consent", "authorised_notes_or_transcript"],
+      "produces": ["draft_minutes", "proposed_decisions", "proposed_actions", "follow_up_draft"],
+      "maximumRisk": "R2"
+    },
+    {
+      "profileWorkflowId": "delivery_action_follow_through",
+      "parentWorkflowId": "action_follow_through",
+      "produces": ["action_exception", "proposed_reminder", "proposed_escalation"],
+      "maximumRisk": "R2"
+    },
+    {
+      "profileWorkflowId": "weekly_status_draft",
+      "parentWorkflowId": "recurring_update_draft",
+      "produces": [
+        "reconciled_status",
+        "input_gaps_or_conflicts",
+        "status_report_draft",
+        "executive_narrative_draft"
+      ],
+      "maximumRisk": "R2"
+    },
+    {
+      "profileWorkflowId": "raid_and_decision_exception_review",
+      "parentWorkflowId": "record_exception_review",
+      "produces": ["configured_exception", "decisive_facts", "proposed_escalation"],
+      "maximumRisk": "R1"
+    }
+  ],
+  "templates": [
+    "daily_delivery_briefing_v1",
+    "governance_agenda_v1",
+    "governance_pre_read_v1",
+    "draft_minutes_v1",
+    "weekly_status_update_v1",
+    "raid_escalation_proposal_v1"
+  ],
+  "connectorResourceKinds": [
+    "outlook_selected_message_or_compose_item",
+    "outlook_allow_listed_calendar",
+    "teams_personal_app_context",
+    "selected_sharepoint_or_onedrive_file_or_folder",
+    "future_approved_selected_project_or_task_records"
+  ],
+  "humanAccountability": {
+    "cannot": [
+      "make_or_approve_governance_investment_priority_or_delivery_decision",
+      "accept_risk_or_liability",
+      "certify_assurance_accuracy_compliance_baseline_or_benefit",
+      "approve_minutes_report_business_case_or_formal_submission",
+      "represent_sponsor_or_director_externally",
+      "publish_send_invite_or_mutate_external_delivery_system",
+      "assess_employee_performance_sentiment_or_productivity"
+    ]
+  },
+  "copy": {
+    "catalogueSummary": "Prepare governance work, coordinate approved follow-up and keep delivery information ready for accountable action—without giving up control of decisions or communications.",
+    "profileDisclosure": "Your Admin TeamMate is configured with the Delivery Operations profile.",
+    "riskRefusal": "Admin cannot accept this risk or make the decision. It can prepare the evidence and record the accountable owner’s confirmed decision.",
+    "draftNotice": "Delivery Operations draft only. Review before approval, publication or use."
+  },
+  "measures": [
+    "governance_preparation_by_deadline",
+    "action_and_decision_record_completeness",
+    "delivery_record_freshness",
+    "draft_adoption_and_material_correction",
+    "missing_or_conflicting_input_resolution",
+    "safe_action_rate",
+    "customer_trust_feedback"
+  ],
+  "compatibility": {
+    "parentCapabilitiesMustContainEveryProfileCapability": true,
+    "profileRiskMayExceedParent": false,
+    "deliverySpecificExecutableCodeAllowed": false,
+    "legacyResponseTranslationAllowed": false,
+    "profileRetirementPreservesHistory": true,
+    "customerTerminologyChangesSemantics": false
+  },
+  "reasonCodes": [
+    "ADMIN_PROFILE_ALLOWED",
+    "ADMIN_PROFILE_INCOMPATIBLE",
+    "ADMIN_PROFILE_CAPABILITY_NOT_ALLOWED",
+    "ADMIN_PROFILE_EVIDENCE_MISSING",
+    "ADMIN_PROFILE_EVIDENCE_STALE",
+    "ADMIN_PROFILE_EVIDENCE_CONFLICT",
+    "ADMIN_PROFILE_ACCOUNTABLE_DECISION_REQUIRED",
+    "ADMIN_PROFILE_RETIRED",
+    "ADMIN_PROFILE_TENANT_DENIED"
+  ]
+}

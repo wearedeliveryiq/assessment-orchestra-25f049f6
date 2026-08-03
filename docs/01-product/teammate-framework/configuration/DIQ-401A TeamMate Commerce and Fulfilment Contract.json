@@ -1,0 +1,564 @@
+{
+  "document": {
+    "id": "DIQ-401A",
+    "version": "1.0.0-rc2",
+    "status": "product_owner_approved_commercial_decisions_and_final_approval_pending",
+    "owner": "Product Owner",
+    "subjectOwner": "TeamMate Commerce and Customer Operations",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-02",
+    "frameworkId": "DIQ-401",
+    "frameworkVersion": "1.0-RC2",
+    "teammateFrameworkId": "DIQ-400",
+    "teammateFrameworkVersion": "1.0-RC3",
+    "fixtureId": "DIQ-401B",
+    "fixtureVersion": "1.0.0-rc2",
+    "contractId": "teammate-commerce-fulfilment-1.0.0-rc2"
+  },
+  "authorityNotice": "Fixed policy in this contract is Product Owner-approved release-candidate definition. Values under pendingCommercialDecisions are deliberately not production rules and must remain non-actionable until approved by Matt Prust and promoted in a locked version.",
+  "definitions": {
+    "purchase": "Authoritative creation or amendment of a commercial subscription/order after a verified provider or authorised contract event.",
+    "entitlement": "A tenant-scoped versioned decision that a customer organisation may allocate an approved TeamMate offer subject to availability, permission and activation.",
+    "allocation": "An entitlement-backed available slot for one TeamMate type, approved work profile and plan; it is not an active TeamMate instance.",
+    "provisioning": "Idempotent preparation of DeliveryIQ organisation, workspace, allocation and onboarding resources.",
+    "activation": "Separate DIQ-400 approval of exact TeamMate instance scope, capabilities, data, memory, schedules, integrations and consent.",
+    "shipping": "Making the subscribed SaaS allocation ready to configure in DeliveryIQ and providing optional approved client-extension delivery paths."
+  },
+  "fixedPolicy": {
+    "deliveryModel": "multi_tenant_saas",
+    "authoritativeHome": "deliveryiq",
+    "downloadableAgentDelivered": false,
+    "purchaseActivatesRuntime": false,
+    "purchaseCreatesMemory": false,
+    "purchaseStartsWorkflow": false,
+    "purchaseGrantsConnectorAccess": false,
+    "microsoftExtensionsIndependentTeamMate": false,
+    "industryProfileCreatesSeparateRuntime": false,
+    "profileMayWidenType": false,
+    "clientRedirectAuthoritativeForPayment": false,
+    "verifiedServerEventRequiredForSubscription": true,
+    "paymentDetailsStoredByDeliveryIQ": false,
+    "supportMayFabricatePaidState": false,
+    "cancellationDeletesImmutableHistory": false
+  },
+  "separatedStates": [
+    "discoverable",
+    "purchasable",
+    "checkout_ready",
+    "payment_state",
+    "subscription_state",
+    "entitlement_state",
+    "provisioning_state",
+    "profile_selection_and_compatibility",
+    "workspace_permission",
+    "activation_consent",
+    "teammate_instance_state",
+    "connector_grant_state"
+  ],
+  "commerceCatalogue": {
+    "productIdFormat": "teammate.lowercase_snake_case",
+    "offerIdFormat": "lowercase_snake_case",
+    "immutableOfferVersions": true,
+    "serverAuthoritative": true,
+    "providerDisplayNameAuthoritative": false,
+    "requiredOfferFields": [
+      "product_id",
+      "teammate_type_id",
+      "eligible_type_versions",
+      "eligible_work_profile_versions",
+      "industry_overlay_policy",
+      "display_name",
+      "customer_safe_summary",
+      "supported_outcomes",
+      "available_work_profiles",
+      "plan_id",
+      "billing_interval",
+      "currency",
+      "price_minor_units",
+      "tax_policy_id",
+      "instance_allowance",
+      "collaborator_allowance",
+      "included_features",
+      "usage_policy_id",
+      "market_availability",
+      "buyer_eligibility",
+      "trial_policy_id",
+      "renewal_policy_id",
+      "cancellation_policy_id",
+      "support_policy_id",
+      "fulfilment_profile_id",
+      "provider_price_mapping_reference",
+      "terms_version",
+      "privacy_notice_version",
+      "effective_from",
+      "effective_to",
+      "status",
+      "configuration_digest"
+    ],
+    "customerVisibleFields": [
+      "product_id",
+      "display_name",
+      "customer_safe_summary",
+      "supported_outcomes",
+      "plan_id",
+      "billing_interval",
+      "currency",
+      "display_price",
+      "tax_display",
+      "included_features",
+      "availability_state",
+      "permitted_cta",
+      "terms_url",
+      "privacy_url"
+    ],
+    "restrictedFields": [
+      "provider_price_mapping_reference",
+      "configuration_digest",
+      "fraud_policy",
+      "internal_margin",
+      "operator_notes"
+    ]
+  },
+  "referenceProduct": {
+    "productId": "teammate.admin",
+    "teammateTypeId": "admin",
+    "specificationId": "TM-001",
+    "specificationVersion": "1.0-RC2",
+    "workProfileRequired": true,
+    "referenceProfileId": "delivery_operations",
+    "referenceProfileSpecificationId": "TM-001P-001",
+    "referenceProfileVersion": "1.0-RC1",
+    "allowedPlanIds": ["deliveryiq_core", "teammate_premium", "teammate_enterprise"],
+    "selfServiceRecommendation": "teammate_premium",
+    "salesAssistedRecommendation": "teammate_enterprise",
+    "commercialValuesApproved": false
+  },
+  "purchaseReadiness": {
+    "required": [
+      "authenticated_user",
+      "verified_primary_email",
+      "customer_organisation_created_or_selected",
+      "actor_may_purchase_for_organisation",
+      "billing_contact_identified",
+      "prospective_accountable_owner_identified",
+      "current_offer_active_and_purchasable",
+      "selected_work_profile_active_compatible_and_in_offer",
+      "market_and_buyer_eligible",
+      "current_terms_and_privacy_acknowledged",
+      "fraud_sanctions_and_abuse_checks_passed_or_not_required"
+    ],
+    "emailAloneBindsOrganisation": false,
+    "domainAloneMergesOrganisation": false,
+    "failureMode": "fail_closed"
+  },
+  "checkout": {
+    "createdServerSide": true,
+    "amountDerivedFromClient": false,
+    "providerHostedOrEmbeddedCertifiedUi": true,
+    "initialBasketMaximumDistinctOffers": 1,
+    "requiredMetadata": [
+      "internal_order_id",
+      "organisation_binding_reference",
+      "offer_version_reference"
+    ],
+    "successReturnState": "confirmation_pending_until_verified_event",
+    "clientSuccessParameterIgnored": true,
+    "checkoutSessionExpiryControlledByProviderAndOfferPolicy": true
+  },
+  "orderStateMachine": {
+    "initial": "draft",
+    "states": [
+      "draft",
+      "checkout_pending",
+      "payment_processing",
+      "paid",
+      "failed",
+      "expired",
+      "cancelled",
+      "review_required"
+    ],
+    "terminal": ["paid", "failed", "expired", "cancelled"],
+    "paidRequires": "verified_qualifying_provider_or_contract_event"
+  },
+  "subscriptionStateMachine": {
+    "states": [
+      "incomplete",
+      "trialing",
+      "active",
+      "past_due",
+      "paused",
+      "scheduled_to_cancel",
+      "cancelled",
+      "unpaid",
+      "disputed"
+    ],
+    "providerSpecificStateRetained": true,
+    "normalisationPolicyVersionRequired": true
+  },
+  "entitlementStateMachine": {
+    "initial": "pending",
+    "states": ["pending", "active", "restricted", "grace", "scheduled_end", "ended", "revoked"],
+    "derivedFromVersionedPolicy": true,
+    "sourceEventRequired": true,
+    "securityRevocationCanOverrideImmediately": true,
+    "commercialHistoryRewrittenByOverride": false
+  },
+  "provisioningStateMachine": {
+    "initial": "not_started",
+    "states": [
+      "not_started",
+      "queued",
+      "provisioning",
+      "ready_to_configure",
+      "partially_failed",
+      "failed",
+      "superseded"
+    ],
+    "successState": "ready_to_configure",
+    "automaticTeamMateActivation": false,
+    "boundedRetry": true,
+    "reconciliationRequired": true
+  },
+  "teamMateStateAuthority": {
+    "framework": "DIQ-400",
+    "states": ["recommended", "activation_review", "configured", "active", "paused", "revoked"],
+    "commerceMaySkipState": false,
+    "activationSnapshotRequired": true,
+    "entitlementRecheckedAtActivation": true
+  },
+  "authoritativeEvents": {
+    "externalBillingEvent": {
+      "requirements": [
+        "durably_received",
+        "signature_verified",
+        "environment_verified",
+        "event_id_unique",
+        "timestamp_policy_passed",
+        "provider_customer_and_subscription_binding_valid",
+        "offer_mapping_valid"
+      ]
+    },
+    "internalContractEvent": {
+      "requirements": [
+        "authorised_commercial_actor_or_system",
+        "approved_contract_or_order_reference",
+        "organisation_binding_valid",
+        "offer_version_valid",
+        "separation_of_duties",
+        "immutable_audit"
+      ]
+    },
+    "browserReturn": {
+      "authoritative": false,
+      "mayReadSafeOrderStatus": true
+    }
+  },
+  "fulfilment": {
+    "qualifyingEventActions": [
+      "record_event_exactly_once",
+      "update_subscription_projection",
+      "issue_or_amend_entitlement",
+      "create_or_update_teammate_allocation",
+      "pin_selected_profile_and_optional_overlay_to_onboarding_handoff",
+      "provision_deliveryiq_organisation_and_workspace_resources",
+      "create_onboarding_handoff",
+      "make_ready_to_configure_visible",
+      "send_minimum_information_welcome_notification",
+      "record_fulfilment_audit"
+    ],
+    "mustNot": [
+      "activate_teammate_runtime",
+      "create_profile_specific_runtime",
+      "create_teammate_memory",
+      "start_scheduled_work",
+      "grant_connector_permission",
+      "send_customer_data_to_model",
+      "charge_again_on_retry"
+    ],
+    "idempotencyScope": [
+      "order",
+      "billing_event",
+      "subscription",
+      "entitlement_period",
+      "allocation",
+      "provisioning_request"
+    ]
+  },
+  "onboarding": {
+    "initialRoute": "workspace/my-teammates/configure",
+    "requiredSteps": [
+      "confirm_organisation_workspace_and_outcome",
+      "confirm_approved_work_profile_and_optional_industry_overlay",
+      "name_accountable_owner_and_participants",
+      "select_deliveryiq_scope",
+      "review_and_select_capability_grants",
+      "configure_cadence_and_standing_r2_policies",
+      "review_memory_retention_redaction_and_audit",
+      "optionally_connect_approved_integrations_progressively",
+      "review_integration_and_resource_permissions",
+      "accept_activation_disclosure",
+      "approve_immutable_activation_snapshot"
+    ],
+    "deliveryiqOnlyAllowed": true,
+    "firstValueRequired": true,
+    "firstValueOptions": ["daily_admin_briefing", "meeting_preparation"],
+    "genericChatAsOnlyFirstValue": false
+  },
+  "channels": {
+    "deliveryiqWeb": {
+      "availableAfterFulfilment": true,
+      "primary": true,
+      "downloadRequired": false
+    },
+    "outlook": {
+      "optionalExtension": true,
+      "sameInstance": true,
+      "installationGrantsEntitlement": false,
+      "installationGrantsDataAccess": false,
+      "selfServicePath": "approved_microsoft_marketplace_where_customer_policy_permits",
+      "enterprisePath": "microsoft_365_integrated_apps_admin_deployment",
+      "signInAndProgressiveConsentRequired": true
+    },
+    "teams": {
+      "optionalExtension": true,
+      "sameInstance": true,
+      "installationGrantsEntitlement": false,
+      "selfServicePath": "approved_teams_store_where_customer_policy_permits",
+      "enterprisePath": "organisation_catalogue_or_admin_managed_deployment",
+      "adminPolicyMayBlock": true
+    }
+  },
+  "offerRoutes": {
+    "teammate_premium": {
+      "recommendedRoute": "eligible_self_service_subscription",
+      "finalApprovalPending": true
+    },
+    "teammate_enterprise": {
+      "recommendedRoute": "contact_sales_and_managed_fulfilment",
+      "finalApprovalPending": true
+    }
+  },
+  "subscriptionChangePolicy": {
+    "upgrade": {
+      "authoritativeBillingConfirmationRequired": true,
+      "newEntitlementVersionRequired": true,
+      "provisionAdditionalCapacityIdempotently": true,
+      "capabilityIntegrationOrScopeExpansionRequiresActivationAmendment": true
+    },
+    "downgrade": {
+      "effectiveDateAndImpactPreviewRequired": true,
+      "silentDataDeletion": false,
+      "excessAllocationResolutionRequired": true
+    },
+    "cancellation": {
+      "effectiveDateAndImpactPreviewRequired": true,
+      "runtimeEffectControlledByLockedPolicy": true,
+      "immutableHistoryDeleted": false,
+      "connectorTokenRetentionIndependentOfAudit": true,
+      "dataExportAndRetentionControlledSeparately": true
+    },
+    "resubscription": {
+      "newEntitlementPeriod": true,
+      "automaticRuntimeResume": false,
+      "deliberateResumeOrNewInstanceDecision": true
+    }
+  },
+  "billingPortal": {
+    "authenticatedBillingAdministratorRequired": true,
+    "sessionCreatedServerSide": true,
+    "shortLivedSessionRequired": true,
+    "organisationToProviderCustomerBindingRequired": true,
+    "browserReturnAuthoritative": false,
+    "providerEventConfirmsChange": true,
+    "allowedFunctionsSubjectToOfferPolicy": [
+      "view_invoices",
+      "update_payment_method",
+      "update_billing_details",
+      "change_plan_or_quantity",
+      "schedule_cancellation"
+    ]
+  },
+  "permissions": {
+    "roles": {
+      "billingAdministrator": [
+        "view_subscription",
+        "open_billing_portal",
+        "request_offer_change",
+        "request_cancellation"
+      ],
+      "organisationOwner": [
+        "assign_accountable_owner",
+        "manage_workspace_allocation",
+        "view_safe_entitlement"
+      ],
+      "teammateActivator": ["configure_and_activate_within_entitlement_and_workspace_permission"],
+      "customerSupport": [
+        "view_safe_states",
+        "resend_welcome",
+        "retry_eligible_provisioning",
+        "open_reconciliation_case"
+      ],
+      "financeOperator": ["reconcile_commercial_event_under_separation_of_duties"],
+      "securityOperator": ["immediate_security_restriction_or_revocation"]
+    },
+    "supportProhibited": [
+      "mark_unpaid_order_paid",
+      "create_unsourced_entitlement",
+      "activate_runtime",
+      "edit_source_event",
+      "merge_tenant_by_email",
+      "expand_capability_or_connector_grant"
+    ]
+  },
+  "security": {
+    "providerSecretInApprovedSecretStore": true,
+    "environmentIsolation": true,
+    "serverSidePriceResolution": true,
+    "crossTenantOrderStatusDenied": true,
+    "crossTenantBillingPortalDenied": true,
+    "eventReplayDetection": true,
+    "separationOfDuties": true,
+    "rawPaymentDataInLogs": false,
+    "rawCustomerEvidenceInCommerceAnalytics": false,
+    "threats": [
+      "forged_or_replayed_webhook",
+      "client_price_or_product_tampering",
+      "checkout_session_hijack",
+      "cross_tenant_status_or_portal_access",
+      "account_takeover",
+      "trial_coupon_or_refund_abuse",
+      "duplicate_allocation",
+      "out_of_order_event_regression",
+      "support_privilege_abuse"
+    ]
+  },
+  "reconciliation": {
+    "scheduled": true,
+    "compares": [
+      "provider_subscription_truth",
+      "processed_events",
+      "subscription_projection",
+      "entitlement",
+      "allocation",
+      "provisioning"
+    ],
+    "sourceHistoryMutationAllowed": false,
+    "repairsThroughNewAuditedEvent": true,
+    "duplicateChargeAllowed": false,
+    "duplicateAllocationAllowed": false
+  },
+  "customerStates": {
+    "confirmation_pending": {
+      "heading": "Confirming your subscription",
+      "body": "Payment is being confirmed. You can safely leave this page; we’ll update your account.",
+      "cta": null
+    },
+    "fulfilment_pending": {
+      "heading": "Subscription confirmed",
+      "body": "We’re preparing your TeamMate. No TeamMate work has started.",
+      "cta": "view_status"
+    },
+    "ready_to_configure": {
+      "heading": "Your Admin is ready to configure",
+      "body": "Choose its workspace, owner, capabilities and optional connections. No work starts until you review and activate it.",
+      "cta": "configure_admin"
+    },
+    "provisioning_delayed": {
+      "heading": "Your subscription is confirmed; setup is delayed",
+      "body": "You do not need to purchase again. We’re retrying safely. Use the support reference if you need help.",
+      "cta": "view_status"
+    },
+    "payment_failed": {
+      "heading": "Subscription not started",
+      "body": "Payment was not completed. Review your payment details to try again.",
+      "cta": "retry_checkout"
+    },
+    "ended": {
+      "heading": "Admin is paused",
+      "body": "New TeamMate work has stopped. Review your subscription, export and data-retention options.",
+      "cta": "manage_subscription"
+    }
+  },
+  "performanceTargets": {
+    "publicOfferReadP95Ms": 500,
+    "checkoutSessionCreateP95MsExcludingProviderRender": 2000,
+    "providerEventAcknowledgeP95MsAfterDurableReceipt": 2000,
+    "entitlementAvailableP95MsAfterQualifyingEvent": 30000,
+    "readyToConfigureP95MsWithoutManualGate": 60000,
+    "orderStatusReadP95Ms": 500,
+    "billingPortalSessionCreateP95Ms": 2000,
+    "securityRuntimeBlockMaxMs": 5000
+  },
+  "reasonCodes": [
+    "COMMERCE_OFFER_UNAVAILABLE",
+    "COMMERCE_OFFER_NOT_PURCHASABLE",
+    "COMMERCE_PROFILE_INCOMPATIBLE",
+    "COMMERCE_PURCHASE_READINESS_REQUIRED",
+    "COMMERCE_ORGANISATION_BINDING_INVALID",
+    "COMMERCE_PRICE_TAMPERING_REJECTED",
+    "COMMERCE_CHECKOUT_CREATED",
+    "COMMERCE_CONFIRMATION_PENDING",
+    "COMMERCE_PAYMENT_FAILED",
+    "COMMERCE_EVENT_SIGNATURE_INVALID",
+    "COMMERCE_EVENT_REUSED",
+    "COMMERCE_EVENT_OUT_OF_ORDER",
+    "COMMERCE_SUBSCRIPTION_CONFIRMED",
+    "COMMERCE_ENTITLEMENT_ACTIVE",
+    "COMMERCE_ENTITLEMENT_NOT_ACTIVE",
+    "COMMERCE_PROVISIONING_QUEUED",
+    "COMMERCE_READY_TO_CONFIGURE",
+    "COMMERCE_PROVISIONING_DELAYED",
+    "COMMERCE_PROVISIONING_REUSED",
+    "COMMERCE_RECONCILIATION_REQUIRED",
+    "COMMERCE_ACTIVATION_SEPARATE",
+    "COMMERCE_PERMISSION_DENIED",
+    "COMMERCE_TENANT_DENIED",
+    "COMMERCE_PORTAL_SESSION_CREATED",
+    "COMMERCE_SUBSCRIPTION_CHANGE_PENDING",
+    "COMMERCE_ACTIVATION_AMENDMENT_REQUIRED",
+    "COMMERCE_SUPPORT_ACTION_DENIED"
+  ],
+  "pendingCommercialDecisions": {
+    "status": "awaiting_matt_prust",
+    "pricingUnit": {
+      "recommended": "per_active_teammate_allocation_or_instance_with_included_collaborator_allowance",
+      "approved": null
+    },
+    "trialPolicy": {
+      "recommended": "one_guided_time_limited_trial_per_verified_organisation",
+      "durationDays": null,
+      "paymentMethodRequired": null,
+      "connectorAccessPolicy": null,
+      "approved": null
+    },
+    "salesChannel": {
+      "recommended": {
+        "teammate_premium": "self_service",
+        "teammate_enterprise": "sales_assisted"
+      },
+      "approved": null
+    },
+    "billingProvider": {
+      "referenceCandidate": "stripe",
+      "selected": null,
+      "approved": null
+    },
+    "paymentFailureAndCancellation": {
+      "gracePeriodDays": null,
+      "cancellationEffectivePolicy": null,
+      "exportWindowDays": null,
+      "retentionPolicyId": null,
+      "approved": null
+    },
+    "microsoftDistribution": {
+      "recommended": "public_marketplace_for_eligible_self_service_and_admin_managed_for_enterprise",
+      "approved": null
+    },
+    "launchMarkets": {
+      "countries": [],
+      "currencies": [],
+      "businessBuyerOnly": null,
+      "approved": null
+    }
+  }
+}

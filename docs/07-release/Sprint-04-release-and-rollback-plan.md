@@ -2,9 +2,9 @@
 
 ## Release status
 
-Status: **HOLD — remediation deployed; controlled external evidence pending**.
+Status: **SPRINT ACCEPTED WITH RECORDED LIMITATIONS — COMPLETE-JOURNEY GENERAL AVAILABILITY NOT YET AUTHORISED**.
 
-The recommendation framework remains fail closed where no eligible evidence exists. PDR-004-001 governs S4-010 and recovery objectives. S4-010 managed migration and deployment verification passed on 3 August 2026. S4-014 audit export remains disabled during this hold until authorised export testing, measured recovery and superseding Product Acceptance.
+The recommendation framework remains fail closed where no eligible evidence exists. PDR-004-001 v1.1 preserves all S4-010 outcome rules and, with PB-004A, establishes the founder-approved proportionate current-stage recovery policy. PDR-004-002 is superseded. SAR-004 v1.2 accepts Sprint 04 with recorded limitations. No restore occurred and no fixed RPO/RTO is claimed. S4-014 audit export remains disabled until separately authorised genuine-evidence testing; the complete Delivery DNA journey remains outside general availability until its genuine smoke gate passes.
 
 ## Release sequence
 
@@ -12,10 +12,10 @@ The recommendation framework remains fail closed where no eligible evidence exis
 2. **Complete:** apply `20260803150000`, `20260803151000` and `20260803152000` as separate Lovable-managed migrations, apply the Cloud-default-grant correction, and verify RLS, ACL, immutability, functions, generated types and unchanged existing data.
 3. **Complete:** publish the verified build and confirm the public shell remains available with HTTP 200.
 4. **Complete:** production catalogue `deliveryiq-recommendations` v1.0.0 is active against configuration set `sprint03-product-config-1.0.0`; its governed digest remains `0d35fb4d682e0817741454bd730f9fc2aeffe6a762ca03c0d2c093251712f2dc`.
-5. **Blocked externally:** Lovable self-service recovery exposes daily in-place snapshots, not an arbitrary <=15-minute recovery point or isolated target. Obtain a qualifying support-provisioned target or approved alternative architecture, then restore into isolation, measure RPO/RTO and verify integrity, tenant denial, immutable history, idempotency, audit continuity and safe feature flags.
+5. **Complete policy decision:** PB-004A/PDR-004-001 v1.1 accept documented daily in-place recovery and its residual risks for the current stage. No isolated restore or fixed RPO/RTO is required or claimed. Before customer enablement under the accepted Sprint 04 release, record backup visibility and runbook accessibility.
 6. Enable `audit_exports` through an idempotent Product Governance event with reason `release_gate`; run an authorised export/redaction/expiry/access-log test; disable it again if general enablement is not approved.
 7. Execute the genuine eligible Delivery DNA smoke journey when genuine customer evidence is available; do not manufacture it.
-8. **Evidence filed:** obtain a superseding Product Owner and Matt Prust acceptance decision before declaring the sprint released.
+8. **Complete:** SAR-004 v1.2 records Product Owner and Matt Prust Sprint acceptance with recorded limitations. Do not describe that acceptance as complete-journey general availability.
 
 ## Rollback
 
@@ -23,15 +23,13 @@ The recommendation framework remains fail closed where no eligible evidence exis
 2. Return catalogue activation to the last approved version using different author and approver identities.
 3. Revert application deployment to the recorded good revision without force-push, rebase, amend or squash.
 4. Preserve all immutable histories. Use superseding events for corrections; never delete catalogue, recommendation, decision, action, hand-off, analytics, export or integrity records during an incident.
-5. Restore from the approved platform recovery point only through the platform process and validate tenant scope, digests, migrations and row counts before reopening traffic.
+5. If database recovery is operationally required, record the selected available snapshot and expected loss cutoff, obtain the required decision authority, use Lovable's documented in-place process, and validate application/schema compatibility, tenant scope, digests, migrations, RLS, privileges, immutable controls and governed row counts before reopening traffic. No fixed recovery duration is promised.
 
-## Acceptance evidence required
+## Remaining evidence required for capability enablement and complete-journey general availability
 
-- Sprint 04 acceptance matrix with every feasible gate passing and S4-010 no longer blocked.
-- Full DIQ-203B and Sprint 04 regression, static checks and production build.
-- Live schema, RLS, ACL, expiry, alert and cross-tenant checks.
-- Measured Tier 1 backup/restore evidence showing RPO <=15 minutes and RTO <=4 hours.
-- Genuine end-to-end customer journey and signed release acceptance.
+- Recorded recent-backup visibility and accessible recovery runbook before customer enablement under the accepted Sprint 04 release; no restore pass is required or claimed.
+- Genuine end-to-end customer journey before complete-journey general availability.
+- Authorised audit-export/redaction/expiry/access-log evidence before enabling `audit_exports`.
 
 ## Managed deployment record
 

@@ -1,0 +1,838 @@
+{
+  "document": {
+    "id": "DIQ-401B",
+    "version": "1.0.0-rc2",
+    "status": "product_owner_approved_commercial_decisions_and_final_approval_pending",
+    "owner": "Product Owner",
+    "subjectOwner": "TeamMate Commerce and Customer Operations",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-02",
+    "frameworkId": "DIQ-401",
+    "frameworkVersion": "1.0-RC2",
+    "contractId": "DIQ-401A",
+    "contractVersion": "1.0.0-rc2",
+    "fixtureSetId": "teammate-commerce-fulfilment-fixtures-1.0.0-rc2"
+  },
+  "productionRuleNotice": "Expected separation, authorisation, side-effect, reason-code, state, idempotency, tenant and customer-copy outcomes are normative release-candidate rules. Example identifiers, timestamps and provider names are illustrative. Fixtures do not approve values explicitly listed as pending commercial decisions in DIQ-401A.",
+  "commonContext": {
+    "tenantId": "tenant_alpha",
+    "organisationId": "org_alpha",
+    "workspaceId": "workspace_alpha_1",
+    "productId": "teammate.admin",
+    "teammateTypeId": "admin",
+    "workProfileId": "delivery_operations",
+    "offerVersion": "illustrative_offer_v1",
+    "orderId": "order_1001"
+  },
+  "fixtures": [
+    {
+      "id": "public_catalogue_safe_projection",
+      "stage": "catalogue",
+      "input": {
+        "authenticated": false,
+        "offerActive": true,
+        "marketAvailable": true,
+        "buyerEligible": "not_yet_evaluated"
+      },
+      "expected": {
+        "visible": true,
+        "fields": [
+          "product_id",
+          "display_name",
+          "customer_safe_summary",
+          "supported_outcomes",
+          "plan_id",
+          "billing_interval",
+          "currency",
+          "display_price",
+          "tax_display",
+          "included_features",
+          "availability_state",
+          "permitted_cta",
+          "terms_url",
+          "privacy_url"
+        ],
+        "restrictedFieldsReturned": [],
+        "permittedCta": "sign_in_to_subscribe"
+      }
+    },
+    {
+      "id": "unavailable_offer_has_no_checkout",
+      "stage": "catalogue",
+      "input": {
+        "offerActive": true,
+        "marketAvailable": false,
+        "requestedAction": "create_checkout"
+      },
+      "expected": {
+        "visible": true,
+        "availabilityState": "unavailable",
+        "checkoutCreated": false,
+        "permittedCta": "contact_sales",
+        "reasonCode": "COMMERCE_OFFER_UNAVAILABLE"
+      }
+    },
+    {
+      "id": "unapproved_offer_version_not_purchasable",
+      "stage": "catalogue",
+      "input": {
+        "offerStatus": "draft",
+        "commercialValuesApproved": false,
+        "requestedAction": "create_checkout"
+      },
+      "expected": {
+        "visibleAsPurchasable": false,
+        "checkoutCreated": false,
+        "entitlementCreated": false,
+        "reasonCode": "COMMERCE_OFFER_NOT_PURCHASABLE"
+      }
+    },
+    {
+      "id": "purchase_readiness_complete",
+      "stage": "purchase_readiness",
+      "input": {
+        "authenticated": true,
+        "primaryEmailVerified": true,
+        "organisationSelected": true,
+        "actorMayPurchase": true,
+        "billingContactIdentified": true,
+        "prospectiveOwnerIdentified": true,
+        "offerPurchasable": true,
+        "marketAndBuyerEligible": true,
+        "termsAndPrivacyAcknowledged": true,
+        "riskChecksPassed": true
+      },
+      "expected": {
+        "ready": true,
+        "missing": [],
+        "checkoutAllowed": true
+      }
+    },
+    {
+      "id": "purchase_readiness_missing_verified_identity",
+      "stage": "purchase_readiness",
+      "input": {
+        "authenticated": true,
+        "primaryEmailVerified": false,
+        "organisationSelected": true,
+        "actorMayPurchase": true,
+        "offerPurchasable": true
+      },
+      "expected": {
+        "ready": false,
+        "missing": ["verified_primary_email"],
+        "checkoutAllowed": false,
+        "reasonCode": "COMMERCE_PURCHASE_READINESS_REQUIRED"
+      }
+    },
+    {
+      "id": "email_domain_does_not_merge_tenant",
+      "stage": "identity_binding",
+      "input": {
+        "newUserEmail": "buyer@example.com",
+        "existingOrganisationDomain": "example.com",
+        "authorisedJoinOrClaimFlowCompleted": false
+      },
+      "expected": {
+        "organisationMerged": false,
+        "existingTenantAccessGranted": false,
+        "manualOrAuthorisedClaimRequired": true,
+        "reasonCode": "COMMERCE_ORGANISATION_BINDING_INVALID"
+      }
+    },
+    {
+      "id": "server_authoritative_price_rejects_tampering",
+      "stage": "checkout_creation",
+      "input": {
+        "offerServerPriceMinorUnits": 10000,
+        "clientSubmittedPriceMinorUnits": 100,
+        "offerMappingValid": true
+      },
+      "expected": {
+        "checkoutCreated": false,
+        "clientAmountUsed": false,
+        "charged": false,
+        "securityEventRecorded": true,
+        "reasonCode": "COMMERCE_PRICE_TAMPERING_REJECTED"
+      }
+    },
+    {
+      "id": "checkout_created_from_offer_mapping",
+      "stage": "checkout_creation",
+      "input": {
+        "purchaseReady": true,
+        "offerVersionActive": true,
+        "providerPriceMappingValid": true,
+        "organisationBindingValid": true,
+        "idempotencyKey": "checkout-order-1001"
+      },
+      "expected": {
+        "checkoutCreated": true,
+        "orderState": "checkout_pending",
+        "providerMetadata": [
+          "internal_order_id",
+          "organisation_binding_reference",
+          "offer_version_reference"
+        ],
+        "runtimeActivated": false,
+        "reasonCode": "COMMERCE_CHECKOUT_CREATED"
+      }
+    },
+    {
+      "id": "success_redirect_before_event_is_pending",
+      "stage": "checkout_return",
+      "input": {
+        "query": { "success": "true", "session_id": "provider_session_1" },
+        "verifiedQualifyingEventReceived": false,
+        "orderState": "payment_processing"
+      },
+      "expected": {
+        "subscriptionConfirmed": false,
+        "entitlementCreated": false,
+        "heading": "Confirming your subscription",
+        "cta": null,
+        "reasonCode": "COMMERCE_CONFIRMATION_PENDING"
+      }
+    },
+    {
+      "id": "verified_subscription_event_accepted",
+      "stage": "billing_event",
+      "input": {
+        "eventId": "evt_101",
+        "signatureValid": true,
+        "environmentValid": true,
+        "timestampPolicyPassed": true,
+        "bindingValid": true,
+        "offerMappingValid": true,
+        "qualifyingSubscriptionState": "active"
+      },
+      "expected": {
+        "eventAccepted": true,
+        "eventStoredOnce": true,
+        "orderState": "paid",
+        "subscriptionProjection": "active",
+        "entitlementEvaluationQueued": true,
+        "reasonCode": "COMMERCE_SUBSCRIPTION_CONFIRMED"
+      }
+    },
+    {
+      "id": "invalid_event_signature_denied",
+      "stage": "billing_event",
+      "input": {
+        "eventId": "evt_forged_1",
+        "signatureValid": false,
+        "payloadClaimsPaid": true
+      },
+      "expected": {
+        "eventAccepted": false,
+        "orderStateChanged": false,
+        "subscriptionChanged": false,
+        "entitlementCreated": false,
+        "securityEventRecorded": true,
+        "reasonCode": "COMMERCE_EVENT_SIGNATURE_INVALID"
+      }
+    },
+    {
+      "id": "duplicate_event_is_idempotent",
+      "stage": "billing_event",
+      "input": {
+        "eventId": "evt_101",
+        "eventAlreadyProcessed": true,
+        "sameCanonicalPayload": true,
+        "existingResultId": "event_result_101"
+      },
+      "expected": {
+        "processedAgain": false,
+        "resultId": "event_result_101",
+        "duplicateSubscriptionCreated": false,
+        "duplicateEntitlementCreated": false,
+        "duplicateAllocationCreated": false,
+        "reasonCode": "COMMERCE_EVENT_REUSED"
+      }
+    },
+    {
+      "id": "out_of_order_event_does_not_regress_state",
+      "stage": "billing_event_ordering",
+      "input": {
+        "currentProjection": "active",
+        "currentEffectiveAt": "2026-08-02T10:00:00Z",
+        "incomingState": "incomplete",
+        "incomingEffectiveAt": "2026-08-02T09:00:00Z"
+      },
+      "expected": {
+        "incomingEventStored": true,
+        "projectionChanged": false,
+        "resultingProjection": "active",
+        "reasonCode": "COMMERCE_EVENT_OUT_OF_ORDER"
+      }
+    },
+    {
+      "id": "paid_event_creates_active_entitlement",
+      "stage": "entitlement",
+      "input": {
+        "subscriptionProjection": "active",
+        "commercialPolicyVersion": "illustrative_policy_v1",
+        "organisationBindingValid": true,
+        "offerAvailable": true
+      },
+      "expected": {
+        "entitlementState": "active",
+        "allocationAvailable": true,
+        "sourceEventReferenceRequired": true,
+        "activationAllowedWithoutFurtherChecks": false,
+        "reasonCode": "COMMERCE_ENTITLEMENT_ACTIVE"
+      }
+    },
+    {
+      "id": "purchase_does_not_activate_teammate",
+      "stage": "separation_boundary",
+      "input": {
+        "orderState": "paid",
+        "subscriptionProjection": "active",
+        "entitlementState": "active",
+        "provisioningState": "ready_to_configure"
+      },
+      "expected": {
+        "teammateInstanceCreated": false,
+        "teammateInstanceState": null,
+        "memoryCreated": false,
+        "scheduleCreated": false,
+        "workflowStarted": false,
+        "connectorAccessGranted": false,
+        "reasonCode": "COMMERCE_ACTIVATION_SEPARATE"
+      }
+    },
+    {
+      "id": "successful_fulfilment_ready_to_configure",
+      "stage": "provisioning",
+      "input": {
+        "entitlementState": "active",
+        "organisationResourcesReady": true,
+        "workspaceResourcesReady": true,
+        "allocationCreated": true,
+        "onboardingHandoffCreated": true
+      },
+      "expected": {
+        "provisioningState": "ready_to_configure",
+        "heading": "Your Admin is ready to configure",
+        "cta": "configure_admin",
+        "runtimeActivated": false,
+        "reasonCode": "COMMERCE_READY_TO_CONFIGURE"
+      }
+    },
+    {
+      "id": "provisioning_failure_does_not_recharge",
+      "stage": "provisioning",
+      "input": {
+        "orderState": "paid",
+        "entitlementState": "active",
+        "workspaceProvisioning": "failed_retryable",
+        "chargeAlreadyCompleted": true
+      },
+      "expected": {
+        "provisioningState": "failed",
+        "newCheckoutCreated": false,
+        "newChargeCreated": false,
+        "duplicateAllocationCreated": false,
+        "boundedRetryScheduled": true,
+        "heading": "Your subscription is confirmed; setup is delayed",
+        "reasonCode": "COMMERCE_PROVISIONING_DELAYED"
+      }
+    },
+    {
+      "id": "provisioning_retry_reuses_request",
+      "stage": "provisioning_idempotency",
+      "input": {
+        "provisioningRequestId": "provision_1001",
+        "sameIdempotencyKey": true,
+        "sameCanonicalInput": true,
+        "existingAllocationId": "allocation_1001"
+      },
+      "expected": {
+        "newRequestCreated": false,
+        "allocationId": "allocation_1001",
+        "duplicateWorkspaceCreated": false,
+        "reasonCode": "COMMERCE_PROVISIONING_REUSED"
+      }
+    },
+    {
+      "id": "reconciliation_repairs_derived_state_only",
+      "stage": "reconciliation",
+      "input": {
+        "providerSubscription": "active",
+        "verifiedEventStored": true,
+        "subscriptionProjection": "active",
+        "entitlementState": "pending",
+        "provisioningState": "not_started"
+      },
+      "expected": {
+        "reconciliationRequired": true,
+        "sourceEventMutated": false,
+        "newEntitlementDecisionCreated": true,
+        "provisioningQueued": true,
+        "duplicateChargeCreated": false,
+        "reasonCode": "COMMERCE_RECONCILIATION_REQUIRED"
+      }
+    },
+    {
+      "id": "valid_internal_enterprise_contract_event",
+      "stage": "internal_contract_event",
+      "input": {
+        "actorAuthorised": true,
+        "contractReferenceApproved": true,
+        "organisationBindingValid": true,
+        "offerVersionValid": true,
+        "separationOfDutiesPassed": true,
+        "auditComplete": true
+      },
+      "expected": {
+        "eventAccepted": true,
+        "subscriptionProjectionCreated": true,
+        "entitlementEvaluationQueued": true,
+        "runtimeActivated": false,
+        "reasonCode": "COMMERCE_SUBSCRIPTION_CONFIRMED"
+      }
+    },
+    {
+      "id": "unsourced_enterprise_entitlement_denied",
+      "stage": "internal_contract_event",
+      "input": {
+        "actorAuthorised": true,
+        "contractReferenceApproved": false,
+        "requestedAction": "create_entitlement"
+      },
+      "expected": {
+        "eventAccepted": false,
+        "entitlementCreated": false,
+        "reasonCode": "COMMERCE_SUPPORT_ACTION_DENIED"
+      }
+    },
+    {
+      "id": "entitlement_revoked_before_activation",
+      "stage": "activation_handoff",
+      "input": {
+        "onboardingState": "activation_review",
+        "entitlementAtPageLoad": "active",
+        "entitlementAtSubmit": "revoked",
+        "activationSnapshotOtherwiseValid": true
+      },
+      "expected": {
+        "activationAllowed": false,
+        "teammateInstanceCreated": false,
+        "reasonCode": "COMMERCE_ENTITLEMENT_NOT_ACTIVE"
+      }
+    },
+    {
+      "id": "activation_after_complete_governed_configuration",
+      "stage": "activation_handoff",
+      "input": {
+        "entitlementState": "active",
+        "workspacePermission": "teammate.activate",
+        "accountableOwnerConfirmed": true,
+        "scopeReviewed": true,
+        "capabilitiesReviewed": true,
+        "memoryAndRetentionReviewed": true,
+        "integrationGrantsValid": true,
+        "activationConsent": true,
+        "activationSnapshotValid": true
+      },
+      "expected": {
+        "activationAllowed": true,
+        "teammateInstanceCreated": true,
+        "instanceState": "active",
+        "activationSource": "separate_diq_400_activation",
+        "commerceEventUsedAsActionApproval": false
+      }
+    },
+    {
+      "id": "outlook_install_without_entitlement",
+      "stage": "channel_binding",
+      "input": {
+        "channel": "outlook",
+        "extensionInstalled": true,
+        "deliveryiqSignedIn": true,
+        "entitlementState": "ended"
+      },
+      "expected": {
+        "extensionMayShowSafeSignInState": true,
+        "instanceBound": false,
+        "outlookDataAccessible": false,
+        "runtimeAccessible": false,
+        "reasonCode": "COMMERCE_ENTITLEMENT_NOT_ACTIVE"
+      }
+    },
+    {
+      "id": "teams_install_without_entitlement",
+      "stage": "channel_binding",
+      "input": {
+        "channel": "teams",
+        "appInstalled": true,
+        "adminAllowedApp": true,
+        "entitlementState": "pending"
+      },
+      "expected": {
+        "instanceBound": false,
+        "teammateWorkVisible": false,
+        "entitlementGrantedByInstall": false,
+        "reasonCode": "COMMERCE_ENTITLEMENT_NOT_ACTIVE"
+      }
+    },
+    {
+      "id": "cross_tenant_order_status_denied",
+      "stage": "tenant_isolation",
+      "input": {
+        "actorTenantId": "tenant_beta",
+        "orderTenantId": "tenant_alpha",
+        "orderId": "order_1001"
+      },
+      "expected": {
+        "allowed": false,
+        "externalStatus": 404,
+        "orderExistenceDisclosed": false,
+        "orderDataReturned": false,
+        "reasonCode": "COMMERCE_TENANT_DENIED"
+      }
+    },
+    {
+      "id": "billing_portal_requires_billing_admin",
+      "stage": "billing_portal",
+      "input": {
+        "authenticated": true,
+        "actorRole": "workspace_member",
+        "organisationBindingValid": true
+      },
+      "expected": {
+        "portalSessionCreated": false,
+        "providerCustomerIdReturned": false,
+        "reasonCode": "COMMERCE_PERMISSION_DENIED"
+      }
+    },
+    {
+      "id": "billing_portal_session_allowed",
+      "stage": "billing_portal",
+      "input": {
+        "authenticated": true,
+        "actorRole": "billing_administrator",
+        "organisationBindingValid": true,
+        "providerCustomerBindingValid": true
+      },
+      "expected": {
+        "portalSessionCreated": true,
+        "sessionShortLived": true,
+        "providerCustomerIdReturnedToClient": false,
+        "reasonCode": "COMMERCE_PORTAL_SESSION_CREATED"
+      }
+    },
+    {
+      "id": "billing_portal_return_not_authoritative",
+      "stage": "billing_portal_return",
+      "input": {
+        "query": { "plan_changed": "true" },
+        "verifiedProviderChangeEventReceived": false,
+        "currentEntitlementVersion": "entitlement_v1"
+      },
+      "expected": {
+        "planChanged": false,
+        "entitlementVersion": "entitlement_v1",
+        "status": "change_confirmation_pending",
+        "reasonCode": "COMMERCE_SUBSCRIPTION_CHANGE_PENDING"
+      }
+    },
+    {
+      "id": "upgrade_does_not_expand_capability_grant",
+      "stage": "subscription_change",
+      "input": {
+        "verifiedUpgradeEvent": true,
+        "newEntitlementIncludesAdditionalIntegration": true,
+        "existingInstanceGrantIncludesIntegration": false,
+        "activationAmendmentApproved": false
+      },
+      "expected": {
+        "entitlementVersionCreated": true,
+        "instanceCapabilityGrantChanged": false,
+        "connectorGrantCreated": false,
+        "amendmentRequired": true,
+        "reasonCode": "COMMERCE_ACTIVATION_AMENDMENT_REQUIRED"
+      }
+    },
+    {
+      "id": "downgrade_with_excess_allocation_is_restricted",
+      "stage": "subscription_change",
+      "input": {
+        "verifiedDowngradeEvent": true,
+        "effectiveNow": true,
+        "activeAllocations": 2,
+        "newAllocationAllowance": 1,
+        "ownerResolutionCompleted": false
+      },
+      "expected": {
+        "entitlementState": "restricted",
+        "allocationSilentlyDeleted": false,
+        "runtimeHistoryDeleted": false,
+        "ownerResolutionRequired": true,
+        "reasonCode": "COMMERCE_ACTIVATION_AMENDMENT_REQUIRED"
+      }
+    },
+    {
+      "id": "scheduled_cancellation_preserves_runtime_until_effective_date",
+      "stage": "cancellation",
+      "input": {
+        "verifiedCancellationScheduled": true,
+        "effectiveDateReached": false,
+        "currentEntitlementState": "active"
+      },
+      "expected": {
+        "subscriptionProjection": "scheduled_to_cancel",
+        "entitlementState": "scheduled_end",
+        "newWorkBlockedImmediately": false,
+        "historyDeleted": false,
+        "reasonCode": "COMMERCE_SUBSCRIPTION_CHANGE_PENDING"
+      }
+    },
+    {
+      "id": "cancellation_end_stops_new_work_not_history",
+      "stage": "cancellation",
+      "input": {
+        "cancellationEffectiveDateReached": true,
+        "commercialPolicyApproved": true,
+        "instanceState": "active"
+      },
+      "expected": {
+        "entitlementState": "ended",
+        "newScheduledWorkAllowed": false,
+        "instanceState": "paused",
+        "immutableHistoryDeleted": false,
+        "exportAndRetentionEvaluatedSeparately": true
+      }
+    },
+    {
+      "id": "resubscription_does_not_auto_resume",
+      "stage": "resubscription",
+      "input": {
+        "newVerifiedSubscriptionActive": true,
+        "previousEntitlementState": "ended",
+        "previousInstanceState": "paused"
+      },
+      "expected": {
+        "newEntitlementPeriodCreated": true,
+        "previousInstanceAutoResumed": false,
+        "resumeOrNewInstanceDecisionRequired": true,
+        "reasonCode": "COMMERCE_ACTIVATION_SEPARATE"
+      }
+    },
+    {
+      "id": "security_revocation_blocks_runtime_immediately",
+      "stage": "security_override",
+      "input": {
+        "subscriptionProjection": "active",
+        "entitlementState": "active",
+        "securityRevocationAuthorised": true,
+        "instanceState": "active"
+      },
+      "expected": {
+        "subscriptionProjectionChanged": false,
+        "entitlementState": "revoked",
+        "newRuntimeWorkAllowed": false,
+        "securityBlockWithinMs": 5000,
+        "sourceBillingHistoryMutated": false
+      }
+    },
+    {
+      "id": "support_cannot_mark_order_paid",
+      "stage": "support_authorisation",
+      "input": {
+        "actorRole": "customer_support",
+        "orderState": "payment_processing",
+        "verifiedQualifyingEventReceived": false,
+        "requestedAction": "mark_paid"
+      },
+      "expected": {
+        "allowed": false,
+        "orderStateChanged": false,
+        "entitlementCreated": false,
+        "reasonCode": "COMMERCE_SUPPORT_ACTION_DENIED"
+      }
+    },
+    {
+      "id": "support_can_retry_eligible_provisioning",
+      "stage": "support_authorisation",
+      "input": {
+        "actorRole": "customer_support",
+        "orderState": "paid",
+        "entitlementState": "active",
+        "provisioningState": "failed",
+        "failureRetryable": true,
+        "requestedAction": "retry_provisioning"
+      },
+      "expected": {
+        "allowed": true,
+        "newChargeCreated": false,
+        "sourceEventMutated": false,
+        "provisioningQueued": true,
+        "auditRequired": true,
+        "reasonCode": "COMMERCE_PROVISIONING_QUEUED"
+      }
+    },
+    {
+      "id": "welcome_notification_contains_no_bearer_access",
+      "stage": "notification",
+      "input": {
+        "provisioningState": "ready_to_configure",
+        "notificationType": "welcome",
+        "linkType": "normal_authenticated_deliveryiq_route"
+      },
+      "expected": {
+        "sent": true,
+        "containsPaymentDetails": false,
+        "containsBearerTeamMateToken": false,
+        "containsCustomerEvidence": false,
+        "statesRuntimeActive": false,
+        "nextAction": "sign_in_and_configure"
+      }
+    },
+    {
+      "id": "unapproved_trial_policy_cannot_checkout",
+      "stage": "commercial_decision_guard",
+      "input": {
+        "offerType": "trial",
+        "trialPolicyApproved": false,
+        "durationDays": null,
+        "requestedAction": "create_checkout"
+      },
+      "expected": {
+        "checkoutCreated": false,
+        "trialEntitlementCreated": false,
+        "reasonCode": "COMMERCE_OFFER_NOT_PURCHASABLE"
+      }
+    },
+    {
+      "id": "purchase_and_onboarding_accessible",
+      "stage": "accessibility",
+      "input": {
+        "keyboardComplete": true,
+        "screenReaderLabelsComplete": true,
+        "pricePeriodAndTaxProgrammaticallyAssociated": true,
+        "statusNotColourOnly": true,
+        "focusManagedOnStateChange": true,
+        "liveStatusAnnouncementsAppropriate": true
+      },
+      "expected": {
+        "accepted": true,
+        "meetsWcag22AA": true,
+        "purchaseBlockedByAccessibility": false
+      }
+    },
+    {
+      "id": "ready_to_configure_performance_target",
+      "stage": "performance",
+      "input": {
+        "qualifyingEventEffectiveAtMs": 0,
+        "readyToConfigureAtMs": 42000,
+        "manualOrEnterpriseGate": false
+      },
+      "expected": {
+        "targetMs": 60000,
+        "passed": true
+      }
+    },
+    {
+      "id": "provider_outage_preserves_order",
+      "stage": "resilience",
+      "input": {
+        "orderState": "payment_processing",
+        "providerStatusApiUnavailable": true,
+        "eventEndpointDurableReceiptAvailable": true,
+        "verifiedCompletionEventReceived": false
+      },
+      "expected": {
+        "orderDeleted": false,
+        "orderMarkedPaid": false,
+        "duplicateCheckoutCreated": false,
+        "customerState": "confirmation_pending",
+        "reconciliationScheduled": true,
+        "reasonCode": "COMMERCE_CONFIRMATION_PENDING"
+      }
+    },
+    {
+      "id": "catalogue_exposes_compatible_admin_profiles",
+      "stage": "catalogue",
+      "input": {
+        "productId": "teammate.admin",
+        "activeCompatibleProfiles": ["delivery_operations"],
+        "illustrativeDraftProfiles": ["property_admin"]
+      },
+      "expected": {
+        "availableWorkProfiles": ["delivery_operations"],
+        "draftProfilePurchasable": false,
+        "separateRuntimeProductsShown": false
+      }
+    },
+    {
+      "id": "incompatible_profile_blocks_checkout",
+      "stage": "purchase_readiness",
+      "input": {
+        "productId": "teammate.admin",
+        "selectedProfileId": "illustrative_profile",
+        "profileActive": true,
+        "profileCompatibleWithType": false,
+        "profileIncludedInOffer": true
+      },
+      "expected": {
+        "ready": false,
+        "checkoutCreated": false,
+        "reasonCode": "COMMERCE_PROFILE_INCOMPATIBLE"
+      }
+    },
+    {
+      "id": "paid_allocation_pins_selected_profile",
+      "stage": "fulfilment",
+      "input": {
+        "verifiedSubscriptionActive": true,
+        "productId": "teammate.admin",
+        "selectedProfileId": "delivery_operations",
+        "selectedProfileVersion": "1.0.0-rc1",
+        "profileCompatible": true
+      },
+      "expected": {
+        "allocationCreated": true,
+        "allocationTypeId": "admin",
+        "allocationProfileId": "delivery_operations",
+        "allocationProfileVersion": "1.0.0-rc1",
+        "profileSpecificRuntimeCreated": false,
+        "runtimeActivated": false,
+        "reasonCode": "COMMERCE_READY_TO_CONFIGURE"
+      }
+    },
+    {
+      "id": "industry_profile_does_not_create_separate_runtime",
+      "stage": "fulfilment",
+      "input": {
+        "productId": "teammate.admin",
+        "selectedProfileId": "illustrative_property_admin",
+        "profileApprovedCompatibleAndInOffer": true
+      },
+      "expected": {
+        "runtimeProduct": "admin",
+        "profileResolvedAsConfiguration": true,
+        "industrySpecificRuntimeCreated": false
+      }
+    },
+    {
+      "id": "profile_change_requires_activation_amendment",
+      "stage": "subscription_change",
+      "input": {
+        "instanceTypeId": "admin",
+        "currentProfileId": "delivery_operations",
+        "requestedProfileId": "illustrative_property_admin",
+        "requestedProfileApprovedAndCompatible": true,
+        "activationAmendmentApproved": false
+      },
+      "expected": {
+        "commercialChangeMayBePending": true,
+        "activeInstanceProfileChanged": false,
+        "instanceScopeOrMemoryReusedAutomatically": false,
+        "reasonCode": "COMMERCE_ACTIVATION_AMENDMENT_REQUIRED"
+      }
+    }
+  ]
+}

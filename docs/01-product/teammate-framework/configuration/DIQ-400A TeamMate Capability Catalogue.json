@@ -1,0 +1,757 @@
+{
+  "document": {
+    "id": "DIQ-400A",
+    "version": "1.0.0-rc3",
+    "status": "product_owner_approved_final_approval_pending",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "frameworkId": "DIQ-400",
+    "frameworkVersion": "1.0-RC3",
+    "catalogueId": "teammate-capability-catalogue-1.0.0-rc3",
+    "approvedAt": "2026-08-02"
+  },
+  "definition": "An authenticated, tenant-scoped, purpose-bounded digital colleague that uses approved DeliveryIQ intelligence and authorised organisational context to help people implement and sustain a defined delivery outcome through explainable guidance, draft work products, governed coordination and explicitly authorised actions.",
+  "identityPolicy": {
+    "typeIdFormat": "lowercase_snake_case",
+    "capabilityIdFormat": "lowercase_dot_notation",
+    "stableIdsNeverReused": true,
+    "oneActiveTypeVersionPerEnvironment": true,
+    "instanceCannotSelfExpand": true
+  },
+  "riskLevels": [
+    {
+      "id": "R0",
+      "name": "read",
+      "sideEffect": false,
+      "minimumControl": "active_instance_and_runtime_authorisation"
+    },
+    {
+      "id": "R1",
+      "name": "advise_or_draft",
+      "sideEffect": false,
+      "minimumControl": "clear_draft_labelling_and_human_review_before_use"
+    },
+    {
+      "id": "R2",
+      "name": "controlled_reversible",
+      "sideEffect": true,
+      "minimumControl": "explicit_user_command_or_approved_standing_policy_visible_result_and_complete_audit"
+    },
+    {
+      "id": "R3",
+      "name": "external_or_material",
+      "sideEffect": true,
+      "minimumControl": "just_in_time_human_approval_of_exact_action_and_target"
+    },
+    {
+      "id": "R4",
+      "name": "prohibited",
+      "sideEffect": true,
+      "minimumControl": "refuse_and_escalate"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "context.read",
+      "family": "context_and_grounding",
+      "defaultRisk": "R0",
+      "description": "Retrieve the minimum authorised tenant-scoped context required for the approved purpose.",
+      "requiredControls": [
+        "resource_scope",
+        "current_permission",
+        "source_provenance",
+        "data_minimisation"
+      ]
+    },
+    {
+      "id": "intelligence.explain",
+      "family": "context_and_grounding",
+      "defaultRisk": "R1",
+      "description": "Explain approved Delivery Intelligence, recommendations, actions and outcomes using traceable customer-safe rationale.",
+      "requiredControls": ["trace_reference", "permission_redaction", "no_hidden_reasoning"]
+    },
+    {
+      "id": "evidence.summarise",
+      "family": "context_and_grounding",
+      "defaultRisk": "R1",
+      "description": "Summarise authorised evidence without changing source facts or asserting unsupported certainty.",
+      "requiredControls": [
+        "source_reference",
+        "classification_check",
+        "conflict_and_staleness_caveat"
+      ]
+    },
+    {
+      "id": "guidance.provide",
+      "family": "advice_and_creation",
+      "defaultRisk": "R1",
+      "description": "Provide bounded guidance tied to the TeamMate role, supported outcome and approved DeliveryIQ context.",
+      "requiredControls": ["role_scope", "approved_context", "draft_or_advice_label"]
+    },
+    {
+      "id": "artifact.draft",
+      "family": "advice_and_creation",
+      "defaultRisk": "R1",
+      "description": "Create a clearly labelled draft work product from authorised context and approved templates.",
+      "requiredControls": [
+        "template_policy",
+        "source_provenance",
+        "draft_label",
+        "output_validation"
+      ]
+    },
+    {
+      "id": "scenario.compare",
+      "family": "advice_and_creation",
+      "defaultRisk": "R1",
+      "description": "Compare bounded options and assumptions without selecting or approving the accountable decision.",
+      "requiredControls": ["assumption_disclosure", "source_provenance", "human_decision_boundary"]
+    },
+    {
+      "id": "plan.propose",
+      "family": "planning_and_coordination",
+      "defaultRisk": "R1",
+      "description": "Propose an action, sequence, owner role, dependency or milestone for human review.",
+      "requiredControls": [
+        "recommendation_or_action_source",
+        "dependency_visibility",
+        "draft_label"
+      ]
+    },
+    {
+      "id": "task.coordinate",
+      "family": "planning_and_coordination",
+      "defaultRisk": "R2",
+      "description": "Create or update an authorised DeliveryIQ task/action workflow state within the instance scope.",
+      "requiredControls": [
+        "explicit_command_or_standing_policy",
+        "owner_scope",
+        "idempotency",
+        "audit",
+        "reversibility"
+      ]
+    },
+    {
+      "id": "reminder.schedule",
+      "family": "planning_and_coordination",
+      "defaultRisk": "R2",
+      "description": "Schedule a visible cancellable internal reminder for an authorised owner or participant.",
+      "requiredControls": [
+        "recipient_scope",
+        "schedule_visibility",
+        "cancel_control",
+        "rate_limit",
+        "audit"
+      ]
+    },
+    {
+      "id": "decision.record",
+      "family": "planning_and_coordination",
+      "defaultRisk": "R2",
+      "description": "Record a human-approved decision and its owner, rationale and actions without making the decision.",
+      "requiredControls": [
+        "human_approval_reference",
+        "decision_owner",
+        "immutable_history",
+        "audit"
+      ]
+    },
+    {
+      "id": "signal.monitor",
+      "family": "monitoring_and_escalation",
+      "defaultRisk": "R0",
+      "description": "Read approved delivery state on a visible bounded schedule and evaluate configured monitoring criteria.",
+      "requiredControls": [
+        "approved_sources",
+        "visible_schedule",
+        "bounded_query",
+        "no_covert_monitoring"
+      ]
+    },
+    {
+      "id": "exception.detect",
+      "family": "monitoring_and_escalation",
+      "defaultRisk": "R1",
+      "description": "Identify and explain a configured exception, threshold breach, conflict or stale state.",
+      "requiredControls": [
+        "versioned_rule",
+        "evidence_reference",
+        "confidence_or_limitation",
+        "no_person_scoring"
+      ]
+    },
+    {
+      "id": "escalation.propose",
+      "family": "monitoring_and_escalation",
+      "defaultRisk": "R1",
+      "description": "Propose an escalation route, owner and message for human review without broadcasting it.",
+      "requiredControls": [
+        "approved_route",
+        "minimum_necessary_detail",
+        "draft_label",
+        "human_review"
+      ]
+    },
+    {
+      "id": "meeting.prepare",
+      "family": "meetings_and_communication",
+      "defaultRisk": "R1",
+      "description": "Prepare agenda, pre-read, decision and action material from authorised context.",
+      "requiredControls": ["meeting_scope", "approved_context", "draft_label", "source_provenance"]
+    },
+    {
+      "id": "meeting.capture",
+      "family": "meetings_and_communication",
+      "defaultRisk": "R2",
+      "description": "Capture authorised meeting notes and draft decisions/actions under explicit participant consent.",
+      "requiredControls": [
+        "explicit_recording_or_capture_consent",
+        "participant_notice",
+        "retention_policy",
+        "draft_minutes_label",
+        "audit"
+      ]
+    },
+    {
+      "id": "communication.draft",
+      "family": "meetings_and_communication",
+      "defaultRisk": "R1",
+      "description": "Draft a communication for an authorised purpose and audience without sending it.",
+      "requiredControls": [
+        "audience_scope",
+        "minimum_necessary_data",
+        "draft_label",
+        "human_review"
+      ]
+    },
+    {
+      "id": "communication.insert_draft",
+      "family": "meetings_and_communication",
+      "defaultRisk": "R2",
+      "description": "Insert approved draft content into the user-present unsent compose item without sending it.",
+      "requiredControls": [
+        "explicit_user_command",
+        "active_compose_surface",
+        "current_item_only",
+        "draft_remains_unsent",
+        "visible_reversible_result",
+        "audit"
+      ]
+    },
+    {
+      "id": "calendar.draft",
+      "family": "meetings_and_communication",
+      "defaultRisk": "R2",
+      "description": "Prepare or update a user-present unsent appointment draft without inviting attendees or committing the event.",
+      "requiredControls": [
+        "explicit_user_command",
+        "active_appointment_compose_surface",
+        "current_item_only",
+        "no_attendee_notification",
+        "visible_reversible_result",
+        "audit"
+      ]
+    },
+    {
+      "id": "artifact.save_draft",
+      "family": "advice_and_creation",
+      "defaultRisk": "R2",
+      "description": "Save a clearly labelled draft artifact to an allow-listed DeliveryIQ workspace location for review.",
+      "requiredControls": [
+        "explicit_user_command_or_standing_policy",
+        "approved_template",
+        "workspace_resource_scope",
+        "draft_label",
+        "version_history",
+        "audit"
+      ]
+    },
+    {
+      "id": "integration.read",
+      "family": "integrations_and_action",
+      "defaultRisk": "R0",
+      "description": "Read allow-listed resources through an approved connector using least-privilege scopes.",
+      "requiredControls": [
+        "approved_connector",
+        "resource_allow_list",
+        "short_lived_credential",
+        "classification_check",
+        "audit"
+      ]
+    },
+    {
+      "id": "integration.write",
+      "family": "integrations_and_action",
+      "defaultRisk": "R3",
+      "description": "Create or update an allow-listed external record after exact just-in-time approval.",
+      "requiredControls": [
+        "approved_connector_and_action",
+        "exact_preview",
+        "just_in_time_approval",
+        "idempotency",
+        "item_level_result",
+        "audit"
+      ]
+    },
+    {
+      "id": "communication.send",
+      "family": "integrations_and_action",
+      "defaultRisk": "R3",
+      "description": "Send an approved communication to exact reviewed recipients after just-in-time approval.",
+      "requiredControls": [
+        "exact_recipient_and_content_preview",
+        "just_in_time_approval",
+        "idempotency",
+        "rate_and_volume_limit",
+        "audit"
+      ]
+    },
+    {
+      "id": "outcome.observe",
+      "family": "outcomes_and_learning",
+      "defaultRisk": "R2",
+      "description": "Record an authorised outcome observation against an approved measure without claiming causation.",
+      "requiredControls": [
+        "measure_scope",
+        "source",
+        "period",
+        "observer_or_system",
+        "immutable_or_superseding_history"
+      ]
+    },
+    {
+      "id": "outcome.summarise",
+      "family": "outcomes_and_learning",
+      "defaultRisk": "R1",
+      "description": "Summarise approved outcome observations and limitations without attributing sole causation.",
+      "requiredControls": ["observation_provenance", "period", "limitation", "no_causal_claim"]
+    },
+    {
+      "id": "feedback.record",
+      "family": "outcomes_and_learning",
+      "defaultRisk": "R2",
+      "description": "Record explicit user feedback about TeamMate usefulness, correction or outcome support.",
+      "requiredControls": [
+        "explicit_user_input",
+        "purpose_limit",
+        "no_employee_scoring",
+        "correction_and_deletion_path"
+      ]
+    }
+  ],
+  "prohibitedDecisions": [
+    "executive_or_governance_final_decision",
+    "funding_or_investment_approval",
+    "legal_or_contractual_commitment",
+    "employment_or_performance_decision",
+    "risk_acceptance_or_assurance_sign_off",
+    "baseline_benefit_business_case_or_report_approval",
+    "identity_access_security_audit_retention_or_billing_change",
+    "covert_monitoring_employee_scoring_or_protected_characteristic_inference",
+    "self_modification_or_permission_expansion",
+    "autonomous_teammate_or_agent_activation"
+  ],
+  "memoryClasses": [
+    {
+      "id": "session_context",
+      "durability": "transient",
+      "defaultRetention": "session_or_task",
+      "requiresExplicitPromotion": true
+    },
+    {
+      "id": "working_state",
+      "durability": "durable_while_active",
+      "defaultRetention": "instance_policy",
+      "inspectable": true,
+      "correctable": true
+    },
+    {
+      "id": "approved_operational_memory",
+      "durability": "versioned_durable",
+      "defaultRetention": "controlled_policy",
+      "requiresSourceOwnerPurpose": true,
+      "inspectable": true,
+      "correctable": true
+    },
+    {
+      "id": "outcome_observation",
+      "durability": "immutable_or_superseding",
+      "defaultRetention": "outcome_record_policy",
+      "causalClaimPermitted": false
+    },
+    {
+      "id": "audit_record",
+      "durability": "append_only",
+      "defaultRetention": "audit_policy",
+      "permissionRedacted": true
+    }
+  ],
+  "activationPrerequisites": [
+    "authenticated_workspace",
+    "active_approved_type_version",
+    "available",
+    "entitled",
+    "teammate.activate_permission",
+    "accepted_mapped_recommendation_or_separately_approved_direct_purpose",
+    "named_accountable_owner",
+    "scope_capability_context_memory_integration_review",
+    "activation_consent",
+    "compatible_resource_scopes",
+    "immutable_activation_snapshot_and_idempotency_key"
+  ],
+  "adaptationPolicy": {
+    "layers": [
+      "type",
+      "work_profile",
+      "optional_industry_overlay",
+      "customer_configuration",
+      "instance_grant"
+    ],
+    "lowerLayerMayWidenUpperLayer": false,
+    "sharedRuntimeRequired": true,
+    "industryRuntimeForkAllowed": false,
+    "workProfileRequiredForAdmin": true,
+    "profileIdFormat": "lowercase_snake_case",
+    "industryOverlayIdFormat": "lowercase_snake_case",
+    "profileRequiredFields": [
+      "id",
+      "version",
+      "parent_type_id",
+      "supported_outcomes",
+      "capability_subset",
+      "workflows",
+      "terminology",
+      "record_semantics",
+      "templates",
+      "connector_resource_kinds",
+      "prohibitions",
+      "copy",
+      "measures",
+      "golden_fixture_reference"
+    ],
+    "industryOverlayMayDefine": [
+      "terminology",
+      "templates",
+      "record_schemas",
+      "connector_mappings",
+      "classification",
+      "retention",
+      "disclaimers",
+      "stricter_prohibitions"
+    ],
+    "industryOverlayMayNotDefine": [
+      "new_capability",
+      "higher_risk",
+      "unapproved_connector_action",
+      "executable_code",
+      "hidden_prompt",
+      "professional_decision_authority",
+      "weaker_privacy_or_security"
+    ],
+    "regulatedOverlayRequires": [
+      "domain_review",
+      "legal_and_privacy_review",
+      "security_review",
+      "product_owner_approval",
+      "golden_refusal_and_boundary_fixtures"
+    ]
+  },
+  "referenceTypes": [
+    {
+      "id": "admin",
+      "name": "Admin TeamMate",
+      "version": "1.0.0-rc2",
+      "category": "business_administration",
+      "market": "cross_industry_sme",
+      "supportedOutcome": "reduce routine administration and keep agreed work, records, meetings and communications organised under human control",
+      "defaultMaximumRisk": "R2",
+      "profileRequired": true,
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "scenario.compare",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "meeting.capture",
+        "communication.draft",
+        "communication.insert_draft",
+        "calendar.draft",
+        "artifact.save_draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "platform_administration",
+        "make_accountable_or_professional_decision",
+        "send_or_publish_or_invite",
+        "external_system_mutation",
+        "employee_surveillance",
+        "self_expand",
+        "act_without_profile_and_instance_scope"
+      ]
+    }
+  ],
+  "initialTypeProfiles": [
+    {
+      "id": "executive",
+      "name": "Executive TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "prepare decisions, maintain executive accountability and track value",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": [
+        "rec_decision_rights",
+        "rec_sponsor_contract",
+        "rec_benefits_ownership"
+      ],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "scenario.compare",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "make_executive_decision",
+        "approve_investment",
+        "accept_risk",
+        "commit_benefit",
+        "represent_executive_without_exact_approval"
+      ]
+    },
+    {
+      "id": "pmo",
+      "name": "PMO TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "maintain integrated controls and improvement actions",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": ["rec_integrated_controls", "rec_improvement_cadence"],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "scenario.compare",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "approve_baseline",
+        "certify_assurance",
+        "overwrite_source_truth_without_authority",
+        "judge_individual_performance"
+      ]
+    },
+    {
+      "id": "portfolio",
+      "name": "Portfolio TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "maintain transparent priorities and portfolio decisions",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": ["rec_portfolio_priorities"],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "scenario.compare",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "allocate_funding",
+        "approve_priority",
+        "cancel_initiative",
+        "override_accountable_governance"
+      ]
+    },
+    {
+      "id": "reporting",
+      "name": "Reporting TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "produce evidence-led reporting and track outcomes",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": ["rec_delivery_insight", "rec_benefits_ownership"],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "scenario.compare",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "fabricate_missing_data",
+        "overwrite_system_of_record_fact",
+        "certify_report_accuracy",
+        "publish_without_exact_approval"
+      ]
+    },
+    {
+      "id": "raid",
+      "name": "RAID TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "maintain risk, action, issue and dependency controls",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": ["rec_risk_assurance", "rec_integrated_controls"],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "accept_risk",
+        "close_material_item_without_owner",
+        "change_severity_or_owner_without_authority",
+        "notify_external_party_without_exact_approval"
+      ]
+    },
+    {
+      "id": "meeting",
+      "name": "Meeting TeamMate",
+      "version": "1.0.0-rc1",
+      "supportedOutcome": "prepare governance meetings and track decisions and actions",
+      "defaultMaximumRisk": "R2",
+      "mapsFromRecommendations": ["rec_decision_rights", "rec_sponsor_contract"],
+      "capabilities": [
+        "context.read",
+        "intelligence.explain",
+        "evidence.summarise",
+        "guidance.provide",
+        "artifact.draft",
+        "plan.propose",
+        "task.coordinate",
+        "reminder.schedule",
+        "decision.record",
+        "signal.monitor",
+        "exception.detect",
+        "escalation.propose",
+        "meeting.prepare",
+        "meeting.capture",
+        "communication.draft",
+        "integration.read",
+        "outcome.observe",
+        "outcome.summarise",
+        "feedback.record"
+      ],
+      "explicitExclusions": [
+        "capture_without_consent",
+        "treat_draft_as_approved_minutes",
+        "send_invitation_or_follow_up_without_exact_approval",
+        "make_meeting_decision"
+      ]
+    }
+  ],
+  "r3InitialProfilePolicy": {
+    "enabledByDefaultForAnyInitialType": false,
+    "capabilities": ["integration.write", "communication.send"],
+    "enablementRequires": [
+      "locked_type_version_with_capability",
+      "approved_connector_and_resource_scope",
+      "just_in_time_exact_approval_workflow",
+      "golden_side_effect_and_reconciliation_fixtures",
+      "security_and_privacy_acceptance"
+    ]
+  },
+  "customerCopy": {
+    "recommendationTemplate": "The {name} can help your team {supportedOutcome}. Review its scope and permissions before activation.",
+    "draftLabel": "Draft prepared by {name} — review before use.",
+    "approvalHeading": "Review this action before it happens",
+    "safeStop": "I can’t complete that action within my approved role or permissions. Review the required decision or ask an authorised owner for help.",
+    "uncertainContext": "The available information is incomplete, conflicting or may be out of date. Review the cited sources before taking action."
+  },
+  "stableErrorCodes": [
+    "TEAMMATE_TYPE_UNAVAILABLE",
+    "TEAMMATE_NOT_ENTITLED",
+    "TEAMMATE_ACTION_DENIED",
+    "TEAMMATE_ACTIVATION_PREREQUISITE_MISSING",
+    "TEAMMATE_INSTANCE_NOT_ACTIVE",
+    "TEAMMATE_CAPABILITY_NOT_GRANTED",
+    "TEAMMATE_CONTEXT_DENIED",
+    "TEAMMATE_MEMORY_DENIED",
+    "TEAMMATE_APPROVAL_REQUIRED",
+    "TEAMMATE_APPROVAL_EXPIRED",
+    "TEAMMATE_ACTION_PROHIBITED",
+    "TEAMMATE_ACTION_CONFLICT",
+    "TEAMMATE_TOOL_OUTPUT_INVALID",
+    "TEAMMATE_INTEGRATION_UNAVAILABLE",
+    "TEAMMATE_EXECUTION_TRANSIENT",
+    "TEAMMATE_EXECUTION_FAILED",
+    "TEAMMATE_AUDIT_INCOMPLETE"
+  ]
+}
