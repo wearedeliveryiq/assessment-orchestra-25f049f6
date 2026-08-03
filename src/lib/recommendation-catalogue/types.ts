@@ -1,6 +1,11 @@
 export type CatalogueLifecycleState =
   "draft" | "in_review" | "approved" | "active" | "retired" | "superseded";
 
+export interface VersionedRecommendationReference {
+  id: string;
+  version: string;
+}
+
 export interface CatalogueDefinition {
   id: string;
   version: string;
@@ -13,6 +18,9 @@ export interface CatalogueDefinition {
   exclusions: Array<Record<string, string>>;
   dependencies: string[];
   conflicts: string[];
+  conflictPriority?: number;
+  canonicalRecommendation?: VersionedRecommendationReference;
+  supersedes?: VersionedRecommendationReference[];
   outcome: string;
   successMeasures: string[];
 }

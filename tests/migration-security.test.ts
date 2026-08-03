@@ -118,6 +118,20 @@ const recommendationConfidenceGateHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationResolutionMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803040000_recommendation_conflict_resolutions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationResolutionHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803041000_harden_recommendation_resolution_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -332,6 +346,32 @@ describe("Sprint 03 migration security", () => {
     expect(recommendationConfidenceGateHardening).toContain("REVOKE MAINTAIN");
     expect(recommendationConfidenceGateHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.publish_recommendation_confidence_gate(jsonb) TO service_role",
+    );
+  });
+
+  it("publishes immutable tenant-scoped conflict resolutions without client access", () => {
+    expect(recommendationResolutionMigration).toContain(
+      "recommendation_conflict_resolutions_immutable",
+    );
+    expect(recommendationResolutionMigration).toContain(
+      "recommendation_resolution_candidates_immutable",
+    );
+    expect(recommendationResolutionMigration).toContain(
+      "recommendation_resolution_trace_links_immutable",
+    );
+    expect(recommendationResolutionMigration).toContain(
+      "v_gate.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationResolutionMigration).toContain(
+      "dependency.dependency_id = v_gate_candidate.recommendation_id",
+    );
+    expect(recommendationResolutionMigration).toContain("deduplicated_evidence");
+    expect(recommendationResolutionMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationResolutionMigration).not.toContain("CREATE POLICY");
+    expect(recommendationResolutionHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationResolutionHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationResolutionHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_conflict_resolution(jsonb) TO service_role",
     );
   });
 });
