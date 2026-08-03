@@ -52,6 +52,9 @@ export interface AssessmentResponse {
   evidenceReasonText?: string | null;
   respondentGroupId?: string | null;
   evidenceAt?: string | null;
+  provenanceSource?: string | null;
+  provenanceVersion?: string | null;
+  originalRespondedAt?: string | null;
 }
 
 export interface AssessmentAnswerInput {

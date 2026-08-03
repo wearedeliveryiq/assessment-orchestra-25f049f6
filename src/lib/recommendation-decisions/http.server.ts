@@ -1,6 +1,7 @@
 import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
+import { assertDeliveryDnaActionAccess } from "../delivery-intelligence/commercial-access.server";
 import { canViewRecommendationEvaluationAudit } from "../recommendation-evaluation/projection";
 import { captureRecommendationAnalyticsSafely } from "../recommendation-analytics/service.server";
 import {
@@ -51,6 +52,11 @@ export async function getRecommendationDecision(request: Request, portfolioItemI
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const projectionAudience = audience(verified.identity.permissions);
     const result = await recommendationDecisionService.get(
       portfolioItemId,
@@ -73,6 +79,11 @@ export async function postRecommendationDecision(request: Request, portfolioItem
   try {
     const verified = await assessmentRequestContext(request, { write: true });
     assertPermission(verified.identity, "assessment:submit");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const body = (await request.json()) as Record<string, unknown>;
     const command = body.decision;
     const reasonCategory = body.reasonCategory ?? null;
@@ -143,6 +154,11 @@ export async function getRecommendationPortfolioDecisions(request: Request, port
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const projectionAudience = audience(verified.identity.permissions);
     const records = await recommendationDecisionService.list(
       portfolioId,

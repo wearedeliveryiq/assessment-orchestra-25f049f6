@@ -2,9 +2,11 @@ import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/service.server";
 import { getResult } from "./result-repository.server";
-import { projectWorkspaceResult } from "./projection";
+import { freePresentedRecommendationIds, projectCommercialWorkspaceResult } from "./projection";
 import { resolveProductRecommendations } from "./product-recommendations.server";
 import { getTrace } from "./trace-repository.server";
+import { recommendationPortfolioService } from "../recommendation-portfolio/service.server";
+import { resolveDeliveryDnaCommercialAccess } from "./commercial-access.server";
 
 const json = (body: unknown, status: number, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -49,25 +51,41 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
         500,
       );
     }
-    const etag = `"${stored.resultHash}"`;
+    // The complete governed portfolio is generated and persisted independently
+    // of commercial tier. Access affects projection only, never calculation.
+    const [access, ensuredPortfolio] = await Promise.all([
+      resolveDeliveryDnaCommercialAccess({
+        organisationId: context.organisationId,
+        workspaceId: context.workspaceId,
+        permitted: verified.identity.permissions.includes("assessment:read"),
+      }),
+      recommendationPortfolioService.ensure(run),
+    ]);
+    const portfolio = ensuredPortfolio.portfolio;
+    const etag = `"${stored.resultHash}:${access.policyVersion}:${access.accessTier}:${access.state}"`;
     if (request.headers.get("if-none-match") === etag) {
       return new Response(null, {
         status: 304,
         headers: { etag, "cache-control": "private, no-cache" },
       });
     }
-    const projected = projectWorkspaceResult(stored);
+    const projected = projectCommercialWorkspaceResult({ stored, portfolio, access });
+    const recommendationIds =
+      access.accessTier === "entitled"
+        ? stored.canonicalResult.recommendations.ranked.map((item) => item.id)
+        : freePresentedRecommendationIds(stored, portfolio);
     const productRecommendations = await resolveProductRecommendations({
       analysisRunId: run.id,
       organisationId: context.organisationId,
       workspaceId: context.workspaceId,
-      recommendationIds: projected.recommendations.map((item) => item.id),
+      recommendationIds,
       permissions: verified.identity.permissions,
     });
-    const trace = await getTrace(run.id, context);
-    const explanations = trace.nodes
-      .filter((node) => node.visible)
-      .map((node) => ({ id: node.id, type: node.nodeType, domainId: node.domainId }));
+    const trace = access.accessTier === "entitled" ? await getTrace(run.id, context) : null;
+    const explanations =
+      trace?.nodes
+        .filter((node) => node.visible)
+        .map((node) => ({ id: node.id, type: node.nodeType, domainId: node.domainId })) ?? [];
     return json({ ...projected, productRecommendations, explanations }, 200, { etag });
   } catch (error) {
     if (error instanceof IdentityError)

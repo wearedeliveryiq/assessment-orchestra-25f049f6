@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 
 import { AuthLayout, FormError, FormNotice } from "@/components/identity/auth-layout";
@@ -9,6 +9,9 @@ import { confirmVerification, resendVerification } from "@/lib/identity/client";
 
 export const Route = createFileRoute("/auth/verify-email")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    snapshot: search.snapshot === "continue" ? ("continue" as const) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Verify your email — DeliveryIQ" },
@@ -38,6 +41,7 @@ async function awaitSession(attempts = 10): Promise<string | null> {
 }
 
 function VerifyEmailPage() {
+  const search = useSearch({ from: "/auth/verify-email" });
   const [state, setState] = useState<"checking" | "verified" | "failed">("checking");
   const [message, setMessage] = useState<string>(GENERIC_LINK_ERROR);
   const [email, setEmail] = useState("");
@@ -128,7 +132,12 @@ function VerifyEmailPage() {
               className="w-full"
               disabled={!email}
               onClick={async () => {
-                await resendVerification(email).catch(() => undefined);
+                await resendVerification(
+                  email,
+                  search.snapshot === "continue"
+                    ? `${window.location.origin}/auth/verify-email?snapshot=continue`
+                    : undefined,
+                ).catch(() => undefined);
                 setNotice("If that address needs verifying, a new link is on its way.");
               }}
             >
@@ -137,7 +146,12 @@ function VerifyEmailPage() {
           </div>
         ) : null}
         <Button asChild className="w-full" disabled={state === "checking"}>
-          <Link to="/auth/login">Continue to sign in</Link>
+          <Link
+            to="/auth/login"
+            search={search.snapshot === "continue" ? { redirect: "/snapshot?continue=1" } : {}}
+          >
+            Continue to sign in
+          </Link>
         </Button>
       </div>
     </AuthLayout>

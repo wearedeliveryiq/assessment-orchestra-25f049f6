@@ -65,7 +65,11 @@ function LoginPage() {
       footer={
         <>
           New to DeliveryIQ?{" "}
-          <Link to="/auth/register" className="text-foreground underline underline-offset-4">
+          <Link
+            to="/auth/register"
+            search={{ snapshot: undefined, source: undefined, result: undefined }}
+            className="text-foreground underline underline-offset-4"
+          >
             Create an account
           </Link>
         </>

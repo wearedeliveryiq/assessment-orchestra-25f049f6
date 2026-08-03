@@ -1,4 +1,5 @@
 import { sprint03Configuration } from "./config";
+import { DELIVERY_DNA_COMMERCIAL_POLICY } from "./commercial-access";
 import type { ReturnTypeWorkspaceProjection } from "./projection-types";
 
 type RecordValue = Record<string, unknown>;
@@ -77,7 +78,7 @@ export function publicSourceFromWorkspace(
       summary: item.outcome,
     })),
     registrationPrompt: {
-      label: sprint03Configuration.publicDisclosure.registrationPrompt,
+      label: DELIVERY_DNA_COMMERCIAL_POLICY.anonymousRegistrationLabel,
       destination: sprint03Configuration.publicDisclosure.registrationDestination.replace(
         "{publicResultId}",
         publicResultId,
