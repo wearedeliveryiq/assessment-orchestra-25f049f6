@@ -194,6 +194,52 @@ describe("S3-001 analysis worker", () => {
     expect(events).toContain("recommendation.priority_failed");
   });
 
+  it("runs dependency sequencing only after priority modelling succeeds", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => undefined);
+    dependencies.sequenceRecommendations = vi.fn(async () => undefined);
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.prioritiseRecommendations).toHaveBeenCalledBefore(
+      vi.mocked(dependencies.sequenceRecommendations),
+    );
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_completed",
+      "recommendation.conflict_resolution_completed",
+      "recommendation.priority_completed",
+      "recommendation.sequence_completed",
+    ]);
+  });
+
+  it("fails the sequence safely without rolling back completed analysis", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => undefined);
+    dependencies.sequenceRecommendations = vi.fn(async () => {
+      throw Object.assign(new Error("internal dependency graph detail"), {
+        code: "ROADMAP_DEPENDENCY_CYCLE",
+      });
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(events).toContain("recommendation.sequence_failed");
+    expect(dependencies.event).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "completed" }),
+      "recommendation.sequence_failed",
+      { code: "ROADMAP_DEPENDENCY_CYCLE" },
+      "error",
+    );
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),

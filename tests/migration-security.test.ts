@@ -146,6 +146,20 @@ const recommendationPriorityHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationSequenceMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803060000_recommendation_dependency_sequences.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationSequenceHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803061000_harden_recommendation_sequence_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -418,6 +432,47 @@ describe("Sprint 03 migration security", () => {
     );
     expect(recommendationPriorityHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.set_recommendation_priority_display_preference(jsonb) TO service_role",
+    );
+  });
+
+  it("publishes immutable dependency sequences and append-only audited overrides", () => {
+    expect(recommendationSequenceMigration).toContain("recommendation_sequence_models_immutable");
+    expect(recommendationSequenceMigration).toContain("recommendation_sequence_items_immutable");
+    expect(recommendationSequenceMigration).toContain(
+      "recommendation_sequence_dependencies_immutable",
+    );
+    expect(recommendationSequenceMigration).toContain(
+      "recommendation_sequence_overrides_immutable",
+    );
+    expect(recommendationSequenceMigration).toContain("UNIQUE (priority_model_id, policy_version)");
+    expect(recommendationSequenceMigration).toContain(
+      "UNIQUE (organisation_id, workspace_id, idempotency_key)",
+    );
+    expect(recommendationSequenceMigration).toContain(
+      "v_priority.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationSequenceMigration).toContain(
+      "v_resolution.organisation_id <> v_run.organisation_id",
+    );
+    expect(recommendationSequenceMigration).toContain(
+      "v_run.configuration_snapshot #> '{roadmap,capacity}'",
+    );
+    expect(recommendationSequenceMigration).toContain(
+      "required_item.generated_sequence >= dependant.generated_sequence",
+    );
+    expect(recommendationSequenceMigration).toContain("dependency.dependency_type = 'required'");
+    expect(recommendationSequenceMigration).toContain("RECOMMENDATION_SEQUENCE_VERSION_CONFLICT");
+    expect(recommendationSequenceMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationSequenceMigration).toContain("membership.user_id =");
+    expect(recommendationSequenceMigration).toContain("acknowledged_risk");
+    expect(recommendationSequenceMigration).not.toContain("CREATE POLICY");
+    expect(recommendationSequenceHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationSequenceHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationSequenceHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.publish_recommendation_sequence_model(jsonb) TO service_role",
+    );
+    expect(recommendationSequenceHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.set_recommendation_sequence_override(jsonb) TO service_role",
     );
   });
 });

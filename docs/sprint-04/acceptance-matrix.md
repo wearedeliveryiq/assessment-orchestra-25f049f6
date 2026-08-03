@@ -116,22 +116,50 @@
 
 ## S4-005 quality gates
 
-| Gate                                | Evidence                                                                                | Status                                                      |
-| ----------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Deterministic domain/unit           | `tests/recommendation-priority.test.ts`                                                 | PASS                                                        |
-| Integration/idempotency/failure     | immutable replay, append-only preference, worker sequencing and safe failure tests      | PASS                                                        |
-| Tenant isolation/traceability       | service scope rejection plus database run/result/gate/resolution/catalogue/trace checks | PASS — live migration verification pending                  |
-| Permission/redaction                | public/workspace/audit schema-diff tests and deny-by-default migration contract         | PASS — live privilege inspection pending                    |
-| Accessibility/copy                  | textual five-component rationale and explicit non-estimate effort copy; no new UI       | PASS                                                        |
-| Performance                         | 250 governed candidates prioritised inside the two-second portfolio budget              | PASS                                                        |
-| Sprint 03 and S4-001–004 regression | complete DIQ-203B, catalogue, evaluation, confidence and resolution suites              | PASS                                                        |
-| Type checking                       | `tsc --noEmit`                                                                          | PASS                                                        |
-| Changed-file lint/format            | ESLint and Prettier over every S4-005 application, route, generated-route and test file | PASS                                                        |
+| Gate                                | Evidence                                                                                | Status                                                                  |
+| ----------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Deterministic domain/unit           | `tests/recommendation-priority.test.ts`                                                 | PASS                                                                    |
+| Integration/idempotency/failure     | immutable replay, append-only preference, worker sequencing and safe failure tests      | PASS                                                                    |
+| Tenant isolation/traceability       | service scope rejection plus database run/result/gate/resolution/catalogue/trace checks | PASS — including live Lovable verification                              |
+| Permission/redaction                | public/workspace/audit schema-diff tests and deny-by-default migration contract         | PASS — including live privilege inspection                              |
+| Accessibility/copy                  | textual five-component rationale and explicit non-estimate effort copy; no new UI       | PASS                                                                    |
+| Performance                         | 250 governed candidates prioritised inside the two-second portfolio budget              | PASS                                                                    |
+| Sprint 03 and S4-001–004 regression | complete DIQ-203B, catalogue, evaluation, confidence and resolution suites              | PASS                                                                    |
+| Type checking                       | `tsc --noEmit`                                                                          | PASS                                                                    |
+| Changed-file lint/format            | ESLint and Prettier over every S4-005 application, route, generated-route and test file | PASS                                                                    |
 | Full-repository lint                | inherited repository baseline                                                           | RECORDED LIMITATION — 5,654 errors and 15 warnings outside S4-005 scope |
-| Full regression                     | 34 files / 388 tests                                                                    | PASS                                                        |
-| Production build                    | Vite/Nitro production build                                                             | PASS                                                        |
-| Lovable Cloud migration execution   | `20260803050000` followed by `20260803051000`; schema, ACL and idempotency verification | PENDING DEPLOYMENT                                          |
+| Full regression                     | 34 files / 388 tests                                                                    | PASS                                                                    |
+| Production build                    | Vite/Nitro production build                                                             | PASS                                                                    |
+| Lovable Cloud migration execution   | `20260803050000` followed by `20260803051000`; schema, ACL and idempotency verification | PASS — live smoke unavailable because no eligible analysis exists       |
+
+## S4-006 — Dependency and Sequencing Engine
+
+| Acceptance criterion                            | Implementation evidence                                                                                                           | Test evidence                                                                 | Status |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------ |
+| AC1 locked roadmap fixtures pass                | S4-006 delegates ordering/horizon assignment to the unchanged shared DIQ-203 roadmap primitive and pinned 3/3/4 capacity snapshot | complete DIQ-203B suite plus exact S4-006 dependency/capacity projection      | PASS   |
+| AC2 required/recommended semantics are enforced | typed immutable edge graph; required unavailable/blocked propagates `blocked_dependency`; recommended produces a safe caveat      | missing, transitive block, recommended warning, superseded and capacity tests | PASS   |
+| AC3 cycle path is returned safely               | bounded deterministic topological check returns exact `ROADMAP_DEPENDENCY_CYCLE`; worker emits only approved safe detail          | exact two-node cycle/path and non-rollback executor tests                     | PASS   |
+| AC4 override is an audited overlay              | append-only actor/reason/risk/version/idempotency record; immutable generated sequence and server-calculated dependency risk      | baseline preservation, invalid permutation, required fields and service tests | PASS   |
+| AC5 graph queries meet the performance target   | deterministic traversal bounded to 250 recommendations and 1,000 edges; publisher repeats hard bounds                             | 250-node / 986-edge fixture below one second; over-bound rejection            | PASS   |
+
+## S4-006 quality gates
+
+| Gate                                | Evidence                                                                                     | Status                                                                  |
+| ----------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Deterministic domain/unit           | `tests/recommendation-sequencing.test.ts`                                                    | PASS                                                                    |
+| Integration/idempotency/failure     | immutable replay, append-only override, worker sequencing and cycle-safe failure tests       | PASS                                                                    |
+| Tenant isolation/traceability       | service scope rejection plus database run/resolution/priority/catalogue/mapping checks       | PASS — live migration verification pending                              |
+| Permission/redaction                | public/workspace/audit schema-diff tests and deny-by-default migration contract              | PASS — live privilege inspection pending                                |
+| Accessibility/copy                  | textual dependency state, reason, block and caveat contracts; no colour-only/new UI          | PASS                                                                    |
+| Performance                         | 250 recommendations / 986 edges inside one-second traversal and two-second portfolio targets | PASS                                                                    |
+| Sprint 03 and S4-001–005 regression | complete DIQ-203B, catalogue, evaluation, confidence, resolution and priority suites         | PASS                                                                    |
+| Type checking                       | `tsc --noEmit`                                                                               | PASS                                                                    |
+| Changed-file lint/format            | ESLint and Prettier over every S4-006 application, route, generated-route and test file      | PASS                                                                    |
+| Full-repository lint                | inherited repository baseline                                                                | RECORDED LIMITATION — 5,965 errors and 15 warnings outside S4-006 scope |
+| Full regression                     | 35 files / 408 tests                                                                         | PASS                                                                    |
+| Production build                    | Vite/Nitro production build                                                                  | PASS                                                                    |
+| Lovable Cloud migration execution   | `20260803060000` followed by `20260803061000`; schema, ACL and idempotency verification      | PENDING DEPLOYMENT                                                      |
 
 ## Quality gates
 
-Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.
+Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003–005 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.
