@@ -11,6 +11,7 @@ import { assessmentApi, assessmentKeys } from "@/lib/assessment/client";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { useIdentity } from "@/hooks/use-identity";
 import type { AssessmentSession } from "@/lib/assessment/types";
+import { DELIVERY_DNA_ASSESSMENT_TYPE } from "@/lib/delivery-dna/catalogue";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,7 +60,11 @@ function LandingPage() {
   const completed = sessions.filter((s) => s.status === "completed");
 
   const create = useMutation({
-    mutationFn: () => assessmentApi.create({ organisationName: organisation }),
+    mutationFn: () =>
+      assessmentApi.create({
+        organisationName: organisation,
+        assessmentType: DELIVERY_DNA_ASSESSMENT_TYPE,
+      }),
     onSuccess: ({ session }) => {
       queryClient.invalidateQueries({ queryKey: assessmentKeys.list });
       navigate({ to: "/assessment/$id", params: { id: session.id } });
@@ -71,15 +76,15 @@ function LandingPage() {
     <AppShell action={<IdentityMenu />}>
       <section className="ribbon-panel rounded-xl px-6 py-10 sm:px-10 sm:py-14">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-          Delivery maturity intelligence
+          Delivery DNA™
         </p>
         <h1 className="mt-3 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-          Run an assessment, watch the engines work,{" "}
-          <span className="text-gradient-ribbon">act on the narrative.</span>
+          See how your organisation delivers,{" "}
+          <span className="text-gradient-ribbon">then focus improvement where it matters.</span>
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Every submission moves through eight independent engines — Knowledge Pack through
-          Narrative — with responses and processing state persisted at each step.
+          Complete the 39-question Delivery DNA assessment to receive evidence-backed delivery
+          intelligence, priorities and practical next steps.
         </p>
       </section>
 
@@ -93,7 +98,7 @@ function LandingPage() {
             </h2>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            Create a draft and start capturing responses immediately.
+            Start a Delivery DNA assessment and save your progress as you go.
           </p>
           {!isAuthenticated ? (
             <Link
@@ -172,7 +177,10 @@ function LandingPage() {
             session.completedAt ? `Completed ${formatDate(session.completedAt)}` : "Completed"
           }
           hrefFor={(session) => ({
-            to: "/assessment/$id/results" as const,
+            to:
+              session.assessmentType === DELIVERY_DNA_ASSESSMENT_TYPE
+                ? ("/dashboard/$id" as const)
+                : ("/assessment/$id/results" as const),
             params: { id: session.id },
           })}
         />
@@ -301,7 +309,11 @@ function SessionCard({
   sessions: AssessmentSession[];
   renderMeta: (session: AssessmentSession) => string;
   hrefFor: (session: AssessmentSession) => {
-    to: "/assessment/$id" | "/assessment/$id/processing" | "/assessment/$id/results";
+    to:
+      | "/assessment/$id"
+      | "/assessment/$id/processing"
+      | "/assessment/$id/results"
+      | "/dashboard/$id";
     params: { id: string };
   };
 }) {

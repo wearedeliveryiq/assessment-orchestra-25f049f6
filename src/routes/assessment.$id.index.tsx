@@ -9,19 +9,21 @@ import { StatusPill } from "@/components/deliveryiq/status-pill";
 import { assessmentApi, assessmentKeys } from "@/lib/assessment/client";
 import { QUESTIONNAIRE, TOTAL_QUESTIONS } from "@/lib/assessment/questionnaire";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { DeliveryDnaAssessmentJourney } from "@/components/delivery-dna/assessment-journey";
+import { isDeliveryDnaAssessment } from "@/lib/delivery-dna/catalogue";
 
 export const Route = createFileRoute("/assessment/$id/")({
   head: () => ({
     meta: [
-      { title: "Capture responses — DeliveryIQ" },
+      { title: "Assessment responses — DeliveryIQ" },
       {
         name: "description",
-        content: "Capture delivery maturity responses section by section and submit for analysis.",
+        content: "Capture assessment responses section by section and submit for analysis.",
       },
-      { property: "og:title", content: "Capture responses — DeliveryIQ" },
+      { property: "og:title", content: "Assessment responses — DeliveryIQ" },
       {
         property: "og:description",
-        content: "Capture delivery maturity responses section by section and submit for analysis.",
+        content: "Capture assessment responses section by section and submit for analysis.",
       },
     ],
   }),
@@ -79,7 +81,6 @@ function AssessmentPage() {
     onError: (err: Error) => toast.error(err.message),
   });
 
-
   const submit = useMutation({
     mutationFn: async () => {
       await assessmentApi.save(id, {
@@ -113,6 +114,10 @@ function AssessmentPage() {
         </div>
       </AppShell>
     );
+  }
+
+  if (isDeliveryDnaAssessment(data.session.assessmentType)) {
+    return <DeliveryDnaAssessmentJourney assessmentId={id} detail={data} />;
   }
 
   const locked = !["draft", "in_progress"].includes(data.session.status);

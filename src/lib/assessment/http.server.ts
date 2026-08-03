@@ -44,3 +44,13 @@ export async function readJson<T>(request: Request): Promise<T> {
     throw new runtime.RuntimeError("Invalid JSON body", 400);
   }
 }
+
+export async function readOptionalJson<T>(request: Request, fallback: T): Promise<T> {
+  const text = await request.text();
+  if (!text.trim()) return fallback;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new runtime.RuntimeError("Invalid JSON body", 400);
+  }
+}

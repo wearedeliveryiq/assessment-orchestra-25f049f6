@@ -32,3 +32,33 @@ The final local regression contains 251 passing tests across 24 files, including
 - Generated Supabase TypeScript types should be refreshed after migrations are applied; repository adapters temporarily isolate pending tables from generated types.
 
 No unresolved product decision or conflict with DIQ-002/PB-003 remains.
+
+## PDR-003-003 delivery update — 3 August 2026
+
+### Customer value delivered
+
+The application now contains the genuine Delivery DNA 1.0.0 collection journey: 39 locked questions across 13 capabilities, clear five-point response guidance, saved progress, explicit not-applicable reasons, acknowledged missing evidence, review-before-completion and direct transition to the existing Delivery Intelligence dashboard.
+
+The legacy 16-question delivery-maturity journey is unchanged and remains terminally ineligible for Sprint 03 analysis. No evidence mapping, scoring rule or recommendation rule was invented.
+
+### Architecture and data
+
+- `src/lib/delivery-dna/catalogue.ts` is the single validated application adapter over the unchanged locked DIQ-203C JSON; server creation and analysis loading fail closed if its contract differs from DIQ-203A.
+- Assessment sessions pin assessment, Knowledge Pack, question-set and configuration identities plus the exact 39-ID manifest and digest.
+- Draft responses persist answered or not-applicable state. Completion creates explicit missing rows for every unanswered manifest entry.
+- A completed `delivery-dna-collection` runtime execution supplies immutable, idempotent provenance to the existing PDR-003-001 hand-off and S3-001 analysis pipeline without invoking the legacy eight-stage questionnaire engine.
+- Migrations add governed reason fields, evidence-state constraints, one-per-session collection provenance and completed-provenance immutability. A separate hardening migration removes Cloud default execution grants.
+
+### Verification actually run
+
+- TypeScript `--noEmit`: pass.
+- Changed-file ESLint: pass.
+- Changed-file Prettier: pass.
+- Full regression: 572/572 tests across 44 files pass.
+- Locked DIQ-203B fixtures: 53/53 pass unchanged.
+- Production Vite/Nitro build: pass.
+- Local browser smoke: the signed-out production shell renders the new Delivery DNA value proposition and start action with correct semantic structure.
+
+### Deployment status and limitation
+
+The code and migrations are ready for review and merge. The two new migrations have not been applied to Lovable Cloud, the build has not yet been published, and no real customer assessment was manufactured locally. Final hosted acceptance therefore still requires: apply both migrations in order, regenerate Supabase types, publish, and record one authorised Delivery DNA completion reaching eligible analysis and a published intelligence result. The authenticated questionnaire and narrow-screen checks must be included in that focused deployment smoke test.

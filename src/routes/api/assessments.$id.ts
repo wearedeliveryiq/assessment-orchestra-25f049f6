@@ -13,7 +13,13 @@ export const Route = createFileRoute("/api/assessments/$id")({
         const { handleRoute, readJson } = await import("@/lib/assessment/http.server");
         return handleRoute(request, async (rt, ownerKey) => {
           const body = await readJson<{
-            answers?: { questionId: string; value: number | string | null; notes?: string | null }[];
+            answers?: Array<{
+              questionId: string;
+              value: number | string | null;
+              notes?: string | null;
+              evidenceStatus?: "answered" | "not_applicable";
+              evidenceReasonText?: string | null;
+            }>;
             currentSection?: string | null;
             organisationName?: string;
             contactName?: string | null;

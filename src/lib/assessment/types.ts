@@ -48,8 +48,18 @@ export interface AssessmentResponse {
   answeredAt: string;
   evidenceStatus?: "answered" | "not_applicable" | "excluded" | "missing";
   exclusionReason?: string | null;
+  evidenceReasonCode?: string | null;
+  evidenceReasonText?: string | null;
   respondentGroupId?: string | null;
   evidenceAt?: string | null;
+}
+
+export interface AssessmentAnswerInput {
+  questionId: string;
+  value: string | number | null;
+  notes?: string | null;
+  evidenceStatus?: "answered" | "not_applicable";
+  evidenceReasonText?: string | null;
 }
 
 export interface StageRun {

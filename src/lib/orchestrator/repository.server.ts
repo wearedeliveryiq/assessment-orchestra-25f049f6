@@ -170,6 +170,76 @@ export async function createExecution(input: {
   return execution;
 }
 
+export async function ensureCompletedCollectionExecution(input: {
+  assessmentSessionId: string;
+  ownerKey: string;
+  organisationName: string;
+  assessmentRevision: number;
+  knowledgePackId: string;
+  knowledgePackVersion: string;
+  questionSetId: string;
+  questionSetVersion: string;
+  questionManifestDigest: string;
+  configurationSetId: string;
+}): Promise<Execution> {
+  const existingRows = unwrap<ExecutionRow[]>(
+    await executions()
+      .select("*")
+      .eq("assessment_session_id", input.assessmentSessionId)
+      .eq("pipeline_id", "delivery-dna-collection")
+      .eq("knowledge_pack_id", input.knowledgePackId)
+      .eq("knowledge_pack_version", input.knowledgePackVersion)
+      .eq("metadata->>assessmentRevision", String(input.assessmentRevision))
+      .limit(1),
+  );
+  if (existingRows[0]) return toExecution(existingRows[0]);
+
+  const completedAt = new Date().toISOString();
+  const insert = await executions()
+    .insert({
+      assessment_session_id: input.assessmentSessionId,
+      owner_key: input.ownerKey,
+      organisation_name: input.organisationName,
+      knowledge_pack_id: input.knowledgePackId,
+      knowledge_pack_version: input.knowledgePackVersion,
+      pipeline_id: "delivery-dna-collection",
+      pipeline_version: "1.0.0",
+      status: "completed",
+      progress: 100,
+      started_at: completedAt,
+      completed_at: completedAt,
+      heartbeat_at: completedAt,
+      execution_mode: "triggered",
+      correlation_id: crypto.randomUUID(),
+      metadata: {
+        assessmentRevision: input.assessmentRevision,
+        questionSetId: input.questionSetId,
+        questionSetVersion: input.questionSetVersion,
+        questionManifestDigest: input.questionManifestDigest,
+        configurationSetId: input.configurationSetId,
+        purpose: "immutable-analysis-input-provenance",
+      },
+    })
+    .select("*")
+    .single();
+  if (!insert.error) return toExecution(insert.data as ExecutionRow);
+
+  // A concurrent double-submit may win the partial unique index. Re-read the
+  // immutable record rather than creating a second provenance execution.
+  const raced = unwrap<ExecutionRow | null>(
+    await executions()
+      .select("*")
+      .eq("assessment_session_id", input.assessmentSessionId)
+      .eq("pipeline_id", "delivery-dna-collection")
+      .eq("knowledge_pack_id", input.knowledgePackId)
+      .eq("knowledge_pack_version", input.knowledgePackVersion)
+      .eq("metadata->>assessmentRevision", String(input.assessmentRevision))
+      .maybeSingle(),
+  );
+  if (!raced) throw new Error(insert.error.message);
+  return toExecution(raced);
+}
+
 export async function updateExecution(
   id: string,
   patch: Partial<ExecutionRow>,

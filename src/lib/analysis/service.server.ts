@@ -1,8 +1,6 @@
 import * as assessmentRepo from "../assessment/repository.server";
 import type { AssessmentResponse, AssessmentSession } from "../assessment/types";
 import { componentDigests, sprint03Configuration } from "../delivery-intelligence/config";
-import { knowledgePackLoader } from "../knowledge-packs/loader.server";
-import type { KnowledgePackDocument } from "../knowledge-packs/schema";
 import * as executionRepo from "../orchestrator/repository.server";
 import type { Execution } from "../orchestrator/types";
 import {
@@ -11,6 +9,8 @@ import {
   hashAnalysisInput,
   normaliseAnalysisInput,
 } from "./normalizer";
+import type { AnalysisQuestionSet } from "./normalizer";
+import { loadAnalysisQuestionSet } from "./question-set.server";
 import * as analysisRepo from "./repository.server";
 import type { AnalysisRequestedMode, AssessmentAnalysisRun } from "./types";
 
@@ -43,7 +43,7 @@ export interface AnalysisDependencies {
   getSession(id: string, ownerKey: string): Promise<AssessmentSession | null>;
   getResponses(id: string): Promise<AssessmentResponse[]>;
   findCompletedExecution(id: string, ownerKey: string): Promise<Execution | null>;
-  loadPack(id: string, version: string): KnowledgePackDocument;
+  loadPack(id: string, version: string): AnalysisQuestionSet;
   findRun(
     key: string,
     tenant: { organisationId: string; workspaceId: string },
@@ -72,7 +72,7 @@ const dependencies: AnalysisDependencies = {
   getSession: assessmentRepo.getSession,
   getResponses: assessmentRepo.getResponses,
   findCompletedExecution: executionRepo.findCompletedExecutionForSession,
-  loadPack: (id, version) => knowledgePackLoader.load(id, version),
+  loadPack: loadAnalysisQuestionSet,
   findRun: analysisRepo.findByIdempotencyKey,
   getRun: analysisRepo.getRun,
   latestRun: analysisRepo.latestForSession,
@@ -114,7 +114,7 @@ export class AssessmentAnalysisService {
         "ANALYSIS_VERSION_UNAVAILABLE",
       );
     }
-    let pack: KnowledgePackDocument;
+    let pack: AnalysisQuestionSet;
     try {
       pack = this.deps.loadPack(execution.knowledgePackId, execution.knowledgePackVersion);
     } catch {

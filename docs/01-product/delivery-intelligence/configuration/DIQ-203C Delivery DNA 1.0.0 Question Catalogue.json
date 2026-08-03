@@ -1,0 +1,498 @@
+{
+  "document": {
+    "id": "DIQ-203C",
+    "version": "1.0.0",
+    "status": "locked",
+    "title": "Delivery DNA 1.0.0 Question Catalogue",
+    "owner": "Product Owner",
+    "approvalAuthority": "Product Owner and Chief Solution Architect",
+    "approvedAt": "2026-08-03",
+    "locale": "en-GB",
+    "configurationSetId": "sprint03-product-config-1.0.0"
+  },
+  "identity": {
+    "assessmentType": "delivery-dna",
+    "knowledgePackId": "delivery-dna",
+    "knowledgePackVersion": "1.0.0",
+    "questionSetId": "delivery-dna",
+    "questionSetVersion": "1.0.0",
+    "questionCount": 39,
+    "manifestPolicy": "exact_set_equality_with_DIQ-203A_1.0.0"
+  },
+  "journey": {
+    "title": "Delivery DNA assessment",
+    "introduction": "Delivery DNA looks at how your organisation enables, manages and learns from delivery. Answer for how things work today, using the best evidence available.",
+    "instructions": "Choose the option that most closely reflects your organisation today. Consider relevant delivery activity across the organisation, not one exceptional project. If you cannot support a response, leave it unanswered rather than estimate. Use Not applicable only where the question genuinely does not apply and explain why.",
+    "dimensionLabels": {
+      "foundation": "Foundation",
+      "practice": "Practice",
+      "evidence": "Evidence"
+    },
+    "dimensionInstructions": {
+      "foundation": "Consider whether the necessary purpose, ownership, roles and agreed approach are clearly established and current.",
+      "practice": "Consider what routinely happens across relevant delivery activity, not isolated examples or stated intent.",
+      "evidence": "Consider recent, verifiable records, decisions, measures or outcomes rather than confidence or anecdote alone."
+    },
+    "responseScale": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "options": [
+        {
+          "value": 1,
+          "id": "not_in_place",
+          "label": "Not in place",
+          "description": "Little or no consistent evidence is available."
+        },
+        {
+          "value": 2,
+          "id": "emerging",
+          "label": "Emerging",
+          "description": "Some examples exist, but they are informal, isolated or inconsistent."
+        },
+        {
+          "value": 3,
+          "id": "defined",
+          "label": "Defined",
+          "description": "An agreed approach exists and is used in important areas, but application varies."
+        },
+        {
+          "value": 4,
+          "id": "consistent",
+          "label": "Consistent",
+          "description": "The approach is used consistently across most relevant delivery activity and is supported by current evidence."
+        },
+        {
+          "value": 5,
+          "id": "embedded",
+          "label": "Embedded",
+          "description": "The approach is embedded across relevant delivery activity, reviewed and improved using evidence."
+        }
+      ]
+    },
+    "evidenceStatusPresentation": {
+      "answered": {
+        "customerSelectable": true,
+        "label": "Answered",
+        "valueRequired": true,
+        "scoreTreatment": "eligible"
+      },
+      "not_applicable": {
+        "customerSelectable": true,
+        "label": "Not applicable",
+        "reasonCode": "customer_declared_not_applicable",
+        "reasonTextRequired": true,
+        "reasonPrompt": "Briefly explain why this question does not apply to your organisation.",
+        "scoreTreatment": "non_contributing",
+        "customerHelp": "Use this only when the question genuinely does not apply. It is not scored and may limit the result."
+      },
+      "missing": {
+        "customerSelectable": false,
+        "generatedWhen": "question_has_no_answer_at_completion",
+        "label": "Not answered",
+        "scoreTreatment": "non_contributing",
+        "customerHelp": "This question is not scored. Missing required evidence may reduce confidence or make part of the result unavailable."
+      },
+      "excluded": {
+        "customerSelectable": false,
+        "label": "Excluded from this result",
+        "scoreTreatment": "non_contributing",
+        "reasonLabels": {
+          "superseded": "Replaced by a later response",
+          "invalidated": "Marked invalid during review",
+          "duplicate": "Duplicate response",
+          "quality_review": "Excluded following quality review"
+        }
+      }
+    },
+    "completionPolicy": {
+      "exactManifestRequired": true,
+      "allowCompletionWithMissingEvidence": true,
+      "missingAcknowledgementRequired": true,
+      "missingAcknowledgement": "Some questions are not answered. You can complete the assessment, but this may limit the results and reduce confidence.",
+      "notApplicableReasonRequired": true,
+      "excludedIsCustomerSelectable": false,
+      "reviewAnswersBeforeCompletion": true
+    },
+    "displayOrder": "capability_order_then_foundation_practice_evidence"
+  },
+  "capabilities": [
+    {
+      "id": "strategy_alignment",
+      "label": "Strategy and Alignment",
+      "order": 1,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.strategy_alignment.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are the organisation's delivery priorities and intended outcomes defined and connected to its strategy?"
+        },
+        {
+          "id": "ddna.strategy_alignment.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are delivery decisions and trade-offs made using those strategic priorities and intended outcomes?"
+        },
+        {
+          "id": "ddna.strategy_alignment.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently can leaders see evidence that delivery activity is contributing to the intended strategic outcomes?"
+        }
+      ]
+    },
+    {
+      "id": "governance",
+      "label": "Governance and Decision-Making",
+      "order": 2,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.governance.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are decision rights, governance forums and escalation routes defined for delivery?"
+        },
+        {
+          "id": "ddna.governance.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently do governance forums make timely decisions, resolve issues and hold delivery to account?"
+        },
+        {
+          "id": "ddna.governance.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that governance decisions are recorded, acted on and followed through?"
+        }
+      ]
+    },
+    {
+      "id": "sponsorship",
+      "label": "Executive Sponsorship and Accountability",
+      "order": 3,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.sponsorship.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are executive sponsors, their responsibilities and accountabilities defined for delivery?"
+        },
+        {
+          "id": "ddna.sponsorship.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently do executive sponsors provide direction, remove barriers and own key decisions?"
+        },
+        {
+          "id": "ddna.sponsorship.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that sponsor actions and decisions are followed through in delivery?"
+        }
+      ]
+    },
+    {
+      "id": "portfolio",
+      "label": "Portfolio Direction and Prioritisation",
+      "order": 4,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.portfolio.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are portfolio objectives, prioritisation criteria and investment boundaries defined?"
+        },
+        {
+          "id": "ddna.portfolio.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently is work prioritised, started, stopped or rebalanced using agreed criteria and available capacity?"
+        },
+        {
+          "id": "ddna.portfolio.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that portfolio choices reflect strategic value, constraints and delivery performance?"
+        }
+      ]
+    },
+    {
+      "id": "programme_delivery",
+      "label": "Programme Delivery",
+      "order": 5,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.programme_delivery.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are programme outcomes, governance, dependencies and delivery approach defined?"
+        },
+        {
+          "id": "ddna.programme_delivery.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are programme-level dependencies, risks, decisions and delivery plans actively managed?"
+        },
+        {
+          "id": "ddna.programme_delivery.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that programmes are progressing against agreed outcomes, milestones and dependencies?"
+        }
+      ]
+    },
+    {
+      "id": "project_delivery",
+      "label": "Project Delivery",
+      "order": 6,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.project_delivery.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are project outcomes, scope, responsibilities and delivery approach defined?"
+        },
+        {
+          "id": "ddna.project_delivery.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are projects planned, monitored, adapted and closed using agreed controls?"
+        },
+        {
+          "id": "ddna.project_delivery.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that projects deliver agreed outputs and outcomes within understood constraints?"
+        }
+      ]
+    },
+    {
+      "id": "planning_controls",
+      "label": "Planning and Controls",
+      "order": 7,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.planning_controls.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are planning standards, baselines, controls and change tolerances defined?"
+        },
+        {
+          "id": "ddna.planning_controls.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are plans maintained, forecasts updated and changes controlled using current information?"
+        },
+        {
+          "id": "ddna.planning_controls.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there reliable evidence of progress, forecast accuracy, changes and corrective action?"
+        }
+      ]
+    },
+    {
+      "id": "benefits",
+      "label": "Benefits Realisation",
+      "order": 8,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.benefits.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are intended benefits, measures, owners and realisation timescales defined?"
+        },
+        {
+          "id": "ddna.benefits.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are benefits tracked, reviewed and acted on through delivery and after implementation?"
+        },
+        {
+          "id": "ddna.benefits.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that benefit measures are being achieved or that corrective action is taken?"
+        }
+      ]
+    },
+    {
+      "id": "risk_assurance",
+      "label": "Risk and Assurance",
+      "order": 9,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.risk_assurance.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are delivery risk, assurance, control and escalation expectations defined?"
+        },
+        {
+          "id": "ddna.risk_assurance.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are risks, assumptions, issues and assurance findings identified, challenged and acted on?"
+        },
+        {
+          "id": "ddna.risk_assurance.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that material risks and assurance actions are current, owned and resolved or accepted?"
+        }
+      ]
+    },
+    {
+      "id": "stakeholder_change",
+      "label": "Stakeholder and Change Leadership",
+      "order": 10,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.stakeholder_change.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are affected stakeholders, change impacts, engagement needs and adoption outcomes defined?"
+        },
+        {
+          "id": "ddna.stakeholder_change.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are stakeholders engaged and change impacts prepared for, supported and monitored?"
+        },
+        {
+          "id": "ddna.stakeholder_change.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence of stakeholder understanding, adoption and sustained use of delivered changes?"
+        }
+      ]
+    },
+    {
+      "id": "pmo_enablement",
+      "label": "PMO Enablement",
+      "order": 11,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.pmo_enablement.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are the PMO's purpose, service offer, authority and relationship with delivery teams defined?"
+        },
+        {
+          "id": "ddna.pmo_enablement.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently does the PMO provide proportionate support, challenge, coordination and standards?"
+        },
+        {
+          "id": "ddna.pmo_enablement.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that PMO services are used and associated with clearer decisions, visibility and delivery discipline?"
+        }
+      ]
+    },
+    {
+      "id": "reporting_insight",
+      "label": "Reporting and Delivery Insight",
+      "order": 12,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.reporting_insight.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are reporting purposes, measures, ownership and data standards defined?"
+        },
+        {
+          "id": "ddna.reporting_insight.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently is delivery information updated, validated and used in decisions?"
+        },
+        {
+          "id": "ddna.reporting_insight.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that reports are timely, reliable and provide actionable insight rather than activity-only updates?"
+        }
+      ]
+    },
+    {
+      "id": "continuous_improvement",
+      "label": "Continuous Improvement",
+      "order": 13,
+      "weight": 1,
+      "questions": [
+        {
+          "id": "ddna.continuous_improvement.f",
+          "dimension": "foundation",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How clearly are improvement responsibilities, feedback routes and learning expectations defined?"
+        },
+        {
+          "id": "ddna.continuous_improvement.p",
+          "dimension": "practice",
+          "weight": 0.4,
+          "required": true,
+          "prompt": "How consistently are delivery lessons, performance signals and feedback translated into agreed improvements?"
+        },
+        {
+          "id": "ddna.continuous_improvement.e",
+          "dimension": "evidence",
+          "weight": 0.3,
+          "required": true,
+          "prompt": "How consistently is there evidence that improvement actions are completed, reviewed and embedded in subsequent delivery?"
+        }
+      ]
+    }
+  ]
+}

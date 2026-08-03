@@ -16,6 +16,22 @@
 
 Evidence baseline: branch `agent/sprint-03-foundation`, 2 August 2026.
 
+## PDR-003-003 — Delivery DNA 1.0.0 collection journey
+
+| Requirement                            | Status                     | Implementation and test evidence                                                                                                                                                                                                     |
+| -------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Exact locked wording and manifest      | PASS                       | `src/lib/delivery-dna/catalogue.ts` validates the unchanged DIQ-203C document against DIQ-203A; `tests/delivery-dna-journey.test.ts` proves 13 capabilities and 39 unique mapped IDs.                                                |
+| New journey; no legacy relabelling     | PASS                       | Home creates explicit `delivery-dna` sessions; the legacy questionnaire and `delivery-maturity` default remain intact. Existing legacy ineligibility regression passes.                                                              |
+| Five answer values                     | PASS                       | Accessible radio controls render the exact labels/descriptions and server validation accepts only integers 1–5.                                                                                                                      |
+| Not applicable                         | PASS                       | Customer-selectable radio plus mandatory 1–500 character reason; stable `customer_declared_not_applicable` code persisted and passed to canonical analysis.                                                                          |
+| Missing evidence                       | PASS                       | Completion is permitted only after the locked acknowledgement; absent manifest entries are persisted as explicit `missing` and never scored.                                                                                         |
+| Excluded evidence                      | PASS                       | Not exposed as a customer action; authorised stored exclusions retain the DIQ-203 approved-reason validation.                                                                                                                        |
+| Review and completion                  | PASS                       | Dedicated review state precedes completion; completed sessions become read-only and navigate directly to Delivery Intelligence preparation.                                                                                          |
+| Identity and immutable provenance      | PASS                       | Session metadata pins the full identity tuple, manifest and digest; `delivery-dna-collection` execution is one-per-revision input and immutable after completion.                                                                    |
+| Automatic eligible hand-off            | PASS (LOCAL)               | Genuine 39-ID input reaches deterministic eligibility and the shared analysis core; existing outbox, hand-off and analysis regressions pass. Hosted execution awaits the two Lovable-managed migrations and deployment.              |
+| Authentication and tenant isolation    | PASS                       | Existing authenticated tenant context remains the only API envelope; completed execution and analysis use the stored owner, organisation, workspace and revision. Cross-tenant regressions pass.                                     |
+| Accessibility and responsive structure | PASS WITH DEPLOYMENT CHECK | Semantic fieldsets, legends, radio names, labelled reason text, review acknowledgement and keyboard-sized controls are present; local landing smoke passed. Authenticated narrow-screen production check remains part of deployment. |
+
 | Story  | Status | Implementation and acceptance evidence                                                                                                                                                     |
 | ------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | S3-001 | PASS   | Canonical snapshot, locked config digest, immutable/idempotent run, event lifecycle, lease/concurrency and bounded 5s/30s retries. `assessment-analysis`, `analysis-executor` tests.       |
@@ -35,16 +51,16 @@ Evidence baseline: branch `agent/sprint-03-foundation`, 2 August 2026.
 
 ## PDR-003-001 automatic analysis trigger
 
-| Criterion                   | Status               | Evidence                                                                                                                                                 |
-| --------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Automatic durable hand-off  | PASS                 | Completion transition trigger writes a unique tenant-scoped outbox record in the completion transaction; runtime schedules processing only after commit. |
-| Duplicate/concurrent safety | PASS                 | Unique revision/configuration/mode key, `FOR UPDATE SKIP LOCKED`, locked DIQ-203 derived idempotency key and double-click tests.                         |
-| Completion durability       | PASS                 | Hand-off processing is separate and failure updates only the outbox; completed assessment rows are never rolled back.                                    |
-| Reconciliation              | PASS                 | Native one-minute Nitro task and generated Cloudflare cron trigger, protected operational endpoint and bounded database reconciliation function.         |
-| UX states                   | PASS                 | Accessible preparing, queued/running, completed, retryable failure, non-retryable failure and missing-after-15s states; no normal-path generate action.  |
-| Authorised retry            | PASS                 | Tenant-scoped write context, same idempotent request contract, atomic failed-run retry and disabled in-flight button.                                    |
-| Audit and redaction         | PASS                 | Append-only tenant-scoped hand-off events contain IDs, versions, correlation and safe codes only; no raw evidence.                                       |
-| Hosted completion-to-result | PASS WITH LIMITATION | Published authenticated ineligible journey passed. Eligible customer E2E awaits an approved Delivery DNA 1.0.0 collection journey.                       |
+| Criterion                   | Status             | Evidence                                                                                                                                                                     |
+| --------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Automatic durable hand-off  | PASS               | Completion transition trigger writes a unique tenant-scoped outbox record in the completion transaction; runtime schedules processing only after commit.                     |
+| Duplicate/concurrent safety | PASS               | Unique revision/configuration/mode key, `FOR UPDATE SKIP LOCKED`, locked DIQ-203 derived idempotency key and double-click tests.                                             |
+| Completion durability       | PASS               | Hand-off processing is separate and failure updates only the outbox; completed assessment rows are never rolled back.                                                        |
+| Reconciliation              | PASS               | Native one-minute Nitro task and generated Cloudflare cron trigger, protected operational endpoint and bounded database reconciliation function.                             |
+| UX states                   | PASS               | Accessible preparing, queued/running, completed, retryable failure, non-retryable failure and missing-after-15s states; no normal-path generate action.                      |
+| Authorised retry            | PASS               | Tenant-scoped write context, same idempotent request contract, atomic failed-run retry and disabled in-flight button.                                                        |
+| Audit and redaction         | PASS               | Append-only tenant-scoped hand-off events contain IDs, versions, correlation and safe codes only; no raw evidence.                                                           |
+| Hosted completion-to-result | PENDING DEPLOYMENT | The approved Delivery DNA collection journey is implemented and locally verified. Apply migrations, deploy, then record one authorised genuine completion-to-result journey. |
 
 ## Golden fixture register
 
@@ -52,21 +68,21 @@ All 53 locked DIQ-203B fixtures execute by identifier in `tests/sprint03-golden.
 
 ## Sprint-wide gates
 
-| Gate                                      | Status               | Evidence                                                                                                                                    |
-| ----------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Locked configuration and golden data      | PASS                 | Central Zod validation and digest; 53/53 locked fixtures                                                                                    |
-| Formatting, lint and type checking        | PASS                 | Changed-file Prettier/ESLint and TypeScript `--noEmit`                                                                                      |
-| Unit, integration, failure and edge cases | PASS                 | 27 files, 282 tests                                                                                                                         |
-| Determinism and immutability              | PASS                 | Ordering-invariance, immutable result publication and database mutation triggers                                                            |
-| Idempotency, concurrency and retry        | PASS                 | Unique idempotency key, atomic claim/lease, retry cap and approved backoff tests                                                            |
-| Tenant/workspace isolation                | PASS                 | Tenant-bound API/service/repository queries and cross-scope trace rejection                                                                 |
-| Visible lineage                           | PASS                 | Publication rejects incomplete trace; every visible trace node requires evidence path                                                       |
-| Public schema leakage                     | PASS                 | Exact allow-list projection and forbidden-key recursive tests                                                                               |
-| Accessibility                             | PASS                 | Semantic headings/lists, labelled states, keyboard-sized controls and live/error regions                                                    |
-| Performance                               | PASS                 | Deterministic local engine/narrative performance tests remain well below PB-003 processing limits                                           |
-| Production build                          | PASS                 | Vite/Nitro client and server build                                                                                                          |
-| Hosted migration/E2E rehearsal            | PASS WITH LIMITATION | Migrations, RLS, remediation and authenticated ineligible smoke verified; eligible E2E awaits the governed Delivery DNA collection journey. |
+| Gate                                      | Status             | Evidence                                                                                                                                      |
+| ----------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Locked configuration and golden data      | PASS               | Central Zod validation and digest; 53/53 locked fixtures                                                                                      |
+| Formatting, lint and type checking        | PASS               | Changed-file Prettier/ESLint and TypeScript `--noEmit`                                                                                        |
+| Unit, integration, failure and edge cases | PASS               | 44 files, 572 tests                                                                                                                           |
+| Determinism and immutability              | PASS               | Ordering-invariance, immutable result publication and database mutation triggers                                                              |
+| Idempotency, concurrency and retry        | PASS               | Unique idempotency key, atomic claim/lease, retry cap and approved backoff tests                                                              |
+| Tenant/workspace isolation                | PASS               | Tenant-bound API/service/repository queries and cross-scope trace rejection                                                                   |
+| Visible lineage                           | PASS               | Publication rejects incomplete trace; every visible trace node requires evidence path                                                         |
+| Public schema leakage                     | PASS               | Exact allow-list projection and forbidden-key recursive tests                                                                                 |
+| Accessibility                             | PASS               | Semantic headings/lists, labelled states, keyboard-sized controls and live/error regions                                                      |
+| Performance                               | PASS               | Deterministic local engine/narrative performance tests remain well below PB-003 processing limits                                             |
+| Production build                          | PASS               | Vite/Nitro client and server build                                                                                                            |
+| Hosted migration/E2E rehearsal            | PENDING DEPLOYMENT | Existing hosted migrations remain verified; PDR-003-003 migrations and one authorised eligible customer journey remain to be run after merge. |
 
 ## Final Product Owner Decision
 
-Sprint 03 is **ACCEPTED WITH RECORDED LIMITATIONS** under `docs/07-release/SAR-003 Sprint 03 Product Acceptance.md`. The inherited repository-wide lint baseline and unavailable Delivery DNA 1.0.0 collection journey are recorded limitations. Neither permits weakening PDR-003-002 or enabling the future collection journey before its production end-to-end gate passes.
+Sprint 03 is **ACCEPTED WITH RECORDED LIMITATIONS** under `docs/07-release/SAR-003 Sprint 03 Product Acceptance.md`. PDR-003-003 closes the Delivery DNA 1.0.0 collection implementation gap locally; its production end-to-end gate remains pending until the migrations are applied and one authorised genuine journey is verified. The inherited repository-wide lint baseline remains recorded debt and PDR-003-002 must not be weakened.

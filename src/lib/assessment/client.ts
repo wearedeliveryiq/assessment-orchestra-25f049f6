@@ -2,6 +2,7 @@ import type {
   AssessmentDetail,
   AssessmentResults,
   AssessmentSession,
+  AssessmentAnswerInput,
   RuntimeStatus,
 } from "./types";
 import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
@@ -25,7 +26,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const assessmentApi = {
   list: () => request<{ sessions: AssessmentSession[] }>(""),
-  create: (input: { organisationName: string; contactName?: string | null }) =>
+  create: (input: {
+    organisationName: string;
+    contactName?: string | null;
+    assessmentType?: string;
+  }) =>
     request<{ session: AssessmentSession }>("", {
       method: "POST",
       body: JSON.stringify(input),
@@ -34,12 +39,19 @@ export const assessmentApi = {
   save: (
     id: string,
     body: {
-      answers?: { questionId: string; value: number | string | null; notes?: string | null }[];
+      answers?: AssessmentAnswerInput[];
       currentSection?: string | null;
       organisationName?: string;
     },
   ) => request<AssessmentDetail>(`/${id}`, { method: "PUT", body: JSON.stringify(body) }),
-  submit: (id: string) => request<RuntimeStatus>(`/${id}/submit`, { method: "POST" }),
+  submit: (
+    id: string,
+    options: { reviewAcknowledged?: boolean; missingAcknowledged?: boolean } = {},
+  ) =>
+    request<RuntimeStatus>(`/${id}/submit`, {
+      method: "POST",
+      body: JSON.stringify(options),
+    }),
   advance: (id: string) => request<RuntimeStatus>(`/${id}/advance`, { method: "POST" }),
   retry: (id: string) => request<RuntimeStatus>(`/${id}/retry`, { method: "POST" }),
   status: (id: string) => request<RuntimeStatus>(`/${id}/status`),
