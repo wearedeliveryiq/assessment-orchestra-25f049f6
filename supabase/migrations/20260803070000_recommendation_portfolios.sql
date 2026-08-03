@@ -274,11 +274,11 @@ BEGIN
      OR (p_input #>> '{canonical_portfolio,summary,blockedCount}')::integer <> v_blocked_count
      OR (p_input #>> '{canonical_portfolio,summary,capacityExceededCount}')::integer
         <> v_capacity_exceeded_count
-     OR p_input ->> 'portfolio_state' <> CASE
+     OR p_input ->> 'portfolio_state' <> (CASE
        WHEN v_expected_count = 0 THEN 'empty'
        WHEN v_expected_count = v_scheduled_count THEN 'complete'
        ELSE 'partial'
-     END THEN
+     END) THEN
     RAISE EXCEPTION 'PORTFOLIO_PUBLICATION_FAILED';
   END IF;
 

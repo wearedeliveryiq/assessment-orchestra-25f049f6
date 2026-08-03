@@ -171,6 +171,24 @@ const recommendationPortfolioHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationPortfolioRepair = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803072000_repair_recommendation_portfolio_publisher.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationDecisionMigration = readFileSync(
+  new URL("../supabase/migrations/20260803080000_recommendation_decisions.sql", import.meta.url),
+  "utf8",
+);
+const recommendationDecisionHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803081000_harden_recommendation_decision_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -509,6 +527,42 @@ describe("Sprint 03 migration security", () => {
     expect(recommendationPortfolioHardening).toContain("REVOKE MAINTAIN");
     expect(recommendationPortfolioHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.publish_recommendation_portfolio(jsonb) TO service_role",
+    );
+    expect(recommendationPortfolioMigration).toContain("p_input ->> 'portfolio_state' <> (CASE");
+    expect(recommendationPortfolioRepair).toContain(
+      "a2f0a464281c3fe76110af94ac7ae573bb1be05ba5aa58f0205fe83e6a27988e",
+    );
+    expect(recommendationPortfolioRepair).toContain(
+      "9739e3def0f39053bb058d718c993a1519290275da4ba93cf79d75743ceba043",
+    );
+    expect(recommendationPortfolioRepair).toContain("DROP TABLE public._s4_007_fn_parts");
+  });
+
+  it("records tenant-scoped decisions as an immutable audited overlay", () => {
+    expect(recommendationDecisionMigration).toContain("recommendation_decision_events_immutable");
+    expect(recommendationDecisionMigration).toContain("recommendation_decision_event_scope");
+    expect(recommendationDecisionMigration).toContain(
+      "v_portfolio.catalogue_digest <> NEW.catalogue_digest",
+    );
+    expect(recommendationDecisionMigration).toContain("recommendation_item_decisions_governed");
+    expect(recommendationDecisionMigration).toContain(
+      "UNIQUE (organisation_id, workspace_id, idempotency_key)",
+    );
+    expect(recommendationDecisionMigration).toContain(
+      "coalesce(v_current.decision_version, 0) <> v_expected_version",
+    );
+    expect(recommendationDecisionMigration).toContain("RECOMMENDATION_DECISION_VERSION_CONFLICT");
+    expect(recommendationDecisionMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationDecisionMigration).toContain("membership.user_id = v_actor_user_id");
+    expect(recommendationDecisionMigration).toContain("v_command = 'superseded'");
+    expect(recommendationDecisionMigration).not.toContain("CREATE POLICY");
+    expect(recommendationDecisionHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationDecisionHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationDecisionHardening).toContain(
+      "REVOKE EXECUTE ON FUNCTION public.enforce_recommendation_decision_event_scope()",
+    );
+    expect(recommendationDecisionHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.record_recommendation_item_decision(jsonb) TO service_role",
     );
   });
 });

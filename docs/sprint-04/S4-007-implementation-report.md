@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-007-recommendation-portfolio`. Application verification is complete; Lovable Cloud migration execution and live schema verification remain deployment gates.
+Implemented and merged. The live Lovable schema is deployed and hardened. During deployment, PostgreSQL exposed an ambiguous unparenthesised `CASE` expression in the publisher's validation condition; the expression is now parenthesised without changing its logic, the exact repaired function body is digest-verified, and the temporary locked staging artefact has been removed.
 
 ## Architecture and reuse
 
@@ -57,6 +57,7 @@ The public projection contains only portfolio state and recommendation count. It
 - `src/routes/api/recommendation-portfolios.$id.ts`
 - `supabase/migrations/20260803070000_recommendation_portfolios.sql`
 - `supabase/migrations/20260803071000_harden_recommendation_portfolio_permissions.sql`
+- `supabase/migrations/20260803072000_repair_recommendation_portfolio_publisher.sql`
 - `tests/recommendation-portfolio.test.ts`
 - `docs/sprint-04/S4-007-deployment-runbook.md`
 
@@ -95,10 +96,10 @@ The public projection contains only portfolio state and recommendation count. It
 - Full-repository ESLint remains a recorded inherited limitation: 6,336 errors and 15 warnings outside the S4-007 changed scope.
 - Production Vite/Nitro build passed after final documentation.
 - The 250-item performance fixture completed inside the two-second portfolio target.
+- Live publisher verification passed: exact repaired body digest `9739e3def0f39053bb058d718c993a1519290275da4ba93cf79d75743ceba043`, `SECURITY DEFINER`, fixed `public, pg_temp` search path, service-role-only execution, no client table access, zero portfolio rows, and no residual staging table.
 
 ## Known limitations and deployment gates
 
-- Apply and verify both migrations through Lovable Cloud in timestamp order; local CLI migration execution remains unavailable for the Lovable-managed database.
 - Production has no eligible completed analysis/intelligence result, so live portfolio creation, replay, ETag, redaction, and cross-tenant smoke tests remain unavailable rather than manufacturing customer evidence.
 - S4-012 owns the interactive recommendation experience. S4-007 supplies accessible semantic response structures but introduces no new visual workflow.
 

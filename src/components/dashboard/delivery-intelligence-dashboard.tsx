@@ -5,11 +5,12 @@ import {
   fetchLatestIntelligence,
   fetchAnalysisStatus,
   retryAnalysis,
-  acceptIntelligenceRecommendation,
   fetchIntelligenceExplanation,
   type WorkspaceIntelligenceResult,
 } from "@/lib/delivery-intelligence/client";
+import { RecommendationPortfolioSection } from "@/components/dashboard/recommendation-portfolio-section";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { fetchRecommendationPortfolio } from "@/lib/recommendation-decisions/client";
 
 export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: string }) {
   const hydrated = useHydrated();
@@ -44,11 +45,11 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
       await queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] });
     },
   });
-  const acceptance = useMutation({
-    mutationFn: (recommendationId: string) =>
-      acceptIntelligenceRecommendation(query.data!.analysisRunId, recommendationId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] }),
+  const portfolioQuery = useQuery({
+    queryKey: ["recommendation-portfolio", query.data?.analysisRunId],
+    queryFn: () => fetchRecommendationPortfolio(query.data!.analysisRunId),
+    enabled: Boolean(query.data?.analysisRunId),
+    staleTime: 60_000,
   });
   const explanation = useQuery({
     queryKey: ["delivery-intelligence-explanation", query.data?.analysisRunId, conclusionId],
@@ -303,39 +304,18 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           </p>
         )}
       </section>
-      <section className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="text-xl font-semibold">Prioritised recommendations</h2>
-        {result.recommendations.length ? (
-          <ol className="mt-4 space-y-3">
-            {result.recommendations.map((item, index) => (
-              <li key={item.id} className="rounded-xl border border-border/70 p-4">
-                <div className="flex gap-3">
-                  <span className="font-semibold text-primary">{index + 1}</span>
-                  <div>
-                    <h3 className="font-medium">{item.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{item.outcome}</p>
-                    <p className="mt-2 text-xs capitalize text-muted-foreground">
-                      {item.impact} impact · {item.effort} effort
-                    </p>
-                    <button
-                      type="button"
-                      className="mt-3 min-h-11 rounded-lg border border-border px-3 text-sm font-medium"
-                      disabled={acceptance.isPending}
-                      onClick={() => acceptance.mutate(item.id)}
-                    >
-                      Accept recommendation
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ol>
-        ) : (
+      {portfolioQuery.data ? (
+        <RecommendationPortfolioSection portfolio={portfolioQuery.data} />
+      ) : (
+        <section aria-live="polite" className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            No action meets the approved recommendation rules.
+            {portfolioQuery.error
+              ? "The governed recommendation portfolio is temporarily unavailable. No customer decision has been changed."
+              : "Preparing your governed recommendation portfolio…"}
           </p>
-        )}
-      </section>
+        </section>
+      )}
       <ProductPanel
         title="Recommended Knowledge Packs"
         items={result.productRecommendations.knowledgePacks}
