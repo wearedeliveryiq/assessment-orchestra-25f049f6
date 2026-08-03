@@ -22,12 +22,7 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
     enabled: hydrated,
     refetchInterval: (query) => {
       const state = query.state.data?.state;
-      return state === "completed" ||
-        state === "failed" ||
-        state === "missing" ||
-        state === "ineligible"
-        ? false
-        : 2_000;
+      return state === "completed" || state === "failed" || state === "ineligible" ? false : 2_000;
     },
   });
   const query = useQuery({

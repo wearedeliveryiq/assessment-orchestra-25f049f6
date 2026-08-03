@@ -108,15 +108,22 @@ export class AnalysisHandoffService {
    * durable outbox row but before it has created the analysis run. Concurrent
    * completion requests remain safe because the database claim is atomic.
    */
-  async processAssessmentCompletion(assessmentId: string, context: AnalysisHandoffContext) {
+  async processAssessmentCompletion(
+    assessmentId: string,
+    context: AnalysisHandoffContext,
+    options: { reclaimProcessing?: boolean } = {},
+  ) {
     const handoff = await this.ensureForAssessment(assessmentId, context);
-    if (handoff.status !== "pending") return null;
+    const claimable =
+      handoff.status === "pending" ||
+      (options.reclaimProcessing === true && handoff.status === "processing");
+    if (!claimable) return null;
     const claimed = await this.deps.claimHandoff(handoff.id);
     if (!claimed) return null;
-    return this.processClaimed(claimed);
+    return this.processClaimed(claimed, { driveRun: false });
   }
 
-  async processClaimed(handoff: AssessmentAnalysisHandoff) {
+  async processClaimed(handoff: AssessmentAnalysisHandoff, options: { driveRun?: boolean } = {}) {
     const session = await this.deps.getSessionById(handoff.assessmentSessionId);
     if (
       !session ||
@@ -127,10 +134,10 @@ export class AnalysisHandoffService {
       throw new Error("ANALYSIS_ACCESS_DENIED");
     }
     const verifiedOwnerKey = `${session.createdByUserId}:${session.workspaceId}`;
-    const execution = await this.deps.findCompletedExecution(
-      handoff.assessmentSessionId,
-      verifiedOwnerKey,
-    );
+    const [execution, responses] = await Promise.all([
+      this.deps.findCompletedExecution(handoff.assessmentSessionId, verifiedOwnerKey),
+      this.deps.getResponses(handoff.assessmentSessionId),
+    ]);
     if (!execution) {
       throw new AnalysisServiceError(
         "Required immutable version is unavailable",
@@ -138,7 +145,6 @@ export class AnalysisHandoffService {
         "ANALYSIS_VERSION_UNAVAILABLE",
       );
     }
-    const responses = await this.deps.getResponses(handoff.assessmentSessionId);
     const evaluation = await evaluateAnalysisEligibility({
       assessmentId: session.id,
       assessmentRevision: session.assessmentRevision ?? 1,
@@ -227,6 +233,7 @@ export class AnalysisHandoffService {
       throw error;
     }
     let run = requested.run;
+    if (options.driveRun === false) return run;
     try {
       if (run.status === "failed" && run.retryable) {
         run = (await this.deps.retryRun(run.id)) ?? run;
@@ -236,6 +243,14 @@ export class AnalysisHandoffService {
       }
     } catch (error) {
       console.error("[analysis-handoff] analysis execution will retry", safeCode(error));
+    }
+    return run;
+  }
+
+  async driveLatestRun(assessmentId: string, context: AnalysisHandoffContext) {
+    const run = await this.deps.latestRun(assessmentId, context);
+    if (run && (run.status === "queued" || run.status === "running")) {
+      return (await this.deps.driveRun(run.id)) ?? run;
     }
     return run;
   }

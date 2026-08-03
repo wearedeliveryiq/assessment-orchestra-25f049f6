@@ -44,9 +44,15 @@ function contextOf(verified: Awaited<ReturnType<typeof assessmentRequestContext>
 export function getAnalysisHandoffStatus(request: Request, assessmentId: string) {
   return safe(async () => {
     const context = contextOf(await assessmentRequestContext(request));
-    const initial = await analysisHandoffService.view(assessmentId, context);
-    if (initial.state === "preparing" || initial.state === "missing") {
-      await analysisHandoffService.processPending(10);
+    let current = await analysisHandoffService.view(assessmentId, context);
+    if (current.state === "preparing" || current.state === "missing") {
+      await analysisHandoffService.processAssessmentCompletion(assessmentId, context, {
+        reclaimProcessing: true,
+      });
+      current = await analysisHandoffService.view(assessmentId, context);
+    }
+    if (current.state === "queued" || current.state === "running") {
+      await analysisHandoffService.driveLatestRun(assessmentId, context);
     }
     return json(await analysisHandoffService.view(assessmentId, context));
   });

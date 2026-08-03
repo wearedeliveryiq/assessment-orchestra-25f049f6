@@ -217,6 +217,7 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
     expect(dependencies.claimHandoff).toHaveBeenCalledWith(handoff.id);
     expect(dependencies.claimHandoffs).not.toHaveBeenCalled();
     expect(dependencies.completeHandoff).toHaveBeenCalledWith(handoff.id, run.id);
+    expect(dependencies.driveRun).not.toHaveBeenCalled();
   });
 
   it("does not reclaim a completion hand-off already owned by another worker", async () => {
@@ -228,6 +229,33 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
 
     expect(dependencies.claimHandoff).not.toHaveBeenCalled();
     expect(dependencies.requestAnalysis).not.toHaveBeenCalled();
+  });
+
+  it("reclaims a stale tenant-scoped processing hand-off during status polling", async () => {
+    const reclaimed = { ...handoff, attempt: 2 };
+    const { service, dependencies } = harness({
+      claimHandoff: vi.fn(async () => reclaimed),
+    });
+
+    await expect(
+      service.processAssessmentCompletion(session.id, context, { reclaimProcessing: true }),
+    ).resolves.toMatchObject({ id: run.id });
+
+    expect(dependencies.claimHandoff).toHaveBeenCalledWith(handoff.id);
+    expect(dependencies.completeHandoff).toHaveBeenCalledWith(handoff.id, run.id);
+    expect(dependencies.driveRun).not.toHaveBeenCalled();
+  });
+
+  it("advances the queued analysis run from authenticated status polling", async () => {
+    const queued = { ...run, status: "queued" } as AssessmentAnalysisRun;
+    const { service, dependencies } = harness({ latestRun: vi.fn(async () => queued) });
+
+    await expect(service.driveLatestRun(session.id, context)).resolves.toMatchObject({
+      status: "completed",
+    });
+
+    expect(dependencies.latestRun).toHaveBeenCalledWith(session.id, context);
+    expect(dependencies.driveRun).toHaveBeenCalledWith(run.id);
   });
 
   it("records a retryable hand-off failure without changing assessment completion", async () => {
@@ -383,6 +411,20 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
     expect(runtime).toContain("await scheduleAnalysisHandoff(");
     expect(handoffService).toContain("processAssessmentCompletion(assessmentId, context)");
     expect(handoffService).not.toContain("void analysisHandoffService.processPending");
+  });
+
+  it("keeps polling a missing hand-off so automatic recovery does not depend on Retry", () => {
+    const dashboard = readFileSync(
+      resolve(process.cwd(), "src/components/dashboard/delivery-intelligence-dashboard.tsx"),
+      "utf8",
+    );
+    const http = readFileSync(
+      resolve(process.cwd(), "src/lib/analysis/handoff-http.server.ts"),
+      "utf8",
+    );
+    expect(dashboard).not.toContain('state === "missing" ||');
+    expect(http).toContain("reclaimProcessing: true");
+    expect(http).toContain("driveLatestRun(assessmentId, context)");
   });
 
   it("keeps generation automatic and exposes only the governed retry action", () => {
