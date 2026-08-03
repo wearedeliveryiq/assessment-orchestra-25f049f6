@@ -2057,18 +2057,21 @@ export type Database = {
         Row: {
           product_id: string
           product_type: string
+          product_version: string | null
           status: string
           updated_at: string
         }
         Insert: {
           product_id: string
           product_type: string
+          product_version?: string | null
           status: string
           updated_at?: string
         }
         Update: {
           product_id?: string
           product_type?: string
+          product_version?: string | null
           status?: string
           updated_at?: string
         }
@@ -2558,6 +2561,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "organisation_memberships_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organisation_product_activations: {
+        Row: {
+          activated_at: string | null
+          organisation_id: string
+          product_id: string
+          product_type: string
+          product_version: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          organisation_id: string
+          product_id: string
+          product_type: string
+          product_version: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          organisation_id?: string
+          product_id?: string
+          product_type?: string
+          product_version?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organisation_product_activations_organisation_id_fkey"
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
@@ -5401,6 +5442,163 @@ export type Database = {
           },
         ]
       }
+      recommendation_product_handoff_events: {
+        Row: {
+          actor_user_id: string
+          event_type: Database["public"]["Enums"]["delivery_product_handoff_event_type"]
+          handoff_id: string
+          id: number
+          occurred_at: string
+          organisation_id: string
+          workspace_id: string
+        }
+        Insert: {
+          actor_user_id: string
+          event_type: Database["public"]["Enums"]["delivery_product_handoff_event_type"]
+          handoff_id: string
+          id?: never
+          occurred_at?: string
+          organisation_id: string
+          workspace_id: string
+        }
+        Update: {
+          actor_user_id?: string
+          event_type?: Database["public"]["Enums"]["delivery_product_handoff_event_type"]
+          handoff_id?: string
+          id?: never
+          occurred_at?: string
+          organisation_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_product_handoff_events_handoff_id_fkey"
+            columns: ["handoff_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_product_handoffs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoff_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoff_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_product_handoffs: {
+        Row: {
+          analysis_run_id: string
+          consent_basis: string
+          consented_at: string
+          created_at: string
+          created_by_user_id: string
+          cta: Database["public"]["Enums"]["delivery_product_handoff_cta"]
+          expires_at: string
+          id: string
+          idempotency_key: string
+          organisation_id: string
+          recommendation_id: string
+          recommendation_version: string
+          request_hash: string
+          source_action_id: string
+          source_portfolio_item_id: string
+          target_id: string
+          target_type: string
+          target_version: string
+          token_hash: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          consent_basis: string
+          consented_at: string
+          created_at?: string
+          created_by_user_id: string
+          cta: Database["public"]["Enums"]["delivery_product_handoff_cta"]
+          expires_at: string
+          id?: string
+          idempotency_key: string
+          organisation_id: string
+          recommendation_id: string
+          recommendation_version: string
+          request_hash: string
+          source_action_id: string
+          source_portfolio_item_id: string
+          target_id: string
+          target_type: string
+          target_version: string
+          token_hash: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          consent_basis?: string
+          consented_at?: string
+          created_at?: string
+          created_by_user_id?: string
+          cta?: Database["public"]["Enums"]["delivery_product_handoff_cta"]
+          expires_at?: string
+          id?: string
+          idempotency_key?: string
+          organisation_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          request_hash?: string
+          source_action_id?: string
+          source_portfolio_item_id?: string
+          target_id?: string
+          target_type?: string
+          target_version?: string
+          token_hash?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_product_handoffs_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoffs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoffs_source_action_id_fkey"
+            columns: ["source_action_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_improvement_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoffs_source_portfolio_item_id_fkey"
+            columns: ["source_portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_product_handoffs_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_resolution_candidates: {
         Row: {
           analysis_run_id: string
@@ -6943,6 +7141,37 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      consume_recommendation_product_handoff: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          consent_basis: string
+          consented_at: string
+          created_at: string
+          created_by_user_id: string
+          cta: Database["public"]["Enums"]["delivery_product_handoff_cta"]
+          expires_at: string
+          id: string
+          idempotency_key: string
+          organisation_id: string
+          recommendation_id: string
+          recommendation_version: string
+          request_hash: string
+          source_action_id: string
+          source_portfolio_item_id: string
+          target_id: string
+          target_type: string
+          target_version: string
+          token_hash: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_product_handoffs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       create_recommendation_catalogue_version: {
         Args: { p_input: Json }
         Returns: {
@@ -6961,6 +7190,37 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "recommendation_catalogue_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_recommendation_product_handoff: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          consent_basis: string
+          consented_at: string
+          created_at: string
+          created_by_user_id: string
+          cta: Database["public"]["Enums"]["delivery_product_handoff_cta"]
+          expires_at: string
+          id: string
+          idempotency_key: string
+          organisation_id: string
+          recommendation_id: string
+          recommendation_version: string
+          request_hash: string
+          source_action_id: string
+          source_portfolio_item_id: string
+          target_id: string
+          target_type: string
+          target_version: string
+          token_hash: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_product_handoffs"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -7553,6 +7813,12 @@ export type Database = {
         | "processing"
         | "completed"
         | "archived"
+      delivery_product_handoff_cta:
+        | "start_assessment"
+        | "view_pack"
+        | "review_activation"
+        | "view_teammate"
+      delivery_product_handoff_event_type: "consumed"
       identity_user_status:
         | "pending_verification"
         | "active"
@@ -7790,6 +8056,13 @@ export const Constants = {
         "completed",
         "archived",
       ],
+      delivery_product_handoff_cta: [
+        "start_assessment",
+        "view_pack",
+        "review_activation",
+        "view_teammate",
+      ],
+      delivery_product_handoff_event_type: ["consumed"],
       identity_user_status: [
         "pending_verification",
         "active",
