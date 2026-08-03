@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      _s4_007_fn_parts: {
+        Row: {
+          i: number
+          s: string
+        }
+        Insert: {
+          i: number
+          s: string
+        }
+        Update: {
+          i?: number
+          s?: string
+        }
+        Relationships: []
+      }
       analysis_recommendation_acceptances: {
         Row: {
           accepted_at: string
@@ -4173,6 +4188,337 @@ export type Database = {
           },
         ]
       }
+      recommendation_portfolio_items: {
+        Row: {
+          analysis_run_id: string
+          blocking_dependency_ids: Json
+          catalogue_order: number
+          caveats: Json
+          confidence_caveat: string | null
+          confidence_result: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          confidence_state: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at: string
+          dependencies: Json
+          effort: string
+          generated_horizon:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank: number
+          generated_sequence: number | null
+          id: string
+          impact: string
+          matched_triggers: Json
+          organisation_id: string
+          outcome: string
+          portfolio_id: string
+          portfolio_order: number
+          primary_class: Database["public"]["Enums"]["recommendation_portfolio_class"]
+          priority_item_id: string
+          priority_label: Database["public"]["Enums"]["recommendation_priority_label"]
+          rationale: Json
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          resolution_candidate_id: string
+          secondary_tags: Json
+          semantic_hash: string
+          sequence_item_id: string
+          sequence_reason_code: string
+          sequence_state: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids: Json
+          success_measures: Json
+          title: string
+          urgency: number
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          blocking_dependency_ids: Json
+          catalogue_order: number
+          caveats: Json
+          confidence_caveat?: string | null
+          confidence_result: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          confidence_state: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at?: string
+          dependencies: Json
+          effort: string
+          generated_horizon?:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank: number
+          generated_sequence?: number | null
+          id?: string
+          impact: string
+          matched_triggers: Json
+          organisation_id: string
+          outcome: string
+          portfolio_id: string
+          portfolio_order: number
+          primary_class: Database["public"]["Enums"]["recommendation_portfolio_class"]
+          priority_item_id: string
+          priority_label: Database["public"]["Enums"]["recommendation_priority_label"]
+          rationale: Json
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          resolution_candidate_id: string
+          secondary_tags: Json
+          semantic_hash: string
+          sequence_item_id: string
+          sequence_reason_code: string
+          sequence_state: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids: Json
+          success_measures: Json
+          title: string
+          urgency: number
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          blocking_dependency_ids?: Json
+          catalogue_order?: number
+          caveats?: Json
+          confidence_caveat?: string | null
+          confidence_result?: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          confidence_state?: Database["public"]["Enums"]["recommendation_confidence_state"]
+          created_at?: string
+          dependencies?: Json
+          effort?: string
+          generated_horizon?:
+            | Database["public"]["Enums"]["recommendation_sequence_horizon"]
+            | null
+          generated_rank?: number
+          generated_sequence?: number | null
+          id?: string
+          impact?: string
+          matched_triggers?: Json
+          organisation_id?: string
+          outcome?: string
+          portfolio_id?: string
+          portfolio_order?: number
+          primary_class?: Database["public"]["Enums"]["recommendation_portfolio_class"]
+          priority_item_id?: string
+          priority_label?: Database["public"]["Enums"]["recommendation_priority_label"]
+          rationale?: Json
+          recommendation_definition_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          resolution_candidate_id?: string
+          secondary_tags?: Json
+          semantic_hash?: string
+          sequence_item_id?: string
+          sequence_reason_code?: string
+          sequence_state?: Database["public"]["Enums"]["recommendation_sequence_state"]
+          source_trace_node_ids?: Json
+          success_measures?: Json
+          title?: string
+          urgency?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_portfolio_item_recommendation_definition_id_fkey"
+            columns: ["recommendation_definition_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_priority_item_id_fkey"
+            columns: ["priority_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_resolution_candidate_id_fkey"
+            columns: ["resolution_candidate_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_resolution_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_sequence_item_id_fkey"
+            columns: ["sequence_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolio_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_portfolios: {
+        Row: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_portfolio: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          id: string
+          input_hash: string
+          item_count: number
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          portfolio_state: Database["public"]["Enums"]["recommendation_portfolio_state"]
+          priority_model_id: string
+          projector_version: string
+          recommendation_evaluation_id: string
+          scheduled_count: number
+          sequence_model_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_portfolio: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at?: string
+          id?: string
+          input_hash: string
+          item_count: number
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          portfolio_state: Database["public"]["Enums"]["recommendation_portfolio_state"]
+          priority_model_id: string
+          projector_version: string
+          recommendation_evaluation_id: string
+          scheduled_count: number
+          sequence_model_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          canonical_input?: Json
+          canonical_portfolio?: Json
+          catalogue_digest?: string
+          catalogue_id?: string
+          catalogue_version?: string
+          catalogue_version_id?: string
+          confidence_gate_id?: string
+          configuration_set_id?: string
+          conflict_resolution_id?: string
+          created_at?: string
+          id?: string
+          input_hash?: string
+          item_count?: number
+          organisation_id?: string
+          output_hash?: string
+          policy_version?: string
+          portfolio_state?: Database["public"]["Enums"]["recommendation_portfolio_state"]
+          priority_model_id?: string
+          projector_version?: string
+          recommendation_evaluation_id?: string
+          scheduled_count?: number
+          sequence_model_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_portfolios_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_confidence_gate_id_fkey"
+            columns: ["confidence_gate_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_confidence_gates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_conflict_resolution_id_fkey"
+            columns: ["conflict_resolution_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_conflict_resolutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_priority_model_id_fkey"
+            columns: ["priority_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_recommendation_evaluation_id_fkey"
+            columns: ["recommendation_evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_sequence_model_id_fkey"
+            columns: ["sequence_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_sequence_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_portfolios_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_priority_display_preferences: {
         Row: {
           actor_user_id: string
@@ -6576,6 +6922,13 @@ export type Database = {
         | "unavailable"
       recommendation_dependency_state: "available" | "blocked" | "unavailable"
       recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
+      recommendation_portfolio_class:
+        | "immediate_attention"
+        | "foundation"
+        | "quick_win"
+        | "strategic_initiative"
+        | "watch"
+      recommendation_portfolio_state: "empty" | "partial" | "complete"
       recommendation_priority_label: "critical" | "high" | "medium" | "low"
       recommendation_resolution_reason:
         | "retained"
@@ -6778,6 +7131,14 @@ export const Constants = {
       ],
       recommendation_dependency_state: ["available", "blocked", "unavailable"],
       recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
+      recommendation_portfolio_class: [
+        "immediate_attention",
+        "foundation",
+        "quick_win",
+        "strategic_initiative",
+        "watch",
+      ],
+      recommendation_portfolio_state: ["empty", "partial", "complete"],
       recommendation_priority_label: ["critical", "high", "medium", "low"],
       recommendation_resolution_reason: [
         "retained",
