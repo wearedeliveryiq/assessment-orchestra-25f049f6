@@ -1,11 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { useId, useState } from "react";
 
-import {
-  createAndConsumeProductHandoff,
-  fetchProductHandoffOpportunities,
-} from "@/lib/recommendation-handoffs/client";
+import { createAndConsumeProductHandoff } from "@/lib/recommendation-handoffs/client";
 import type { ProductHandoffOpportunity } from "@/lib/recommendation-handoffs/model";
 
 const ctaLabels = {
@@ -15,14 +12,16 @@ const ctaLabels = {
   view_teammate: "View TeamMate",
 } as const;
 
-export function RecommendationHandoffControls({ actionId }: { actionId: string }) {
+export function RecommendationHandoffControls({
+  actionId,
+  opportunities,
+}: {
+  actionId: string;
+  opportunities: ProductHandoffOpportunity[];
+}) {
   const titleId = useId();
   const [selected, setSelected] = useState<ProductHandoffOpportunity | null>(null);
   const [completed, setCompleted] = useState<string | null>(null);
-  const query = useQuery({
-    queryKey: ["recommendation-handoffs", actionId],
-    queryFn: () => fetchProductHandoffOpportunities(actionId),
-  });
   const mutation = useMutation({
     mutationFn: (opportunity: ProductHandoffOpportunity) =>
       createAndConsumeProductHandoff(actionId, opportunity),
@@ -31,21 +30,7 @@ export function RecommendationHandoffControls({ actionId }: { actionId: string }
       setSelected(null);
     },
   });
-  if (query.isLoading) {
-    return (
-      <p aria-live="polite" className="mt-3 text-sm text-muted-foreground">
-        Checking available next steps…
-      </p>
-    );
-  }
-  if (query.error) {
-    return (
-      <p role="alert" className="mt-3 text-sm text-destructive">
-        {query.error.message}
-      </p>
-    );
-  }
-  if (!query.data?.opportunities.length) return null;
+  if (!opportunities.length) return null;
   return (
     <section aria-labelledby={titleId} className="mt-4 border-t border-border/70 pt-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">
@@ -69,7 +54,7 @@ export function RecommendationHandoffControls({ actionId }: { actionId: string }
         </p>
       )}
       <ul className="mt-3 space-y-3">
-        {query.data.opportunities.map((opportunity) => (
+        {opportunities.map((opportunity) => (
           <li
             key={`${opportunity.targetType}:${opportunity.targetId}:${opportunity.targetVersion}`}
             className="rounded-lg border border-border bg-background p-3"

@@ -202,6 +202,7 @@ import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/por
 import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
 import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
 import { Route as ApiRecommendationPortfoliosIdDecisionsRouteImport } from './routes/api/recommendation-portfolios.$id.decisions'
+import { Route as ApiRecommendationPortfoliosIdExperienceRouteImport } from './routes/api/recommendation-portfolios.$id.experience'
 import { Route as ApiReportingReportsIdRouteImport } from './routes/api/reporting.reports.$id'
 import { Route as AssessmentIdExportFormatRouteImport } from './routes/assessment.$id.export.$format'
 import { Route as ApiAnalysisRunsIdPublicResultsPublicResultIdRouteImport } from './routes/api/analysis-runs.$id.public-results.$publicResultId'
@@ -1224,6 +1225,12 @@ const ApiRecommendationPortfoliosIdDecisionsRoute =
     path: '/decisions',
     getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
   } as any)
+const ApiRecommendationPortfoliosIdExperienceRoute =
+  ApiRecommendationPortfoliosIdExperienceRouteImport.update({
+    id: '/experience',
+    path: '/experience',
+    getParentRoute: () => ApiRecommendationPortfoliosIdRoute,
+  } as any)
 const ApiReportingReportsIdRoute = ApiReportingReportsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -1472,6 +1479,7 @@ export interface FileRoutesByFullPath {
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/experience': typeof ApiRecommendationPortfoliosIdExperienceRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -1676,6 +1684,7 @@ export interface FileRoutesByTo {
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/experience': typeof ApiRecommendationPortfoliosIdExperienceRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -1881,6 +1890,7 @@ export interface FileRoutesById {
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
   '/api/recommendation-portfolios/$id/decisions': typeof ApiRecommendationPortfoliosIdDecisionsRoute
+  '/api/recommendation-portfolios/$id/experience': typeof ApiRecommendationPortfoliosIdExperienceRoute
   '/api/reporting/reports/$id': typeof ApiReportingReportsIdRouteWithChildren
   '/assessment/$id/export/$format': typeof AssessmentIdExportFormatRoute
   '/api/analysis-runs/$id/public-results/$publicResultId': typeof ApiAnalysisRunsIdPublicResultsPublicResultIdRoute
@@ -3998,6 +4008,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRecommendationPortfoliosIdDecisionsRouteImport
       parentRoute: typeof ApiRecommendationPortfoliosIdRoute
     }
+    '/api/recommendation-portfolios/$id/experience': {
+      id: '/api/recommendation-portfolios/$id/experience'
+      path: '/experience'
+      fullPath: '/api/recommendation-portfolios/$id/experience'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdExperienceRouteImport
+      parentRoute: typeof ApiRecommendationPortfoliosIdRoute
+    }
     '/api/reporting/reports/$id': {
       id: '/api/reporting/reports/$id'
       path: '/$id'
@@ -4390,6 +4407,7 @@ const ApiInternalRecommendationCataloguesRouteWithChildren =
 interface ApiRecommendationPortfoliosIdRouteChildren {
   ApiRecommendationPortfoliosIdActionsRoute: typeof ApiRecommendationPortfoliosIdActionsRoute
   ApiRecommendationPortfoliosIdDecisionsRoute: typeof ApiRecommendationPortfoliosIdDecisionsRoute
+  ApiRecommendationPortfoliosIdExperienceRoute: typeof ApiRecommendationPortfoliosIdExperienceRoute
 }
 
 const ApiRecommendationPortfoliosIdRouteChildren: ApiRecommendationPortfoliosIdRouteChildren =
@@ -4398,6 +4416,8 @@ const ApiRecommendationPortfoliosIdRouteChildren: ApiRecommendationPortfoliosIdR
       ApiRecommendationPortfoliosIdActionsRoute,
     ApiRecommendationPortfoliosIdDecisionsRoute:
       ApiRecommendationPortfoliosIdDecisionsRoute,
+    ApiRecommendationPortfoliosIdExperienceRoute:
+      ApiRecommendationPortfoliosIdExperienceRoute,
   }
 
 const ApiRecommendationPortfoliosIdRouteWithChildren =
