@@ -80,12 +80,10 @@ export async function sourceExists(input: {
     portfolio_item: "recommendation_portfolio_items",
     decision: "recommendation_item_decisions",
     action: "recommendation_improvement_actions",
+    outcome: "recommendation_action_outcomes",
     handoff: "recommendation_product_handoffs",
   };
   const table = tables[input.objectType];
-  // S4-010 does not yet provide a governed outcome source. Keep the approved
-  // event contract available, but fail closed until an outcome can be scoped
-  // to an immutable tenant-owned record.
   if (!table) return false;
   const result = await database
     .from(table)

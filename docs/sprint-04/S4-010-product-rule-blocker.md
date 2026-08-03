@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementation is isolated pending a locked Product Owner decision. S4-011 and every other independent Sprint 04 story continue.
+**RESOLVED on 3 August 2026.** This record preserves the original authority gap. Locked PDR-004-001 v1.0 supplies every decision requested below, and S4-010 is implemented with the corresponding mandatory fixtures. Current evidence is in `S4-010-implementation-report.md` and `acceptance-matrix.md`.
 
 ## Confirmed authority gap
 

@@ -334,9 +334,10 @@ describe("PDR-003-001 durable automatic analysis hand-off", () => {
   it("ships the reconciler as a native one-minute deployment task", () => {
     const config = readFileSync(resolve(process.cwd(), "vite.config.ts"), "utf8");
     const task = readFileSync(resolve(process.cwd(), "tasks/analysis/reconcile.ts"), "utf8");
-    expect(config).toContain(
-      '"* * * * *": ["analysis:reconcile", "recommendation-governance:exports"]',
-    );
+    expect(config).toContain('"* * * * *"');
+    expect(config).toContain('"analysis:reconcile"');
+    expect(config).toContain('"recommendation-governance:exports"');
+    expect(config).toContain('"recommendation-outcomes:reconcile"');
     expect(config).toContain("handler: analysisReconcilerTask");
     expect(task).toContain("analysisHandoffService.reconcile(100)");
   });

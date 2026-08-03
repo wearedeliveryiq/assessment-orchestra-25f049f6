@@ -45,6 +45,10 @@ export interface RecommendationAuditSource {
   plans: Record<string, unknown>[];
   actionEvents: Record<string, unknown>[];
   actions: Record<string, unknown>[];
+  actionOutcomes: Record<string, unknown>[];
+  outcomeMeasureVersions: Record<string, unknown>[];
+  outcomeObservations: Record<string, unknown>[];
+  outcomeStatusEvents: Record<string, unknown>[];
   handoffs: Record<string, unknown>[];
   handoffEvents: Record<string, unknown>[];
 }

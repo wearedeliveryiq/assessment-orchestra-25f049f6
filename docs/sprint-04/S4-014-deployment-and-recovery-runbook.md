@@ -48,4 +48,4 @@ Use isolated non-production IDs and clean them up only through governed routines
 
 ## Release blockers outside S4-014
 
-PB-004 explicitly says the absence of approved platform RPO/RTO blocks production release, not implementation. S4-010 also remains blocked on locked maintain/date-policy rules. Therefore the S4-014 operational code may be deployed safely with `audit_exports` off, but Sprint 04 cannot be accepted for production until those authorities exist and the complete genuine eligible Delivery DNA journey is exercised.
+PDR-004-001 approves Tier 1 RPO <=15 minutes and RTO <=4 hours and resolves the S4-010 maintain/date policy. The operational code remains safe with `audit_exports` off, but Sprint 04 cannot be accepted for release until the measured isolated recovery rehearsal, authorised export evidence and superseding Product Acceptance are recorded. The complete genuine eligible Delivery DNA journey remains a separate general-availability gate.

@@ -150,6 +150,7 @@ describe("S4-012 recommendation experience and executive reporting", () => {
       portfolio: stored,
       decisions: [decision(stored)],
       actions: [action(stored)],
+      outcomes: [],
       products: [
         {
           targetType: "knowledge_pack",
@@ -203,6 +204,7 @@ describe("S4-012 recommendation experience and executive reporting", () => {
         portfolio: portfolio(),
         decisions: [],
         actions: [],
+        outcomes: [],
         products: [],
         permissions,
         snapshotAt: "2026-08-03T13:00:00.000Z",
@@ -219,12 +221,13 @@ describe("S4-012 recommendation experience and executive reporting", () => {
 
   it("loads each governed source once and keeps a stable semantic snapshot", async () => {
     const stored = portfolio(250);
-    const calls = { portfolio: 0, decisions: 0, actions: 0, products: 0 };
+    const calls = { portfolio: 0, decisions: 0, actions: 0, products: 0, outcomes: 0 };
     const sources: RecommendationExperienceSources = {
       getPortfolio: async () => (calls.portfolio++, stored),
       getDecisions: async () => (calls.decisions++, []),
       getActions: async () => (calls.actions++, []),
       getProducts: async () => (calls.products++, []),
+      getOutcome: async () => (calls.outcomes++, null),
     };
     const service = new RecommendationExperienceService(sources);
     const started = performance.now();
@@ -233,7 +236,7 @@ describe("S4-012 recommendation experience and executive reporting", () => {
     const second = await service.get({ portfolioId: stored.id, ...tenant, permissions: [] });
     expect(first.summary.recommendationCount).toBe(250);
     expect(second.snapshot.version).toBe(first.snapshot.version);
-    expect(calls).toEqual({ portfolio: 2, decisions: 2, actions: 2, products: 2 });
+    expect(calls).toEqual({ portfolio: 2, decisions: 2, actions: 2, products: 2, outcomes: 0 });
     expect(performance.now() - warmStarted).toBeLessThan(700);
     expect(performance.now() - started).toBeLessThan(2_000);
   });
@@ -246,6 +249,7 @@ describe("S4-012 recommendation experience and executive reporting", () => {
       getDecisions: async () => [escaped],
       getActions: async () => [],
       getProducts: async () => [],
+      getOutcome: async () => null,
     });
     await expect(
       service.get({ portfolioId: stored.id, ...tenant, permissions: [] }),

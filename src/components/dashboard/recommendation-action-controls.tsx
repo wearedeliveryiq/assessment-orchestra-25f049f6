@@ -3,6 +3,7 @@ import { AlertTriangle, Ban, CheckCircle2, Play, Plus } from "lucide-react";
 import { useId, useState } from "react";
 
 import { RecommendationHandoffControls } from "@/components/dashboard/recommendation-handoff-controls";
+import { RecommendationOutcomeControls } from "@/components/dashboard/recommendation-outcome-controls";
 import {
   createRecommendationAction,
   updateRecommendationAction,
@@ -341,6 +342,13 @@ export function RecommendationActionControls({
         <RecommendationHandoffControls
           actionId={action.actionId}
           opportunities={handoffOpportunities}
+        />
+      )}
+      {action.status !== "cancelled" && (
+        <RecommendationOutcomeControls
+          actionId={action.actionId}
+          accountableOwnerId={action.accountableOwnerId}
+          canManage={canManage}
         />
       )}
     </div>

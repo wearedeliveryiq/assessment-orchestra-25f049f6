@@ -300,19 +300,29 @@ describe("S4-013 privacy-safe recommendation analytics", () => {
     }
   });
 
-  it("keeps outcome capture fail-closed until S4-010 supplies a tenant-owned source", () => {
+  it("accepts outcome analytics only through the governed tenant-owned S4-010 source", () => {
     const repository = readFileSync(
       new URL("../src/lib/recommendation-analytics/repository.server.ts", import.meta.url),
       "utf8",
     );
     const migration = readFileSync(
       new URL(
-        "../supabase/migrations/20260803130000_recommendation_analytics.sql",
+        "../supabase/migrations/20260803152000_enable_governed_outcome_analytics.sql",
         import.meta.url,
       ),
       "utf8",
     );
-    expect(repository).toContain("if (!table) return false");
-    expect(migration).toContain("WHEN 'outcome' THEN v_source_valid := false");
+    const outcomeHttp = readFileSync(
+      new URL("../src/lib/recommendation-outcomes/http.server.ts", import.meta.url),
+      "utf8",
+    );
+    expect(repository).toContain('outcome: "recommendation_action_outcomes"');
+    expect(migration).toContain(
+      "WHEN 'outcome' THEN SELECT EXISTS (SELECT 1 FROM public.recommendation_action_outcomes",
+    );
+    expect(migration).toContain("organisation_id = v_organisation_id");
+    expect(migration).toContain("workspace_id = v_workspace_id");
+    expect(outcomeHttp).toContain('eventType: "outcome_observed"');
+    expect(outcomeHttp).toContain("captureRecommendationAnalyticsSafely");
   });
 });

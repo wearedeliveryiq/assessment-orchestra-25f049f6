@@ -228,6 +228,77 @@ function source(): RecommendationAuditSource {
         evidence_references: ["private-evidence"],
       },
     ],
+    actionOutcomes: [
+      {
+        ...scope,
+        id: "outcome-1",
+        action_id: "action-1",
+        portfolio_item_id: "portfolio-item-1",
+        recommendation_id: "rec_decision_rights",
+        recommendation_version: "1.0.0",
+        catalogue_version_id: "catalogue-version-1",
+        catalogue_version: "1.0.0",
+        catalogue_digest: "c".repeat(64),
+        intended_outcome: "Faster, clearer decisions",
+        success_measure_templates: ["Decision turnaround time"],
+        policy_version: "PDR-004-001/1.0",
+        created_by_user_id: "private-actor",
+      },
+    ],
+    outcomeMeasureVersions: [
+      {
+        ...scope,
+        id: "measure-version-1",
+        outcome_id: "outcome-1",
+        measure_id: "measure-1",
+        measure_version: 1,
+        direction: "increase",
+        unit: "percentage points",
+        decimal_scale: 1,
+        baseline_numeric: "50.0",
+        target_numeric: "60.0",
+        source_description: "Monthly operating report",
+        source_reference: "private-source-reference",
+        cadence: "Monthly",
+        accountable_owner_id: "private-owner",
+        policy_version: "PDR-004-001/1.0",
+        evaluator_version: "deliveryiq.outcome-measurement/1.0.0",
+      },
+    ],
+    outcomeObservations: [
+      {
+        ...scope,
+        id: "observation-1",
+        measure_version_id: "measure-version-1",
+        numeric_value: "60.0",
+        effective_at: "2026-08-03T13:00:00.000Z",
+        recorded_at: "2026-08-03T14:00:00.000Z",
+        source_description: "Monthly operating report",
+        source_reference: "private-source-reference",
+        actor_user_id: "private-actor",
+        payload_hash: "9".repeat(64),
+        trace_id: "outcome-trace-1",
+      },
+    ],
+    outcomeStatusEvents: [
+      {
+        ...scope,
+        id: "outcome-status-1",
+        measure_version_id: "measure-version-1",
+        sequence: 1,
+        status: "target_met",
+        reason_code: "target_satisfied",
+        decisive_observation_id: "observation-1",
+        timing: "on_time",
+        deadline_was_missed: false,
+        recorded_late: false,
+        customer_copy: "The recorded observation is within the agreed target.",
+        policy_version: "PDR-004-001/1.0",
+        evaluator_version: "deliveryiq.outcome-measurement/1.0.0",
+        trace_id: "outcome-trace-1",
+        facts: { private: "private-fact" },
+      },
+    ],
     handoffs: [
       {
         ...scope,
@@ -324,8 +395,17 @@ describe("S4-014 recommendation governance, audit and operations", () => {
     const exported = buildRecommendationAuditExport(source(), "2026-08-03T15:00:00.000Z");
     expect(exported.integrity).toMatchObject({ status: "passed" });
     expect(exported.catalogue.version).toMatchObject({ version: "1.0.0" });
-    expect(exported.customerOverlay).toMatchObject({ outcomes: [] });
-    expect(exported.limitations[0]).toContain("S4-010");
+    expect(exported.customerOverlay.outcomes).toHaveLength(1);
+    expect(exported.customerOverlay.outcomes[0]).toMatchObject({
+      id: "outcome-1",
+      measureVersions: [
+        expect.objectContaining({
+          id: "measure-version-1",
+          observations: [expect.objectContaining({ id: "observation-1" })],
+          statusHistory: [expect.objectContaining({ status: "target_met" })],
+        }),
+      ],
+    });
     const encoded = JSON.stringify(exported);
     for (const prohibited of [
       "private-actor",
@@ -481,6 +561,7 @@ describe("S4-014 recommendation governance, audit and operations", () => {
     input.catalogueLifecycle = [];
     input.actionEvents = [];
     input.handoffEvents = [];
+    input.outcomeStatusEvents = [];
     input.decisionEvents = Array.from({ length: 10_000 }, (_, index) => ({
       ...scope,
       id: `decision-event-${index}`,
@@ -503,6 +584,7 @@ describe("S4-014 recommendation governance, audit and operations", () => {
     input.catalogueLifecycle = [];
     input.actionEvents = [];
     input.handoffEvents = [];
+    input.outcomeStatusEvents = [];
     input.decisionEvents = Array.from({ length: 10_001 }, (_, index) => ({
       ...scope,
       id: `decision-event-${index}`,

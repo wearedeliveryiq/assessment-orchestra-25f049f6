@@ -201,11 +201,13 @@ import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executio
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
 import { Route as ApiImprovementActionsIdHandoffsRouteImport } from './routes/api/improvement-actions.$id.handoffs'
+import { Route as ApiImprovementActionsIdOutcomesRouteImport } from './routes/api/improvement-actions.$id.outcomes'
 import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
 import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
 import { Route as ApiInternalRecommendationGovernanceConfigurationDiffRouteImport } from './routes/api/internal/recommendation-governance.configuration-diff'
 import { Route as ApiInternalRecommendationGovernanceFeatureFlagsRouteImport } from './routes/api/internal/recommendation-governance.feature-flags'
 import { Route as ApiInternalRecommendationGovernanceHealthRouteImport } from './routes/api/internal/recommendation-governance.health'
+import { Route as ApiOutcomeMeasuresIdObservationsRouteImport } from './routes/api/outcome-measures.$id.observations'
 import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
 import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
 import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
@@ -1227,6 +1229,12 @@ const ApiImprovementActionsIdHandoffsRoute =
     path: '/handoffs',
     getParentRoute: () => ApiImprovementActionsIdRoute,
   } as any)
+const ApiImprovementActionsIdOutcomesRoute =
+  ApiImprovementActionsIdOutcomesRouteImport.update({
+    id: '/outcomes',
+    path: '/outcomes',
+    getParentRoute: () => ApiImprovementActionsIdRoute,
+  } as any)
 const ApiInternalAnalysisHandoffsReconcileRoute =
   ApiInternalAnalysisHandoffsReconcileRouteImport.update({
     id: '/api/internal/analysis-handoffs/reconcile',
@@ -1255,6 +1263,12 @@ const ApiInternalRecommendationGovernanceHealthRoute =
   ApiInternalRecommendationGovernanceHealthRouteImport.update({
     id: '/api/internal/recommendation-governance/health',
     path: '/api/internal/recommendation-governance/health',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiOutcomeMeasuresIdObservationsRoute =
+  ApiOutcomeMeasuresIdObservationsRouteImport.update({
+    id: '/api/outcome-measures/$id/observations',
+    path: '/api/outcome-measures/$id/observations',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPortfolioItemsIdActionsRoute =
@@ -1534,11 +1548,13 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
+  '/api/improvement-actions/$id/outcomes': typeof ApiImprovementActionsIdOutcomesRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
   '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
   '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
+  '/api/outcome-measures/$id/observations': typeof ApiOutcomeMeasuresIdObservationsRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -1747,11 +1763,13 @@ export interface FileRoutesByTo {
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
+  '/api/improvement-actions/$id/outcomes': typeof ApiImprovementActionsIdOutcomesRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
   '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
   '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
+  '/api/outcome-measures/$id/observations': typeof ApiOutcomeMeasuresIdObservationsRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -1961,11 +1979,13 @@ export interface FileRoutesById {
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
+  '/api/improvement-actions/$id/outcomes': typeof ApiImprovementActionsIdOutcomesRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
   '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
   '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
+  '/api/outcome-measures/$id/observations': typeof ApiOutcomeMeasuresIdObservationsRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -2176,11 +2196,13 @@ export interface FileRouteTypes {
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
     | '/api/improvement-actions/$id/handoffs'
+    | '/api/improvement-actions/$id/outcomes'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/internal/recommendation-governance/configuration-diff'
     | '/api/internal/recommendation-governance/feature-flags'
     | '/api/internal/recommendation-governance/health'
+    | '/api/outcome-measures/$id/observations'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2389,11 +2411,13 @@ export interface FileRouteTypes {
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
     | '/api/improvement-actions/$id/handoffs'
+    | '/api/improvement-actions/$id/outcomes'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/internal/recommendation-governance/configuration-diff'
     | '/api/internal/recommendation-governance/feature-flags'
     | '/api/internal/recommendation-governance/health'
+    | '/api/outcome-measures/$id/observations'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2602,11 +2626,13 @@ export interface FileRouteTypes {
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
     | '/api/improvement-actions/$id/handoffs'
+    | '/api/improvement-actions/$id/outcomes'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/internal/recommendation-governance/configuration-diff'
     | '/api/internal/recommendation-governance/feature-flags'
     | '/api/internal/recommendation-governance/health'
+    | '/api/outcome-measures/$id/observations'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2764,6 +2790,7 @@ export interface RootRouteChildren {
   ApiInternalRecommendationGovernanceConfigurationDiffRoute: typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
   ApiInternalRecommendationGovernanceFeatureFlagsRoute: typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
   ApiInternalRecommendationGovernanceHealthRoute: typeof ApiInternalRecommendationGovernanceHealthRoute
+  ApiOutcomeMeasuresIdObservationsRoute: typeof ApiOutcomeMeasuresIdObservationsRoute
   ApiPortfolioItemsIdActionsRoute: typeof ApiPortfolioItemsIdActionsRoute
   ApiPortfolioItemsIdDecisionsRoute: typeof ApiPortfolioItemsIdDecisionsRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
@@ -4115,6 +4142,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiImprovementActionsIdHandoffsRouteImport
       parentRoute: typeof ApiImprovementActionsIdRoute
     }
+    '/api/improvement-actions/$id/outcomes': {
+      id: '/api/improvement-actions/$id/outcomes'
+      path: '/outcomes'
+      fullPath: '/api/improvement-actions/$id/outcomes'
+      preLoaderRoute: typeof ApiImprovementActionsIdOutcomesRouteImport
+      parentRoute: typeof ApiImprovementActionsIdRoute
+    }
     '/api/internal/analysis-handoffs/reconcile': {
       id: '/api/internal/analysis-handoffs/reconcile'
       path: '/api/internal/analysis-handoffs/reconcile'
@@ -4148,6 +4182,13 @@ declare module '@tanstack/react-router' {
       path: '/api/internal/recommendation-governance/health'
       fullPath: '/api/internal/recommendation-governance/health'
       preLoaderRoute: typeof ApiInternalRecommendationGovernanceHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/outcome-measures/$id/observations': {
+      id: '/api/outcome-measures/$id/observations'
+      path: '/api/outcome-measures/$id/observations'
+      fullPath: '/api/outcome-measures/$id/observations'
+      preLoaderRoute: typeof ApiOutcomeMeasuresIdObservationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/portfolio-items/$id/actions': {
@@ -4546,11 +4587,13 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
 
 interface ApiImprovementActionsIdRouteChildren {
   ApiImprovementActionsIdHandoffsRoute: typeof ApiImprovementActionsIdHandoffsRoute
+  ApiImprovementActionsIdOutcomesRoute: typeof ApiImprovementActionsIdOutcomesRoute
 }
 
 const ApiImprovementActionsIdRouteChildren: ApiImprovementActionsIdRouteChildren =
   {
     ApiImprovementActionsIdHandoffsRoute: ApiImprovementActionsIdHandoffsRoute,
+    ApiImprovementActionsIdOutcomesRoute: ApiImprovementActionsIdOutcomesRoute,
   }
 
 const ApiImprovementActionsIdRouteWithChildren =
@@ -4790,6 +4833,7 @@ const rootRouteChildren: RootRouteChildren = {
     ApiInternalRecommendationGovernanceFeatureFlagsRoute,
   ApiInternalRecommendationGovernanceHealthRoute:
     ApiInternalRecommendationGovernanceHealthRoute,
+  ApiOutcomeMeasuresIdObservationsRoute: ApiOutcomeMeasuresIdObservationsRoute,
   ApiPortfolioItemsIdActionsRoute: ApiPortfolioItemsIdActionsRoute,
   ApiPortfolioItemsIdDecisionsRoute: ApiPortfolioItemsIdDecisionsRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,

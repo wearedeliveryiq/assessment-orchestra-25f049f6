@@ -2,20 +2,20 @@
 
 ## Release status
 
-Status: **HOLD — engineering complete except S4-010; release acceptance blocked**.
+Status: **HOLD — remediation implemented locally; external release evidence pending**.
 
-The recommendation framework must remain fail closed until the S4-010 policy, platform RPO/RTO and genuine end-to-end evidence are approved. S4-014 audit export must remain disabled during this hold.
+The recommendation framework remains fail closed where no eligible evidence exists. PDR-004-001 now governs S4-010 and recovery objectives. S4-014 audit export remains disabled during this hold until managed migration verification, authorised export testing, measured recovery and superseding Product Acceptance.
 
 ## Release sequence
 
-1. Lock the S4-010 maintain/date policy and golden fixtures; implement and rerun all regression gates.
-2. Approve platform RPO/RTO and complete the isolated backup/restore rehearsal.
-3. Confirm exact production catalogue/configuration IDs, versions and digests.
-4. Verify every Sprint 04 managed migration, generated type and least-privilege ACL.
-5. Execute the genuine eligible Delivery DNA smoke journey, including cross-tenant denial.
-6. Enable `audit_exports` through an idempotent Product Governance event with reason `release_gate`.
-7. Verify the asynchronous export within 60 seconds, its redaction/integrity record, access logging and expiry.
-8. Record Product Owner and Matt Prust acceptance before declaring the sprint released.
+1. Merge the S4-010 implementation and preserve the locked PDR/SAR records.
+2. Apply `20260803150000`, `20260803151000` and `20260803152000` as separate Lovable-managed migrations and verify RLS, ACL, immutability, functions, generated types and unchanged existing data.
+3. Publish the verified build and confirm the public shell remains available.
+4. Confirm exact production catalogue/configuration IDs, versions and digests.
+5. Restore a qualifying <=15-minute Tier 1 recovery point into an isolated target; measure RPO/RTO and verify integrity, tenant denial, immutable history, idempotency, audit continuity and safe feature flags.
+6. Enable `audit_exports` through an idempotent Product Governance event with reason `release_gate`; run an authorised export/redaction/expiry/access-log test; disable it again if general enablement is not approved.
+7. Execute the genuine eligible Delivery DNA smoke journey when genuine customer evidence is available; do not manufacture it.
+8. File the reconciled evidence and obtain a superseding Product Owner and Matt Prust acceptance decision before declaring the sprint released.
 
 ## Rollback
 
@@ -30,5 +30,5 @@ The recommendation framework must remain fail closed until the S4-010 policy, pl
 - Sprint 04 acceptance matrix with every feasible gate passing and S4-010 no longer blocked.
 - Full DIQ-203B and Sprint 04 regression, static checks and production build.
 - Live schema, RLS, ACL, expiry, alert and cross-tenant checks.
-- Measured backup/restore evidence against approved RPO/RTO.
+- Measured Tier 1 backup/restore evidence showing RPO <=15 minutes and RTO <=4 hours.
 - Genuine end-to-end customer journey and signed release acceptance.

@@ -113,7 +113,7 @@ export function RecommendationPortfolioSection({
             <Printer className="h-4 w-4" aria-hidden /> Print executive report
           </button>
         </div>
-        <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
           <SummaryMetric label="Recommendations" value={experience.summary.recommendationCount} />
           <SummaryMetric
             label="Trace coverage"
@@ -121,6 +121,7 @@ export function RecommendationPortfolioSection({
           />
           <SummaryMetric label="Accepted" value={experience.summary.decisions.accepted ?? 0} />
           <SummaryMetric label="In progress" value={experience.summary.actions.in_progress ?? 0} />
+          <SummaryMetric label="Targets met" value={experience.summary.outcomes.target_met ?? 0} />
         </dl>
         <div className="mt-4 rounded-lg border border-border/70 bg-muted/20 p-3 text-xs text-muted-foreground">
           <p>
@@ -220,6 +221,28 @@ export function RecommendationPortfolioSection({
                           <p className="mt-1 text-muted-foreground">{item.outcome}</p>
                         </div>
                         <DetailList label="Success measures" values={item.successMeasures} />
+                        {item.outcomeMeasurement && (
+                          <div>
+                            <p className="font-medium">Outcome measurement</p>
+                            {item.outcomeMeasurement.measures.length ? (
+                              <ul className="mt-1 space-y-2 text-muted-foreground">
+                                {item.outcomeMeasurement.measures.map((measure) => (
+                                  <li key={measure.measureId}>
+                                    <span className="font-medium text-foreground">
+                                      {humanize(measure.status ?? "not_measured")}
+                                    </span>{" "}
+                                    — {measure.customerCopy ?? "No status recorded."}
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="mt-1 text-muted-foreground">No measure configured.</p>
+                            )}
+                            <p className="mt-2 text-xs text-muted-foreground">
+                              {item.outcomeMeasurement.associationNotice}
+                            </p>
+                          </div>
+                        )}
                         <div>
                           <p className="font-medium">Source versions</p>
                           <p className="mt-1 break-all text-muted-foreground">

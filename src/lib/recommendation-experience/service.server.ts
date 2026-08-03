@@ -7,6 +7,11 @@ import type { RecommendationActionRecord } from "../recommendation-actions/types
 import type { RecommendationDecisionRecord } from "../recommendation-decisions/types";
 import type { ProductOperationalState } from "../recommendation-handoffs/model";
 import type { RecommendationPortfolioRecord } from "../recommendation-portfolio/types";
+import { recommendationOutcomeService } from "../recommendation-outcomes/service.server";
+import type {
+  OutcomeMeasureRecord,
+  RecommendationActionOutcome,
+} from "../recommendation-outcomes/types";
 import { projectRecommendationExperience, RecommendationExperienceError } from "./model";
 
 export interface RecommendationExperienceSources {
@@ -23,6 +28,13 @@ export interface RecommendationExperienceSources {
     tenant: { organisationId: string; workspaceId: string },
   ): Promise<RecommendationActionRecord[]>;
   getProducts(organisationId: string): Promise<ProductOperationalState[]>;
+  getOutcome(
+    actionId: string,
+    tenant: { organisationId: string; workspaceId: string },
+  ): Promise<{
+    outcome: RecommendationActionOutcome;
+    records: OutcomeMeasureRecord[];
+  } | null>;
 }
 
 const sources: RecommendationExperienceSources = {
@@ -31,6 +43,10 @@ const sources: RecommendationExperienceSources = {
   getDecisions: (portfolioId, tenant) => recommendationDecisionService.list(portfolioId, tenant),
   getActions: (portfolioId, tenant) => recommendationActionService.list(portfolioId, tenant),
   getProducts: getOperationalStates,
+  getOutcome: async (actionId, tenant) => {
+    const value = await recommendationOutcomeService.getActionOutcome(actionId, tenant);
+    return value ? { outcome: value.outcome, records: value.records } : null;
+  },
 };
 
 export class RecommendationExperienceService {
@@ -57,6 +73,9 @@ export class RecommendationExperienceService {
       this.source.getActions(portfolio.id, tenant),
       this.source.getProducts(input.organisationId),
     ]);
+    const outcomes = (
+      await Promise.all(actions.map((action) => this.source.getOutcome(action.id, tenant)))
+    ).filter((value): value is NonNullable<typeof value> => value !== null);
     const itemIds = new Set(portfolio.items.map((item) => item.id));
     if (
       portfolio.organisationId !== input.organisationId ||
@@ -74,6 +93,18 @@ export class RecommendationExperienceService {
           record.workspaceId !== input.workspaceId ||
           record.portfolioId !== portfolio.id ||
           !itemIds.has(record.portfolioItemId),
+      ) ||
+      outcomes.some(
+        ({ outcome, records }) =>
+          outcome.organisationId !== input.organisationId ||
+          outcome.workspaceId !== input.workspaceId ||
+          !actions.some((action) => action.id === outcome.actionId) ||
+          records.some(
+            ({ measure }) =>
+              measure.organisationId !== input.organisationId ||
+              measure.workspaceId !== input.workspaceId ||
+              measure.actionId !== outcome.actionId,
+          ),
       )
     ) {
       throw new RecommendationExperienceError(
@@ -100,6 +131,20 @@ export class RecommendationExperienceService {
           updatedAt: record.updatedAt,
         }))
         .sort((left, right) => left.item.localeCompare(right.item)),
+      outcomes: outcomes
+        .map(({ outcome, records }) => ({
+          action: outcome.actionId,
+          outcome: outcome.id,
+          measures: records
+            .map((record) => ({
+              id: record.measure.id,
+              version: record.measure.version,
+              status: record.current.status,
+              observation: record.current.decisiveObservationId,
+            }))
+            .sort((left, right) => left.id.localeCompare(right.id)),
+        }))
+        .sort((left, right) => left.action.localeCompare(right.action)),
       products: [...products].sort((left, right) =>
         `${left.targetType}:${left.targetId}`.localeCompare(
           `${right.targetType}:${right.targetId}`,
@@ -111,6 +156,7 @@ export class RecommendationExperienceService {
       portfolio,
       decisions,
       actions,
+      outcomes,
       products,
       permissions: input.permissions,
       snapshotAt: (input.now ?? new Date()).toISOString(),

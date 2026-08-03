@@ -97,6 +97,10 @@ export function buildRecommendationAuditExport(
     ...source.plans,
     ...source.actionEvents,
     ...source.actions,
+    ...source.actionOutcomes,
+    ...source.outcomeMeasureVersions,
+    ...source.outcomeObservations,
+    ...source.outcomeStatusEvents,
     ...source.handoffs,
     ...source.handoffEvents,
   ];
@@ -114,6 +118,18 @@ export function buildRecommendationAuditExport(
   const overlayLinked = [...source.decisions, ...source.actions, ...source.handoffs].every((row) =>
     itemIds.has(String(row.portfolio_item_id ?? row.source_portfolio_item_id)),
   );
+  const actionIds = new Set(source.actions.map((row) => String(row.id)));
+  const outcomeIds = new Set(source.actionOutcomes.map((row) => String(row.id)));
+  const measureVersionIds = new Set(source.outcomeMeasureVersions.map((row) => String(row.id)));
+  const outcomeLineage =
+    source.actionOutcomes.every((row) => actionIds.has(String(row.action_id))) &&
+    source.outcomeMeasureVersions.every((row) => outcomeIds.has(String(row.outcome_id))) &&
+    [...source.outcomeObservations, ...source.outcomeStatusEvents].every((row) =>
+      measureVersionIds.has(String(row.measure_version_id)),
+    );
+  const everyActionHasOutcome = source.actions.every((row) =>
+    source.actionOutcomes.some((outcome) => outcome.action_id === row.id),
+  );
   const countsReconcile =
     Number(source.portfolio.item_count ?? source.portfolioItems.length) ===
     source.portfolioItems.length;
@@ -122,11 +138,9 @@ export function buildRecommendationAuditExport(
     portfolioCount: countsReconcile,
     traceCoverage: traceComplete,
     customerOverlayLinkage: overlayLinked,
-    outcomeSourceAvailable: false,
+    outcomeSourceAvailable: outcomeLineage && everyActionHasOutcome,
   };
-  const status: RecommendationIntegrityStatus = Object.entries(checks)
-    .filter(([key]) => key !== "outcomeSourceAvailable")
-    .every(([, value]) => value)
+  const status: RecommendationIntegrityStatus = Object.values(checks).every((value) => value)
     ? "passed"
     : "failed";
   if (status === "failed") {
@@ -140,6 +154,7 @@ export function buildRecommendationAuditExport(
     source.catalogueLifecycle.length +
     source.decisionEvents.length +
     source.actionEvents.length +
+    source.outcomeStatusEvents.length +
     source.handoffEvents.length;
   if (auditEventCount > 10_000) {
     throw new RecommendationGovernanceError(
@@ -353,7 +368,87 @@ export function buildRecommendationAuditExport(
         "dependency_override",
         "occurred_at",
       ]),
-      outcomes: [],
+      outcomes: source.actionOutcomes.map((row) => ({
+        ...pick(row, [
+          "id",
+          "action_id",
+          "portfolio_item_id",
+          "recommendation_id",
+          "recommendation_version",
+          "catalogue_version_id",
+          "catalogue_version",
+          "catalogue_digest",
+          "intended_outcome",
+          "success_measure_templates",
+          "policy_version",
+          "created_at",
+        ]),
+        measureVersions: source.outcomeMeasureVersions
+          .filter((measure) => measure.outcome_id === row.id)
+          .map((measure) => ({
+            ...pick(measure, [
+              "id",
+              "measure_id",
+              "measure_version",
+              "direction",
+              "unit",
+              "decimal_scale",
+              "baseline_numeric",
+              "baseline_binary",
+              "baseline_effective_at",
+              "target_numeric",
+              "target_binary",
+              "absolute_tolerance",
+              "target_date",
+              "target_timezone",
+              "target_deadline_at",
+              "source_description",
+              "cadence",
+              "retired_at",
+              "policy_version",
+              "evaluator_version",
+              "created_at",
+            ]),
+            observations: actorRedacted(
+              source.outcomeObservations.filter(
+                (observation) => observation.measure_version_id === measure.id,
+              ),
+              [
+                "id",
+                "measure_version_id",
+                "numeric_value",
+                "binary_value",
+                "effective_at",
+                "recorded_at",
+                "source_description",
+                "supersedes_observation_id",
+                "correction_reason",
+                "trace_id",
+              ],
+            ),
+            statusHistory: actorRedacted(
+              source.outcomeStatusEvents.filter((event) => event.measure_version_id === measure.id),
+              [
+                "id",
+                "measure_version_id",
+                "sequence",
+                "status",
+                "reason_code",
+                "decisive_observation_id",
+                "decisive_effective_at",
+                "decisive_recorded_at",
+                "timing",
+                "deadline_was_missed",
+                "recorded_late",
+                "customer_copy",
+                "policy_version",
+                "evaluator_version",
+                "trace_id",
+                "occurred_at",
+              ],
+            ),
+          })),
+      })),
       handoffs: actorRedacted(source.handoffs, [
         "id",
         "source_action_id",
@@ -377,10 +472,7 @@ export function buildRecommendationAuditExport(
       ]),
     },
     integrity: { status, checks },
-    limitations: [
-      "S4-010 outcome observations are unavailable until the locked outcome policy is supplied.",
-      "The export records association and lineage; it does not claim causation.",
-    ],
+    limitations: ["The export records association and lineage; it does not claim causation."],
   };
 }
 

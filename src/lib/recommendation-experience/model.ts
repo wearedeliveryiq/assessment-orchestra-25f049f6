@@ -8,6 +8,11 @@ import {
 } from "../recommendation-handoffs/model";
 import { projectRecommendationPortfolio } from "../recommendation-portfolio/projection";
 import type { RecommendationPortfolioRecord } from "../recommendation-portfolio/types";
+import { projectRecommendationOutcome } from "../recommendation-outcomes/projection";
+import type {
+  OutcomeMeasureRecord,
+  RecommendationActionOutcome,
+} from "../recommendation-outcomes/types";
 
 type NonPublicPortfolioProjection = Extract<
   ReturnType<typeof projectRecommendationPortfolio>,
@@ -41,6 +46,10 @@ export function projectRecommendationExperience(input: {
   portfolio: RecommendationPortfolioRecord;
   decisions: RecommendationDecisionRecord[];
   actions: RecommendationActionRecord[];
+  outcomes: Array<{
+    outcome: RecommendationActionOutcome;
+    records: OutcomeMeasureRecord[];
+  }>;
   products: ProductOperationalState[];
   permissions: readonly string[];
   snapshotAt: string;
@@ -69,11 +78,18 @@ export function projectRecommendationExperience(input: {
       projectRecommendationAction(record, "workspace"),
     ]),
   );
+  const outcomes = new Map(
+    input.outcomes.map((record) => [
+      record.outcome.actionId,
+      projectRecommendationOutcome(record.outcome, record.records, "executive"),
+    ]),
+  );
   const groups = portfolio.groups.map((group) => ({
     ...group,
     recommendations: group.recommendations.map((recommendation) => {
       const decision = decisions.get(recommendation.portfolioItemId) ?? null;
       const action = actions.get(recommendation.portfolioItemId) ?? null;
+      const outcomeMeasurement = action ? (outcomes.get(action.actionId) ?? null) : null;
       return {
         ...recommendation,
         sourceVersions: {
@@ -84,6 +100,7 @@ export function projectRecommendationExperience(input: {
         },
         decision,
         action,
+        outcomeMeasurement,
         handoffs:
           action && action.status !== "cancelled"
             ? resolveProductHandoffOpportunities({
@@ -106,6 +123,21 @@ export function projectRecommendationExperience(input: {
     ["not_started", "in_progress", "blocked", "completed", "cancelled"].map((state) => [
       state,
       input.actions.filter((action) => action.status === state).length,
+    ]),
+  );
+  const outcomeCounts = Object.fromEntries(
+    [
+      "not_measured",
+      "baseline_recorded",
+      "tracking",
+      "target_met",
+      "target_not_met",
+      "retired",
+    ].map((status) => [
+      status,
+      input.outcomes
+        .flatMap((record) => record.records)
+        .filter((record) => record.current.status === status).length,
     ]),
   );
   return {
@@ -136,13 +168,14 @@ export function projectRecommendationExperience(input: {
       traceCoveragePercentage: portfolio.traceCoverage.percentage,
       decisions: decisionCounts,
       actions: actionCounts,
+      outcomes: outcomeCounts,
     },
     report: {
       title: "DeliveryIQ recommendation executive report",
       generatedLabel: "Generated advice baseline",
       customerLabel: "Customer decision and progress overlay",
       associationNotice:
-        "Action progress is associated with this advice. It does not prove that DeliveryIQ caused an outcome.",
+        "Observed progress is associated with this action. It does not prove that DeliveryIQ or the recommendation caused the outcome.",
     },
     groups,
   };

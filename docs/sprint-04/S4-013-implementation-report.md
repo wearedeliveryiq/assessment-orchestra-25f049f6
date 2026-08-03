@@ -4,7 +4,7 @@
 
 Implemented on `agent/s4-013-recommendation-analytics`. Application, migration-contract and targeted verification are complete; managed migration execution, regenerated live types, publish and authenticated live smoke remain deployment gates.
 
-S4-013 changes no recommendation rule, score, confidence, rank, catalogue definition or generated/customer state. S4-010 remains independently blocked; its approved `outcome_observed` event contract is present, while capture fails closed until a governed tenant-owned outcome record exists.
+S4-013 changes no recommendation rule, score, confidence, rank, catalogue definition or generated/customer state. PDR-004-001 now governs S4-010, and the remediation captures `outcome_observed` only from a governed tenant-owned observation under existing consent; failure remains non-blocking.
 
 ## Architecture and reuse
 
