@@ -3256,6 +3256,136 @@ export type Database = {
           },
         ]
       }
+      recommendation_analytics_consent_events: {
+        Row: {
+          consent_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          organisation_id: string
+          request_hash: string
+          status: Database["public"]["Enums"]["recommendation_analytics_consent_status"]
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          consent_version: number
+          id?: string
+          idempotency_key: string
+          occurred_at?: string
+          organisation_id: string
+          request_hash: string
+          status: Database["public"]["Enums"]["recommendation_analytics_consent_status"]
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          consent_version?: number
+          id?: string
+          idempotency_key?: string
+          occurred_at?: string
+          organisation_id?: string
+          request_hash?: string
+          status?: Database["public"]["Enums"]["recommendation_analytics_consent_status"]
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_analytics_consent_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_analytics_consent_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_analytics_events: {
+        Row: {
+          actor_pseudonym: string
+          archived_at: string | null
+          consent_event_id: string
+          event_id: string
+          event_type: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          ingested_at: string
+          mode: Database["public"]["Enums"]["recommendation_analytics_mode"]
+          object_id: string
+          object_type: string
+          object_version: string
+          occurred_at: string
+          organisation_id: string
+          properties: Json
+          request_hash: string
+          schema_version: string
+          workspace_id: string
+        }
+        Insert: {
+          actor_pseudonym: string
+          archived_at?: string | null
+          consent_event_id: string
+          event_id: string
+          event_type: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          ingested_at?: string
+          mode: Database["public"]["Enums"]["recommendation_analytics_mode"]
+          object_id: string
+          object_type: string
+          object_version: string
+          occurred_at: string
+          organisation_id: string
+          properties?: Json
+          request_hash: string
+          schema_version: string
+          workspace_id: string
+        }
+        Update: {
+          actor_pseudonym?: string
+          archived_at?: string | null
+          consent_event_id?: string
+          event_id?: string
+          event_type?: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          ingested_at?: string
+          mode?: Database["public"]["Enums"]["recommendation_analytics_mode"]
+          object_id?: string
+          object_type?: string
+          object_version?: string
+          occurred_at?: string
+          organisation_id?: string
+          properties?: Json
+          request_hash?: string
+          schema_version?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_analytics_events_consent_event_id_fkey"
+            columns: ["consent_event_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_analytics_consent_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_analytics_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_analytics_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_candidate_confidence_gates: {
         Row: {
           analysis_run_id: string
@@ -6917,6 +7047,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_recommendation_analytics_retention: {
+        Args: {
+          p_cutoff: string
+          p_limit?: number
+          p_mode: string
+          p_organisation_id: string
+        }
+        Returns: number
+      }
       attach_assessment_analysis_eligibility_decision: {
         Args: { p_eligibility_decision_id: string; p_handoff_id: string }
         Returns: {
@@ -6950,6 +7089,33 @@ export type Database = {
       can_read_delivery_intelligence: {
         Args: { p_organisation_id: string; p_workspace_id: string }
         Returns: boolean
+      }
+      capture_recommendation_analytics_event: {
+        Args: { p_input: Json }
+        Returns: {
+          actor_pseudonym: string
+          archived_at: string | null
+          consent_event_id: string
+          event_id: string
+          event_type: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          ingested_at: string
+          mode: Database["public"]["Enums"]["recommendation_analytics_mode"]
+          object_id: string
+          object_type: string
+          object_version: string
+          occurred_at: string
+          organisation_id: string
+          properties: Json
+          request_hash: string
+          schema_version: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_analytics_events"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       claim_assessment_analysis_handoff: {
         Args: { p_handoff_id: string }
@@ -7600,6 +7766,16 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      recommendation_analytics_product_aggregate: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          event_count: number
+          event_type: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          mode: Database["public"]["Enums"]["recommendation_analytics_mode"]
+          properties: Json
+          tenant_count: number
+        }[]
+      }
       reconcile_assessment_analysis_handoffs: {
         Args: { p_limit?: number }
         Returns: number
@@ -7723,6 +7899,26 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      set_recommendation_analytics_consent: {
+        Args: { p_input: Json }
+        Returns: {
+          consent_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          organisation_id: string
+          request_hash: string
+          status: Database["public"]["Enums"]["recommendation_analytics_consent_status"]
+          user_id: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_analytics_consent_events"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       set_recommendation_priority_display_preference: {
         Args: { p_input: Json }
         Returns: {
@@ -7795,6 +7991,13 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      validate_recommendation_analytics_properties: {
+        Args: {
+          p_event_type: Database["public"]["Enums"]["recommendation_analytics_event_type"]
+          p_properties: Json
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       analysis_eligibility_status: "eligible" | "ineligible"
@@ -7851,6 +8054,19 @@ export type Database = {
         | "blocked"
         | "completed"
         | "cancelled"
+      recommendation_analytics_consent_status: "granted" | "withdrawn"
+      recommendation_analytics_event_type:
+        | "portfolio_viewed"
+        | "explanation_opened"
+        | "decision_recorded"
+        | "action_started"
+        | "action_blocked"
+        | "action_completed"
+        | "outcome_observed"
+        | "knowledge_pack_handoff"
+        | "teammate_handoff"
+        | "usefulness_submitted"
+      recommendation_analytics_mode: "workspace" | "executive_report"
       recommendation_catalogue_state:
         | "draft"
         | "in_review"
@@ -8099,6 +8315,20 @@ export const Constants = {
         "completed",
         "cancelled",
       ],
+      recommendation_analytics_consent_status: ["granted", "withdrawn"],
+      recommendation_analytics_event_type: [
+        "portfolio_viewed",
+        "explanation_opened",
+        "decision_recorded",
+        "action_started",
+        "action_blocked",
+        "action_completed",
+        "outcome_observed",
+        "knowledge_pack_handoff",
+        "teammate_handoff",
+        "usefulness_submitted",
+      ],
+      recommendation_analytics_mode: ["workspace", "executive_report"],
       recommendation_catalogue_state: [
         "draft",
         "in_review",
