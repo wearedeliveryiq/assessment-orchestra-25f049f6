@@ -1,18 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Check, ChevronLeft, Loader2, RotateCcw } from "lucide-react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 
-import { AppShell } from "@/components/deliveryiq/app-shell";
-import { IdentityMenu } from "@/components/identity/identity-menu";
+import { SnapshotPreparation } from "@/components/delivery-dna/snapshot-preparation";
+import { SnapshotRadar } from "@/components/delivery-dna/snapshot-radar";
+import { SnapshotAcquisitionShell } from "@/components/delivery-dna/snapshot-shell";
+import { RibbonStage } from "@/components/ribbon";
 import { Button } from "@/components/ui/button";
 import { useIdentity } from "@/hooks/use-identity";
+import { deliveryDnaCatalogue } from "@/lib/delivery-dna/catalogue";
 import { deliveryDnaSnapshotApi, type SnapshotState } from "@/lib/delivery-dna/snapshot-client";
 import {
   deliveryDnaSnapshotConfiguration,
   deliveryDnaSnapshotQuestions,
+  type SnapshotMaturityLevel,
 } from "@/lib/delivery-dna/snapshot";
-import { deliveryDnaCatalogue } from "@/lib/delivery-dna/catalogue";
 
 export const Route = createFileRoute("/snapshot")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -24,7 +34,7 @@ export const Route = createFileRoute("/snapshot")({
       {
         name: "description",
         content:
-          "Answer 13 quick questions for a directional view of your organisation's delivery practices.",
+          "Answer 13 quick questions for an indicative view of your organisation's delivery practices.",
       },
     ],
   }),
@@ -32,10 +42,24 @@ export const Route = createFileRoute("/snapshot")({
 });
 
 const copy = deliveryDnaSnapshotConfiguration.copy;
+const interaction = deliveryDnaSnapshotConfiguration.interactionPolicy;
+const maturityLevels = copy.maturityLevels as Record<
+  SnapshotMaturityLevel,
+  { label: string; interpretation: string }
+>;
+
+type SaveInput = {
+  questionId: string;
+  status: "answered" | "not_applicable";
+  answer?: number | null;
+  notApplicableReasonText?: string | null;
+};
 
 function DeliveryDnaSnapshotPage() {
   const queryClient = useQueryClient();
   const { isAuthenticated, isLoading: identityLoading } = useIdentity();
+  const [preparing, setPreparing] = useState(false);
+  const handlePreparationReady = useCallback(() => setPreparing(false), []);
   const { data, isLoading, error } = useQuery({
     queryKey: ["delivery-dna-snapshot"],
     queryFn: deliveryDnaSnapshotApi.get,
@@ -47,40 +71,43 @@ function DeliveryDnaSnapshotPage() {
   });
   const restart = useMutation({
     mutationFn: () => deliveryDnaSnapshotApi.start(true),
-    onSuccess: (value) => queryClient.setQueryData(["delivery-dna-snapshot"], value),
+    onSuccess: (value) => {
+      setPreparing(false);
+      queryClient.setQueryData(["delivery-dna-snapshot"], value);
+    },
   });
 
   const snapshot = data?.snapshot ?? null;
   return (
-    <AppShell action={<IdentityMenu />}>
-      <main className="mx-auto max-w-4xl" aria-live="polite">
-        {isLoading ? (
-          <div className="flex min-h-64 items-center justify-center" role="status">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" aria-hidden />
-            <span className="sr-only">Loading your Delivery DNA Snapshot</span>
-          </div>
-        ) : error ? (
-          <SnapshotError message={error.message} />
-        ) : !snapshot ? (
-          <SnapshotStart
-            busy={start.isPending}
-            error={start.error?.message}
-            onStart={() => start.mutate()}
-          />
-        ) : snapshot.status === "completed" || snapshot.status === "linked" ? (
-          <SnapshotResultView
-            snapshot={snapshot}
-            isAuthenticated={isAuthenticated}
-            identityLoading={identityLoading}
-            restarting={restart.isPending}
-            restartError={restart.error?.message}
-            onRestart={() => restart.mutate()}
-          />
-        ) : (
-          <SnapshotQuestions snapshot={snapshot} />
-        )}
-      </main>
-    </AppShell>
+    <SnapshotAcquisitionShell>
+      {isLoading ? (
+        <div className="flex min-h-[60vh] items-center justify-center" role="status">
+          <Loader2 className="h-7 w-7 animate-spin text-[#60A5FA]" aria-hidden />
+          <span className="sr-only">Loading your Delivery DNA Snapshot</span>
+        </div>
+      ) : error ? (
+        <SnapshotError message={error.message} />
+      ) : !snapshot ? (
+        <SnapshotStart
+          busy={start.isPending}
+          error={start.error?.message}
+          onStart={() => start.mutate()}
+        />
+      ) : preparing ? (
+        <SnapshotPreparation onReady={handlePreparationReady} />
+      ) : snapshot.status === "completed" || snapshot.status === "linked" ? (
+        <SnapshotResultView
+          snapshot={snapshot}
+          isAuthenticated={isAuthenticated}
+          identityLoading={identityLoading}
+          restarting={restart.isPending}
+          restartError={restart.error?.message}
+          onRestart={() => restart.mutate()}
+        />
+      ) : (
+        <SnapshotQuestions snapshot={snapshot} onPrepare={() => setPreparing(true)} />
+      )}
+    </SnapshotAcquisitionShell>
   );
 }
 
@@ -94,50 +121,99 @@ function SnapshotStart({
   onStart: () => void;
 }) {
   return (
-    <section className="ribbon-panel rounded-xl px-6 py-10 sm:px-10 sm:py-14">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-        Delivery DNA Snapshot
-      </p>
-      <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">{String(copy.startHeading)}</h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        {String(copy.introduction)}
-      </p>
-      <p className="mt-3 text-sm font-medium">{String(copy.timeEstimate)}</p>
-      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-        {String(copy.instructions)}
-      </p>
-      {error ? (
-        <p className="mt-4 text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      ) : null}
-      <Button className="mt-6 gap-2" disabled={busy} onClick={onStart}>
-        {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-        Start your Snapshot <ArrowRight className="h-4 w-4" aria-hidden />
-      </Button>
-      <p className="mt-5 text-xs text-muted-foreground">
-        No name, email, organisation or account is requested. An unfinished Snapshot expires after
-        24 hours.
-      </p>
+    <section className="snapshot-acquisition-panel relative overflow-hidden rounded-[30px] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
+      <div
+        className="snapshot-ribbon-glow pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] blur-[110px]"
+        aria-hidden="true"
+      />
+      <div className="relative grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
+            Delivery DNA Snapshot
+          </p>
+          <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+            {String(copy.startHeading)}
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#CBD5E1] sm:text-lg">
+            {String(copy.introduction)}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#CBD5E1]">
+            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+              13 questions
+            </span>
+            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+              {String(copy.timeEstimate)}
+            </span>
+            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+              No account required
+            </span>
+          </div>
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-[#94A3B8]">
+            {String(copy.instructions)}
+          </p>
+          {error ? (
+            <p className="mt-4 text-sm text-red-300" role="alert">
+              {error}
+            </p>
+          ) : null}
+          <Button
+            className="snapshot-gradient-button mt-7 min-h-12 gap-2 border-0 px-6 text-white"
+            disabled={busy}
+            onClick={onStart}
+          >
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+            Start your Snapshot <ArrowRight className="h-4 w-4" aria-hidden />
+          </Button>
+          <p className="mt-5 text-xs leading-relaxed text-[#94A3B8]">
+            No name, email, organisation or account is requested. An unfinished Snapshot expires
+            after 24 hours.
+          </p>
+        </div>
+        <RibbonStage size="lg" onNavy className="mx-auto hidden lg:grid" />
+      </div>
     </section>
   );
 }
 
-function SnapshotQuestions({ snapshot }: { snapshot: SnapshotState }) {
+function SnapshotQuestions({
+  snapshot,
+  onPrepare,
+}: {
+  snapshot: SnapshotState;
+  onPrepare: () => void;
+}) {
   const queryClient = useQueryClient();
-  const [index, setIndex] = useState(0);
+  const initialIndex = Math.max(
+    0,
+    (() => {
+      const recorded = new Set(snapshot.responses.map((response) => response.questionId));
+      const next = deliveryDnaSnapshotQuestions.findIndex(
+        (question) => !recorded.has(question.question.id),
+      );
+      return next === -1 ? 12 : next;
+    })(),
+  );
+  const [index, setIndex] = useState(initialIndex);
   const [reason, setReason] = useState("");
   const [selectingNotApplicable, setSelectingNotApplicable] = useState(false);
+  const [localAnswer, setLocalAnswer] = useState<number | null>(null);
+  const [failedInput, setFailedInput] = useState<SaveInput | null>(null);
   const [completionError, setCompletionError] = useState<string | null>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const responses = useMemo(
     () => new Map(snapshot.responses.map((response) => [response.questionId, response])),
     [snapshot.responses],
   );
   const item = deliveryDnaSnapshotQuestions[index];
   const current = responses.get(item.question.id);
+
   useEffect(() => {
     setReason(current?.notApplicableReasonText ?? "");
     setSelectingNotApplicable(current?.status === "not_applicable");
+    setLocalAnswer(null);
+    setFailedInput(null);
+    headingRef.current?.focus();
   }, [current?.notApplicableReasonText, current?.status, item.question.id]);
 
   const save = useMutation({
@@ -147,96 +223,190 @@ function SnapshotQuestions({ snapshot }: { snapshot: SnapshotState }) {
       setCompletionError(null);
     },
   });
-  const complete = useMutation({
-    mutationFn: deliveryDnaSnapshotApi.complete,
-    onSuccess: (value) => {
-      queryClient.setQueryData(["delivery-dna-snapshot"], { snapshot: value.snapshot });
-      if (!value.result.available) setCompletionError(String(copy.insufficientBody));
+
+  const move = useCallback((next: number) => setIndex(Math.min(12, Math.max(0, next))), []);
+
+  const commit = useCallback(
+    async (input: SaveInput) => {
+      const selectedAt = performance.now();
+      setFailedInput(null);
+      if (input.status === "answered") {
+        setLocalAnswer(Number(input.answer));
+        setSelectingNotApplicable(false);
+      }
+      try {
+        const value = await save.mutateAsync(input);
+        const remaining = Math.max(
+          0,
+          interaction.selectionConfirmationMilliseconds - (performance.now() - selectedAt),
+        );
+        if (remaining) await new Promise((resolve) => setTimeout(resolve, remaining));
+        setFailedInput(null);
+        if (index === 12) {
+          const deliberate = value.snapshot.responses.length === 13;
+          const answered = value.snapshot.responses.filter(
+            (response) => response.status === "answered",
+          ).length;
+          if (deliberate && answered >= 9) {
+            onPrepare();
+          } else {
+            setCompletionError(String(copy.insufficientBody));
+          }
+          return;
+        }
+        move(index + 1);
+      } catch {
+        setFailedInput(input);
+      }
     },
-  });
-  const allDeliberate = snapshot.responses.length === 13;
+    [index, move, onPrepare, save],
+  );
+
+  const selectedAnswer =
+    localAnswer ??
+    (!selectingNotApplicable && current?.status === "answered" ? current.answer : null);
   const answeredCount = snapshot.responses.filter(
     (response) => response.status === "answered",
   ).length;
-  const progress = Math.round((snapshot.responses.length / 13) * 100);
+  const savedCount = snapshot.responses.length;
 
-  const move = (next: number) => setIndex(Math.min(12, Math.max(0, next)));
+  const handleArrow = (event: ReactKeyboardEvent<HTMLButtonElement>, optionIndex: number) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+    event.preventDefault();
+    const direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
+    const next = (optionIndex + direction + 5) % 5;
+    optionRefs.current[next]?.focus();
+  };
+
   return (
-    <section>
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
+    <section className="mx-auto max-w-4xl">
+      <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
         Delivery DNA Snapshot
       </p>
-      <div className="mt-3 flex items-end justify-between gap-4">
+      <div className="mt-4 flex items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">{item.capabilityLabel}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Question {index + 1} of 13</p>
+          <p className="text-sm font-semibold text-[#94A3B8]">{item.capabilityLabel}</p>
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="mt-2 text-2xl font-extrabold leading-tight outline-none sm:text-3xl"
+          >
+            {item.question.prompt}
+          </h1>
         </div>
-        <span className="text-sm tabular-nums text-muted-foreground">{progress}%</span>
       </div>
+      <p className="sr-only" aria-live="polite">
+        Question {index + 1} of 13
+      </p>
       <div
-        className="mt-4 h-2 overflow-hidden rounded-full bg-muted"
-        aria-label={`${progress}% complete`}
+        className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.08]"
+        role="progressbar"
+        aria-label="Snapshot progress"
+        aria-valuemin={0}
+        aria-valuemax={13}
+        aria-valuenow={savedCount}
       >
-        <div className="ribbon-bar h-full transition-all" style={{ width: `${progress}%` }} />
+        <div
+          className="h-full rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] transition-[width] duration-500"
+          style={{ width: `${(savedCount / 13) * 100}%` }}
+        />
       </div>
+      <p className="mt-2 text-xs text-[#94A3B8]">
+        Question {index + 1} of 13 · {snapshot.responses.length} saved
+      </p>
 
-      <fieldset className="ribbon-panel mt-6 rounded-xl p-5 sm:p-7" disabled={save.isPending}>
-        <legend className="px-1 text-base font-semibold leading-relaxed sm:text-lg">
-          {item.question.prompt}
-        </legend>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {deliveryDnaCatalogue.journey.dimensionLabels.practice}:{" "}
+      <fieldset
+        className="snapshot-acquisition-panel mt-7 rounded-[24px] p-5 sm:p-7"
+        disabled={save.isPending}
+      >
+        <legend className="sr-only">{item.question.prompt}</legend>
+        <p className="text-sm leading-relaxed text-[#CBD5E1]">
           {deliveryDnaCatalogue.journey.dimensionInstructions.practice}
         </p>
-        <div className="mt-5 grid gap-2 sm:grid-cols-5">
-          {deliveryDnaCatalogue.journey.responseScale.options.map((option) => (
-            <label
-              key={option.value}
-              className={`cursor-pointer rounded-md border p-3 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary ${
-                current?.status === "answered" && current.answer === option.value
-                  ? "border-primary bg-primary/15"
-                  : "border-border bg-surface/60 hover:border-primary/40"
-              }`}
-            >
-              <input
-                className="sr-only"
-                type="radio"
-                name={item.question.id}
-                checked={
-                  !selectingNotApplicable &&
-                  current?.status === "answered" &&
-                  current.answer === option.value
-                }
-                onChange={() => {
-                  setSelectingNotApplicable(false);
-                  save.mutate({
+
+        <div
+          className="mt-6 grid gap-3 sm:grid-cols-5"
+          role="radiogroup"
+          aria-label="Choose the response that best reflects your organisation"
+          aria-busy={save.isPending}
+          onKeyDown={(event) => {
+            if (
+              !save.isPending &&
+              ["1", "2", "3", "4", "5"].includes(event.key) &&
+              !(event.target instanceof HTMLTextAreaElement)
+            ) {
+              event.preventDefault();
+              const answer = Number(event.key);
+              void commit({
+                questionId: item.question.id,
+                status: "answered",
+                answer,
+              });
+            }
+          }}
+        >
+          {deliveryDnaCatalogue.journey.responseScale.options.map((option, optionIndex) => {
+            const selected = selectedAnswer === option.value && !selectingNotApplicable;
+            return (
+              <button
+                key={option.value}
+                ref={(node) => {
+                  optionRefs.current[optionIndex] = node;
+                }}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onKeyDown={(event) => handleArrow(event, optionIndex)}
+                onClick={() =>
+                  void commit({
                     questionId: item.question.id,
                     status: "answered",
                     answer: option.value,
-                  });
-                }}
-              />
-              <span className="block font-semibold">{option.label}</span>
-              <span className="mt-1 block text-xs leading-snug text-muted-foreground">
-                {option.description}
-              </span>
-            </label>
-          ))}
+                  })
+                }
+                className={`min-h-28 rounded-2xl border p-4 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] sm:text-center ${
+                  selected
+                    ? "scale-[1.02] border-[#60A5FA] bg-[#2563EB]/25 shadow-[0_12px_34px_-20px_rgba(37,99,235,0.9)]"
+                    : "border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
+                }`}
+              >
+                <span className="block text-xs font-extrabold text-[#60A5FA]" aria-hidden="true">
+                  {option.value}
+                </span>
+                <span className="mt-2 block text-sm font-bold text-[#F8FAFC]">{option.label}</span>
+                <span className="mt-1 block text-xs leading-snug text-[#94A3B8]">
+                  {option.description}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="mt-4 rounded-md border border-border p-4">
-          <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
-            <input
-              type="radio"
-              name={item.question.id}
-              checked={selectingNotApplicable}
-              onChange={() => setSelectingNotApplicable(true)}
-            />
+        <div className="mt-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={selectingNotApplicable}
+            className="flex min-h-11 w-full items-center gap-3 text-left text-sm font-semibold text-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+            onClick={() => {
+              setLocalAnswer(null);
+              setSelectingNotApplicable(true);
+              setFailedInput(null);
+            }}
+          >
+            <span
+              className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                selectingNotApplicable ? "border-[#60A5FA] bg-[#2563EB]" : "border-white/30"
+              }`}
+              aria-hidden="true"
+            >
+              {selectingNotApplicable ? <span className="h-2 w-2 rounded-full bg-white" /> : null}
+            </span>
             {deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable.label}
-          </label>
-          {selectingNotApplicable && (
-            <div className="mt-3">
-              <label htmlFor="snapshot-na-reason" className="text-xs font-medium">
+          </button>
+          {selectingNotApplicable ? (
+            <div className="mt-4">
+              <label htmlFor="snapshot-na-reason" className="text-xs font-semibold text-[#CBD5E1]">
                 {
                   deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable
                     .reasonPrompt
@@ -247,14 +417,14 @@ function SnapshotQuestions({ snapshot }: { snapshot: SnapshotState }) {
                 value={reason}
                 maxLength={500}
                 onChange={(event) => setReason(event.target.value)}
-                className="mt-1.5 min-h-20 w-full rounded-md border border-input bg-background p-3 text-sm"
+                className="mt-2 min-h-24 w-full rounded-xl border border-white/10 bg-[#090E1A] p-3 text-sm text-[#F8FAFC] outline-none focus:border-[#60A5FA] focus:ring-2 focus:ring-[#2563EB]/40"
               />
               <Button
                 variant="secondary"
-                className="mt-2"
+                className="mt-3 min-h-11"
                 disabled={!reason.trim() || save.isPending}
                 onClick={() =>
-                  save.mutate({
+                  void commit({
                     questionId: item.question.id,
                     status: "not_applicable",
                     answer: null,
@@ -262,40 +432,58 @@ function SnapshotQuestions({ snapshot }: { snapshot: SnapshotState }) {
                   })
                 }
               >
-                Save Not applicable
+                Save and continue
               </Button>
             </div>
-          )}
+          ) : null}
         </div>
-        {save.error ? (
-          <p className="mt-3 text-sm text-destructive" role="alert">
-            {save.error.message}
+
+        {save.isPending ? (
+          <p className="mt-4 flex items-center gap-2 text-sm text-[#CBD5E1]" role="status">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Saving your response
           </p>
+        ) : null}
+        {save.error ? (
+          <div className="mt-4 rounded-xl border border-red-400/30 bg-red-400/10 p-4" role="alert">
+            <p className="text-sm text-[#F8FAFC]">
+              We couldn’t save that response. Your selection is still here.
+            </p>
+            {failedInput ? (
+              <Button variant="secondary" className="mt-3" onClick={() => void commit(failedInput)}>
+                <RotateCcw className="h-4 w-4" aria-hidden /> Try again
+              </Button>
+            ) : null}
+          </div>
         ) : null}
       </fieldset>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-        <Button variant="secondary" disabled={index === 0} onClick={() => move(index - 1)}>
-          <ChevronLeft className="h-4 w-4" aria-hidden /> Previous
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <Button
+          variant="secondary"
+          disabled={index === 0 || save.isPending}
+          onClick={() => move(index - 1)}
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden /> Back
         </Button>
-        <div className="text-xs text-muted-foreground" aria-live="polite">
+        <div className="text-xs text-[#94A3B8]" aria-live="polite">
           {snapshot.responses.length} recorded · {answeredCount} applicable
         </div>
-        {index < 12 ? (
-          <Button variant="secondary" onClick={() => move(index + 1)}>
-            Next <ChevronRight className="h-4 w-4" aria-hidden />
+        {index < 12 && current && !save.isPending ? (
+          <Button variant="ghost" onClick={() => move(index + 1)}>
+            Continue with saved answer <ArrowRight className="h-4 w-4" aria-hidden />
           </Button>
         ) : (
-          <Button disabled={!allDeliberate || complete.isPending} onClick={() => complete.mutate()}>
-            {complete.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-            View your Snapshot
-          </Button>
+          <span aria-hidden />
         )}
       </div>
+
       {completionError ? (
-        <div className="mt-5 rounded-lg border border-warning/40 bg-warning/10 p-4" role="alert">
-          <h2 className="font-semibold">{String(copy.insufficientHeading)}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{completionError}</p>
+        <div
+          className="mt-6 rounded-2xl border border-amber-300/30 bg-amber-300/10 p-5"
+          role="alert"
+        >
+          <h2 className="font-bold">{String(copy.insufficientHeading)}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{completionError}</p>
         </div>
       ) : null}
     </section>
@@ -325,62 +513,104 @@ function SnapshotResultView({
       navigate({ to: "/assessment/$id", params: { id: assessmentId } }),
   });
   const result = snapshot.result;
-  if (!result?.available) return <SnapshotError message={String(copy.insufficientBody)} />;
+  if (!result?.available || !result.indicativeMaturityLevel) {
+    return <SnapshotError message={String(copy.insufficientBody)} />;
+  }
+  const maturity = maturityLevels[result.indicativeMaturityLevel];
 
   return (
-    <section>
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-        Delivery DNA Snapshot
-      </p>
-      <h1 className="mt-3 text-3xl font-semibold">{String(copy.resultHeading)}</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-        {String(copy.resultSummary)}
-      </p>
+    <section className="mx-auto max-w-5xl">
+      <section className="snapshot-acquisition-panel relative overflow-hidden rounded-[30px] px-6 py-10 text-center sm:px-10 sm:py-14">
+        <div
+          className="snapshot-ribbon-glow pointer-events-none absolute left-1/2 top-0 h-56 w-96 -translate-x-1/2 rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] blur-[100px]"
+          aria-hidden="true"
+        />
+        <RibbonStage size="sm" onNavy className="mx-auto" />
+        <p className="relative mt-3 text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
+          {String(copy.readyHeading)}
+        </p>
+        <h1 className="relative mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">
+          {String(copy.resultHeading)}
+        </h1>
+        <p className="snapshot-gradient-text relative mt-5 text-5xl font-extrabold tracking-tight sm:text-6xl">
+          {maturity.label}
+        </p>
+      </section>
 
-      <div className="mt-7 grid gap-5 md:grid-cols-2">
-        <SignalGroup title="Positive signals" items={result.positiveSignals} />
-        <SignalGroup title="Areas to explore" items={result.areasToExplore} />
-      </div>
-      <p className="mt-6 rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-6 rounded-2xl border border-white/[0.08] bg-[#111827] p-5 text-sm leading-relaxed text-[#CBD5E1]">
         {String(copy.resultCaveat)}
       </p>
 
       <section
-        className="ribbon-panel mt-7 rounded-xl p-5 sm:p-7"
+        className="snapshot-acquisition-panel mt-7 rounded-[28px] p-5 sm:p-8"
+        aria-labelledby="snapshot-profile-title"
+      >
+        <h2 id="snapshot-profile-title" className="text-2xl font-extrabold tracking-tight">
+          {String(copy.profileHeading)}
+        </h2>
+        <p className="mt-2 text-sm text-[#CBD5E1]">{String(copy.profileBody)}</p>
+        <div className="mt-4">
+          <SnapshotRadar profile={result.profile} />
+        </div>
+      </section>
+
+      <section className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#182131] p-6 sm:p-8">
+        <h2 className="text-xl font-extrabold">{maturity.label}</h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">{maturity.interpretation}</p>
+      </section>
+
+      <div className="mt-7 grid gap-5 md:grid-cols-2">
+        <SignalGroup title={String(copy.positiveHeading)} items={result.positiveSignals} />
+        <SignalGroup title={String(copy.exploreHeading)} items={result.areasToExplore} />
+      </div>
+
+      <section
+        className="snapshot-acquisition-panel mt-8 rounded-[28px] p-6 sm:p-9"
         aria-labelledby="snapshot-continue-title"
       >
-        <h2 id="snapshot-continue-title" className="text-xl font-semibold">
-          {String(copy.continuationCta)}
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {String(copy.registrationBody)}
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
+          13 questions to engage. 39 questions to diagnose.
         </p>
+        <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
+          {String(copy.continuationHeading)}
+        </h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+          {String(copy.continuationBody)}
+        </p>
+
         {snapshot.status === "linked" && snapshot.linkedAssessmentId ? (
-          <Button asChild className="mt-5">
+          <Button
+            asChild
+            className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
+          >
             <Link to="/assessment/$id" params={{ id: snapshot.linkedAssessmentId }}>
-              Review your carried responses <ArrowRight className="h-4 w-4" aria-hidden />
+              {String(copy.continuationCtaLinked)} <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </Button>
         ) : identityLoading ? (
           <Loader2
-            className="mt-5 h-5 w-5 animate-spin text-primary"
+            className="mt-6 h-5 w-5 animate-spin text-[#60A5FA]"
             aria-label="Checking account"
           />
         ) : !isAuthenticated ? (
-          <Button asChild className="mt-5">
+          <Button
+            asChild
+            className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
+          >
             <Link
               to="/auth/register"
               search={{ snapshot: "continue", source: undefined, result: undefined }}
             >
-              {String(copy.continuationCta)} <ArrowRight className="h-4 w-4" aria-hidden />
+              {String(copy.continuationCtaAnonymous)}
+              <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </Button>
         ) : (
-          <div className="mt-5">
-            <label className="flex cursor-pointer items-start gap-3 text-sm">
+          <div className="mt-6">
+            <label className="flex cursor-pointer items-start gap-3 text-sm text-[#CBD5E1]">
               <input
                 type="checkbox"
-                className="mt-0.5 h-4 w-4"
+                className="mt-0.5 h-5 w-5 accent-[#2563EB]"
                 checked={consent}
                 onChange={(event) => setConsent(event.target.checked)}
               />
@@ -390,30 +620,36 @@ function SnapshotResultView({
               </span>
             </label>
             <Button
-              className="mt-4"
+              className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
               disabled={!consent || continuation.isPending}
               onClick={() => continuation.mutate()}
             >
               {continuation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
               ) : null}
-              {String(copy.continuationCta)}
+              {String(copy.continuationCtaAnonymous)}
             </Button>
             {continuation.error ? (
-              <p className="mt-3 text-sm text-destructive" role="alert">
+              <p className="mt-3 text-sm text-red-300" role="alert">
                 {continuation.error.message}
               </p>
             ) : null}
           </div>
         )}
       </section>
-      <div className="mt-6 border-t border-border pt-5">
-        <Button variant="secondary" disabled={restarting} onClick={onRestart}>
+
+      <div className="mt-8 border-t border-white/[0.08] pt-6 text-center">
+        <Button
+          variant="ghost"
+          className="text-[#CBD5E1] hover:bg-white/[0.06] hover:text-white"
+          disabled={restarting}
+          onClick={onRestart}
+        >
           {restarting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-          Start a new Snapshot
+          {String(copy.restartCta)}
         </Button>
         {restartError ? (
-          <p className="mt-3 text-sm text-destructive" role="alert">
+          <p className="mt-3 text-sm text-red-300" role="alert">
             {restartError}
           </p>
         ) : null}
@@ -430,21 +666,24 @@ function SignalGroup({
   items: { capabilityId: string; capabilityLabel: string; text: string }[];
 }) {
   return (
-    <section className="rounded-xl border border-border bg-card p-5">
-      <h2 className="font-display text-lg font-semibold">{title}</h2>
+    <section className="rounded-[24px] border border-white/[0.08] bg-[#182131] p-5 sm:p-6">
+      <h2 className="text-lg font-extrabold">{title}</h2>
       {items.length ? (
         <div className="mt-4 space-y-3">
           {items.map((item) => (
-            <article key={item.capabilityId} className="rounded-lg bg-surface p-4">
-              <h3 className="flex items-center gap-2 text-sm font-semibold">
-                <Check className="h-4 w-4 text-primary" aria-hidden /> {item.capabilityLabel}
+            <article
+              key={item.capabilityId}
+              className="rounded-2xl border border-white/[0.06] bg-[#111827] p-4"
+            >
+              <h3 className="flex items-center gap-2 text-sm font-bold">
+                <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.capabilityLabel}
               </h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{item.text}</p>
             </article>
           ))}
         </div>
       ) : (
-        <p className="mt-4 text-sm text-muted-foreground">No directional signals to show here.</p>
+        <p className="mt-4 text-sm text-[#94A3B8]">No directional signals to show here.</p>
       )}
     </section>
   );
@@ -452,12 +691,15 @@ function SignalGroup({
 
 function SnapshotError({ message }: { message: string }) {
   return (
-    <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
-      <h1 className="text-xl font-semibold">We could not open your Delivery DNA Snapshot</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{message}</p>
-      <Button asChild className="mt-5">
+    <section
+      className="snapshot-acquisition-panel mx-auto max-w-2xl rounded-[24px] p-6"
+      role="alert"
+    >
+      <h1 className="text-xl font-extrabold">We could not open your Delivery DNA Snapshot</h1>
+      <p className="mt-3 text-sm text-[#CBD5E1]">{message}</p>
+      <Button asChild className="snapshot-gradient-button mt-5 border-0 text-white">
         <Link to="/snapshot" search={{ continue: false }}>
-          Start a new Snapshot
+          {String(copy.restartCta)}
         </Link>
       </Button>
     </section>

@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   deliveryDnaSnapshotConfiguration,
+  deliveryDnaSnapshotConfigurationV1,
   deliveryDnaSnapshotQuestions,
   evaluateDeliveryDnaSnapshot,
+  indicativeSnapshotMaturity,
   normaliseSnapshotResponse,
   safeSnapshotAnalyticsEvent,
   snapshotContinuationRecord,
@@ -14,6 +16,10 @@ import { deliveryDnaCatalogue } from "../src/lib/delivery-dna/catalogue";
 
 const migration = readFileSync(
   "supabase/migrations/20260803210000_delivery_dna_snapshot.sql",
+  "utf8",
+);
+const v11Migration = readFileSync(
+  "supabase/migrations/20260803220000_delivery_dna_snapshot_v1_1.sql",
   "utf8",
 );
 const hardening = readFileSync(
@@ -28,6 +34,18 @@ const route = readFileSync("src/routes/snapshot.tsx", "utf8");
 const apiRoute = readFileSync("src/routes/api/delivery-dna-snapshot.ts", "utf8");
 const client = readFileSync("src/lib/delivery-dna/snapshot-client.ts", "utf8");
 const server = readFileSync("src/lib/delivery-dna/snapshot.server.ts", "utf8");
+const preparation = readFileSync("src/components/delivery-dna/snapshot-preparation.tsx", "utf8");
+const radar = readFileSync("src/components/delivery-dna/snapshot-radar.tsx", "utf8");
+const shell = readFileSync("src/components/delivery-dna/snapshot-shell.tsx", "utf8");
+const brandStyles = readFileSync("src/styles/snapshot-brand.css", "utf8");
+const logo = readFileSync("src/components/logo.tsx", "utf8");
+const ribbon = readFileSync("src/components/ribbon.tsx", "utf8");
+const markAsset = JSON.parse(
+  readFileSync("src/assets/deliveryiq-mark.png.asset.json", "utf8"),
+) as Record<string, unknown>;
+const horizontalAsset = JSON.parse(
+  readFileSync("src/assets/deliveryiq-logo-horizontal.png.asset.json", "utf8"),
+) as Record<string, unknown>;
 
 type Fixture = {
   id: string;
@@ -65,7 +83,72 @@ function responsesFor(fixture: Fixture): SnapshotResponse[] {
   });
 }
 
-describe("PDR-003-005 Delivery DNA Snapshot", () => {
+function assertDirectionalFixture(rawFixture: Fixture) {
+  const responses = responsesFor(rawFixture);
+  const actual = evaluateDeliveryDnaSnapshot(responses);
+  expect(actual.available).toBe(rawFixture.expected.available);
+  if ("positiveSignalCapabilityIds" in rawFixture.expected) {
+    expect(actual.positiveSignals.map((item) => item.capabilityId)).toEqual(
+      rawFixture.expected.positiveSignalCapabilityIds,
+    );
+  }
+  if ("areaToExploreCapabilityIds" in rawFixture.expected) {
+    expect(actual.areasToExplore.map((item) => item.capabilityId)).toEqual(
+      rawFixture.expected.areaToExploreCapabilityIds,
+    );
+  }
+  if ("reasonCode" in rawFixture.expected) {
+    expect(actual.reasonCode).toBe(rawFixture.expected.reasonCode);
+  }
+  if ("answeredCount" in rawFixture.expected) {
+    expect(actual.answeredCount).toBe(rawFixture.expected.answeredCount);
+  }
+  if ("answerSum" in rawFixture.expected) {
+    expect(
+      responses.reduce(
+        (total, response) => total + (response.status === "answered" ? Number(response.answer) : 0),
+        0,
+      ),
+    ).toBe(rawFixture.expected.answerSum);
+  }
+  if ("indicativeMaturityLevel" in rawFixture.expected) {
+    expect(actual.indicativeMaturityLevel).toBe(rawFixture.expected.indicativeMaturityLevel);
+  }
+  if ("profileValuesByCapabilityOrder" in rawFixture.expected) {
+    expect(actual.profile.map((axis) => axis.value)).toEqual(
+      rawFixture.expected.profileValuesByCapabilityOrder,
+    );
+  }
+  expect(actual).not.toHaveProperty("numericScore");
+  expect(actual).not.toHaveProperty("authoritativeBand");
+}
+
+describe("PDR-003-005/A v1.0 historical compatibility", () => {
+  it("keeps all eight historical machine-readable fixtures passing unchanged", () => {
+    expect(deliveryDnaSnapshotConfigurationV1.fixtures).toHaveLength(8);
+    for (const fixture of deliveryDnaSnapshotConfigurationV1.fixtures as Fixture[]) {
+      if (fixture.id === "snapshot_exact_transfer") {
+        expect(
+          snapshotContinuationRecord(
+            {
+              questionId: String(fixture.input.snapshotQuestionId),
+              status: "answered",
+              answer: Number(fixture.input.answer),
+              notApplicableReasonCode: null,
+              notApplicableReasonText: null,
+              respondedAt: String(fixture.input.respondedAt),
+            },
+            "1.0.0",
+          ),
+        ).toMatchObject(fixture.expected);
+      } else {
+        assertDirectionalFixture(fixture);
+      }
+    }
+  });
+});
+
+describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
   it("uses exactly the 13 existing practice questions in locked capability order", () => {
     expect(deliveryDnaSnapshotQuestions).toHaveLength(13);
     expect(deliveryDnaSnapshotQuestions.map((item) => item.question.id)).toEqual(
@@ -82,45 +165,52 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
     }
   });
 
-  for (const rawFixture of deliveryDnaSnapshotConfiguration.fixtures as Fixture[]) {
-    it(`passes locked fixture ${rawFixture.id}`, () => {
-      if (rawFixture.id === "snapshot_exact_transfer") {
+  it("passes all 14 locked v1.1.0 fixtures exactly", () => {
+    expect(deliveryDnaSnapshotConfiguration.fixtures).toHaveLength(14);
+    for (const fixture of deliveryDnaSnapshotConfiguration.fixtures as Fixture[]) {
+      if (fixture.id === "snapshot_exact_transfer") {
         const transferred = snapshotContinuationRecord({
-          questionId: String(rawFixture.input.snapshotQuestionId),
+          questionId: String(fixture.input.snapshotQuestionId),
           status: "answered",
-          answer: Number(rawFixture.input.answer),
+          answer: Number(fixture.input.answer),
           notApplicableReasonCode: null,
           notApplicableReasonText: null,
-          respondedAt: String(rawFixture.input.respondedAt),
+          respondedAt: String(fixture.input.respondedAt),
         });
-        expect(transferred).toMatchObject(rawFixture.expected);
-        expect(migration).toContain("'delivery-dna-snapshot', '1.0.0', responded_at");
-        expect(migration).toContain(
-          "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
-        );
-        expect(linkValueFix).toContain(
-          "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
-        );
-        expect(linkValueFix).toContain("REVOKE ALL ON FUNCTION public.link_delivery_dna_snapshot");
-        expect(migration).toContain("status = 'linked'");
-        expect(migration).not.toContain("status = 'completed', progress = 100");
-        expect(migration).not.toContain("assessment_analysis_runs");
-        return;
+        expect(transferred).toMatchObject(fixture.expected);
+      } else {
+        assertDirectionalFixture(fixture);
       }
-      const actual = evaluateDeliveryDnaSnapshot(responsesFor(rawFixture));
-      expect(actual.available).toBe(rawFixture.expected.available);
-      expect(actual.positiveSignals.map((item) => item.capabilityId)).toEqual(
-        rawFixture.expected.positiveSignalCapabilityIds,
-      );
-      expect(actual.areasToExplore.map((item) => item.capabilityId)).toEqual(
-        rawFixture.expected.areaToExploreCapabilityIds,
-      );
-      expect(actual.available ? null : actual.reasonCode).toBe(
-        rawFixture.expected.reasonCode ?? null,
-      );
-      expect(actual).not.toHaveProperty("numericScore");
-    });
-  }
+    }
+  });
+
+  it("uses every unrounded lower-inclusive maturity boundary", () => {
+    expect(indicativeSnapshotMaturity([2, 2, 2, 2, 2, 2, 3, 3, 3, 3])).toBe("emerging");
+    expect(indicativeSnapshotMaturity([2, 2, 2, 2, 2, 3, 3, 3, 3, 3])).toBe("developing");
+    expect(indicativeSnapshotMaturity([3, 3, 3, 3, 3, 3, 4, 4, 4, 4])).toBe("developing");
+    expect(indicativeSnapshotMaturity([3, 3, 3, 3, 3, 4, 4, 4, 4, 4])).toBe("established");
+    expect(indicativeSnapshotMaturity([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5])).toBe("established");
+    expect(indicativeSnapshotMaturity([4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5])).toBe("leading");
+    expect(indicativeSnapshotMaturity([5, 5, 5, 5, 5, 5, 5, 5, 5])).toBe("leading");
+    expect(indicativeSnapshotMaturity([5, 5, 5, 5, 5, 5, 5, 5])).toBeNull();
+  });
+
+  it("excludes N/A from maturity and preserves it as a visible chart gap", () => {
+    const fixture = (deliveryDnaSnapshotConfiguration.fixtures as Fixture[]).find(
+      (candidate) => candidate.id === "snapshot_nine_answered_four_not_applicable",
+    );
+    expect(fixture).toBeDefined();
+    const result = evaluateDeliveryDnaSnapshot(responsesFor(fixture!));
+    expect(result.available).toBe(true);
+    expect(result.indicativeMaturityLevel).toBe("developing");
+    expect(result.profile.slice(9).map((axis) => axis.value)).toEqual([null, null, null, null]);
+    expect(result.profile.slice(9).map((axis) => axis.responseLabel)).toEqual([
+      "N/A",
+      "N/A",
+      "N/A",
+      "N/A",
+    ]);
+  });
 
   it("preserves exact answer and not-applicable semantics", () => {
     expect(
@@ -151,21 +241,142 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
     ).toThrow("SNAPSHOT_RESPONSE_INVALID");
   });
 
-  it("uses exact approved copy and displays no prohibited intelligence output", () => {
-    expect(readFileSync("src/routes/index.tsx", "utf8")).toContain(
-      String(deliveryDnaSnapshotConfiguration.copy.websiteCta),
+  it("implements save-first auto-advance, failure recovery, Back/edit and explicit N/A", () => {
+    expect(route).toContain("await save.mutateAsync(input)");
+    expect(route).toContain("interaction.selectionConfirmationMilliseconds");
+    expect(route).toContain("onPrepare()");
+    expect(route).toContain("We couldn’t save that response. Your selection is still here.");
+    expect(route).toContain("failedInput");
+    expect(route).toContain("> Back");
+    expect(route).toContain("Save and continue");
+    expect(route).toContain("current && !save.isPending");
+    expect(route.indexOf("await save.mutateAsync(input)")).toBeLessThan(
+      route.indexOf("move(index + 1)"),
     );
+  });
+
+  it("keeps keyboard traversal explicit and moves focus after advance", () => {
+    expect(route).toContain('role="radiogroup"');
+    expect(route).toContain('role="radio"');
+    expect(route).toContain("aria-checked={selected}");
+    expect(route).toContain('["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]');
+    expect(route).toContain("optionRefs.current[next]?.focus()");
+    expect(route).toContain('["1", "2", "3", "4", "5"]');
+    expect(route).toContain("headingRef.current?.focus()");
+    expect(route).toContain('aria-live="polite"');
+  });
+
+  it("provides the truthful timed preparation, slow, error and reduced-motion states", () => {
+    expect(preparation).toContain("policy.minimumVisibleMilliseconds");
+    expect(preparation).toContain("policy.slowStateAtMilliseconds");
+    expect(preparation).toContain("copy.preparationHeading");
+    expect(preparation).toContain("copy.preparationBody");
+    expect(preparation).toContain("copy.slowPreparationBody");
+    expect(preparation).toContain("copy.readyHeading");
+    expect(preparation).toContain("Your saved responses are safe.");
+    for (const step of deliveryDnaSnapshotConfiguration.preparationPolicy.steps) {
+      expect(preparation).toContain("step.copy");
+      expect(step.copy).not.toMatch(
+        /AI analysis|benchmarking|external data comparison|evidence validation|Delivery Intelligence Engine analysis/i,
+      );
+    }
+    expect(brandStyles).toContain("@media (prefers-reduced-motion: reduce)");
+  });
+
+  it("renders 13 chart axes, true N/A gaps and an accessible ordered equivalent", () => {
+    expect(radar).toContain("data-axis-count={profile.length}");
+    expect(radar).toContain("connectNulls={false}");
+    expect(radar).toContain('" · N/A"');
+    expect(radar).toContain("<ol");
+    expect(radar).toContain('aria-label="Accessible indicative delivery profile"');
+    expect(radar).toContain("axis.capabilityLabel");
+    expect(radar).toContain("axis.responseLabel");
+    expect(radar).toContain("sm:grid-cols-2");
+    expect(radar).toContain("lg:grid-cols-3");
+  });
+
+  it("uses the exact premium result copy and hierarchy without numeric intelligence claims", () => {
     expect(deliveryDnaSnapshotConfiguration.copy).toMatchObject({
       startHeading: "Discover your Delivery DNA Snapshot",
-      resultHeading: "Your Delivery DNA Snapshot",
-      continuationCta: "Complete your Delivery DNA Assessment",
+      readyHeading: "Your Snapshot is ready",
+      resultHeading: "Your indicative delivery maturity",
+      profileHeading: "Your indicative delivery profile",
+      continuationHeading: "Turn your Snapshot into your complete Delivery DNA",
+      continuationCtaAnonymous: "Complete my Delivery DNA",
+      continuationCtaLinked: "Continue my Delivery DNA",
+      restartCta: "Start a new Snapshot",
     });
-    expect(route).toContain("copy.startHeading");
-    expect(route).toContain("copy.resultHeading");
-    expect(route).toContain("copy.continuationCta");
-    expect(route).not.toMatch(/confidence index|maturity band|cross-company comparison/i);
+    const orderedMarkers = [
+      "copy.readyHeading",
+      "copy.resultHeading",
+      "copy.resultCaveat",
+      "copy.profileHeading",
+      "maturity.interpretation",
+      "copy.positiveHeading",
+      "copy.exploreHeading",
+      "copy.continuationHeading",
+      "copy.restartCta",
+    ];
+    for (let index = 1; index < orderedMarkers.length; index += 1) {
+      expect(route.indexOf(orderedMarkers[index - 1])).toBeLessThan(
+        route.indexOf(orderedMarkers[index]),
+      );
+    }
+    expect(route).not.toMatch(
+      /maturity score|authoritative maturity|benchmark|confidence index|percentage|roadmapGenerated/i,
+    );
+    expect(route).not.toContain("{progress}%");
+  });
+
+  it("uses the dedicated dark acquisition shell and exact pinned brand sources", () => {
+    expect(route).toContain("<SnapshotAcquisitionShell>");
+    expect(route).not.toContain("AppShell");
+    expect(route).not.toContain("IdentityMenu");
+    expect(shell).toContain("<Logo onNavy");
+    expect(shell).not.toMatch(
+      /Workspace|GitHub Sync|runtime dashboard|design system|product administration/,
+    );
+    expect(markAsset).toMatchObject({
+      asset_id: "85519077-9014-4033-b924-06c965dc5a68",
+      project_id: "a3f77a8e-ca53-4497-8623-bd83d9046aa1",
+    });
+    expect(horizontalAsset).toMatchObject({
+      asset_id: "06c48f5f-1879-40dc-92c4-ca0b5da43b1e",
+      project_id: "a3f77a8e-ca53-4497-8623-bd83d9046aa1",
+    });
+    expect(ribbon).toContain('import markAsset from "@/assets/deliveryiq-mark.png.asset.json"');
+    expect(ribbon).toContain("Never distorted or rotated");
+    expect(logo).toContain("Delivery");
+    expect(logo).toContain("Smarter");
+    expect(brandStyles).toContain("#090e1a");
+    expect(brandStyles).toContain("#111827");
+    expect(brandStyles).toContain("#182131");
+    expect(brandStyles).toContain("#14b8a6");
+    expect(brandStyles).toContain("#2563eb");
+    expect(brandStyles).toContain("#7c3aed");
+    expect(brandStyles).toContain('font-family: "Manrope"');
+    expect(brandStyles).toContain("data:font/woff2;base64,d09GMg");
+  });
+
+  it("pins new sessions to 1.1.0 and safely reprojects eligible v1.0 results", () => {
+    expect(v11Migration).toContain(
+      "token_hash, configuration_version, presentation_policy_version",
+    );
+    expect(v11Migration).toContain("p_token_hash, '1.1.0', '1.1.0'");
+    expect(v11Migration).toContain("provenance_version IN ('1.0.0', '1.1.0')");
+    expect(v11Migration).toContain(
+      "'delivery-dna-snapshot', v_snapshot.configuration_version, responded_at",
+    );
+    expect(v11Migration).toContain("SNAPSHOT_CONFIGURATION_VERSION_IMMUTABLE");
+    expect(v11Migration).toContain("SNAPSHOT_PRESENTATION_VERSION_TRANSITION_INVALID");
+    expect(v11Migration).toContain("delivery_dna_snapshot_versions_guard");
+    expect(server).toContain('session.configuration_version === "1.0.0"');
+    expect(server).toContain('presentation_policy_version: "1.1.0"');
+    expect(server).toContain(
+      "snapshotContinuationRecord(response, resolved.session.configuration_version)",
+    );
     expect(server).not.toMatch(
-      /assessment_analysis_runs|delivery_intelligence_results|scheduleAnalysisHandoff/,
+      /presentation_policy_version[\s\S]{0,300}(delivery_intelligence|assessment_analysis_runs)/,
     );
   });
 
@@ -182,7 +393,7 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
   });
 
   it("starts a fresh anonymous session without mutating a completed or linked Snapshot", () => {
-    expect(route).toContain("Start a new Snapshot");
+    expect(route).toContain("copy.restartCta");
     expect(route).toContain("deliveryDnaSnapshotApi.start(true)");
     expect(client).toContain("JSON.stringify({ restart })");
     expect(apiRoute).toContain("body.restart === true");
@@ -204,16 +415,25 @@ describe("PDR-003-005 Delivery DNA Snapshot", () => {
     expect(migration).not.toMatch(
       /delivery_dna_snapshot_funnel_events[\s\S]{0,500}(question_id|answer|email|organisation_name)/i,
     );
+    expect(deliveryDnaSnapshotConfiguration.privacyPolicy.analyticsProhibitedFields).toContain(
+      "indicativeMaturityLevel",
+    );
   });
 
   it("links atomically, tenant-scoped and double-click-safe without completion or analysis", () => {
-    expect(migration).toContain("FOR UPDATE");
-    expect(migration).toContain("membership.user_id = p_user_id");
-    expect(migration).toContain("workspace.organisation_id = p_organisation_id");
-    expect(migration).toContain("RETURN v_snapshot.assessment_session_id");
-    expect(migration).toContain("p_consent IS DISTINCT FROM true");
-    expect(migration).toContain("v_response_count <> 13 OR v_answered_count < 9");
-    expect(migration).toContain("'delivery-dna', p_manifest_metadata, 'in_progress'");
-    expect(migration).not.toContain("publish_delivery_intelligence_result");
+    expect(v11Migration).toContain("FOR UPDATE");
+    expect(v11Migration).toContain("membership.user_id = p_user_id");
+    expect(v11Migration).toContain("workspace.organisation_id = p_organisation_id");
+    expect(v11Migration).toContain("RETURN v_snapshot.assessment_session_id");
+    expect(v11Migration).toContain("p_consent IS DISTINCT FROM true");
+    expect(v11Migration).toContain("v_response_count <> 13 OR v_answered_count < 9");
+    expect(v11Migration).toContain("'delivery-dna', p_manifest_metadata, 'in_progress'");
+    expect(v11Migration).not.toContain("publish_delivery_intelligence_result");
+    expect(migration).toContain(
+      "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
+    );
+    expect(linkValueFix).toContain(
+      "v_assessment_id, question_id, capability_id, to_jsonb(answer), answer",
+    );
   });
 });
