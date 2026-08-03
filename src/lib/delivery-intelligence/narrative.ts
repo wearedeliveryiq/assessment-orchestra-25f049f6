@@ -19,6 +19,24 @@ const LIMITATION_TEXT: Record<string, string> = {
   limited_respondent_breadth: sprint03Configuration.confidence.limitations.respondent_breadth.text,
 };
 
+const LIMITATION_PROMPT: Record<string, string> = {
+  incomplete_required_evidence:
+    sprint03Configuration.confidence.limitations.required_completion.prompt,
+  limited_capability_coverage:
+    sprint03Configuration.confidence.limitations.capability_coverage.prompt,
+  inconsistent_responses: sprint03Configuration.confidence.limitations.response_consistency.prompt,
+  stale_evidence: sprint03Configuration.confidence.limitations.evidence_recency.prompt,
+  limited_respondent_breadth:
+    sprint03Configuration.confidence.limitations.respondent_breadth.prompt,
+};
+
+export function customerSafeConfidenceGuidance(codes: string[]) {
+  return {
+    limitations: codes.map((code) => LIMITATION_TEXT[code] ?? code),
+    improvementPrompts: codes.map((code) => LIMITATION_PROMPT[code] ?? code),
+  };
+}
+
 function words(value: string, maximum: number): string {
   const tokens = value.trim().split(/\s+/);
   return tokens.length <= maximum ? value.trim() : `${tokens.slice(0, maximum - 1).join(" ")}…`;
@@ -52,7 +70,7 @@ export function renderExecutiveNarrative(input: {
         .replace("{priorityFact}", priorityFact)
     : sprint03Configuration.narrative.templates.overallUnavailableCaveat;
   const limitationSummary = input.confidence.limitations.length
-    ? input.confidence.limitations.map((code) => LIMITATION_TEXT[code] ?? code).join(" ")
+    ? customerSafeConfidenceGuidance(input.confidence.limitations).limitations.join(" ")
     : "The approved evidence-quality checks identify no material limitation.";
   const confidence = sprint03Configuration.narrative.templates.confidence
     .replace("{confidenceBand}", input.confidence.band)

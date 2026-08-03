@@ -15,12 +15,15 @@ import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SnapshotRouteImport } from './routes/snapshot'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as ApiAnalysisRunsRouteImport } from './routes/api/analysis-runs'
 import { Route as ApiAssessmentSessionsRouteImport } from './routes/api/assessment-sessions'
 import { Route as ApiAssessmentsRouteImport } from './routes/api/assessments'
+import { Route as ApiDeliveryDnaSnapshotRouteImport } from './routes/api/delivery-dna-snapshot'
 import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
@@ -85,6 +88,8 @@ import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth.register'
 import { Route as ApiAuthSessionRouteImport } from './routes/api/auth.session'
 import { Route as ApiAuthSessionsRouteImport } from './routes/api/auth.sessions'
 import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth.verify-email'
+import { Route as ApiDeliveryDnaSnapshotCompleteRouteImport } from './routes/api/delivery-dna-snapshot.complete'
+import { Route as ApiDeliveryDnaSnapshotContinueRouteImport } from './routes/api/delivery-dna-snapshot.continue'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
@@ -253,9 +258,19 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SnapshotRoute = SnapshotRouteImport.update({
+  id: '/snapshot',
+  path: '/snapshot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93ListToolsRoute =
@@ -283,6 +298,11 @@ const ApiAssessmentSessionsRoute = ApiAssessmentSessionsRouteImport.update({
 const ApiAssessmentsRoute = ApiAssessmentsRouteImport.update({
   id: '/api/assessments',
   path: '/api/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDeliveryDnaSnapshotRoute = ApiDeliveryDnaSnapshotRouteImport.update({
+  id: '/api/delivery-dna-snapshot',
+  path: '/api/delivery-dna-snapshot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMembersRoute = ApiMembersRouteImport.update({
@@ -608,6 +628,18 @@ const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
   path: '/api/auth/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDeliveryDnaSnapshotCompleteRoute =
+  ApiDeliveryDnaSnapshotCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
+    getParentRoute: () => ApiDeliveryDnaSnapshotRoute,
+  } as any)
+const ApiDeliveryDnaSnapshotContinueRoute =
+  ApiDeliveryDnaSnapshotContinueRouteImport.update({
+    id: '/continue',
+    path: '/continue',
+    getParentRoute: () => ApiDeliveryDnaSnapshotRoute,
+  } as any)
 const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
   id: '/api/executions/$id',
   path: '/api/executions/$id',
@@ -1362,12 +1394,15 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
+  '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
+  '/snapshot': typeof SnapshotRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/delivery-dna-snapshot': typeof ApiDeliveryDnaSnapshotRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -1432,6 +1467,8 @@ export interface FileRoutesByFullPath {
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
+  '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
+  '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -1577,12 +1614,15 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
+  '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
+  '/snapshot': typeof SnapshotRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/delivery-dna-snapshot': typeof ApiDeliveryDnaSnapshotRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -1647,6 +1687,8 @@ export interface FileRoutesByTo {
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
+  '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
+  '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -1793,12 +1835,15 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
+  '/register': typeof RegisterRoute
   '/settings': typeof SettingsRoute
+  '/snapshot': typeof SnapshotRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/analysis-runs': typeof ApiAnalysisRunsRouteWithChildren
   '/api/assessment-sessions': typeof ApiAssessmentSessionsRouteWithChildren
   '/api/assessments': typeof ApiAssessmentsRouteWithChildren
+  '/api/delivery-dna-snapshot': typeof ApiDeliveryDnaSnapshotRouteWithChildren
   '/api/members': typeof ApiMembersRouteWithChildren
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -1863,6 +1908,8 @@ export interface FileRoutesById {
   '/api/auth/session': typeof ApiAuthSessionRoute
   '/api/auth/sessions': typeof ApiAuthSessionsRouteWithChildren
   '/api/auth/verify-email': typeof ApiAuthVerifyEmailRouteWithChildren
+  '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
+  '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -2010,12 +2057,15 @@ export interface FileRouteTypes {
     | '/home'
     | '/mcp'
     | '/notifications'
+    | '/register'
     | '/settings'
+    | '/snapshot'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
+    | '/api/delivery-dna-snapshot'
     | '/api/members'
     | '/api/navigation'
     | '/api/notifications'
@@ -2080,6 +2130,8 @@ export interface FileRouteTypes {
     | '/api/auth/session'
     | '/api/auth/sessions'
     | '/api/auth/verify-email'
+    | '/api/delivery-dna-snapshot/complete'
+    | '/api/delivery-dna-snapshot/continue'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -2225,12 +2277,15 @@ export interface FileRouteTypes {
     | '/home'
     | '/mcp'
     | '/notifications'
+    | '/register'
     | '/settings'
+    | '/snapshot'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
+    | '/api/delivery-dna-snapshot'
     | '/api/members'
     | '/api/navigation'
     | '/api/notifications'
@@ -2295,6 +2350,8 @@ export interface FileRouteTypes {
     | '/api/auth/session'
     | '/api/auth/sessions'
     | '/api/auth/verify-email'
+    | '/api/delivery-dna-snapshot/complete'
+    | '/api/delivery-dna-snapshot/continue'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -2440,12 +2497,15 @@ export interface FileRouteTypes {
     | '/home'
     | '/mcp'
     | '/notifications'
+    | '/register'
     | '/settings'
+    | '/snapshot'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/analysis-runs'
     | '/api/assessment-sessions'
     | '/api/assessments'
+    | '/api/delivery-dna-snapshot'
     | '/api/members'
     | '/api/navigation'
     | '/api/notifications'
@@ -2510,6 +2570,8 @@ export interface FileRouteTypes {
     | '/api/auth/session'
     | '/api/auth/sessions'
     | '/api/auth/verify-email'
+    | '/api/delivery-dna-snapshot/complete'
+    | '/api/delivery-dna-snapshot/continue'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -2656,12 +2718,15 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   McpRoute: typeof McpRoute
   NotificationsRoute: typeof NotificationsRoute
+  RegisterRoute: typeof RegisterRoute
   SettingsRoute: typeof SettingsRoute
+  SnapshotRoute: typeof SnapshotRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiAnalysisRunsRoute: typeof ApiAnalysisRunsRouteWithChildren
   ApiAssessmentSessionsRoute: typeof ApiAssessmentSessionsRouteWithChildren
   ApiAssessmentsRoute: typeof ApiAssessmentsRouteWithChildren
+  ApiDeliveryDnaSnapshotRoute: typeof ApiDeliveryDnaSnapshotRouteWithChildren
   ApiMembersRoute: typeof ApiMembersRouteWithChildren
   ApiNavigationRoute: typeof ApiNavigationRoute
   ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
@@ -2840,11 +2905,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/snapshot': {
+      id: '/snapshot'
+      path: '/snapshot'
+      fullPath: '/snapshot'
+      preLoaderRoute: typeof SnapshotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -2880,6 +2959,13 @@ declare module '@tanstack/react-router' {
       path: '/api/assessments'
       fullPath: '/api/assessments'
       preLoaderRoute: typeof ApiAssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/delivery-dna-snapshot': {
+      id: '/api/delivery-dna-snapshot'
+      path: '/api/delivery-dna-snapshot'
+      fullPath: '/api/delivery-dna-snapshot'
+      preLoaderRoute: typeof ApiDeliveryDnaSnapshotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/members': {
@@ -3329,6 +3415,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/verify-email'
       preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/delivery-dna-snapshot/complete': {
+      id: '/api/delivery-dna-snapshot/complete'
+      path: '/complete'
+      fullPath: '/api/delivery-dna-snapshot/complete'
+      preLoaderRoute: typeof ApiDeliveryDnaSnapshotCompleteRouteImport
+      parentRoute: typeof ApiDeliveryDnaSnapshotRoute
+    }
+    '/api/delivery-dna-snapshot/continue': {
+      id: '/api/delivery-dna-snapshot/continue'
+      path: '/continue'
+      fullPath: '/api/delivery-dna-snapshot/continue'
+      preLoaderRoute: typeof ApiDeliveryDnaSnapshotContinueRouteImport
+      parentRoute: typeof ApiDeliveryDnaSnapshotRoute
     }
     '/api/executions/$id': {
       id: '/api/executions/$id'
@@ -4435,6 +4535,22 @@ const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
   ApiAssessmentsRouteChildren,
 )
 
+interface ApiDeliveryDnaSnapshotRouteChildren {
+  ApiDeliveryDnaSnapshotCompleteRoute: typeof ApiDeliveryDnaSnapshotCompleteRoute
+  ApiDeliveryDnaSnapshotContinueRoute: typeof ApiDeliveryDnaSnapshotContinueRoute
+}
+
+const ApiDeliveryDnaSnapshotRouteChildren: ApiDeliveryDnaSnapshotRouteChildren =
+  {
+    ApiDeliveryDnaSnapshotCompleteRoute: ApiDeliveryDnaSnapshotCompleteRoute,
+    ApiDeliveryDnaSnapshotContinueRoute: ApiDeliveryDnaSnapshotContinueRoute,
+  }
+
+const ApiDeliveryDnaSnapshotRouteWithChildren =
+  ApiDeliveryDnaSnapshotRoute._addFileChildren(
+    ApiDeliveryDnaSnapshotRouteChildren,
+  )
+
 interface ApiMembersRouteChildren {
   ApiMembersIdRoute: typeof ApiMembersIdRoute
   ApiMembersInviteRoute: typeof ApiMembersInviteRoute
@@ -4689,13 +4805,16 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   McpRoute: McpRoute,
   NotificationsRoute: NotificationsRoute,
+  RegisterRoute: RegisterRoute,
   SettingsRoute: SettingsRoute,
+  SnapshotRoute: SnapshotRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiAnalysisRunsRoute: ApiAnalysisRunsRouteWithChildren,
   ApiAssessmentSessionsRoute: ApiAssessmentSessionsRouteWithChildren,
   ApiAssessmentsRoute: ApiAssessmentsRouteWithChildren,
+  ApiDeliveryDnaSnapshotRoute: ApiDeliveryDnaSnapshotRouteWithChildren,
   ApiMembersRoute: ApiMembersRouteWithChildren,
   ApiNavigationRoute: ApiNavigationRoute,
   ApiNotificationsRoute: ApiNotificationsRouteWithChildren,

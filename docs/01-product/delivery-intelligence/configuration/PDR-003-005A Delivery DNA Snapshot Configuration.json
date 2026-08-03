@@ -1,0 +1,254 @@
+{
+  "document": {
+    "id": "PDR-003-005A",
+    "version": "1.0.0",
+    "status": "locked",
+    "title": "Delivery DNA Snapshot Configuration",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-03",
+    "parentDecisionId": "PDR-003-005"
+  },
+  "identity": {
+    "productId": "delivery-dna-snapshot",
+    "productVersion": "1.0.0",
+    "formalName": "Delivery DNA Snapshot",
+    "shorthand": "DNA Snapshot",
+    "locale": "en-GB",
+    "questionSourceId": "DIQ-203C",
+    "questionSourceVersion": "1.0.0",
+    "questionCount": 13,
+    "outputType": "directional_snapshot",
+    "fullAssessmentId": "delivery-dna",
+    "fullAssessmentVersion": "1.0.0"
+  },
+  "copy": {
+    "websiteCta": "Get your free DNA Snapshot",
+    "startHeading": "Discover your Delivery DNA Snapshot",
+    "introduction": "Answer 13 quick questions to see directional signals across your organisation's delivery practices. No account is required.",
+    "timeEstimate": "Approximately 3–5 minutes",
+    "instructions": "Choose the option that most closely reflects how your organisation usually works today. Use Not applicable only where a question genuinely does not apply.",
+    "resultHeading": "Your Delivery DNA Snapshot",
+    "resultSummary": "Your Snapshot is a directional view based on 13 practice questions. Complete the Delivery DNA Assessment for a full evidence-led diagnosis.",
+    "positiveCardText": "Your response indicates this practice may be working consistently.",
+    "exploreCardText": "Your response indicates this practice may benefit from closer examination.",
+    "resultCaveat": "This is not a Delivery DNA score, maturity rating or complete assessment. It does not assess foundations or supporting evidence.",
+    "insufficientHeading": "A Snapshot is not available yet",
+    "insufficientBody": "Answer at least nine applicable questions and provide a response or Not applicable status for all 13 questions.",
+    "continuationCta": "Complete your Delivery DNA Assessment",
+    "registrationBody": "Create your free DeliveryIQ account to continue with the remaining 26 questions. Your 13 Snapshot responses will be carried forward unchanged for you to review.",
+    "prohibitedTerms": [
+      "Delivery DNA score",
+      "quick Delivery DNA score",
+      "mini assessment",
+      "maturity score",
+      "benchmark",
+      "AI prediction"
+    ]
+  },
+  "questionIds": [
+    "ddna.strategy_alignment.p",
+    "ddna.governance.p",
+    "ddna.sponsorship.p",
+    "ddna.portfolio.p",
+    "ddna.programme_delivery.p",
+    "ddna.project_delivery.p",
+    "ddna.planning_controls.p",
+    "ddna.benefits.p",
+    "ddna.risk_assurance.p",
+    "ddna.stakeholder_change.p",
+    "ddna.pmo_enablement.p",
+    "ddna.reporting_insight.p",
+    "ddna.continuous_improvement.p"
+  ],
+  "responsePolicy": {
+    "answeredValues": [1, 2, 3, 4, 5],
+    "customerSelectableStatuses": ["answered", "not_applicable"],
+    "notApplicableReasonRequired": true,
+    "excludedCustomerSelectable": false,
+    "allQuestionsDeliberateStatusRequired": true,
+    "minimumAnsweredQuestions": 9
+  },
+  "selectionPolicy": {
+    "positiveSignalValues": [4, 5],
+    "areaToExploreValues": [1, 2],
+    "neutralValues": [3],
+    "maximumPositiveSignals": 2,
+    "maximumAreasToExplore": 2,
+    "positiveSort": ["answer_desc", "capability_order_asc", "capability_id_asc"],
+    "areaToExploreSort": ["answer_asc", "capability_order_asc", "capability_id_asc"],
+    "numericScoreDisplayed": false,
+    "bandDisplayed": false,
+    "confidenceDisplayed": false,
+    "patternsGenerated": false,
+    "recommendationsGenerated": false,
+    "roadmapGenerated": false,
+    "analysisRunCreated": false
+  },
+  "continuationPolicy": {
+    "registrationRequiredToContinue": true,
+    "explicitLinkingConsentRequired": true,
+    "transferMode": "exact_same_question_response",
+    "transferFields": [
+      "questionId",
+      "status",
+      "answer",
+      "notApplicableReasonCode",
+      "notApplicableReasonText",
+      "respondedAt"
+    ],
+    "provenance": {
+      "source": "delivery-dna-snapshot",
+      "version": "1.0.0"
+    },
+    "customerReviewBeforeFullCompletion": true,
+    "automaticFullCompletion": false,
+    "automaticAnalysisRequest": false,
+    "directFullAssessmentStartAllowed": true
+  },
+  "privacyPolicy": {
+    "accountRequiredForSnapshot": false,
+    "personallyIdentifiableInformationRequired": false,
+    "unlinkedRetentionSeconds": 86400,
+    "cacheControl": "private, no-store",
+    "analyticsAllowedEvents": [
+      "snapshot_landing_viewed",
+      "snapshot_started",
+      "snapshot_step_progressed",
+      "snapshot_completed",
+      "snapshot_continue_selected",
+      "snapshot_registration_completed"
+    ],
+    "analyticsProhibitedFields": [
+      "questionId",
+      "answer",
+      "status",
+      "reasonText",
+      "capabilityId",
+      "signalType",
+      "sessionToken",
+      "email",
+      "name",
+      "organisationName"
+    ]
+  },
+  "fixtures": [
+    {
+      "id": "snapshot_all_positive",
+      "input": {
+        "answersByCapabilityOrder": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+      },
+      "expected": {
+        "available": true,
+        "positiveSignalCapabilityIds": ["strategy_alignment", "governance"],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_all_explore",
+      "input": {
+        "answersByCapabilityOrder": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      },
+      "expected": {
+        "available": true,
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": ["strategy_alignment", "governance"],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_all_neutral",
+      "input": {
+        "answersByCapabilityOrder": [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+      },
+      "expected": {
+        "available": true,
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_mixed_rank_and_ties",
+      "input": {
+        "answersByCapabilityOrder": [4, 5, 2, 1, 5, 3, 2, 4, 3, 3, 3, 3, 3]
+      },
+      "expected": {
+        "available": true,
+        "positiveSignalCapabilityIds": ["governance", "programme_delivery"],
+        "areaToExploreCapabilityIds": ["portfolio", "sponsorship"],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_nine_answered_four_not_applicable",
+      "input": {
+        "answersByCapabilityOrder": [5, 4, 3, 2, 1, 5, 4, 3, 2, null, null, null, null],
+        "statusesByCapabilityOrder": ["answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "not_applicable", "not_applicable", "not_applicable", "not_applicable"],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": true,
+        "positiveSignalCapabilityIds": ["strategy_alignment", "project_delivery"],
+        "areaToExploreCapabilityIds": ["programme_delivery", "portfolio"],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_insufficient_answered",
+      "input": {
+        "answersByCapabilityOrder": [5, 4, 3, 2, 1, 5, 4, 3, null, null, null, null, null],
+        "statusesByCapabilityOrder": ["answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "not_applicable", "not_applicable", "not_applicable", "not_applicable", "not_applicable"],
+        "notApplicableReasonsPresent": true
+      },
+      "expected": {
+        "available": false,
+        "reasonCode": "SNAPSHOT_INSUFFICIENT_APPLICABLE_RESPONSES",
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_incomplete_statuses",
+      "input": {
+        "answersByCapabilityOrder": [5, 4, 3, 2, 1, 5, 4, 3, 2, 1, 5, 4, null],
+        "statusesByCapabilityOrder": ["answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "answered", "missing"]
+      },
+      "expected": {
+        "available": false,
+        "reasonCode": "SNAPSHOT_INCOMPLETE",
+        "positiveSignalCapabilityIds": [],
+        "areaToExploreCapabilityIds": [],
+        "numericScore": null,
+        "analysisRunCreated": false
+      }
+    },
+    {
+      "id": "snapshot_exact_transfer",
+      "input": {
+        "snapshotQuestionId": "ddna.governance.p",
+        "status": "answered",
+        "answer": 4,
+        "respondedAt": "2026-08-03T12:00:00Z",
+        "linkingConsent": true
+      },
+      "expected": {
+        "fullAssessmentQuestionId": "ddna.governance.p",
+        "status": "answered",
+        "answer": 4,
+        "respondedAt": "2026-08-03T12:00:00Z",
+        "provenance": "delivery-dna-snapshot@1.0.0",
+        "fullAssessmentCompleted": false,
+        "analysisRunCreated": false
+      }
+    }
+  ]
+}

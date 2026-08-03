@@ -29,6 +29,16 @@ Roll back the application to the recorded prior SHA first. The Sprint tables and
 
 Release only when staging migrations, tenant isolation, public disclosure, accessibility journeys, performance targets and the full regression suite pass with no high-severity security finding.
 
+## PDR-003-004/005 additive release
+
+1. Apply `20260803200000_delivery_dna_action_entitlement.sql`, then `20260803210000_delivery_dna_snapshot.sql`, then `20260803211000_harden_delivery_dna_snapshot_permissions.sql` through the managed migration path.
+2. Verify no availability, entitlement or customer workflow row was seeded; `anon` and `authenticated` retain no direct access to Snapshot or commercial-control objects/functions.
+3. Regenerate Supabase types, run the focused Snapshot/commercial tests and publish the same application commit.
+4. Smoke one anonymous 13-response result, expiry-safe resume and consented tenant-scoped continuation; verify the linked full draft has 13 exact provenance rows, remains incomplete and has no analysis run.
+5. Verify the current free projection and unavailable commercial panel against an existing completed run. Do not create a commercial entitlement merely for release testing.
+
+Rollback is application-first: restore the prior published build. The additive columns/tables and inactive entitlement key may remain dormant. Stop the Snapshot cleanup schedule with the application rollback; do not drop linked provenance or customer responses. Any database object removal requires a separately reviewed forward migration.
+
 PDR-003-001 additionally requires one hosted journey from assessment completion through automatic
 analysis to dashboard result, plus retryable and non-retryable failure checks. A deployed release is
 not accepted if the one-minute reconciler trigger is absent.

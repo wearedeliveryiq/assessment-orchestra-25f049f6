@@ -33,7 +33,10 @@ export async function readJson(request: Request): Promise<Record<string, unknown
 /** Wraps a handler so no internal error detail ever reaches the client. */
 export async function handleAuthRoute(
   request: Request,
-  handler: (context: { request: Request; ctx: ReturnType<typeof requestContext> }) => Promise<Response>,
+  handler: (context: {
+    request: Request;
+    ctx: ReturnType<typeof requestContext>;
+  }) => Promise<Response>,
 ): Promise<Response> {
   try {
     return await handler({ request, ctx: requestContext(request) });
@@ -64,4 +67,20 @@ export function handleProtectedRoute(
 
 export function originOf(request: Request): string {
   return new URL(request.url).origin;
+}
+
+/** Prevents verification and reset emails from being used as open redirects. */
+export function firstPartyRedirect(
+  request: Request,
+  requested: unknown,
+  fallbackPath: string,
+): string {
+  const origin = originOf(request);
+  if (typeof requested !== "string") return `${origin}${fallbackPath}`;
+  try {
+    const target = new URL(requested);
+    return target.origin === origin ? target.toString() : `${origin}${fallbackPath}`;
+  } catch {
+    return `${origin}${fallbackPath}`;
+  }
 }

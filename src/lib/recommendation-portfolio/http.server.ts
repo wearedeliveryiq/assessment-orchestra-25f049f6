@@ -2,6 +2,7 @@ import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/ser
 import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { assertPermission } from "../identity/service.server";
+import { assertDeliveryDnaActionAccess } from "../delivery-intelligence/commercial-access.server";
 import { canViewRecommendationEvaluationAudit } from "../recommendation-evaluation/projection";
 import {
   projectRecommendationPortfolio,
@@ -32,6 +33,11 @@ async function runContext(request: Request, runId: string) {
     organisationId: verified.organisationId,
     workspaceId: verified.workspaceId,
     userId: verified.identity.user.id,
+  });
+  await assertDeliveryDnaActionAccess({
+    organisationId: verified.organisationId,
+    workspaceId: verified.workspaceId,
+    permitted: true,
   });
   return { verified, run };
 }
@@ -122,6 +128,11 @@ export async function getRecommendationPortfolioById(request: Request, portfolio
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const portfolio = await recommendationPortfolioService.getById(portfolioId, {
       organisationId: verified.organisationId,
       workspaceId: verified.workspaceId,

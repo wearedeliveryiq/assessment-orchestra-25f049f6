@@ -212,6 +212,9 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
       evidence_at?: string | null;
       evidence_reason_code?: string | null;
       evidence_reason_text?: string | null;
+      provenance_source?: string | null;
+      provenance_version?: string | null;
+      original_responded_at?: string | null;
     }[]
   >(await responses().select("*").eq("session_id", sessionId));
 
@@ -228,6 +231,9 @@ export async function getResponses(sessionId: string): Promise<AssessmentRespons
     evidenceAt: row.evidence_at ?? null,
     evidenceReasonCode: row.evidence_reason_code ?? null,
     evidenceReasonText: row.evidence_reason_text ?? null,
+    provenanceSource: row.provenance_source ?? null,
+    provenanceVersion: row.provenance_version ?? null,
+    originalRespondedAt: row.original_responded_at ?? null,
   }));
 }
 

@@ -1,6 +1,7 @@
 import { assessmentRequestContext } from "@/lib/identity/assessment-auth.server";
 import { IdentityError } from "@/lib/identity/errors";
 import { assertPermission } from "@/lib/identity/service.server";
+import { assertDeliveryDnaActionAccess } from "@/lib/delivery-intelligence/commercial-access.server";
 import { canViewRecommendationEvaluationAudit } from "@/lib/recommendation-evaluation/projection";
 import { captureRecommendationAnalyticsSafely } from "@/lib/recommendation-analytics/service.server";
 
@@ -71,6 +72,11 @@ export async function getRecommendationActionOutcome(request: Request, actionId:
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const result = await recommendationOutcomeService.getActionOutcome(actionId, {
       organisationId: verified.organisationId,
       workspaceId: verified.workspaceId,
@@ -97,6 +103,11 @@ export async function postRecommendationActionOutcome(request: Request, actionId
   try {
     const verified = await assessmentRequestContext(request, { write: true });
     assertPermission(verified.identity, "workspace:manage");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const body = (await request.json()) as Record<string, unknown>;
     if (body.command === "retire") {
       if (typeof body.measureVersionId !== "string" || !Number.isInteger(body.expectedVersion))
@@ -151,6 +162,11 @@ export async function getOutcomeObservations(request: Request, measureVersionId:
   try {
     const verified = await assessmentRequestContext(request);
     assertPermission(verified.identity, "assessment:read");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const url = new URL(request.url);
     const requested = Number(url.searchParams.get("limit") ?? "100");
     const limit = Number.isInteger(requested) ? Math.min(Math.max(requested, 1), 250) : 100;
@@ -188,6 +204,11 @@ export async function postOutcomeObservation(request: Request, measureVersionId:
   try {
     const verified = await assessmentRequestContext(request, { write: true });
     assertPermission(verified.identity, "workspace:manage");
+    await assertDeliveryDnaActionAccess({
+      organisationId: verified.organisationId,
+      workspaceId: verified.workspaceId,
+      permitted: true,
+    });
     const body = (await request.json()) as Record<string, unknown>;
     const observed = value(body, "value");
     if (!observed) throw new Error("OUTCOME_OBSERVATION_INVALID: value");

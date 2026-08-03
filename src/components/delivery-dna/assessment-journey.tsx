@@ -74,6 +74,11 @@ export function DeliveryDnaAssessmentJourney({
       ),
     [answers],
   );
+  const carriedResponseCount = detail.responses.filter(
+    (response) =>
+      response.provenanceSource === "delivery-dna-snapshot" &&
+      response.provenanceVersion === "1.0.0",
+  ).length;
 
   const save = useMutation({
     mutationFn: (options?: { sectionId?: string; silent?: boolean }) =>
@@ -203,6 +208,16 @@ export function DeliveryDnaAssessmentJourney({
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
           {deliveryDnaCatalogue.journey.instructions}
         </p>
+        {carriedResponseCount > 0 ? (
+          <div className="mt-5 rounded-lg border border-primary/30 bg-primary/10 p-4 text-sm">
+            <p className="font-semibold">Your Snapshot responses are ready to review</p>
+            <p className="mt-1 leading-relaxed text-muted-foreground">
+              {carriedResponseCount} responses were carried forward unchanged from your Delivery DNA
+              Snapshot. Review them alongside the remaining 26 questions before completing the
+              assessment.
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-6 flex items-center gap-4" aria-label={`${progress}% complete`}>
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">

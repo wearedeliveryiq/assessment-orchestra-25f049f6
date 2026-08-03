@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { register } from "@/lib/identity/authentication.server";
-import { handleAuthRoute, ok, readJson } from "@/lib/identity/http.server";
+import { firstPartyRedirect, handleAuthRoute, ok, readJson } from "@/lib/identity/http.server";
 
 export const Route = createFileRoute("/api/auth/register")({
   server: {
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/api/auth/register")({
               password: body.password,
               firstName: body.firstName,
               lastName: body.lastName,
-              redirectTo: typeof body.redirectTo === "string" ? body.redirectTo : undefined,
+              redirectTo: firstPartyRedirect(request, body.redirectTo, "/auth/verify-email"),
             },
             ctx,
           );

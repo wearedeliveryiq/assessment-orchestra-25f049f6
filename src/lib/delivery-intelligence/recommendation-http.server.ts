@@ -3,6 +3,8 @@ import { IdentityError } from "../identity/errors";
 import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/service.server";
 import { getResult } from "./result-repository.server";
 import { acceptRecommendation } from "./product-recommendations.server";
+import { assertPermission } from "../identity/service.server";
+import { assertDeliveryDnaActionAccess } from "./commercial-access.server";
 
 const json = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), {
@@ -17,6 +19,7 @@ export async function postRecommendationAcceptance(
 ) {
   try {
     const verified = await assessmentRequestContext(request, { write: true });
+    assertPermission(verified.identity, "assessment:submit");
     const context = {
       ownerKey: verified.ownerKey,
       organisationId: verified.organisationId,
@@ -24,6 +27,11 @@ export async function postRecommendationAcceptance(
       userId: verified.identity.user.id,
     };
     const run = await assessmentAnalysisService.get(runId, context);
+    await assertDeliveryDnaActionAccess({
+      organisationId: context.organisationId,
+      workspaceId: context.workspaceId,
+      permitted: true,
+    });
     if (run.status !== "completed")
       return json({ error: "Only completed analysis recommendations can be accepted." }, 409);
     const result = await getResult(runId, context);

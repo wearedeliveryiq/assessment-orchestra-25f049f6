@@ -1,8 +1,8 @@
 import { assessmentAuthHeaders } from "../identity/assessment-auth";
-import type { projectWorkspaceResult } from "./projection";
+import type { projectCommercialWorkspaceResult } from "./projection";
 import type { AnalysisHandoffView } from "../analysis/handoff-types";
 
-export type WorkspaceIntelligenceResult = ReturnType<typeof projectWorkspaceResult> & {
+export type WorkspaceIntelligenceResult = ReturnType<typeof projectCommercialWorkspaceResult> & {
   productRecommendations: {
     knowledgePacks: Array<{ id: string; rank: number; cta: string; copy: string }>;
     teamMates: Array<{ id: string; cta: string; copy: string }>;
