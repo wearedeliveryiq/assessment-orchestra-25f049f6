@@ -25,6 +25,7 @@ import { Route as ApiMembersRouteImport } from './routes/api/members'
 import { Route as ApiNavigationRouteImport } from './routes/api/navigation'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiOrganisationsRouteImport } from './routes/api/organisations'
+import { Route as ApiRecommendationAuditExportsRouteImport } from './routes/api/recommendation-audit-exports'
 import { Route as ApiWorkspacesRouteImport } from './routes/api/workspaces'
 import { Route as AssessIndexRouteImport } from './routes/assess.index'
 import { Route as AssessIdRouteImport } from './routes/assess.$id'
@@ -98,6 +99,7 @@ import { Route as ApiProductHandoffsConsumeRouteImport } from './routes/api/prod
 import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
 import { Route as ApiRecommendationAnalyticsConsentRouteImport } from './routes/api/recommendation-analytics.consent'
 import { Route as ApiRecommendationAnalyticsEventsRouteImport } from './routes/api/recommendation-analytics.events'
+import { Route as ApiRecommendationAuditExportsIdRouteImport } from './routes/api/recommendation-audit-exports.$id'
 import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
 import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
 import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
@@ -201,6 +203,9 @@ import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executio
 import { Route as ApiImprovementActionsIdHandoffsRouteImport } from './routes/api/improvement-actions.$id.handoffs'
 import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
 import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
+import { Route as ApiInternalRecommendationGovernanceConfigurationDiffRouteImport } from './routes/api/internal/recommendation-governance.configuration-diff'
+import { Route as ApiInternalRecommendationGovernanceFeatureFlagsRouteImport } from './routes/api/internal/recommendation-governance.feature-flags'
+import { Route as ApiInternalRecommendationGovernanceHealthRouteImport } from './routes/api/internal/recommendation-governance.health'
 import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
 import { Route as ApiPortfolioItemsIdDecisionsRouteImport } from './routes/api/portfolio-items.$id.decisions'
 import { Route as ApiRecommendationPortfoliosIdActionsRouteImport } from './routes/api/recommendation-portfolios.$id.actions'
@@ -298,6 +303,12 @@ const ApiOrganisationsRoute = ApiOrganisationsRouteImport.update({
   path: '/api/organisations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRecommendationAuditExportsRoute =
+  ApiRecommendationAuditExportsRouteImport.update({
+    id: '/api/recommendation-audit-exports',
+    path: '/api/recommendation-audit-exports',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiWorkspacesRoute = ApiWorkspacesRouteImport.update({
   id: '/api/workspaces',
   path: '/api/workspaces',
@@ -669,6 +680,12 @@ const ApiRecommendationAnalyticsEventsRoute =
     id: '/api/recommendation-analytics/events',
     path: '/api/recommendation-analytics/events',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiRecommendationAuditExportsIdRoute =
+  ApiRecommendationAuditExportsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => ApiRecommendationAuditExportsRoute,
   } as any)
 const ApiRecommendationPortfoliosIdRoute =
   ApiRecommendationPortfoliosIdRouteImport.update({
@@ -1222,6 +1239,24 @@ const ApiInternalRecommendationCataloguesIdRoute =
     path: '/$id',
     getParentRoute: () => ApiInternalRecommendationCataloguesRoute,
   } as any)
+const ApiInternalRecommendationGovernanceConfigurationDiffRoute =
+  ApiInternalRecommendationGovernanceConfigurationDiffRouteImport.update({
+    id: '/api/internal/recommendation-governance/configuration-diff',
+    path: '/api/internal/recommendation-governance/configuration-diff',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiInternalRecommendationGovernanceFeatureFlagsRoute =
+  ApiInternalRecommendationGovernanceFeatureFlagsRouteImport.update({
+    id: '/api/internal/recommendation-governance/feature-flags',
+    path: '/api/internal/recommendation-governance/feature-flags',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiInternalRecommendationGovernanceHealthRoute =
+  ApiInternalRecommendationGovernanceHealthRouteImport.update({
+    id: '/api/internal/recommendation-governance/health',
+    path: '/api/internal/recommendation-governance/health',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPortfolioItemsIdActionsRoute =
   ApiPortfolioItemsIdActionsRouteImport.update({
     id: '/api/portfolio-items/$id/actions',
@@ -1323,6 +1358,7 @@ export interface FileRoutesByFullPath {
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/recommendation-audit-exports': typeof ApiRecommendationAuditExportsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -1396,6 +1432,7 @@ export interface FileRoutesByFullPath {
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
   '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
+  '/api/recommendation-audit-exports/$id': typeof ApiRecommendationAuditExportsIdRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1499,6 +1536,9 @@ export interface FileRoutesByFullPath {
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
+  '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
+  '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -1531,6 +1571,7 @@ export interface FileRoutesByTo {
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/recommendation-audit-exports': typeof ApiRecommendationAuditExportsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -1604,6 +1645,7 @@ export interface FileRoutesByTo {
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
   '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
+  '/api/recommendation-audit-exports/$id': typeof ApiRecommendationAuditExportsIdRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1707,6 +1749,9 @@ export interface FileRoutesByTo {
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
+  '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
+  '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -1740,6 +1785,7 @@ export interface FileRoutesById {
   '/api/navigation': typeof ApiNavigationRoute
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/organisations': typeof ApiOrganisationsRouteWithChildren
+  '/api/recommendation-audit-exports': typeof ApiRecommendationAuditExportsRouteWithChildren
   '/api/workspaces': typeof ApiWorkspacesRouteWithChildren
   '/assess/$id': typeof AssessIdRoute
   '/audit/$assessmentId': typeof AuditAssessmentIdRoute
@@ -1813,6 +1859,7 @@ export interface FileRoutesById {
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-analytics/consent': typeof ApiRecommendationAnalyticsConsentRoute
   '/api/recommendation-analytics/events': typeof ApiRecommendationAnalyticsEventsRoute
+  '/api/recommendation-audit-exports/$id': typeof ApiRecommendationAuditExportsIdRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
@@ -1916,6 +1963,9 @@ export interface FileRoutesById {
   '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
+  '/api/internal/recommendation-governance/configuration-diff': typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
+  '/api/internal/recommendation-governance/feature-flags': typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
+  '/api/internal/recommendation-governance/health': typeof ApiInternalRecommendationGovernanceHealthRoute
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
   '/api/portfolio-items/$id/decisions': typeof ApiPortfolioItemsIdDecisionsRoute
   '/api/recommendation-portfolios/$id/actions': typeof ApiRecommendationPortfoliosIdActionsRoute
@@ -1950,6 +2000,7 @@ export interface FileRouteTypes {
     | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
+    | '/api/recommendation-audit-exports'
     | '/api/workspaces'
     | '/assess/$id'
     | '/audit/$assessmentId'
@@ -2023,6 +2074,7 @@ export interface FileRouteTypes {
     | '/api/public-results/$token'
     | '/api/recommendation-analytics/consent'
     | '/api/recommendation-analytics/events'
+    | '/api/recommendation-audit-exports/$id'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2126,6 +2178,9 @@ export interface FileRouteTypes {
     | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/internal/recommendation-governance/configuration-diff'
+    | '/api/internal/recommendation-governance/feature-flags'
+    | '/api/internal/recommendation-governance/health'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2158,6 +2213,7 @@ export interface FileRouteTypes {
     | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
+    | '/api/recommendation-audit-exports'
     | '/api/workspaces'
     | '/assess/$id'
     | '/audit/$assessmentId'
@@ -2231,6 +2287,7 @@ export interface FileRouteTypes {
     | '/api/public-results/$token'
     | '/api/recommendation-analytics/consent'
     | '/api/recommendation-analytics/events'
+    | '/api/recommendation-audit-exports/$id'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2334,6 +2391,9 @@ export interface FileRouteTypes {
     | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/internal/recommendation-governance/configuration-diff'
+    | '/api/internal/recommendation-governance/feature-flags'
+    | '/api/internal/recommendation-governance/health'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2366,6 +2426,7 @@ export interface FileRouteTypes {
     | '/api/navigation'
     | '/api/notifications'
     | '/api/organisations'
+    | '/api/recommendation-audit-exports'
     | '/api/workspaces'
     | '/assess/$id'
     | '/audit/$assessmentId'
@@ -2439,6 +2500,7 @@ export interface FileRouteTypes {
     | '/api/public-results/$token'
     | '/api/recommendation-analytics/consent'
     | '/api/recommendation-analytics/events'
+    | '/api/recommendation-audit-exports/$id'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
@@ -2542,6 +2604,9 @@ export interface FileRouteTypes {
     | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
+    | '/api/internal/recommendation-governance/configuration-diff'
+    | '/api/internal/recommendation-governance/feature-flags'
+    | '/api/internal/recommendation-governance/health'
     | '/api/portfolio-items/$id/actions'
     | '/api/portfolio-items/$id/decisions'
     | '/api/recommendation-portfolios/$id/actions'
@@ -2575,6 +2640,7 @@ export interface RootRouteChildren {
   ApiNavigationRoute: typeof ApiNavigationRoute
   ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
   ApiOrganisationsRoute: typeof ApiOrganisationsRouteWithChildren
+  ApiRecommendationAuditExportsRoute: typeof ApiRecommendationAuditExportsRouteWithChildren
   ApiWorkspacesRoute: typeof ApiWorkspacesRouteWithChildren
   AssessIdRoute: typeof AssessIdRoute
   AuditAssessmentIdRoute: typeof AuditAssessmentIdRoute
@@ -2695,6 +2761,9 @@ export interface RootRouteChildren {
   ApiAuthPasswordChangeRoute: typeof ApiAuthPasswordChangeRoute
   ApiAuthPasswordForgotRoute: typeof ApiAuthPasswordForgotRoute
   ApiInternalAnalysisHandoffsReconcileRoute: typeof ApiInternalAnalysisHandoffsReconcileRoute
+  ApiInternalRecommendationGovernanceConfigurationDiffRoute: typeof ApiInternalRecommendationGovernanceConfigurationDiffRoute
+  ApiInternalRecommendationGovernanceFeatureFlagsRoute: typeof ApiInternalRecommendationGovernanceFeatureFlagsRoute
+  ApiInternalRecommendationGovernanceHealthRoute: typeof ApiInternalRecommendationGovernanceHealthRoute
   ApiPortfolioItemsIdActionsRoute: typeof ApiPortfolioItemsIdActionsRoute
   ApiPortfolioItemsIdDecisionsRoute: typeof ApiPortfolioItemsIdDecisionsRoute
   AssessmentIdExportFormatRoute: typeof AssessmentIdExportFormatRoute
@@ -2812,6 +2881,13 @@ declare module '@tanstack/react-router' {
       path: '/api/organisations'
       fullPath: '/api/organisations'
       preLoaderRoute: typeof ApiOrganisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-audit-exports': {
+      id: '/api/recommendation-audit-exports'
+      path: '/api/recommendation-audit-exports'
+      fullPath: '/api/recommendation-audit-exports'
+      preLoaderRoute: typeof ApiRecommendationAuditExportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/workspaces': {
@@ -3324,6 +3400,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/recommendation-analytics/events'
       preLoaderRoute: typeof ApiRecommendationAnalyticsEventsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/recommendation-audit-exports/$id': {
+      id: '/api/recommendation-audit-exports/$id'
+      path: '/$id'
+      fullPath: '/api/recommendation-audit-exports/$id'
+      preLoaderRoute: typeof ApiRecommendationAuditExportsIdRouteImport
+      parentRoute: typeof ApiRecommendationAuditExportsRoute
     }
     '/api/recommendation-portfolios/$id': {
       id: '/api/recommendation-portfolios/$id'
@@ -4046,6 +4129,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiInternalRecommendationCataloguesIdRouteImport
       parentRoute: typeof ApiInternalRecommendationCataloguesRoute
     }
+    '/api/internal/recommendation-governance/configuration-diff': {
+      id: '/api/internal/recommendation-governance/configuration-diff'
+      path: '/api/internal/recommendation-governance/configuration-diff'
+      fullPath: '/api/internal/recommendation-governance/configuration-diff'
+      preLoaderRoute: typeof ApiInternalRecommendationGovernanceConfigurationDiffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/internal/recommendation-governance/feature-flags': {
+      id: '/api/internal/recommendation-governance/feature-flags'
+      path: '/api/internal/recommendation-governance/feature-flags'
+      fullPath: '/api/internal/recommendation-governance/feature-flags'
+      preLoaderRoute: typeof ApiInternalRecommendationGovernanceFeatureFlagsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/internal/recommendation-governance/health': {
+      id: '/api/internal/recommendation-governance/health'
+      path: '/api/internal/recommendation-governance/health'
+      fullPath: '/api/internal/recommendation-governance/health'
+      preLoaderRoute: typeof ApiInternalRecommendationGovernanceHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/portfolio-items/$id/actions': {
       id: '/api/portfolio-items/$id/actions'
       path: '/api/portfolio-items/$id/actions'
@@ -4326,6 +4430,20 @@ const ApiOrganisationsRouteChildren: ApiOrganisationsRouteChildren = {
 const ApiOrganisationsRouteWithChildren =
   ApiOrganisationsRoute._addFileChildren(ApiOrganisationsRouteChildren)
 
+interface ApiRecommendationAuditExportsRouteChildren {
+  ApiRecommendationAuditExportsIdRoute: typeof ApiRecommendationAuditExportsIdRoute
+}
+
+const ApiRecommendationAuditExportsRouteChildren: ApiRecommendationAuditExportsRouteChildren =
+  {
+    ApiRecommendationAuditExportsIdRoute: ApiRecommendationAuditExportsIdRoute,
+  }
+
+const ApiRecommendationAuditExportsRouteWithChildren =
+  ApiRecommendationAuditExportsRoute._addFileChildren(
+    ApiRecommendationAuditExportsRouteChildren,
+  )
+
 interface ApiWorkspacesRouteChildren {
   ApiWorkspacesIdRoute: typeof ApiWorkspacesIdRoute
 }
@@ -4539,6 +4657,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiNavigationRoute: ApiNavigationRoute,
   ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
   ApiOrganisationsRoute: ApiOrganisationsRouteWithChildren,
+  ApiRecommendationAuditExportsRoute:
+    ApiRecommendationAuditExportsRouteWithChildren,
   ApiWorkspacesRoute: ApiWorkspacesRouteWithChildren,
   AssessIdRoute: AssessIdRoute,
   AuditAssessmentIdRoute: AuditAssessmentIdRoute,
@@ -4664,6 +4784,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthPasswordForgotRoute: ApiAuthPasswordForgotRoute,
   ApiInternalAnalysisHandoffsReconcileRoute:
     ApiInternalAnalysisHandoffsReconcileRoute,
+  ApiInternalRecommendationGovernanceConfigurationDiffRoute:
+    ApiInternalRecommendationGovernanceConfigurationDiffRoute,
+  ApiInternalRecommendationGovernanceFeatureFlagsRoute:
+    ApiInternalRecommendationGovernanceFeatureFlagsRoute,
+  ApiInternalRecommendationGovernanceHealthRoute:
+    ApiInternalRecommendationGovernanceHealthRoute,
   ApiPortfolioItemsIdActionsRoute: ApiPortfolioItemsIdActionsRoute,
   ApiPortfolioItemsIdDecisionsRoute: ApiPortfolioItemsIdDecisionsRoute,
   AssessmentIdExportFormatRoute: AssessmentIdExportFormatRoute,
