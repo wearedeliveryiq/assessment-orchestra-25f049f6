@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-005-priority-model`. Application verification is complete; Lovable Cloud migration execution and live API verification remain deployment gates.
+Implemented, migrated, verified, and published. Lovable Cloud applied the S4-005 schema and hardening migrations in order; live model creation remains unavailable because production has no eligible completed analysis result.
 
 ## Architecture and reuse
 
@@ -110,9 +110,8 @@ The public projection exposes only the existing aggregate recommendation count. 
 - Production Vite/Nitro build passed.
 - The 250-item deterministic priority test completed within the two-second portfolio target.
 
-## Known limitations and deployment gates
+## Known limitations
 
-- Apply and verify both migrations through Lovable Cloud in timestamp order; local CLI migration execution is unavailable for the Lovable-managed database.
 - The production database has no eligible completed analysis, so live S4-005 creation, replay, preference and cross-tenant smoke tests remain unavailable rather than manufacturing customer evidence.
 - S4-012 owns the interactive customer portfolio experience. S4-005 provides accessible textual API contracts and introduces no new UI control.
 

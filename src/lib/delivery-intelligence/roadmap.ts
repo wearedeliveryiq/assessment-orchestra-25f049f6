@@ -13,7 +13,23 @@ export class RoadmapError extends Error {
   }
 }
 
-function topologicalOrder(input: RoadmapInput): { ordered: string[]; overrides: Set<string> } {
+export type RoadmapPublished = {
+  published: true;
+  day30: Array<{ id: string; reason: string }>;
+  day60: Array<{ id: string; reason: string }>;
+  day90: Array<{ id: string; reason: string }>;
+  unscheduled: Array<{ id: string; reason: string }>;
+};
+
+export type RoadmapFailed = {
+  published: false;
+  error: { code: string; cycle: string[] };
+};
+
+export function topologicalRoadmapOrder(input: RoadmapInput): {
+  ordered: string[];
+  overrides: Set<string>;
+} {
   const rankedIndex = new Map(input.ranked.map((id, index) => [id, index]));
   const visiting = new Set<string>();
   const visited = new Set<string>();
@@ -43,10 +59,10 @@ function topologicalOrder(input: RoadmapInput): { ordered: string[]; overrides: 
   return { ordered, overrides };
 }
 
-export function buildRoadmap(input: RoadmapInput) {
-  let graph: ReturnType<typeof topologicalOrder>;
+export function buildRoadmap(input: RoadmapInput): RoadmapPublished | RoadmapFailed {
+  let graph: ReturnType<typeof topologicalRoadmapOrder>;
   try {
-    graph = topologicalOrder(input);
+    graph = topologicalRoadmapOrder(input);
   } catch (error) {
     if (error instanceof RoadmapError) {
       return { published: false, error: { code: error.message, cycle: error.cycle } };

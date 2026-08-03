@@ -7,6 +7,7 @@ import { recommendationConfidenceGateService } from "../recommendation-confidenc
 import { recommendationEvaluationService } from "../recommendation-evaluation/service.server";
 import { recommendationPriorityService } from "../recommendation-priority/service.server";
 import { recommendationResolutionService } from "../recommendation-resolution/service.server";
+import { recommendationSequenceService } from "../recommendation-sequencing/service.server";
 import type { AssessmentAnalysisRun } from "./types";
 
 const locallyRunning = new Map<string, Promise<AssessmentAnalysisRun | null>>();
@@ -29,6 +30,7 @@ export interface AnalysisExecutorDependencies {
   gateRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
   resolveRecommendationConflicts?(run: AssessmentAnalysisRun): Promise<void>;
   prioritiseRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
+  sequenceRecommendations?(run: AssessmentAnalysisRun): Promise<void>;
   workerId(): string;
 }
 
@@ -61,6 +63,9 @@ const defaultDependencies: AnalysisExecutorDependencies = {
   },
   prioritiseRecommendations: async (run) => {
     await recommendationPriorityService.prioritise(run);
+  },
+  sequenceRecommendations: async (run) => {
+    await recommendationSequenceService.sequence(run);
   },
   workerId: () => `analysis-worker:${crypto.randomUUID()}`,
 };
@@ -134,9 +139,11 @@ export class AnalysisRunExecutor {
           );
         }
       }
+      let recommendationPriorityCompleted = false;
       if (recommendationConflictResolutionCompleted && this.deps.prioritiseRecommendations) {
         try {
           await this.deps.prioritiseRecommendations(completed);
+          recommendationPriorityCompleted = true;
           await this.deps.event(completed, "recommendation.priority_completed", {
             policyVersion: "PB-004/S4-005/1.0.0",
           });
@@ -145,6 +152,27 @@ export class AnalysisRunExecutor {
             completed,
             "recommendation.priority_failed",
             { code: "RECOMMENDATION_PRIORITY_INVALID" },
+            "error",
+          );
+        }
+      }
+      if (recommendationPriorityCompleted && this.deps.sequenceRecommendations) {
+        try {
+          await this.deps.sequenceRecommendations(completed);
+          await this.deps.event(completed, "recommendation.sequence_completed", {
+            policyVersion: "PB-004/S4-006/1.0.0",
+          });
+        } catch (error) {
+          const code =
+            error && typeof error === "object" && "code" in error
+              ? String(error.code)
+              : "RECOMMENDATION_SEQUENCE_INVALID";
+          await this.deps.event(
+            completed,
+            "recommendation.sequence_failed",
+            {
+              code: code === "ROADMAP_DEPENDENCY_CYCLE" ? code : "RECOMMENDATION_SEQUENCE_INVALID",
+            },
             "error",
           );
         }
