@@ -3,7 +3,7 @@
 | Control                    | Value                                                             |
 | -------------------------- | ----------------------------------------------------------------- |
 | Document ID                | DIQ-000                                                           |
-| Version                    | 2.7                                                               |
+| Version                    | 2.8                                                               |
 | Status                     | **CONTROLLED**                                                    |
 | Owner                      | Product Owner                                                     |
 | Approver                   | Matt Prust                                                        |
@@ -35,7 +35,7 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 
 | ID           | Document                                                                                                                                                                           |   Version | Status                                                                   | Location                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------: | ------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| DIQ-000      | Master Index                                                                                                                                                                       |       2.7 | CONTROLLED                                                               | This document                                                           |
+| DIQ-000      | Master Index                                                                                                                                                                       |       2.8 | CONTROLLED                                                               | This document                                                           |
 | DIQ-001      | [Vision & Mission](<DIQ-001 Vision & Mission.md>)                                                                                                                                  |       0.1 | DRAFT                                                                    | `docs/00-master-index`                                                  |
 | DIQ-002      | [Product Architecture](<DIQ-002 Product Architecture.md>)                                                                                                                          |       1.0 | **LOCKED**                                                               | `docs/00-master-index`                                                  |
 | DIQ-003      | [Product Roadmap](<DIQ-003 Product Roadmap.md>)                                                                                                                                    |       0.1 | DRAFT                                                                    | `docs/00-master-index`                                                  |
@@ -71,7 +71,8 @@ This index is the control record and entry point for DeliveryIQ documentation. A
 | SAR-003-PD   | [Sprint 03 Product Definition Acceptance](<../07-release/SAR-003-PD Sprint 03 Product Definition Acceptance.md>)                                                                   |       1.0 | **ACCEPTED**                                                             | `docs/07-release`                                                       |
 | SAR-003      | [Sprint 03 Product Acceptance](<../07-release/SAR-003 Sprint 03 Product Acceptance.md>)                                                                                            |       1.0 | **ACCEPTED WITH RECORDED LIMITATIONS**                                   | `docs/07-release`                                                       |
 | PDR-004-001  | [Sprint 04 Outcome Measurement and Recovery Policy](<../07-release/PDR-004-001 Sprint 04 Outcome Measurement and Recovery Policy.md>)                                              |       1.0 | **LOCKED**                                                               | `docs/07-release`                                                       |
-| SAR-004      | [Sprint 04 Product Acceptance](<../07-release/SAR-004 Sprint 04 Product Acceptance.md>)                                                                                            |       1.0 | **REMEDIATION REQUIRED**                                                 | `docs/07-release`                                                       |
+| SAR-004 v1.0 | [Sprint 04 Product Acceptance — historical review](<../07-release/SAR-004 Sprint 04 Product Acceptance.md>)                                                                        |       1.0 | **SUPERSEDED**                                                           | `docs/07-release`                                                       |
+| SAR-004      | [Sprint 04 Superseding Product Acceptance](<../07-release/SAR-004 v1.1 Sprint 04 Superseding Product Acceptance.md>)                                                               |       1.1 | **REMEDIATION REQUIRED**                                                 | `docs/07-release`                                                       |
 
 ## Filing structure
 
@@ -102,23 +103,24 @@ docs/
 
 ## Index Change History
 
-| Version | Date          | Change                                                                                                                                        |
-| ------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2.7     | 3 August 2026 | Registered locked PDR-004-001 and SAR-004 Sprint 04 review decision with remediation required                                                 |
-| 2.6     | 2 August 2026 | Completed the controlled-document filing audit, defined all statuses used by the register, and removed obsolete empty filing paths            |
-| 2.5     | 2 August 2026 | Refactored TM-001 as cross-industry Admin, registered the Delivery Operations profile, and promoted DIQ-400/A/B to RC3 and DIQ-401/A/B to RC2 |
-| 2.4     | 2 August 2026 | Registered DIQ-401/A/B RC1 TeamMate commerce, subscription, provisioning and delivery package                                                 |
-| 2.3     | 2 August 2026 | Refined DIQ-400/A/B to RC2 and registered the TM-001/A/B Admin TeamMate reference product package                                             |
-| 2.2     | 2 August 2026 | Registered DIQ-400/A/B v1.0 RC1 TeamMate definition and capability package                                                                    |
-| 2.1     | 2 August 2026 | Registered completed PB-005 v1.0-RC1 for final approval                                                                                       |
-| 2.0     | 2 August 2026 | Registered SAR-003 final Sprint 03 Product Acceptance with recorded limitations                                                               |
-| 1.9     | 2 August 2026 | Registered and locked PDR-003-002 Sprint 03 analysis eligibility policy                                                                       |
-| 1.8     | 2 August 2026 | Registered DIQ-300 RC1, KP-001/A/B RC1, and PB-005 initial controlled draft                                                                   |
-| 1.7     | 2 August 2026 | Registered PDR-003-001 automatic analysis trigger and retry policy                                                                            |
-| 1.6     | 2 August 2026 | Recorded Matt Prust’s approval and promoted PB-004 to the locked version 1.0 baseline                                                         |
-| 1.5     | 2 August 2026 | Registered completed PB-004 v1.0-RC1 for final approval                                                                                       |
-| 1.4     | 2 August 2026 | Recorded Matt Prust’s approval and promoted DIQ-203, DIQ-203A, DIQ-203B and SAR-003-PD to final version 1.0 baselines                         |
-| 1.3     | 2 August 2026 | Registered DIQ-203, DIQ-203A, DIQ-203B and SAR-003-PD                                                                                         |
-| 1.2     | 2 August 2026 | Restored and registered the initial DIQ controlled-document set; retained PB-003 and PB-004                                                   |
-| 1.1     | 2 August 2026 | Registered PB-004 initial controlled draft                                                                                                    |
-| 1.0     | 2 August 2026 | Established the index and registered PB-003                                                                                                   |
+| Version | Date          | Change                                                                                                                                                                     |
+| ------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2.8     | 3 August 2026 | Registered SAR-004 v1.1 superseding review; closed S4-010 and evidence remediation, preserved v1.0, and isolated recovery architecture as the remaining acceptance blocker |
+| 2.7     | 3 August 2026 | Registered locked PDR-004-001 and SAR-004 Sprint 04 review decision with remediation required                                                                              |
+| 2.6     | 2 August 2026 | Completed the controlled-document filing audit, defined all statuses used by the register, and removed obsolete empty filing paths                                         |
+| 2.5     | 2 August 2026 | Refactored TM-001 as cross-industry Admin, registered the Delivery Operations profile, and promoted DIQ-400/A/B to RC3 and DIQ-401/A/B to RC2                              |
+| 2.4     | 2 August 2026 | Registered DIQ-401/A/B RC1 TeamMate commerce, subscription, provisioning and delivery package                                                                              |
+| 2.3     | 2 August 2026 | Refined DIQ-400/A/B to RC2 and registered the TM-001/A/B Admin TeamMate reference product package                                                                          |
+| 2.2     | 2 August 2026 | Registered DIQ-400/A/B v1.0 RC1 TeamMate definition and capability package                                                                                                 |
+| 2.1     | 2 August 2026 | Registered completed PB-005 v1.0-RC1 for final approval                                                                                                                    |
+| 2.0     | 2 August 2026 | Registered SAR-003 final Sprint 03 Product Acceptance with recorded limitations                                                                                            |
+| 1.9     | 2 August 2026 | Registered and locked PDR-003-002 Sprint 03 analysis eligibility policy                                                                                                    |
+| 1.8     | 2 August 2026 | Registered DIQ-300 RC1, KP-001/A/B RC1, and PB-005 initial controlled draft                                                                                                |
+| 1.7     | 2 August 2026 | Registered PDR-003-001 automatic analysis trigger and retry policy                                                                                                         |
+| 1.6     | 2 August 2026 | Recorded Matt Prust’s approval and promoted PB-004 to the locked version 1.0 baseline                                                                                      |
+| 1.5     | 2 August 2026 | Registered completed PB-004 v1.0-RC1 for final approval                                                                                                                    |
+| 1.4     | 2 August 2026 | Recorded Matt Prust’s approval and promoted DIQ-203, DIQ-203A, DIQ-203B and SAR-003-PD to final version 1.0 baselines                                                      |
+| 1.3     | 2 August 2026 | Registered DIQ-203, DIQ-203A, DIQ-203B and SAR-003-PD                                                                                                                      |
+| 1.2     | 2 August 2026 | Restored and registered the initial DIQ controlled-document set; retained PB-003 and PB-004                                                                                |
+| 1.1     | 2 August 2026 | Registered PB-004 initial controlled draft                                                                                                                                 |
+| 1.0     | 2 August 2026 | Established the index and registered PB-003                                                                                                                                |
