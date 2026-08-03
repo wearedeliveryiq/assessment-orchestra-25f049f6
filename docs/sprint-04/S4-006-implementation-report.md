@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-006-dependency-sequencing`. Application verification is complete; Lovable Cloud migration execution and live API verification remain deployment gates.
+Deployed from `agent/s4-006-dependency-sequencing`. Application verification, Lovable Cloud migration execution, live schema inspection, and production publication are complete. Live data-path smoke testing remains unavailable because production has no eligible completed Delivery DNA analysis.
 
 ## Architecture and reuse
 
@@ -114,9 +114,11 @@ The public projection exposes only an aggregate recommendation count. It does no
 - Production Vite/Nitro build passed before final documentation; it is rerun in the final quality gate.
 - The 250-item / 986-edge graph test completed inside the one-second dependency target.
 
-## Known limitations and deployment gates
+## Deployment evidence and known limitations
 
-- Apply and verify both migrations through Lovable Cloud in timestamp order; local CLI migration execution remains unavailable for the Lovable-managed database.
+- Lovable Cloud applied the schema and hardening migrations separately and in order as `20260803102050_7a8a201f-7b7b-44b2-a2a7-1cfc3114655b.sql` and `20260803102155_8a2b531b-c0e4-43d3-b034-ed5b948771b7.sql`.
+- All four S4-006 tables, enums, indexes, immutable triggers, constraints, RLS controls, zero-policy posture, and service-role-only routines were verified live. `anon` and `authenticated` retained no direct table or function access.
+- The production build was published at Lovable commit `a41ec0f2b557ae342955bdc89e1639d76be2e3a2`, and the public application returned HTTP 200.
 - The production database has no eligible completed analysis result, so live S4-006 creation, replay, override, stale-version, cycle, and cross-tenant smoke tests remain unavailable rather than manufacturing customer evidence.
 - S4-007 owns the customer-ready grouped recommendation portfolio, and S4-012 owns the interactive experience. S4-006 provides accessible textual contracts and introduces no new UI control.
 

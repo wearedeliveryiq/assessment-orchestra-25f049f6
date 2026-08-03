@@ -240,6 +240,53 @@ describe("S3-001 analysis worker", () => {
     );
   });
 
+  it("publishes the immutable portfolio only after dependency sequencing succeeds", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => undefined);
+    dependencies.sequenceRecommendations = vi.fn(async () => undefined);
+    dependencies.publishRecommendationPortfolio = vi.fn(async () => undefined);
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.sequenceRecommendations).toHaveBeenCalledBefore(
+      vi.mocked(dependencies.publishRecommendationPortfolio),
+    );
+    expect(events).toEqual([
+      "analysis.started",
+      "analysis.completed",
+      "recommendation.evaluation_completed",
+      "recommendation.confidence_gate_completed",
+      "recommendation.conflict_resolution_completed",
+      "recommendation.priority_completed",
+      "recommendation.sequence_completed",
+      "recommendation.portfolio_completed",
+    ]);
+  });
+
+  it("does not roll back completed analysis when portfolio publication fails", async () => {
+    const { dependencies, events } = harness(vi.fn(async () => ({ ...run, status: "completed" })));
+    dependencies.evaluateRecommendations = vi.fn(async () => undefined);
+    dependencies.gateRecommendations = vi.fn(async () => undefined);
+    dependencies.resolveRecommendationConflicts = vi.fn(async () => undefined);
+    dependencies.prioritiseRecommendations = vi.fn(async () => undefined);
+    dependencies.sequenceRecommendations = vi.fn(async () => undefined);
+    dependencies.publishRecommendationPortfolio = vi.fn(async () => {
+      throw new Error("internal portfolio detail");
+    });
+    const executor = new AnalysisRunExecutor(dependencies);
+    await expect(executor.execute(run.id)).resolves.toMatchObject({ status: "completed" });
+    expect(dependencies.fail).not.toHaveBeenCalled();
+    expect(dependencies.event).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "completed" }),
+      "recommendation.portfolio_failed",
+      { code: "PORTFOLIO_PUBLICATION_FAILED" },
+      "error",
+    );
+    expect(events).toContain("recommendation.portfolio_failed");
+  });
+
   it("classifies only approved transient failures as automatically retryable", () => {
     expect(
       classifyExecutionFailure(new Error("ANALYSIS_EXECUTION_TRANSIENT: timeout")),

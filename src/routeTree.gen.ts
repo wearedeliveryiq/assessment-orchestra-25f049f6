@@ -93,6 +93,7 @@ import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invit
 import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
 import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
+import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
 import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
 import { Route as ApiReportingDownloadCentreRouteImport } from './routes/api/reporting.download-centre'
 import { Route as ApiReportingHistoryRouteImport } from './routes/api/reporting.history'
@@ -150,6 +151,7 @@ import { Route as ApiAnalysisRunsIdExplanationsRouteImport } from './routes/api/
 import { Route as ApiAnalysisRunsIdPublicResultRouteImport } from './routes/api/analysis-runs.$id.public-result'
 import { Route as ApiAnalysisRunsIdRecommendationConfidenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-confidence'
 import { Route as ApiAnalysisRunsIdRecommendationEvaluationRouteImport } from './routes/api/analysis-runs.$id.recommendation-evaluation'
+import { Route as ApiAnalysisRunsIdRecommendationPortfolioRouteImport } from './routes/api/analysis-runs.$id.recommendation-portfolio'
 import { Route as ApiAnalysisRunsIdRecommendationPriorityRouteImport } from './routes/api/analysis-runs.$id.recommendation-priority'
 import { Route as ApiAnalysisRunsIdRecommendationResolutionRouteImport } from './routes/api/analysis-runs.$id.recommendation-resolution'
 import { Route as ApiAnalysisRunsIdRecommendationSequenceRouteImport } from './routes/api/analysis-runs.$id.recommendation-sequence'
@@ -628,6 +630,12 @@ const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
   path: '/api/public-results/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRecommendationPortfoliosIdRoute =
+  ApiRecommendationPortfoliosIdRouteImport.update({
+    id: '/api/recommendation-portfolios/$id',
+    path: '/api/recommendation-portfolios/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiReportingBrandingRoute = ApiReportingBrandingRouteImport.update({
   id: '/api/reporting/branding',
   path: '/api/reporting/branding',
@@ -923,6 +931,12 @@ const ApiAnalysisRunsIdRecommendationEvaluationRoute =
   ApiAnalysisRunsIdRecommendationEvaluationRouteImport.update({
     id: '/recommendation-evaluation',
     path: '/recommendation-evaluation',
+    getParentRoute: () => ApiAnalysisRunsIdRoute,
+  } as any)
+const ApiAnalysisRunsIdRecommendationPortfolioRoute =
+  ApiAnalysisRunsIdRecommendationPortfolioRouteImport.update({
+    id: '/recommendation-portfolio',
+    path: '/recommendation-portfolio',
     getParentRoute: () => ApiAnalysisRunsIdRoute,
   } as any)
 const ApiAnalysisRunsIdRecommendationPriorityRoute =
@@ -1301,6 +1315,7 @@ export interface FileRoutesByFullPath {
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1358,6 +1373,7 @@ export interface FileRoutesByFullPath {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-portfolio': typeof ApiAnalysisRunsIdRecommendationPortfolioRoute
   '/api/analysis-runs/$id/recommendation-priority': typeof ApiAnalysisRunsIdRecommendationPriorityRoute
   '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/recommendation-sequence': typeof ApiAnalysisRunsIdRecommendationSequenceRoute
@@ -1496,6 +1512,7 @@ export interface FileRoutesByTo {
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1553,6 +1570,7 @@ export interface FileRoutesByTo {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-portfolio': typeof ApiAnalysisRunsIdRecommendationPortfolioRoute
   '/api/analysis-runs/$id/recommendation-priority': typeof ApiAnalysisRunsIdRecommendationPriorityRoute
   '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/recommendation-sequence': typeof ApiAnalysisRunsIdRecommendationSequenceRoute
@@ -1692,6 +1710,7 @@ export interface FileRoutesById {
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
+  '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRoute
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
   '/api/reporting/download-centre': typeof ApiReportingDownloadCentreRoute
   '/api/reporting/history': typeof ApiReportingHistoryRoute
@@ -1749,6 +1768,7 @@ export interface FileRoutesById {
   '/api/analysis-runs/$id/public-result': typeof ApiAnalysisRunsIdPublicResultRoute
   '/api/analysis-runs/$id/recommendation-confidence': typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   '/api/analysis-runs/$id/recommendation-evaluation': typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  '/api/analysis-runs/$id/recommendation-portfolio': typeof ApiAnalysisRunsIdRecommendationPortfolioRoute
   '/api/analysis-runs/$id/recommendation-priority': typeof ApiAnalysisRunsIdRecommendationPriorityRoute
   '/api/analysis-runs/$id/recommendation-resolution': typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   '/api/analysis-runs/$id/recommendation-sequence': typeof ApiAnalysisRunsIdRecommendationSequenceRoute
@@ -1889,6 +1909,7 @@ export interface FileRouteTypes {
     | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/public-results/$token'
+    | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -1946,6 +1967,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-portfolio'
     | '/api/analysis-runs/$id/recommendation-priority'
     | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/recommendation-sequence'
@@ -2084,6 +2106,7 @@ export interface FileRouteTypes {
     | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/public-results/$token'
+    | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -2141,6 +2164,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-portfolio'
     | '/api/analysis-runs/$id/recommendation-priority'
     | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/recommendation-sequence'
@@ -2279,6 +2303,7 @@ export interface FileRouteTypes {
     | '/api/notifications/read'
     | '/api/organisations/$id'
     | '/api/public-results/$token'
+    | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
     | '/api/reporting/download-centre'
     | '/api/reporting/history'
@@ -2336,6 +2361,7 @@ export interface FileRouteTypes {
     | '/api/analysis-runs/$id/public-result'
     | '/api/analysis-runs/$id/recommendation-confidence'
     | '/api/analysis-runs/$id/recommendation-evaluation'
+    | '/api/analysis-runs/$id/recommendation-portfolio'
     | '/api/analysis-runs/$id/recommendation-priority'
     | '/api/analysis-runs/$id/recommendation-resolution'
     | '/api/analysis-runs/$id/recommendation-sequence'
@@ -2467,6 +2493,7 @@ export interface RootRouteChildren {
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
   ApiInternalRecommendationCataloguesRoute: typeof ApiInternalRecommendationCataloguesRouteWithChildren
   ApiPublicResultsTokenRoute: typeof ApiPublicResultsTokenRoute
+  ApiRecommendationPortfoliosIdRoute: typeof ApiRecommendationPortfoliosIdRoute
   ApiReportingBrandingRoute: typeof ApiReportingBrandingRoute
   ApiReportingDownloadCentreRoute: typeof ApiReportingDownloadCentreRoute
   ApiReportingHistoryRoute: typeof ApiReportingHistoryRoute
@@ -3114,6 +3141,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicResultsTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/recommendation-portfolios/$id': {
+      id: '/api/recommendation-portfolios/$id'
+      path: '/api/recommendation-portfolios/$id'
+      fullPath: '/api/recommendation-portfolios/$id'
+      preLoaderRoute: typeof ApiRecommendationPortfoliosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/reporting/branding': {
       id: '/api/reporting/branding'
       path: '/api/reporting/branding'
@@ -3513,6 +3547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRouteImport
       parentRoute: typeof ApiAnalysisRunsIdRoute
     }
+    '/api/analysis-runs/$id/recommendation-portfolio': {
+      id: '/api/analysis-runs/$id/recommendation-portfolio'
+      path: '/recommendation-portfolio'
+      fullPath: '/api/analysis-runs/$id/recommendation-portfolio'
+      preLoaderRoute: typeof ApiAnalysisRunsIdRecommendationPortfolioRouteImport
+      parentRoute: typeof ApiAnalysisRunsIdRoute
+    }
     '/api/analysis-runs/$id/recommendation-priority': {
       id: '/api/analysis-runs/$id/recommendation-priority'
       path: '/recommendation-priority'
@@ -3885,6 +3926,7 @@ interface ApiAnalysisRunsIdRouteChildren {
   ApiAnalysisRunsIdPublicResultRoute: typeof ApiAnalysisRunsIdPublicResultRoute
   ApiAnalysisRunsIdRecommendationConfidenceRoute: typeof ApiAnalysisRunsIdRecommendationConfidenceRoute
   ApiAnalysisRunsIdRecommendationEvaluationRoute: typeof ApiAnalysisRunsIdRecommendationEvaluationRoute
+  ApiAnalysisRunsIdRecommendationPortfolioRoute: typeof ApiAnalysisRunsIdRecommendationPortfolioRoute
   ApiAnalysisRunsIdRecommendationPriorityRoute: typeof ApiAnalysisRunsIdRecommendationPriorityRoute
   ApiAnalysisRunsIdRecommendationResolutionRoute: typeof ApiAnalysisRunsIdRecommendationResolutionRoute
   ApiAnalysisRunsIdRecommendationSequenceRoute: typeof ApiAnalysisRunsIdRecommendationSequenceRoute
@@ -3900,6 +3942,8 @@ const ApiAnalysisRunsIdRouteChildren: ApiAnalysisRunsIdRouteChildren = {
     ApiAnalysisRunsIdRecommendationConfidenceRoute,
   ApiAnalysisRunsIdRecommendationEvaluationRoute:
     ApiAnalysisRunsIdRecommendationEvaluationRoute,
+  ApiAnalysisRunsIdRecommendationPortfolioRoute:
+    ApiAnalysisRunsIdRecommendationPortfolioRoute,
   ApiAnalysisRunsIdRecommendationPriorityRoute:
     ApiAnalysisRunsIdRecommendationPriorityRoute,
   ApiAnalysisRunsIdRecommendationResolutionRoute:
@@ -4295,6 +4339,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiInternalRecommendationCataloguesRoute:
     ApiInternalRecommendationCataloguesRouteWithChildren,
   ApiPublicResultsTokenRoute: ApiPublicResultsTokenRoute,
+  ApiRecommendationPortfoliosIdRoute: ApiRecommendationPortfoliosIdRoute,
   ApiReportingBrandingRoute: ApiReportingBrandingRoute,
   ApiReportingDownloadCentreRoute: ApiReportingDownloadCentreRoute,
   ApiReportingHistoryRoute: ApiReportingHistoryRoute,
