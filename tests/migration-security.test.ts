@@ -189,6 +189,20 @@ const recommendationDecisionHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationActionMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803090000_recommendation_improvement_actions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationActionHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803091000_harden_recommendation_action_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -563,6 +577,36 @@ describe("Sprint 03 migration security", () => {
     );
     expect(recommendationDecisionHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.record_recommendation_item_decision(jsonb) TO service_role",
+    );
+  });
+
+  it("governs focused recommendation actions with immutable history and dependency controls", () => {
+    expect(recommendationActionMigration).toContain("recommendation_improvement_plans_immutable");
+    expect(recommendationActionMigration).toContain(
+      "recommendation_improvement_action_events_immutable",
+    );
+    expect(recommendationActionMigration).toContain(
+      "recommendation_improvement_action_event_scope",
+    );
+    expect(recommendationActionMigration).toContain("recommendation_improvement_actions_governed");
+    expect(recommendationActionMigration).toContain("UNIQUE (plan_id, portfolio_item_id)");
+    expect(recommendationActionMigration).toContain("DEFERRABLE INITIALLY DEFERRED");
+    expect(recommendationActionMigration).toContain("ACTION_DEPENDENCY_BLOCKED");
+    expect(recommendationActionMigration).toContain("blocking_dependency_ids text[]");
+    expect(recommendationActionMigration).toContain("required_action.status = 'completed'");
+    expect(recommendationActionMigration).toContain("membership.user_id = assigned.user_id");
+    expect(recommendationActionMigration).toContain("membership.user_id = NEW.actor_user_id");
+    expect(recommendationActionMigration).toContain("v_decision.portfolio_item_id");
+    expect(recommendationActionMigration).toContain("RECOMMENDATION_ACTION_VERSION_CONFLICT");
+    expect(recommendationActionMigration).toContain("pg_advisory_xact_lock");
+    expect(recommendationActionMigration).not.toContain("CREATE POLICY");
+    expect(recommendationActionHardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(recommendationActionHardening).toContain("REVOKE MAINTAIN");
+    expect(recommendationActionHardening).toContain(
+      "public.recommendation_improvement_action_events FROM service_role",
+    );
+    expect(recommendationActionHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.record_recommendation_improvement_action(jsonb) TO service_role",
     );
   });
 });
