@@ -256,15 +256,15 @@
 
 ## S4-011 quality gates
 
-| Gate                            | Evidence                                                                                              | Status                                     |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Domain/mapping/state            | `tests/recommendation-product-handoffs.test.ts`                                                       | PASS                                       |
-| Idempotency/expiry/failure      | stable exact replay, bounded expiry and retirement/revocation cases                                   | PASS                                       |
-| Tenant isolation/permissions    | scoped repositories, authenticated request context, DB active-member checks and deny-by-default ACL   | PASS — live migration verification pending |
-| Security/privacy/audit          | HMAC token, stored hash only, no URL secret, explicit immutable consent and append-only consume event | PASS                                       |
-| Accessibility/copy              | labelled status/error/confirmation, 44px controls and explicit no-activation copy                     | PASS                                       |
-| Performance                     | 5,000 governed opportunity resolutions inside two seconds                                             | PASS                                       |
-| Full regression/type/lint/build | final results recorded in S4-011 implementation report                                                | PENDING FINAL GATE                         |
-| Lovable Cloud migration         | `20260803110000` then `20260803111000`                                                                | PENDING DEPLOYMENT                         |
+| Gate                            | Evidence                                                                                              | Status                                        |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Domain/mapping/state            | `tests/recommendation-product-handoffs.test.ts`                                                       | PASS                                          |
+| Idempotency/expiry/failure      | stable exact replay, bounded expiry and retirement/revocation cases                                   | PASS                                          |
+| Tenant isolation/permissions    | scoped repositories, authenticated request context, DB active-member checks and deny-by-default ACL   | PASS — live migration verification pending    |
+| Security/privacy/audit          | HMAC token, stored hash only, no URL secret, explicit immutable consent and append-only consume event | PASS                                          |
+| Accessibility/copy              | labelled status/error/confirmation, 44px controls and explicit no-activation copy                     | PASS                                          |
+| Performance                     | 5,000 governed opportunity resolutions inside two seconds                                             | PASS                                          |
+| Full regression/type/lint/build | 39 files / 481 tests; all 53 DIQ-203B fixtures; typecheck; changed-file lint/format; production build | PASS — full lint limitation remains inherited |
+| Lovable Cloud migration         | `20260803110000` then `20260803111000`                                                                | PENDING DEPLOYMENT                            |
 
 Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003–006 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.

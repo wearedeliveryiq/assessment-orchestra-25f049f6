@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented on `agent/s4-010-outcomes-success-measures`. Application verification is complete; Lovable-managed migration execution and live schema verification remain deployment gates.
+Implemented on `agent/s4-011-product-handoffs`. Application verification is complete; Lovable-managed migration execution and live schema verification remain deployment gates.
 
 S4-010 is independently blocked by the missing locked outcome/date-policy definitions recorded in `S4-010-product-rule-blocker.md`. S4-011 does not depend on those undefined calculations.
 
@@ -71,9 +71,10 @@ All three tables have RLS enabled with zero client policies. `PUBLIC`, `anon` an
 
 ## Verification
 
-- Targeted S4-011 domain, service, security, migration, accessibility and performance tests passed.
-- Type checking and a production build passed during implementation.
-- Full regression, all locked DIQ-203B fixtures, changed-file lint/format and final production build are required before merge and will be recorded here after execution.
+- Targeted S4-011 domain, service, security, migration, accessibility and performance tests passed: 2 files / 35 tests.
+- Full regression passed: 39 files / 481 tests, including all 53 locked DIQ-203B fixtures.
+- Type checking, changed-file ESLint, changed-file Prettier and the production build passed after reconciliation with the deployed S4-009 history.
+- Full-repository lint was run and remains a recorded inherited limitation: 614 errors and 15 warnings outside the S4-011 changed-file gate.
 - Live migration and hand-off smoke remain pending Lovable deployment. No synthetic customer evidence or product availability is created.
 
 ## Known limitations and technical debt
@@ -81,7 +82,7 @@ All three tables have RLS enabled with zero client policies. `PUBLIC`, `anon` an
 - DIQ-203A defines Pack and TeamMate IDs/mappings but not operational product versions. Existing availability rows therefore remain safely hidden until an authorised operational process sets an exact version.
 - This story returns a bounded downstream contract and audit event; the Knowledge Pack runtime and TeamMate activation workflow remain explicitly out of scope.
 - Production has no governed product-availability rows at the last verified baseline. Live customer hand-offs will remain hidden until genuine availability, version and entitlement records exist.
-- Existing repository-wide lint debt remains outside this story; changed files are held to a clean gate.
+- Existing repository-wide lint debt remains outside this story; changed files are clean.
 
 ## Product decisions required
 

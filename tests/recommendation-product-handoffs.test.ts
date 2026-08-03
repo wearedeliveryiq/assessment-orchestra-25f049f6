@@ -368,7 +368,7 @@ describe("S4-011 hand-off service, expiry, replay and isolation", () => {
     expect(component).toContain('role="status"');
     expect(component).toContain('role="alert"');
     expect(component).toContain("Confirm secure hand-off");
-    expect(component).toContain("does not activate a Knowledge Pack or TeamMate");
+    expect(component).toMatch(/does not\s+activate a Knowledge Pack or TeamMate/);
     expect(component).toContain("min-h-11");
   });
 });
