@@ -8,6 +8,7 @@ import {
   updateRecommendationAction,
   type RecommendationActionView,
 } from "@/lib/recommendation-actions/client";
+import type { ProductHandoffOpportunity } from "@/lib/recommendation-handoffs/model";
 
 export function RecommendationActionControls({
   portfolioId,
@@ -15,12 +16,14 @@ export function RecommendationActionControls({
   accepted,
   action,
   canManage,
+  handoffOpportunities,
 }: {
   portfolioId: string;
   portfolioItemId: string;
   accepted: boolean;
   action: RecommendationActionView | undefined;
   canManage: boolean;
+  handoffOpportunities: ProductHandoffOpportunity[];
 }) {
   const queryClient = useQueryClient();
   const targetId = useId();
@@ -50,7 +53,10 @@ export function RecommendationActionControls({
         : updateRecommendationAction(action!.actionId, request.payload),
     onSuccess: async () => {
       setMode("idle");
-      await queryClient.invalidateQueries({ queryKey: ["recommendation-actions", portfolioId] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["recommendation-actions", portfolioId] }),
+        queryClient.invalidateQueries({ queryKey: ["recommendation-experience", portfolioId] }),
+      ]);
     },
   });
 
@@ -332,7 +338,10 @@ export function RecommendationActionControls({
         </div>
       )}
       {action.status !== "cancelled" && (
-        <RecommendationHandoffControls actionId={action.actionId} />
+        <RecommendationHandoffControls
+          actionId={action.actionId}
+          opportunities={handoffOpportunities}
+        />
       )}
     </div>
   );

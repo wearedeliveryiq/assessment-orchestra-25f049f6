@@ -268,3 +268,27 @@
 | Lovable Cloud migration         | `20260803110000` then `20260803111000`                                                                | PENDING DEPLOYMENT                            |
 
 Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003–006 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.
+
+## S4-012 — Recommendation Experience and Executive Reporting
+
+| Acceptance criterion                            | Implementation evidence                                                                                                            | Test evidence                                                            | Status |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------ |
+| AC1 all roles see correct controls              | current permission set is rechecked server-side and projected independently for decide/action/audit/membership/governance controls | viewer, decision-maker, improvement-lead, auditor and admin matrix       | PASS   |
+| AC2 states/loading/errors are explicit          | live-region loading, safe error/retry, mutation errors, pending and empty states                                                   | source contract plus existing decision/action failure regressions        | PASS   |
+| AC3 values reconcile to canonical records       | existing canonical projections composed once; all overlays validated against exact tenant, portfolio and item manifest             | baseline/decision/action/handoff reconciliation and escaped-scope denial | PASS   |
+| AC4 WCAG 2.2 AA core journey                    | semantic hierarchy, native disclosure, labels, live regions, text status and 44px controls                                         | keyboard/screen-reader source contract and existing interaction tests    | PASS   |
+| AC5 responsive at 320px and wider               | single-column base, wrapping, break-safe content and `min-w-0`; enhancements begin at `sm`                                         | narrow-layout source contract                                            | PASS   |
+| AC6 report traceable with snapshot time/version | generated/customer labels, semantic snapshot time/hash, baseline time/policy and per-item source versions                          | exact snapshot, source version, trace coverage and redaction assertions  | PASS   |
+
+## S4-012 quality gates
+
+| Gate                            | Evidence                                                                                                | Status                                        |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Server projection/N+1           | one portfolio read plus one parallel read each for decisions, actions and products, independent of size | PASS                                          |
+| Tenant isolation/permissions    | request-context permission recheck and exact overlay scope validation                                   | PASS                                          |
+| Privacy/disclosure/traceability | customer projection excludes raw evidence/internal lineage while retaining safe evidence and versions   | PASS                                          |
+| Accessibility/responsive/print  | semantic 320px-safe, keyboard-operable, print/PDF-ready customer journey                                | PASS                                          |
+| Performance                     | 250-item report under 2s and warm projection under 700ms                                                | PASS                                          |
+| Full regression/type/lint/build | 40 files / 491 tests; 53 DIQ-203B; typecheck; changed lint/format; build                                | PASS — full lint limitation remains inherited |
+| Database migration              | read-model/application-only story; no schema or data change                                             | NOT APPLICABLE                                |
+| Live report smoke               | requires first genuine eligible production Delivery DNA portfolio                                       | PENDING DEPLOYMENT                            |

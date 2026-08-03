@@ -1,16 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock3, RotateCcw, X } from "lucide-react";
+import { Check, Clock3, Printer, RotateCcw, X } from "lucide-react";
 import { useId, useState } from "react";
 
 import {
-  fetchRecommendationPortfolioDecisions,
   recordRecommendationDecision,
   type RecommendationDecisionView,
   type RecommendationPortfolioView,
 } from "@/lib/recommendation-decisions/client";
 import type { RecommendationDecisionReasonCategory } from "@/lib/recommendation-decisions/model";
 import { RecommendationActionControls } from "@/components/dashboard/recommendation-action-controls";
-import { fetchRecommendationPortfolioActions } from "@/lib/recommendation-actions/client";
+import { fetchRecommendationExperience } from "@/lib/recommendation-experience/client";
 
 const reasonOptions: Array<{ value: RecommendationDecisionReasonCategory; label: string }> = [
   { value: "not_relevant", label: "Not relevant" },
@@ -27,42 +26,89 @@ export function RecommendationPortfolioSection({
   portfolio: RecommendationPortfolioView;
 }) {
   const query = useQuery({
-    queryKey: ["recommendation-decisions", portfolio.portfolioId],
-    queryFn: () => fetchRecommendationPortfolioDecisions(portfolio.portfolioId),
+    queryKey: ["recommendation-experience", portfolio.portfolioId],
+    queryFn: () => fetchRecommendationExperience(portfolio.portfolioId),
   });
-  const actionsQuery = useQuery({
-    queryKey: ["recommendation-actions", portfolio.portfolioId],
-    queryFn: () => fetchRecommendationPortfolioActions(portfolio.portfolioId),
-  });
-  const decisions = new Map(
-    query.data?.decisions.map((decision) => [decision.portfolioItemId, decision]) ?? [],
-  );
+  if (query.isLoading) {
+    return (
+      <section aria-live="polite" className="rounded-2xl border border-border bg-card p-4 sm:p-6">
+        <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Preparing generated advice, customer decisions and action progress…
+        </p>
+      </section>
+    );
+  }
+  if (query.error || !query.data) {
+    return (
+      <section className="rounded-2xl border border-border bg-card p-4 sm:p-6">
+        <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
+        <p role="alert" className="mt-3 text-sm text-destructive">
+          {query.error?.message ?? "The recommendation experience is temporarily unavailable."} No
+          generated advice or customer record was changed.
+        </p>
+        <button
+          type="button"
+          onClick={() => query.refetch()}
+          className="mt-4 min-h-11 rounded-lg border border-border px-3 text-sm font-medium"
+        >
+          Try again
+        </button>
+      </section>
+    );
+  }
+  const experience = query.data;
   return (
-    <section
+    <article
       aria-labelledby="recommendation-portfolio-title"
-      className="rounded-2xl border border-border bg-card p-6"
+      className="min-w-0 rounded-2xl border border-border bg-card p-4 print:border-0 print:p-0 sm:p-6"
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-        Generated advice
-      </p>
-      <h2 id="recommendation-portfolio-title" className="mt-2 text-xl font-semibold">
-        Recommendation portfolio
-      </h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Review the evidence-backed advice, then record your organisation’s decision separately.
-      </p>
-      {query.error && (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          {query.error.message}
-        </p>
-      )}
-      {actionsQuery.error && (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          {actionsQuery.error.message}
-        </p>
-      )}
-      <div className="mt-5 space-y-6">
-        {portfolio.groups
+      <header>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              Generated advice
+            </p>
+            <h2 id="recommendation-portfolio-title" className="mt-2 text-xl font-semibold">
+              Recommendation portfolio
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+              Review governed advice, record the organisation’s decision separately, and monitor
+              accepted actions without changing the generated baseline.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border px-3 text-sm font-medium print:hidden"
+          >
+            <Printer className="h-4 w-4" aria-hidden /> Print executive report
+          </button>
+        </div>
+        <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <SummaryMetric label="Recommendations" value={experience.summary.recommendationCount} />
+          <SummaryMetric
+            label="Trace coverage"
+            value={`${experience.summary.traceCoveragePercentage}%`}
+          />
+          <SummaryMetric label="Accepted" value={experience.summary.decisions.accepted ?? 0} />
+          <SummaryMetric label="In progress" value={experience.summary.actions.in_progress ?? 0} />
+        </dl>
+        <div className="mt-4 rounded-lg border border-border/70 bg-muted/20 p-3 text-xs text-muted-foreground">
+          <p>
+            Report snapshot{" "}
+            <time dateTime={experience.snapshot.at}>{formatDateTime(experience.snapshot.at)}</time>
+          </p>
+          <p className="mt-1 break-all">Snapshot version: {experience.snapshot.version}</p>
+          <p className="mt-1">
+            Generated baseline: {formatDateTime(experience.snapshot.generatedBaselineAt)} · policy{" "}
+            {experience.snapshot.generatedBaselineVersion}
+          </p>
+          <p className="mt-2">{experience.report.associationNotice}</p>
+        </div>
+      </header>
+      <div className="mt-6 space-y-7">
+        {experience.groups
           .filter((group) => group.recommendations.length > 0)
           .map((group) => (
             <section
@@ -72,59 +118,154 @@ export function RecommendationPortfolioSection({
               <h3 id={`portfolio-${group.classification}`} className="text-base font-semibold">
                 {group.label}
               </h3>
-              <ol className="mt-3 space-y-3">
+              <p className="mt-1 text-sm text-muted-foreground">
+                {group.count} item{group.count === 1 ? "" : "s"}
+              </p>
+              <ol className="mt-3 space-y-4">
                 {group.recommendations.map((item) => (
-                  <li key={item.portfolioItemId} className="rounded-xl border border-border/70 p-4">
+                  <li
+                    key={item.portfolioItemId}
+                    className="min-w-0 break-words rounded-xl border border-border/70 p-4"
+                  >
                     <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="max-w-3xl">
+                      <div className="min-w-0 max-w-3xl">
                         <h4 className="font-medium">{item.title}</h4>
-                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                          {item.outcome}
-                        </p>
                         <p className="mt-2 text-xs capitalize text-muted-foreground">
-                          {item.priorityLabel} priority · {item.impact} impact · {item.effort}{" "}
-                          effort
+                          {group.label} · {item.priorityLabel} priority · {item.impact} impact ·{" "}
+                          {item.effort} effort
                         </p>
                       </div>
                       <span className="rounded-full border border-border px-3 py-1 text-xs capitalize">
-                        {decisions.get(item.portfolioItemId)?.currentDecision ?? "undecided"}
+                        {item.decision?.currentDecision ?? "undecided"}
                       </span>
                     </div>
-                    {query.data && (
-                      <>
-                        <RecommendationDecisionControls
-                          decision={decisions.get(item.portfolioItemId)}
-                          canDecide={query.data.canDecide}
-                          portfolioId={portfolio.portfolioId}
+                    <details
+                      className="mt-4 rounded-lg border border-border/70 p-3 print:block"
+                      open
+                    >
+                      <summary className="min-h-11 cursor-pointer py-2 text-sm font-medium">
+                        Why this was generated
+                      </summary>
+                      <div className="space-y-4 pb-2 text-sm">
+                        <DetailList
+                          label="Supporting capabilities or patterns"
+                          values={item.why.matchedTriggers}
                         />
-                        {actionsQuery.data && (
-                          <RecommendationActionControls
-                            portfolioId={portfolio.portfolioId}
-                            portfolioItemId={item.portfolioItemId}
-                            accepted={
-                              decisions.get(item.portfolioItemId)?.currentDecision === "accepted"
-                            }
-                            action={actionsQuery.data.actions.find(
-                              (action) => action.portfolioItemId === item.portfolioItemId,
-                            )}
-                            canManage={actionsQuery.data.canManageActions}
-                          />
+                        <DetailList
+                          label="Evidence-backed rationale"
+                          values={item.why.rationale.map((entry) => entry.statement)}
+                        />
+                        <div>
+                          <p className="font-medium">Confidence and caveat</p>
+                          <p className="mt-1 text-muted-foreground">
+                            {humanize(item.confidence.state)} · {humanize(item.confidence.result)}
+                            {item.confidence.caveat ? ` — ${item.confidence.caveat}` : ""}
+                          </p>
+                        </div>
+                        <DetailList
+                          label="Dependencies"
+                          values={item.dependencies.map(
+                            (dependency) =>
+                              `${dependency.recommendationId}: ${humanize(dependency.state)}`,
+                          )}
+                          empty="No governed dependencies."
+                        />
+                        <div>
+                          <p className="font-medium">Expected outcome</p>
+                          <p className="mt-1 text-muted-foreground">{item.outcome}</p>
+                        </div>
+                        <DetailList label="Success measures" values={item.successMeasures} />
+                        <div>
+                          <p className="font-medium">Source versions</p>
+                          <p className="mt-1 break-all text-muted-foreground">
+                            Recommendation {item.sourceVersions.recommendation} · catalogue{" "}
+                            {item.sourceVersions.catalogue} · configuration{" "}
+                            {item.sourceVersions.configurationSet} · portfolio policy{" "}
+                            {item.sourceVersions.portfolioPolicy}
+                          </p>
+                        </div>
+                        {experience.controls.canViewAudit && (
+                          <p className="text-muted-foreground">
+                            Governed audit detail is available to your auditor role.
+                          </p>
                         )}
-                      </>
-                    )}
+                      </div>
+                    </details>
+                    <div className="mt-4 border-t border-border/70 pt-4">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        Customer decision and progress
+                      </p>
+                    </div>
+                    <RecommendationDecisionControls
+                      decision={item.decision ?? undefined}
+                      canDecide={experience.controls.canDecide}
+                      portfolioId={portfolio.portfolioId}
+                    />
+                    <RecommendationActionControls
+                      portfolioId={portfolio.portfolioId}
+                      portfolioItemId={item.portfolioItemId}
+                      accepted={item.decision?.currentDecision === "accepted"}
+                      action={item.action ?? undefined}
+                      canManage={experience.controls.canManageActions}
+                      handoffOpportunities={item.handoffs}
+                    />
                   </li>
                 ))}
               </ol>
             </section>
           ))}
-        {!portfolio.groups.some((group) => group.recommendations.length > 0) && (
+        {!experience.groups.some((group) => group.recommendations.length > 0) && (
           <p className="text-sm text-muted-foreground">
             No action meets the approved recommendation rules.
           </p>
         )}
       </div>
-    </section>
+    </article>
   );
+}
+
+function SummaryMetric({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-lg border border-border/70 p-3">
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd className="mt-1 text-lg font-semibold">{value}</dd>
+    </div>
+  );
+}
+
+function DetailList({
+  label,
+  values,
+  empty = "Not recorded.",
+}: {
+  label: string;
+  values: string[];
+  empty?: string;
+}) {
+  return (
+    <div>
+      <p className="font-medium">{label}</p>
+      {values.length ? (
+        <ul className="mt-1 list-disc space-y-1 pl-5 text-muted-foreground">
+          {values.map((value) => (
+            <li key={value}>{humanize(value)}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-1 text-muted-foreground">{empty}</p>
+      )}
+    </div>
+  );
+}
+
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(
+    new Date(value),
+  );
+}
+
+function humanize(value: string) {
+  return value.replaceAll("_", " ");
 }
 
 function RecommendationDecisionControls({
@@ -146,7 +287,10 @@ function RecommendationDecisionControls({
     mutationFn: recordRecommendationDecision,
     onSuccess: async () => {
       setMode("idle");
-      await queryClient.invalidateQueries({ queryKey: ["recommendation-decisions", portfolioId] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["recommendation-decisions", portfolioId] }),
+        queryClient.invalidateQueries({ queryKey: ["recommendation-experience", portfolioId] }),
+      ]);
     },
   });
   if (!decision)
