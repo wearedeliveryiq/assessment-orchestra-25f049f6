@@ -31,11 +31,13 @@ Release only when staging migrations, tenant isolation, public disclosure, acces
 
 ## PDR-003-004/005 additive release
 
-1. Apply `20260803200000_delivery_dna_action_entitlement.sql`, then `20260803210000_delivery_dna_snapshot.sql`, then `20260803211000_harden_delivery_dna_snapshot_permissions.sql` through the managed migration path.
-2. Verify no availability, entitlement or customer workflow row was seeded; `anon` and `authenticated` retain no direct access to Snapshot or commercial-control objects/functions.
-3. Regenerate Supabase types, run the focused Snapshot/commercial tests and publish the same application commit.
-4. Smoke one anonymous 13-response result, expiry-safe resume and consented tenant-scoped continuation; verify the linked full draft has 13 exact provenance rows, remains incomplete and has no analysis run.
-5. Verify the current free projection and unavailable commercial panel against an existing completed run. Do not create a commercial entitlement merely for release testing.
+Completed on 3 August 2026:
+
+1. Lovable Cloud applied the commercial entitlement, Snapshot and hardening migrations in order and regenerated Supabase types. A forward correction for Snapshot response JSONB serialisation was then applied with least-privilege grants preserved.
+2. Verification confirmed no availability, entitlement or customer workflow row was seeded and client roles have no direct Snapshot or commercial-control access.
+3. PRs #35 and #36 were merged and the production application published.
+4. Snapshot `51ae3877-ee7d-4df0-a265-59473ed4c7d9` completed anonymously; explicit consent created tenant-scoped full draft `47de0803-48e7-41ac-acda-4c97350e628d` with 13 exact provenance rows. It remains incomplete at 13/39 and has no analysis run or hand-off.
+5. Assessment `d09c51a3-2af8-4283-9b98-4cc1d53a1c93` served the authenticated free projection and unavailable commercial panel. No entitlement was manufactured for release testing; the entitled production smoke is deferred until the first authorised `delivery_dna_action` grant.
 
 Rollback is application-first: restore the prior published build. The additive columns/tables and inactive entitlement key may remain dormant. Stop the Snapshot cleanup schedule with the application rollback; do not drop linked provenance or customer responses. Any database object removal requires a separately reviewed forward migration.
 

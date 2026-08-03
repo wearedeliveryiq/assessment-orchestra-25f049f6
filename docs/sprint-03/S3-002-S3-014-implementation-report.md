@@ -28,8 +28,8 @@ The current local regression contains 606 passing tests across 46 files, includi
 ## Limitations and technical debt
 
 - Operational catalogue, availability and entitlement tables intentionally ship without invented commercial seed data; authorised operations must configure real product availability.
-- The new PDR-003-004/005 migration rehearsal and focused hosted journeys remain deployment gates because local Lovable Cloud credentials are not exposed to this checkout.
-- Generated Supabase TypeScript types must be refreshed by Lovable after the new migrations are applied; repository adapters isolate pending fields until then.
+- No real customer currently holds `delivery_dna_action` 1.0.0, so the entitled production projection and protected writes have not been smoke-tested against customer data. Automated entitlement, permission, tenant-isolation and immutability coverage passes.
+- Pricing, checkout and subscription packaging remain out of scope. No commercial contact route is configured, so the approved fail-safe suppresses the contact action.
 
 No unresolved product decision or conflict with DIQ-002/PB-003 remains.
 
@@ -92,4 +92,10 @@ DeliveryIQ now has a low-friction public **Delivery DNA Snapshot** entry journey
 
 ### Deployment status and limitations
 
-The application changes and three new managed-migration source files are ready to merge. Lovable Cloud must apply the migrations in timestamp order, regenerate generated Supabase types and publish the build. Final hosted evidence must then record one anonymous Snapshot completion and one consented continuation into a 13-response full draft, plus free and unavailable commercial projections. No commercial contact route is configured, so the locked fail-safe behaviour suppresses the `Talk to DeliveryIQ` action. Pricing, checkout and subscription packaging remain out of scope.
+PRs [#35](https://github.com/wearedeliveryiq/assessment-orchestra-25f049f6/pull/35) and [#36](https://github.com/wearedeliveryiq/assessment-orchestra-25f049f6/pull/36) are merged and the application is published. Lovable Cloud applied the governed commercial, Snapshot and permission migrations as `20260803210156_e24b211a-cfcb-4c01-ae71-2844d388fadd.sql`, `20260803210314_773c6451-456e-4a8d-9c28-d136ea047810.sql` and `20260803210349_c790da9a-6d65-4a2a-a833-d399fe703d4c.sql`, regenerated Supabase types, and then applied corrective migration `20260803212556_633d7d4e-8c61-4ec3-9205-e78d09b5cc9a.sql`.
+
+Production Snapshot `51ae3877-ee7d-4df0-a265-59473ed4c7d9` completed with the approved zero-signal presentation and no intelligence output. Its first continuation attempt exposed a JSONB parameter mismatch; the database transaction rolled back completely, leaving the Snapshot unlinked and without a partial draft. The correction serialises the numeric value with `to_jsonb(answer)` without changing product behaviour. Retrying the same explicit consent then created full Delivery DNA draft `47de0803-48e7-41ac-acda-4c97350e628d` with 13/13 exact carried responses. The draft remains `in_progress` at 13/39, with zero analysis runs and zero hand-offs.
+
+The hosted authenticated-free result for assessment `d09c51a3-2af8-4283-9b98-4cc1d53a1c93` showed the complete free projection and exact unavailable copy. Because no commercial contact route is configured, the panel correctly contained no action element. No real customer holds the new entitlement, so an entitled production read/write smoke remains deferred until the first authorised entitlement is granted; automated policy fixtures are the current evidence. Pricing, checkout and subscription packaging remain out of scope.
+
+Post-correction verification ran 27 focused Snapshot/commercial tests, TypeScript checking and a production build successfully. The preceding complete release regression passed 606/606 tests across 46 files, including all 53 DIQ-203B and all eight PDR-003-005A fixtures.
