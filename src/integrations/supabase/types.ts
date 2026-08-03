@@ -3256,6 +3256,106 @@ export type Database = {
           },
         ]
       }
+      recommendation_action_outcomes: {
+        Row: {
+          action_id: string
+          catalogue_digest: string
+          catalogue_version: string
+          catalogue_version_id: string
+          created_at: string
+          created_by_user_id: string
+          id: string
+          intended_outcome: string
+          organisation_id: string
+          policy_version: string
+          portfolio_item_id: string
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          success_measure_templates: Json
+          workspace_id: string
+        }
+        Insert: {
+          action_id: string
+          catalogue_digest: string
+          catalogue_version: string
+          catalogue_version_id: string
+          created_at?: string
+          created_by_user_id: string
+          id?: string
+          intended_outcome: string
+          organisation_id: string
+          policy_version: string
+          portfolio_item_id: string
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          success_measure_templates: Json
+          workspace_id: string
+        }
+        Update: {
+          action_id?: string
+          catalogue_digest?: string
+          catalogue_version?: string
+          catalogue_version_id?: string
+          created_at?: string
+          created_by_user_id?: string
+          id?: string
+          intended_outcome?: string
+          organisation_id?: string
+          policy_version?: string
+          portfolio_item_id?: string
+          recommendation_definition_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          success_measure_templates?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_action_outcome_recommendation_definition_id_fkey"
+            columns: ["recommendation_definition_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_action_outcomes_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_improvement_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_action_outcomes_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_action_outcomes_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_action_outcomes_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_portfolio_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_action_outcomes_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_analytics_consent_events: {
         Row: {
           consent_version: number
@@ -5180,6 +5280,351 @@ export type Database = {
           },
           {
             foreignKeyName: "recommendation_operational_events_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_outcome_measure_versions: {
+        Row: {
+          absolute_tolerance: number | null
+          accountable_owner_id: string
+          action_id: string
+          baseline_binary: boolean | null
+          baseline_effective_at: string | null
+          baseline_numeric: number | null
+          cadence: string
+          created_at: string
+          created_by_user_id: string
+          decimal_scale: number
+          direction: Database["public"]["Enums"]["recommendation_outcome_direction"]
+          evaluator_version: string
+          id: string
+          measure_id: string
+          measure_version: number
+          organisation_id: string
+          outcome_id: string
+          policy_version: string
+          retired_at: string | null
+          source_catalogue_digest: string
+          source_catalogue_version: string
+          source_catalogue_version_id: string
+          source_description: string
+          source_recommendation_id: string
+          source_recommendation_version: string
+          source_reference: string | null
+          supersedes_measure_version_id: string | null
+          target_binary: boolean | null
+          target_date: string | null
+          target_deadline_at: string | null
+          target_numeric: number | null
+          target_timezone: string | null
+          unit: string
+          workspace_id: string
+        }
+        Insert: {
+          absolute_tolerance?: number | null
+          accountable_owner_id: string
+          action_id: string
+          baseline_binary?: boolean | null
+          baseline_effective_at?: string | null
+          baseline_numeric?: number | null
+          cadence: string
+          created_at?: string
+          created_by_user_id: string
+          decimal_scale: number
+          direction: Database["public"]["Enums"]["recommendation_outcome_direction"]
+          evaluator_version: string
+          id?: string
+          measure_id: string
+          measure_version: number
+          organisation_id: string
+          outcome_id: string
+          policy_version: string
+          retired_at?: string | null
+          source_catalogue_digest: string
+          source_catalogue_version: string
+          source_catalogue_version_id: string
+          source_description: string
+          source_recommendation_id: string
+          source_recommendation_version: string
+          source_reference?: string | null
+          supersedes_measure_version_id?: string | null
+          target_binary?: boolean | null
+          target_date?: string | null
+          target_deadline_at?: string | null
+          target_numeric?: number | null
+          target_timezone?: string | null
+          unit: string
+          workspace_id: string
+        }
+        Update: {
+          absolute_tolerance?: number | null
+          accountable_owner_id?: string
+          action_id?: string
+          baseline_binary?: boolean | null
+          baseline_effective_at?: string | null
+          baseline_numeric?: number | null
+          cadence?: string
+          created_at?: string
+          created_by_user_id?: string
+          decimal_scale?: number
+          direction?: Database["public"]["Enums"]["recommendation_outcome_direction"]
+          evaluator_version?: string
+          id?: string
+          measure_id?: string
+          measure_version?: number
+          organisation_id?: string
+          outcome_id?: string
+          policy_version?: string
+          retired_at?: string | null
+          source_catalogue_digest?: string
+          source_catalogue_version?: string
+          source_catalogue_version_id?: string
+          source_description?: string
+          source_recommendation_id?: string
+          source_recommendation_version?: string
+          source_reference?: string | null
+          supersedes_measure_version_id?: string | null
+          target_binary?: boolean | null
+          target_date?: string | null
+          target_deadline_at?: string | null
+          target_numeric?: number | null
+          target_timezone?: string | null
+          unit?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_outcome_measur_supersedes_measure_version_i_fkey"
+            columns: ["supersedes_measure_version_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_outcome_measure_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_measure_source_catalogue_version_id_fkey"
+            columns: ["source_catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_measure_versions_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_improvement_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_measure_versions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_measure_versions_outcome_id_fkey"
+            columns: ["outcome_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_action_outcomes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_measure_versions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_outcome_observations: {
+        Row: {
+          actor_user_id: string
+          binary_value: boolean | null
+          correction_reason: string | null
+          effective_at: string
+          id: string
+          idempotency_key: string
+          measure_version_id: string
+          numeric_value: number | null
+          organisation_id: string
+          payload_hash: string
+          recorded_at: string
+          source_description: string
+          source_reference: string | null
+          supersedes_observation_id: string | null
+          trace_id: string
+          workspace_id: string
+        }
+        Insert: {
+          actor_user_id: string
+          binary_value?: boolean | null
+          correction_reason?: string | null
+          effective_at: string
+          id?: string
+          idempotency_key: string
+          measure_version_id: string
+          numeric_value?: number | null
+          organisation_id: string
+          payload_hash: string
+          recorded_at?: string
+          source_description: string
+          source_reference?: string | null
+          supersedes_observation_id?: string | null
+          trace_id: string
+          workspace_id: string
+        }
+        Update: {
+          actor_user_id?: string
+          binary_value?: boolean | null
+          correction_reason?: string | null
+          effective_at?: string
+          id?: string
+          idempotency_key?: string
+          measure_version_id?: string
+          numeric_value?: number | null
+          organisation_id?: string
+          payload_hash?: string
+          recorded_at?: string
+          source_description?: string
+          source_reference?: string | null
+          supersedes_observation_id?: string | null
+          trace_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_outcome_observati_supersedes_observation_id_fkey"
+            columns: ["supersedes_observation_id"]
+            isOneToOne: true
+            referencedRelation: "recommendation_outcome_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_observations_measure_version_id_fkey"
+            columns: ["measure_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_outcome_measure_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_observations_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_observations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_outcome_status_events: {
+        Row: {
+          customer_copy: string
+          deadline_was_missed: boolean
+          decisive_effective_at: string | null
+          decisive_observation_id: string | null
+          decisive_recorded_at: string | null
+          evaluator_version: string
+          facts: Json
+          id: string
+          measure_version_id: string
+          occurred_at: string
+          organisation_id: string
+          policy_version: string
+          reason_code: string
+          recorded_late: boolean
+          sequence: number
+          status: Database["public"]["Enums"]["recommendation_outcome_status"]
+          timing: string
+          trace_id: string
+          trigger_observation_id: string | null
+          workspace_id: string
+        }
+        Insert: {
+          customer_copy: string
+          deadline_was_missed: boolean
+          decisive_effective_at?: string | null
+          decisive_observation_id?: string | null
+          decisive_recorded_at?: string | null
+          evaluator_version: string
+          facts: Json
+          id?: string
+          measure_version_id: string
+          occurred_at?: string
+          organisation_id: string
+          policy_version: string
+          reason_code: string
+          recorded_late: boolean
+          sequence: number
+          status: Database["public"]["Enums"]["recommendation_outcome_status"]
+          timing: string
+          trace_id: string
+          trigger_observation_id?: string | null
+          workspace_id: string
+        }
+        Update: {
+          customer_copy?: string
+          deadline_was_missed?: boolean
+          decisive_effective_at?: string | null
+          decisive_observation_id?: string | null
+          decisive_recorded_at?: string | null
+          evaluator_version?: string
+          facts?: Json
+          id?: string
+          measure_version_id?: string
+          occurred_at?: string
+          organisation_id?: string
+          policy_version?: string
+          reason_code?: string
+          recorded_late?: boolean
+          sequence?: number
+          status?: Database["public"]["Enums"]["recommendation_outcome_status"]
+          timing?: string
+          trace_id?: string
+          trigger_observation_id?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_outcome_status_even_decisive_observation_id_fkey"
+            columns: ["decisive_observation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_outcome_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_status_event_trigger_observation_id_fkey"
+            columns: ["trigger_observation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_outcome_observations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_status_events_measure_version_id_fkey"
+            columns: ["measure_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_outcome_measure_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_status_events_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_outcome_status_events_workspace_id_fkey"
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
@@ -7308,6 +7753,37 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      append_recommendation_outcome_status_event: {
+        Args: { p_input: Json }
+        Returns: {
+          customer_copy: string
+          deadline_was_missed: boolean
+          decisive_effective_at: string | null
+          decisive_observation_id: string | null
+          decisive_recorded_at: string | null
+          evaluator_version: string
+          facts: Json
+          id: string
+          measure_version_id: string
+          occurred_at: string
+          organisation_id: string
+          policy_version: string
+          reason_code: string
+          recorded_late: boolean
+          sequence: number
+          status: Database["public"]["Enums"]["recommendation_outcome_status"]
+          timing: string
+          trace_id: string
+          trigger_observation_id: string | null
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_outcome_status_events"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       apply_recommendation_analytics_retention: {
         Args: {
           p_cutoff: string
@@ -7668,6 +8144,33 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_recommendation_action_outcome: {
+        Args: { p_input: Json }
+        Returns: {
+          action_id: string
+          catalogue_digest: string
+          catalogue_version: string
+          catalogue_version_id: string
+          created_at: string
+          created_by_user_id: string
+          id: string
+          intended_outcome: string
+          organisation_id: string
+          policy_version: string
+          portfolio_item_id: string
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          success_measure_templates: Json
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_action_outcomes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       create_recommendation_catalogue_version: {
         Args: { p_input: Json }
         Returns: {
@@ -7686,6 +8189,51 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "recommendation_catalogue_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_recommendation_outcome_measure_version: {
+        Args: { p_input: Json }
+        Returns: {
+          absolute_tolerance: number | null
+          accountable_owner_id: string
+          action_id: string
+          baseline_binary: boolean | null
+          baseline_effective_at: string | null
+          baseline_numeric: number | null
+          cadence: string
+          created_at: string
+          created_by_user_id: string
+          decimal_scale: number
+          direction: Database["public"]["Enums"]["recommendation_outcome_direction"]
+          evaluator_version: string
+          id: string
+          measure_id: string
+          measure_version: number
+          organisation_id: string
+          outcome_id: string
+          policy_version: string
+          retired_at: string | null
+          source_catalogue_digest: string
+          source_catalogue_version: string
+          source_catalogue_version_id: string
+          source_description: string
+          source_recommendation_id: string
+          source_recommendation_version: string
+          source_reference: string | null
+          supersedes_measure_version_id: string | null
+          target_binary: boolean | null
+          target_date: string | null
+          target_deadline_at: string | null
+          target_numeric: number | null
+          target_timezone: string | null
+          unit: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_outcome_measure_versions"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -7849,6 +8397,14 @@ export type Database = {
         Args: {
           _role: Database["public"]["Enums"]["platform_role"]
           _user_id: string
+        }
+        Returns: boolean
+      }
+      is_active_recommendation_outcome_member: {
+        Args: {
+          p_organisation_id: string
+          p_user_id: string
+          p_workspace_id: string
         }
         Returns: boolean
       }
@@ -8233,6 +8789,33 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      record_recommendation_outcome_observation: {
+        Args: { p_input: Json }
+        Returns: {
+          actor_user_id: string
+          binary_value: boolean | null
+          correction_reason: string | null
+          effective_at: string
+          id: string
+          idempotency_key: string
+          measure_version_id: string
+          numeric_value: number | null
+          organisation_id: string
+          payload_hash: string
+          recorded_at: string
+          source_description: string
+          source_reference: string | null
+          supersedes_observation_id: string | null
+          trace_id: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_outcome_observations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       request_recommendation_audit_export: {
         Args: { p_input: Json }
         Returns: {
@@ -8592,6 +9175,18 @@ export type Database = {
       recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
       recommendation_integrity_status: "passed" | "failed"
       recommendation_operational_severity: "info" | "warning" | "critical"
+      recommendation_outcome_direction:
+        | "increase"
+        | "decrease"
+        | "maintain"
+        | "binary"
+      recommendation_outcome_status:
+        | "not_measured"
+        | "baseline_recorded"
+        | "tracking"
+        | "target_met"
+        | "target_not_met"
+        | "retired"
       recommendation_portfolio_class:
         | "immediate_attention"
         | "foundation"
@@ -8869,6 +9464,20 @@ export const Constants = {
       recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
       recommendation_integrity_status: ["passed", "failed"],
       recommendation_operational_severity: ["info", "warning", "critical"],
+      recommendation_outcome_direction: [
+        "increase",
+        "decrease",
+        "maintain",
+        "binary",
+      ],
+      recommendation_outcome_status: [
+        "not_measured",
+        "baseline_recorded",
+        "tracking",
+        "target_met",
+        "target_not_met",
+        "retired",
+      ],
       recommendation_portfolio_class: [
         "immediate_attention",
         "foundation",
