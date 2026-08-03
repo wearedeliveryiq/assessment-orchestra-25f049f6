@@ -4173,6 +4173,321 @@ export type Database = {
           },
         ]
       }
+      recommendation_priority_display_preferences: {
+        Row: {
+          actor_user_id: string
+          created_at: string
+          id: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_preference_id: string | null
+          priority_model_id: string
+          version: number
+          workspace_id: string
+        }
+        Insert: {
+          actor_user_id: string
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_preference_id?: string | null
+          priority_model_id: string
+          version: number
+          workspace_id: string
+        }
+        Update: {
+          actor_user_id?: string
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          ordered_recommendation_ids?: Json
+          organisation_id?: string
+          previous_preference_id?: string | null
+          priority_model_id?: string
+          version?: number
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_priority_display_pre_previous_preference_id_fkey"
+            columns: ["previous_preference_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_display_preferences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_display_preferen_priority_model_id_fkey"
+            columns: ["priority_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_display_preference_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_display_preferences_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_priority_items: {
+        Row: {
+          analysis_run_id: string
+          catalogue_order: number
+          component_weights: Json
+          components: Json
+          created_at: string
+          effort: string
+          generated_rank: number
+          id: string
+          impact: string
+          organisation_id: string
+          post_confidence_result: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          priority_label: Database["public"]["Enums"]["recommendation_priority_label"]
+          priority_model_id: string
+          rationale: Json
+          raw_rank_score: number
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          resolution_candidate_id: string
+          semantic_hash: string
+          source_recommendation_ids: Json
+          source_trace_node_ids: Json
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          catalogue_order: number
+          component_weights: Json
+          components: Json
+          created_at?: string
+          effort: string
+          generated_rank: number
+          id?: string
+          impact: string
+          organisation_id: string
+          post_confidence_result: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          priority_label: Database["public"]["Enums"]["recommendation_priority_label"]
+          priority_model_id: string
+          rationale: Json
+          raw_rank_score: number
+          recommendation_definition_id: string
+          recommendation_id: string
+          recommendation_version: string
+          resolution_candidate_id: string
+          semantic_hash: string
+          source_recommendation_ids: Json
+          source_trace_node_ids: Json
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          catalogue_order?: number
+          component_weights?: Json
+          components?: Json
+          created_at?: string
+          effort?: string
+          generated_rank?: number
+          id?: string
+          impact?: string
+          organisation_id?: string
+          post_confidence_result?: Database["public"]["Enums"]["recommendation_confidence_gate_result"]
+          priority_label?: Database["public"]["Enums"]["recommendation_priority_label"]
+          priority_model_id?: string
+          rationale?: Json
+          raw_rank_score?: number
+          recommendation_definition_id?: string
+          recommendation_id?: string
+          recommendation_version?: string
+          resolution_candidate_id?: string
+          semantic_hash?: string
+          source_recommendation_ids?: Json
+          source_trace_node_ids?: Json
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_priority_items_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_items_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_items_priority_model_id_fkey"
+            columns: ["priority_model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_priority_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_items_recommendation_definition_id_fkey"
+            columns: ["recommendation_definition_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_items_resolution_candidate_id_fkey"
+            columns: ["resolution_candidate_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_resolution_candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_items_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_priority_models: {
+        Row: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_priority: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          id: string
+          input_hash: string
+          intelligence_result_id: string
+          model_version: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          recommendation_evaluation_id: string
+          workspace_id: string
+        }
+        Insert: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_priority: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at?: string
+          id?: string
+          input_hash: string
+          intelligence_result_id: string
+          model_version: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          recommendation_evaluation_id: string
+          workspace_id: string
+        }
+        Update: {
+          analysis_run_id?: string
+          canonical_input?: Json
+          canonical_priority?: Json
+          catalogue_digest?: string
+          catalogue_id?: string
+          catalogue_version?: string
+          catalogue_version_id?: string
+          confidence_gate_id?: string
+          configuration_set_id?: string
+          conflict_resolution_id?: string
+          created_at?: string
+          id?: string
+          input_hash?: string
+          intelligence_result_id?: string
+          model_version?: string
+          organisation_id?: string
+          output_hash?: string
+          policy_version?: string
+          recommendation_evaluation_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_priority_model_recommendation_evaluation_id_fkey"
+            columns: ["recommendation_evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_analysis_run_id_fkey"
+            columns: ["analysis_run_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_analysis_runs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_catalogue_version_id_fkey"
+            columns: ["catalogue_version_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_catalogue_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_confidence_gate_id_fkey"
+            columns: ["confidence_gate_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_confidence_gates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_conflict_resolution_id_fkey"
+            columns: ["conflict_resolution_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_conflict_resolutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_intelligence_result_id_fkey"
+            columns: ["intelligence_result_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_intelligence_results"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_priority_models_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_resolution_candidates: {
         Row: {
           analysis_run_id: string
@@ -5633,6 +5948,37 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      publish_recommendation_priority_model: {
+        Args: { p_input: Json }
+        Returns: {
+          analysis_run_id: string
+          canonical_input: Json
+          canonical_priority: Json
+          catalogue_digest: string
+          catalogue_id: string
+          catalogue_version: string
+          catalogue_version_id: string
+          confidence_gate_id: string
+          configuration_set_id: string
+          conflict_resolution_id: string
+          created_at: string
+          id: string
+          input_hash: string
+          intelligence_result_id: string
+          model_version: string
+          organisation_id: string
+          output_hash: string
+          policy_version: string
+          recommendation_evaluation_id: string
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_priority_models"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       reconcile_assessment_analysis_handoffs: {
         Args: { p_limit?: number }
         Returns: number
@@ -5687,6 +6033,27 @@ export type Database = {
           to: "assessment_analysis_runs"
           isOneToOne: false
           isSetofReturn: true
+        }
+      }
+      set_recommendation_priority_display_preference: {
+        Args: { p_input: Json }
+        Returns: {
+          actor_user_id: string
+          created_at: string
+          id: string
+          idempotency_key: string
+          ordered_recommendation_ids: Json
+          organisation_id: string
+          previous_preference_id: string | null
+          priority_model_id: string
+          version: number
+          workspace_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "recommendation_priority_display_preferences"
+          isOneToOne: true
+          isSetofReturn: false
         }
       }
       transition_recommendation_catalogue: {
@@ -5766,6 +6133,7 @@ export type Database = {
         | "evidence_first"
       recommendation_confidence_state: "low" | "moderate" | "high"
       recommendation_evaluation_result: "eligible" | "ineligible" | "excluded"
+      recommendation_priority_label: "critical" | "high" | "medium" | "low"
       recommendation_resolution_reason:
         | "retained"
         | "mutual_exclusion"
@@ -5955,6 +6323,7 @@ export const Constants = {
       ],
       recommendation_confidence_state: ["low", "moderate", "high"],
       recommendation_evaluation_result: ["eligible", "ineligible", "excluded"],
+      recommendation_priority_label: ["critical", "high", "medium", "low"],
       recommendation_resolution_reason: [
         "retained",
         "mutual_exclusion",
