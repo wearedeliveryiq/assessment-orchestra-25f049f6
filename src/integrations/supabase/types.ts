@@ -562,7 +562,6 @@ export type Database = {
           archived_at: string | null
           assigned_to: string | null
           completed_at: string | null
-          configuration_version: string
           created_at: string
           description: string
           due_date: string | null
@@ -1963,7 +1962,6 @@ export type Database = {
           linked_user_id: string | null
           linking_consent_at: string | null
           organisation_id: string | null
-          presentation_policy_version: string
           status: string
           token_hash: string
           updated_at: string
@@ -1972,7 +1970,6 @@ export type Database = {
         Insert: {
           assessment_session_id?: string | null
           completed_at?: string | null
-          configuration_version?: string
           created_at?: string
           expires_at?: string
           id?: string
@@ -1980,7 +1977,6 @@ export type Database = {
           linked_user_id?: string | null
           linking_consent_at?: string | null
           organisation_id?: string | null
-          presentation_policy_version?: string
           status?: string
           token_hash: string
           updated_at?: string
@@ -1989,7 +1985,6 @@ export type Database = {
         Update: {
           assessment_session_id?: string | null
           completed_at?: string | null
-          configuration_version?: string
           created_at?: string
           expires_at?: string
           id?: string
@@ -1997,7 +1992,6 @@ export type Database = {
           linked_user_id?: string | null
           linking_consent_at?: string | null
           organisation_id?: string | null
-          presentation_policy_version?: string
           status?: string
           token_hash?: string
           updated_at?: string
