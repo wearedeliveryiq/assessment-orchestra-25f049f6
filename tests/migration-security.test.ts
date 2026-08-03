@@ -203,6 +203,20 @@ const recommendationActionHardening = readFileSync(
   ),
   "utf8",
 );
+const recommendationProductHandoffMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803110000_recommendation_product_handoffs.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const recommendationProductHandoffHardening = readFileSync(
+  new URL(
+    "../supabase/migrations/20260803111000_harden_recommendation_product_handoff_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -607,6 +621,73 @@ describe("Sprint 03 migration security", () => {
     );
     expect(recommendationActionHardening).toContain(
       "GRANT EXECUTE ON FUNCTION public.record_recommendation_improvement_action(jsonb) TO service_role",
+    );
+  });
+});
+
+describe("S4-011 product hand-off migration security", () => {
+  it("stores immutable consent and consumption audit without an activation side effect", () => {
+    expect(recommendationProductHandoffMigration).toContain(
+      "consent_basis text NOT NULL CHECK (consent_basis = 'explicit_handoff_request')",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "CREATE TRIGGER recommendation_product_handoffs_immutable",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "CREATE TRIGGER recommendation_product_handoff_events_immutable",
+    );
+    expect(recommendationProductHandoffMigration).not.toContain(
+      "INSERT INTO public.organisation_product_activations",
+    );
+  });
+
+  it("rechecks tenant membership, current availability, entitlement and exact version", () => {
+    expect(recommendationProductHandoffMigration).toContain(
+      "v_availability.product_version IS DISTINCT FROM v_target_version",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "v_availability.product_version IS DISTINCT FROM v_handoff.target_version",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "workspace.organisation_id = membership.organisation_id",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "workspace_membership.is_deleted = false",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "v_handoff.cta IN ('view_pack', 'view_teammate') AND v_entitled",
+    );
+  });
+
+  it("uses short-lived hashed tokens and exact idempotent consumption", () => {
+    expect(recommendationProductHandoffMigration).toContain(
+      "token_hash text NOT NULL UNIQUE CHECK (token_hash ~ '^[0-9a-f]{64}$')",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "expires_at <= created_at + interval '15 minutes'",
+    );
+    expect(recommendationProductHandoffMigration).toContain(
+      "UNIQUE (organisation_id, workspace_id, idempotency_key)",
+    );
+    expect(recommendationProductHandoffMigration).toContain("UNIQUE (handoff_id, event_type)");
+  });
+
+  it("keeps storage and definer functions deny-by-default for clients", () => {
+    for (const source of [
+      recommendationProductHandoffMigration,
+      recommendationProductHandoffHardening,
+    ]) {
+      expect(source).toContain("FROM PUBLIC, anon, authenticated");
+      expect(source).not.toContain("CREATE POLICY");
+    }
+    expect(recommendationProductHandoffHardening).toContain(
+      "REVOKE MAINTAIN ON public.recommendation_product_handoffs",
+    );
+    expect(recommendationProductHandoffHardening).toContain(
+      "REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON",
+    );
+    expect(recommendationProductHandoffHardening).toContain(
+      "GRANT EXECUTE ON FUNCTION public.create_recommendation_product_handoff(jsonb)",
     );
   });
 });

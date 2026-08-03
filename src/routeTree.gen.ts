@@ -93,6 +93,7 @@ import { Route as ApiMembersIdRouteImport } from './routes/api/members.$id'
 import { Route as ApiMembersInviteRouteImport } from './routes/api/members.invite'
 import { Route as ApiNotificationsReadRouteImport } from './routes/api/notifications.read'
 import { Route as ApiOrganisationsIdRouteImport } from './routes/api/organisations.$id'
+import { Route as ApiProductHandoffsConsumeRouteImport } from './routes/api/product-handoffs.consume'
 import { Route as ApiPublicResultsTokenRouteImport } from './routes/api/public-results.$token'
 import { Route as ApiRecommendationPortfoliosIdRouteImport } from './routes/api/recommendation-portfolios.$id'
 import { Route as ApiReportingBrandingRouteImport } from './routes/api/reporting.branding'
@@ -194,6 +195,7 @@ import { Route as ApiAuthVerifyEmailResendRouteImport } from './routes/api/auth.
 import { Route as ApiExecutionsIdCancelRouteImport } from './routes/api/executions.$id.cancel'
 import { Route as ApiExecutionsIdRetryRouteImport } from './routes/api/executions.$id.retry'
 import { Route as ApiExecutionsIdStatusRouteImport } from './routes/api/executions.$id.status'
+import { Route as ApiImprovementActionsIdHandoffsRouteImport } from './routes/api/improvement-actions.$id.handoffs'
 import { Route as ApiInternalAnalysisHandoffsReconcileRouteImport } from './routes/api/internal/analysis-handoffs.reconcile'
 import { Route as ApiInternalRecommendationCataloguesIdRouteImport } from './routes/api/internal/recommendation-catalogues.$id'
 import { Route as ApiPortfolioItemsIdActionsRouteImport } from './routes/api/portfolio-items.$id.actions'
@@ -635,6 +637,12 @@ const ApiOrganisationsIdRoute = ApiOrganisationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiOrganisationsRoute,
 } as any)
+const ApiProductHandoffsConsumeRoute =
+  ApiProductHandoffsConsumeRouteImport.update({
+    id: '/api/product-handoffs/consume',
+    path: '/api/product-handoffs/consume',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicResultsTokenRoute = ApiPublicResultsTokenRouteImport.update({
   id: '/api/public-results/$token',
   path: '/api/public-results/$token',
@@ -1174,6 +1182,12 @@ const ApiExecutionsIdStatusRoute = ApiExecutionsIdStatusRouteImport.update({
   path: '/status',
   getParentRoute: () => ApiExecutionsIdRoute,
 } as any)
+const ApiImprovementActionsIdHandoffsRoute =
+  ApiImprovementActionsIdHandoffsRouteImport.update({
+    id: '/handoffs',
+    path: '/handoffs',
+    getParentRoute: () => ApiImprovementActionsIdRoute,
+  } as any)
 const ApiInternalAnalysisHandoffsReconcileRoute =
   ApiInternalAnalysisHandoffsReconcileRouteImport.update({
     id: '/api/internal/analysis-handoffs/reconcile',
@@ -1343,12 +1357,13 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
-  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
@@ -1450,6 +1465,7 @@ export interface FileRoutesByFullPath {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
@@ -1545,12 +1561,13 @@ export interface FileRoutesByTo {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
-  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
@@ -1652,6 +1669,7 @@ export interface FileRoutesByTo {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
@@ -1748,12 +1766,13 @@ export interface FileRoutesById {
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
-  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRoute
+  '/api/improvement-actions/$id': typeof ApiImprovementActionsIdRouteWithChildren
   '/api/internal/recommendation-catalogues': typeof ApiInternalRecommendationCataloguesRouteWithChildren
   '/api/members/$id': typeof ApiMembersIdRoute
   '/api/members/invite': typeof ApiMembersInviteRoute
   '/api/notifications/read': typeof ApiNotificationsReadRoute
   '/api/organisations/$id': typeof ApiOrganisationsIdRoute
+  '/api/product-handoffs/consume': typeof ApiProductHandoffsConsumeRoute
   '/api/public-results/$token': typeof ApiPublicResultsTokenRoute
   '/api/recommendation-portfolios/$id': typeof ApiRecommendationPortfoliosIdRouteWithChildren
   '/api/reporting/branding': typeof ApiReportingBrandingRoute
@@ -1855,6 +1874,7 @@ export interface FileRoutesById {
   '/api/executions/$id/cancel': typeof ApiExecutionsIdCancelRoute
   '/api/executions/$id/retry': typeof ApiExecutionsIdRetryRoute
   '/api/executions/$id/status': typeof ApiExecutionsIdStatusRoute
+  '/api/improvement-actions/$id/handoffs': typeof ApiImprovementActionsIdHandoffsRoute
   '/api/internal/analysis-handoffs/reconcile': typeof ApiInternalAnalysisHandoffsReconcileRoute
   '/api/internal/recommendation-catalogues/$id': typeof ApiInternalRecommendationCataloguesIdRouteWithChildren
   '/api/portfolio-items/$id/actions': typeof ApiPortfolioItemsIdActionsRoute
@@ -1958,6 +1978,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
@@ -2059,6 +2080,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/portfolio-items/$id/actions'
@@ -2160,6 +2182,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
@@ -2261,6 +2284,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/portfolio-items/$id/actions'
@@ -2362,6 +2386,7 @@ export interface FileRouteTypes {
     | '/api/members/invite'
     | '/api/notifications/read'
     | '/api/organisations/$id'
+    | '/api/product-handoffs/consume'
     | '/api/public-results/$token'
     | '/api/recommendation-portfolios/$id'
     | '/api/reporting/branding'
@@ -2463,6 +2488,7 @@ export interface FileRouteTypes {
     | '/api/executions/$id/cancel'
     | '/api/executions/$id/retry'
     | '/api/executions/$id/status'
+    | '/api/improvement-actions/$id/handoffs'
     | '/api/internal/analysis-handoffs/reconcile'
     | '/api/internal/recommendation-catalogues/$id'
     | '/api/portfolio-items/$id/actions'
@@ -2555,8 +2581,9 @@ export interface RootRouteChildren {
   ApiExecutionsIdRoute: typeof ApiExecutionsIdRouteWithChildren
   ApiExecutionsHistoryRoute: typeof ApiExecutionsHistoryRoute
   ApiExecutionsMonitorRoute: typeof ApiExecutionsMonitorRoute
-  ApiImprovementActionsIdRoute: typeof ApiImprovementActionsIdRoute
+  ApiImprovementActionsIdRoute: typeof ApiImprovementActionsIdRouteWithChildren
   ApiInternalRecommendationCataloguesRoute: typeof ApiInternalRecommendationCataloguesRouteWithChildren
+  ApiProductHandoffsConsumeRoute: typeof ApiProductHandoffsConsumeRoute
   ApiPublicResultsTokenRoute: typeof ApiPublicResultsTokenRoute
   ApiRecommendationPortfoliosIdRoute: typeof ApiRecommendationPortfoliosIdRouteWithChildren
   ApiReportingBrandingRoute: typeof ApiReportingBrandingRoute
@@ -3207,6 +3234,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/organisations/$id'
       preLoaderRoute: typeof ApiOrganisationsIdRouteImport
       parentRoute: typeof ApiOrganisationsRoute
+    }
+    '/api/product-handoffs/consume': {
+      id: '/api/product-handoffs/consume'
+      path: '/api/product-handoffs/consume'
+      fullPath: '/api/product-handoffs/consume'
+      preLoaderRoute: typeof ApiProductHandoffsConsumeRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public-results/$token': {
       id: '/api/public-results/$token'
@@ -3915,6 +3949,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExecutionsIdStatusRouteImport
       parentRoute: typeof ApiExecutionsIdRoute
     }
+    '/api/improvement-actions/$id/handoffs': {
+      id: '/api/improvement-actions/$id/handoffs'
+      path: '/handoffs'
+      fullPath: '/api/improvement-actions/$id/handoffs'
+      preLoaderRoute: typeof ApiImprovementActionsIdHandoffsRouteImport
+      parentRoute: typeof ApiImprovementActionsIdRoute
+    }
     '/api/internal/analysis-handoffs/reconcile': {
       id: '/api/internal/analysis-handoffs/reconcile'
       path: '/api/internal/analysis-handoffs/reconcile'
@@ -4302,6 +4343,20 @@ const ApiExecutionsIdRouteWithChildren = ApiExecutionsIdRoute._addFileChildren(
   ApiExecutionsIdRouteChildren,
 )
 
+interface ApiImprovementActionsIdRouteChildren {
+  ApiImprovementActionsIdHandoffsRoute: typeof ApiImprovementActionsIdHandoffsRoute
+}
+
+const ApiImprovementActionsIdRouteChildren: ApiImprovementActionsIdRouteChildren =
+  {
+    ApiImprovementActionsIdHandoffsRoute: ApiImprovementActionsIdHandoffsRoute,
+  }
+
+const ApiImprovementActionsIdRouteWithChildren =
+  ApiImprovementActionsIdRoute._addFileChildren(
+    ApiImprovementActionsIdRouteChildren,
+  )
+
 interface ApiInternalRecommendationCataloguesIdRouteChildren {
   ApiInternalRecommendationCataloguesIdCommandRoute: typeof ApiInternalRecommendationCataloguesIdCommandRoute
 }
@@ -4456,9 +4511,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExecutionsIdRoute: ApiExecutionsIdRouteWithChildren,
   ApiExecutionsHistoryRoute: ApiExecutionsHistoryRoute,
   ApiExecutionsMonitorRoute: ApiExecutionsMonitorRoute,
-  ApiImprovementActionsIdRoute: ApiImprovementActionsIdRoute,
+  ApiImprovementActionsIdRoute: ApiImprovementActionsIdRouteWithChildren,
   ApiInternalRecommendationCataloguesRoute:
     ApiInternalRecommendationCataloguesRouteWithChildren,
+  ApiProductHandoffsConsumeRoute: ApiProductHandoffsConsumeRoute,
   ApiPublicResultsTokenRoute: ApiPublicResultsTokenRoute,
   ApiRecommendationPortfoliosIdRoute:
     ApiRecommendationPortfoliosIdRouteWithChildren,

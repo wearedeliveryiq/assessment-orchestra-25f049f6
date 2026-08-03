@@ -236,4 +236,35 @@
 
 ## Quality gates
 
+## S4-010 — Outcomes and Success Measures
+
+| Acceptance criterion                                                                   | Implementation evidence                                                                        | Test evidence                                           | Status                                       |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------- |
+| AC1 every action retains catalogue outcome/measure                                     | S4-007 portfolio and S4-009 action preserve the immutable generated outcome and measure source | existing portfolio/action regression                    | PARTIAL — source retained                    |
+| AC2–AC6 typed measure, deterministic state, immutable observation, safe copy and scope | no speculative implementation introduced                                                       | authority-gap audit in `S4-010-product-rule-blocker.md` | BLOCKED — locked maintain/date policy absent |
+
+## S4-011 — Knowledge Pack and TeamMate Hand-offs
+
+| Acceptance criterion                      | Implementation evidence                                                                        | Test evidence                                                          | Status |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
+| AC1 locked mapping fixtures pass          | shared DIQ-203A Pack/TeamMate mapping functions; no presentation-layer mapping                 | executable all-recommendation catalogue comparison plus DIQ-203B suite | PASS   |
+| AC2 eligibility never implies entitlement | separate operational state and CTA resolver fields                                             | entitled/unentitled Pack and TeamMate tests                            | PASS   |
+| AC3 stale availability fails safely       | exact version pinned in immutable token contract and rechecked by app/database on consume      | expiry, inactive/missing/retired version and entitlement-change tests  | PASS   |
+| AC4 activation never occurs automatically | no activation routine/insert; downstream response explicitly returns `activated: false`        | service side-effect and migration-source assertions                    | PASS   |
+| AC5 hand-off and consent traced           | immutable source action/item/tenant/version/consent record plus append-only consume event      | explicit-consent, replay, projection and migration tests               | PASS   |
+| AC6 public disclosure remains locked      | authenticated workspace-only endpoints; customer-safe projection; public-result code unchanged | projection schema/token leakage and route auth tests                   | PASS   |
+
+## S4-011 quality gates
+
+| Gate                            | Evidence                                                                                              | Status                                     |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Domain/mapping/state            | `tests/recommendation-product-handoffs.test.ts`                                                       | PASS                                       |
+| Idempotency/expiry/failure      | stable exact replay, bounded expiry and retirement/revocation cases                                   | PASS                                       |
+| Tenant isolation/permissions    | scoped repositories, authenticated request context, DB active-member checks and deny-by-default ACL   | PASS — live migration verification pending |
+| Security/privacy/audit          | HMAC token, stored hash only, no URL secret, explicit immutable consent and append-only consume event | PASS                                       |
+| Accessibility/copy              | labelled status/error/confirmation, 44px controls and explicit no-activation copy                     | PASS                                       |
+| Performance                     | 5,000 governed opportunity resolutions inside two seconds                                             | PASS                                       |
+| Full regression/type/lint/build | final results recorded in S4-011 implementation report                                                | PENDING FINAL GATE                         |
+| Lovable Cloud migration         | `20260803110000` then `20260803111000`                                                                | PENDING DEPLOYMENT                         |
+
 Actual command results are recorded in the story implementation reports. S4-001 Product Governance activation and S4-003–006 deployment are complete; the first genuine eligible Delivery DNA result remains the live end-to-end prerequisite.
