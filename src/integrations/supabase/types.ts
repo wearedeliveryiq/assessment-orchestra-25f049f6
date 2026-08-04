@@ -1766,6 +1766,281 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_dna_overview_access_grants: {
+        Row: {
+          access_key: string
+          access_version: string
+          amount_minor: number
+          assessment_session_id: string
+          checkout_id: string
+          currency: string
+          granted_at: string
+          id: string
+          offer_id: string
+          offer_version: string
+          organisation_id: string
+          payment_event_id: number
+          product_id: string
+          product_version: string
+          purchaser_user_id: string
+          saved_snapshot_id: string
+          workspace_id: string
+        }
+        Insert: {
+          access_key: string
+          access_version: string
+          amount_minor: number
+          assessment_session_id: string
+          checkout_id: string
+          currency: string
+          granted_at?: string
+          id?: string
+          offer_id: string
+          offer_version: string
+          organisation_id: string
+          payment_event_id: number
+          product_id: string
+          product_version: string
+          purchaser_user_id: string
+          saved_snapshot_id: string
+          workspace_id: string
+        }
+        Update: {
+          access_key?: string
+          access_version?: string
+          amount_minor?: number
+          assessment_session_id?: string
+          checkout_id?: string
+          currency?: string
+          granted_at?: string
+          id?: string
+          offer_id?: string
+          offer_version?: string
+          organisation_id?: string
+          payment_event_id?: number
+          product_id?: string
+          product_version?: string
+          purchaser_user_id?: string
+          saved_snapshot_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_checkout_id_fkey"
+            columns: ["checkout_id"]
+            isOneToOne: true
+            referencedRelation: "delivery_dna_overview_checkouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_payment_event_id_fkey"
+            columns: ["payment_event_id"]
+            isOneToOne: true
+            referencedRelation: "delivery_dna_overview_payment_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_saved_snapshot_id_fkey"
+            columns: ["saved_snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_dna_snapshot_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_access_grants_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_dna_overview_checkouts: {
+        Row: {
+          access_key: string
+          access_version: string
+          amount_minor: number
+          assessment_session_id: string
+          charge_type: string
+          completed_at: string | null
+          created_at: string
+          currency: string
+          expires_at: string
+          id: string
+          idempotency_scope_key: string
+          offer_id: string
+          offer_version: string
+          organisation_id: string
+          product_id: string
+          product_version: string
+          provider: string
+          provider_checkout_id: string | null
+          provider_checkout_url: string | null
+          provider_price_reference: string
+          purchaser_user_id: string
+          safe_status: string | null
+          saved_snapshot_id: string
+          status: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          access_key: string
+          access_version: string
+          amount_minor: number
+          assessment_session_id: string
+          charge_type: string
+          completed_at?: string | null
+          created_at?: string
+          currency: string
+          expires_at: string
+          id?: string
+          idempotency_scope_key: string
+          offer_id: string
+          offer_version: string
+          organisation_id: string
+          product_id: string
+          product_version: string
+          provider: string
+          provider_checkout_id?: string | null
+          provider_checkout_url?: string | null
+          provider_price_reference: string
+          purchaser_user_id: string
+          safe_status?: string | null
+          saved_snapshot_id: string
+          status?: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          access_key?: string
+          access_version?: string
+          amount_minor?: number
+          assessment_session_id?: string
+          charge_type?: string
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          expires_at?: string
+          id?: string
+          idempotency_scope_key?: string
+          offer_id?: string
+          offer_version?: string
+          organisation_id?: string
+          product_id?: string
+          product_version?: string
+          provider?: string
+          provider_checkout_id?: string | null
+          provider_checkout_url?: string | null
+          provider_price_reference?: string
+          purchaser_user_id?: string
+          safe_status?: string | null
+          saved_snapshot_id?: string
+          status?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_overview_checkouts_assessment_session_id_fkey"
+            columns: ["assessment_session_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_checkouts_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_checkouts_saved_snapshot_id_fkey"
+            columns: ["saved_snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_dna_snapshot_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_dna_overview_checkouts_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_dna_overview_payment_events: {
+        Row: {
+          amount_minor: number | null
+          checkout_id: string | null
+          currency: string | null
+          event_type: string
+          id: number
+          payload_digest: string
+          payment_status: string
+          processed_at: string
+          provider: string
+          provider_checkout_id: string | null
+          provider_event_id: string
+          safe_status: string
+          verification_status: string
+        }
+        Insert: {
+          amount_minor?: number | null
+          checkout_id?: string | null
+          currency?: string | null
+          event_type: string
+          id?: never
+          payload_digest: string
+          payment_status: string
+          processed_at?: string
+          provider: string
+          provider_checkout_id?: string | null
+          provider_event_id: string
+          safe_status: string
+          verification_status: string
+        }
+        Update: {
+          amount_minor?: number | null
+          checkout_id?: string | null
+          currency?: string | null
+          event_type?: string
+          id?: never
+          payload_digest?: string
+          payment_status?: string
+          processed_at?: string
+          provider?: string
+          provider_checkout_id?: string | null
+          provider_event_id?: string
+          safe_status?: string
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_dna_overview_payment_events_checkout_id_fkey"
+            columns: ["checkout_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_dna_overview_checkouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delivery_dna_public_access_events: {
         Row: {
           id: number
@@ -8028,6 +8303,14 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      attach_delivery_dna_overview_provider_checkout: {
+        Args: {
+          p_checkout_id: string
+          p_provider_checkout_id: string
+          p_provider_checkout_url: string
+        }
+        Returns: undefined
+      }
       can_read_delivery_intelligence: {
         Args: { p_organisation_id: string; p_workspace_id: string }
         Returns: boolean
@@ -8353,6 +8636,28 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_delivery_dna_overview_checkout: {
+        Args: {
+          p_access_key: string
+          p_access_version: string
+          p_amount_minor: number
+          p_assessment_session_id: string
+          p_currency: string
+          p_expires_at: string
+          p_idempotency_scope_key: string
+          p_offer_id: string
+          p_offer_version: string
+          p_organisation_id: string
+          p_product_id: string
+          p_product_version: string
+          p_provider: string
+          p_provider_price_reference: string
+          p_purchaser_user_id: string
+          p_saved_snapshot_id: string
+          p_workspace_id: string
+        }
+        Returns: string
+      }
       create_delivery_dna_snapshot: {
         Args: { p_ip_hash: string; p_token_hash: string }
         Returns: string
@@ -8566,6 +8871,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      fail_delivery_dna_overview_checkout: {
+        Args: { p_checkout_id: string; p_safe_status: string }
+        Returns: undefined
+      }
       fail_recommendation_audit_export: {
         Args: { p_failure_code: string; p_id: string; p_lease_owner: string }
         Returns: {
@@ -8597,6 +8906,29 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      fulfil_delivery_dna_overview_payment: {
+        Args: {
+          p_access_key: string
+          p_access_version: string
+          p_amount_minor: number
+          p_assessment_session_id: string
+          p_checkout_id: string
+          p_currency: string
+          p_event_type: string
+          p_offer_id: string
+          p_offer_version: string
+          p_organisation_id: string
+          p_payload_digest: string
+          p_payment_status: string
+          p_provider: string
+          p_provider_checkout_id: string
+          p_provider_event_id: string
+          p_purchaser_user_id: string
+          p_saved_snapshot_id: string
+          p_workspace_id: string
+        }
+        Returns: Json
       }
       has_org_role: {
         Args: {
