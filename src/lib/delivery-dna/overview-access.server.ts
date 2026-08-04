@@ -19,6 +19,7 @@ export interface DeliveryDnaOverviewAccess {
     offerId: string;
     offerVersion: string;
     displayPrice: string;
+    taxDisplay: string;
     purchaseAction: string;
     checkoutAvailable: boolean;
   } | null;
@@ -99,6 +100,7 @@ export async function resolveDeliveryDnaOverviewAccess(input: {
           offerId: offer.offerId,
           offerVersion: offer.offerVersion,
           displayPrice: offer.displayPrice,
+          taxDisplay: offer.taxDisplay,
           purchaseAction: deliveryDnaCommercialCopy.overviewOffer.purchaseAction,
           checkoutAvailable: checkoutConfigured(),
         }

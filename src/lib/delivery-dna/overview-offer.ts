@@ -1,19 +1,19 @@
 import { z } from "zod";
 
-import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v1.0.0 Delivery DNA Commercial Offer Configuration.json";
+import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v1.0.1 Delivery DNA Commercial Offer Configuration.json";
 
 const offerSchema = z
   .object({
     document: z.object({
       id: z.literal("PDR-003-004A"),
-      version: z.literal("1.0.0"),
+      version: z.literal("1.0.1"),
       status: z.literal("locked"),
       parentDecisionId: z.literal("PDR-003-004"),
-      parentDecisionVersion: z.literal("1.1"),
+      parentDecisionVersion: z.literal("1.2"),
     }),
     activeOffer: z.object({
       offerId: z.literal("delivery-dna-overview-gbp-1"),
-      offerVersion: z.literal("1.0.0"),
+      offerVersion: z.literal("1.0.1"),
       productId: z.literal("delivery-dna-overview"),
       productVersion: z.literal("1.0.0"),
       accessKey: z.literal("delivery_dna_overview"),
@@ -25,9 +25,14 @@ const offerSchema = z
       currency: z.literal("GBP"),
       unitAmountMinor: z.literal(29500),
       displayPrice: z.literal("£295 one-off"),
-      taxPolicy: z.literal("checkout_discloses_final_total_and_applicable_tax_before_confirmation"),
+      taxPolicy: z.literal("no_vat_charged_supplier_not_vat_registered"),
       providerPriceReferenceSource: z.literal("deployment_configuration"),
       clientSuppliedPriceTrusted: z.literal(false),
+      taxStatus: z.literal("supplier_not_vat_registered"),
+      vatCharged: z.literal(false),
+      vatAmountMinor: z.literal(0),
+      customerTotalMinor: z.literal(29500),
+      taxDisplay: z.literal("No VAT charged — DeliveryIQ is not VAT registered."),
     }),
     purchaseScope: z
       .object({
@@ -128,7 +133,7 @@ const offerSchema = z
           expected: z.record(z.string(), z.unknown()),
         }),
       )
-      .length(11),
+      .length(12),
   })
   .passthrough();
 
@@ -139,7 +144,7 @@ export function validateDeliveryDnaOverviewOfferConfiguration(
 ): DeliveryDnaOverviewOfferConfiguration {
   const parsed = offerSchema.parse(value);
   const fixtureIds = parsed.fixtures.map((fixture) => fixture.id);
-  if (new Set(fixtureIds).size !== 11) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
+  if (new Set(fixtureIds).size !== 12) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
   return parsed;
 }
 
@@ -196,6 +201,9 @@ export function evaluateOverviewPaymentFixture(input: {
   tenantWorkspaceAssessmentMatch?: boolean;
   successRedirectReceived?: boolean;
   sameEventDeliveryCount?: number;
+  subtotalMinor?: number;
+  vatAmountMinor?: number;
+  customerTotalMinor?: number;
 }) {
   const offer = deliveryDnaOverviewOffer;
   if (!input.paymentEventVerified) {
@@ -211,6 +219,10 @@ export function evaluateOverviewPaymentFixture(input: {
     input.paymentStatus !== "failed" &&
     input.paymentStatus !== "cancelled" &&
     (input.amountMinor === undefined || input.amountMinor === offer.unitAmountMinor) &&
+    (input.subtotalMinor === undefined || input.subtotalMinor === offer.unitAmountMinor) &&
+    (input.vatAmountMinor === undefined || input.vatAmountMinor === offer.vatAmountMinor) &&
+    (input.customerTotalMinor === undefined ||
+      input.customerTotalMinor === offer.customerTotalMinor) &&
     (input.currency === undefined || input.currency === offer.currency) &&
     input.tenantWorkspaceAssessmentMatch === true;
   if (!valid) {
@@ -227,6 +239,29 @@ export function evaluateOverviewPaymentFixture(input: {
     accessVersion: offer.accessVersion,
     remainingAssessmentAccessible: true,
     deliveryDnaActionAccessible: false,
+  };
+}
+
+export function nonVatRegisteredCheckoutTotal(input: {
+  offerVersion: string;
+  unitAmountMinor: number;
+  supplierVatRegistered: boolean;
+  currency: string;
+}) {
+  const offer = deliveryDnaOverviewOffer;
+  if (
+    input.offerVersion !== offer.offerVersion ||
+    input.unitAmountMinor !== offer.unitAmountMinor ||
+    input.supplierVatRegistered ||
+    input.currency !== offer.currency
+  ) {
+    throw new Error("OVERVIEW_OFFER_TAX_CONFIGURATION_INVALID");
+  }
+  return {
+    subtotalMinor: offer.unitAmountMinor,
+    vatAmountMinor: offer.vatAmountMinor,
+    customerTotalMinor: offer.customerTotalMinor,
+    taxDisplay: offer.taxDisplay,
   };
 }
 
