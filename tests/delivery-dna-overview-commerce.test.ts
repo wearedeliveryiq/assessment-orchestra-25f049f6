@@ -6,9 +6,14 @@ import {
   deliveryDnaOverviewOfferConfiguration,
   evaluateOverviewPaymentFixture,
   historicalOverviewPurchase,
+  nonVatRegisteredCheckoutTotal,
   savedSnapshotFixtureProjection,
 } from "@/lib/delivery-dna/overview-offer";
-import { verifyStripeWebhook } from "@/lib/delivery-dna/overview-payment.server";
+import {
+  deliveryDnaOverviewStripeCheckoutParameters,
+  stripeCheckoutTotals,
+  verifyStripeWebhook,
+} from "@/lib/delivery-dna/overview-payment.server";
 import { projectOverviewIndustryContext } from "@/lib/delivery-intelligence/industry-context";
 import { projectDeliveryDnaOverviewResult } from "@/lib/delivery-intelligence/projection";
 import { renderDeliveryDnaOverviewPdf } from "@/lib/delivery-dna/overview-report.server";
@@ -118,12 +123,12 @@ const access = {
   safeStatus: "available",
 } as const;
 
-describe("PDR-003-004/A v1.1 commercial journey", () => {
-  it("executes all 11 locked acceptance fixtures", () => {
+describe("PDR-003-004/A v1.2 commercial journey", () => {
+  it("executes all 12 locked acceptance fixtures", () => {
     const fixtures = new Map(
       deliveryDnaOverviewOfferConfiguration.fixtures.map((item) => [item.id, item]),
     );
-    expect([...fixtures]).toHaveLength(11);
+    expect([...fixtures]).toHaveLength(12);
 
     expect(
       savedSnapshotFixtureProjection(
@@ -140,6 +145,11 @@ describe("PDR-003-004/A v1.1 commercial journey", () => {
         fixtures.get("verified_payment_grants_one_scoped_overview")!.input,
       ),
     ).toMatchObject(fixtures.get("verified_payment_grants_one_scoped_overview")!.expected);
+    expect(
+      nonVatRegisteredCheckoutTotal(
+        fixtures.get("non_vat_registered_checkout_total")!.input as never,
+      ),
+    ).toEqual(fixtures.get("non_vat_registered_checkout_total")!.expected);
     expect(
       evaluateOverviewPaymentFixture(
         fixtures.get("success_redirect_without_verified_event_denied")!.input,
@@ -200,8 +210,68 @@ describe("PDR-003-004/A v1.1 commercial journey", () => {
     expect(route).not.toContain("£295 one-off");
     expect(route).not.toContain("Buy my Delivery DNA Overview — £295");
     expect(route).toContain("deliveryDnaCommercialCopy.overviewOffer.purchaseAction");
+    expect(route).toContain("access.data.offer.taxDisplay");
     expect(route).toContain("deliveryDnaCommercialCopy.savePanel.primaryAction");
     expect(readFileSync("src/routes/auth.register.tsx", "utf8")).not.toMatch(/free account/i);
+  });
+
+  it("pins a £295 subtotal, zero VAT and £295 final total into hosted Checkout", () => {
+    const params = deliveryDnaOverviewStripeCheckoutParameters({
+      configuration: { priceReference: "price_delivery_dna_overview_295" },
+      checkoutId: "checkout-1",
+      customerEmail: "buyer@example.test",
+      origin: "https://deliveryiq.example",
+      scope: {
+        id: "snapshot-1",
+        linked_user_id: "user-1",
+        organisation_id: "org-1",
+        workspace_id: "workspace-1",
+        assessment_session_id: "assessment-1",
+      },
+    });
+    expect(params.get("automatic_tax[enabled]")).toBe("false");
+    expect(params.get("tax_id_collection[enabled]")).toBe("false");
+    expect(params.get("custom_text[submit][message]")).toBe(
+      "No VAT charged — DeliveryIQ is not VAT registered.",
+    );
+    expect(params.get("custom_text[after_submit][message]")).toBe(
+      "No VAT charged — DeliveryIQ is not VAT registered.",
+    );
+    expect(params.get("metadata[offer_version]")).toBe("1.0.1");
+    const customerSurface = [
+      params.toString(),
+      JSON.stringify(deliveryDnaOverviewOfferConfiguration.activeOffer),
+      readFileSync("src/routes/snapshot.tsx", "utf8"),
+    ].join("\n");
+    expect(customerSurface).not.toMatch(/VAT[- ]inclusive/i);
+    expect(customerSurface).not.toMatch(/VAT registration (?:number|ID)/i);
+
+    expect(
+      stripeCheckoutTotals({
+        amount_subtotal: 29500,
+        amount_total: 29500,
+        total_details: { amount_tax: 0 },
+      }),
+    ).toEqual({ subtotalMinor: 29500, vatAmountMinor: 0, customerTotalMinor: 29500 });
+    expect(
+      evaluateOverviewPaymentFixture({
+        paymentEventVerified: true,
+        paymentStatus: "succeeded",
+        subtotalMinor: 29500,
+        vatAmountMinor: 1,
+        customerTotalMinor: 29501,
+        currency: "GBP",
+        tenantWorkspaceAssessmentMatch: true,
+      }),
+    ).toMatchObject({ accessGrantCount: 0, safeStatus: "payment_verification_failed" });
+    expect(() =>
+      nonVatRegisteredCheckoutTotal({
+        offerVersion: "1.0.1",
+        unitAmountMinor: 29500,
+        supplierVatRegistered: true,
+        currency: "GBP",
+      }),
+    ).toThrow("OVERVIEW_OFFER_TAX_CONFIGURATION_INVALID");
   });
 
   it("fails closed unless a recent provider signature is valid", () => {
@@ -275,9 +345,26 @@ describe("PDR-003-004/A v1.1 commercial journey", () => {
     expect(sql).toContain("status = 'succeeded'");
     expect(sql).toContain("v_checkout.amount_minor IS DISTINCT FROM p_amount_minor");
     expect(sql).toContain("v_checkout.provider_checkout_id IS NULL");
-    expect(readFileSync("src/lib/delivery-dna/overview-payment.server.ts", "utf8")).toContain(
-      "session?.amount_subtotal",
+    const taxMigration = readFileSync(
+      "supabase/migrations/20260804012000_delivery_dna_overview_non_vat_offer.sql",
+      "utf8",
     );
+    const hardening = readFileSync(
+      "supabase/migrations/20260804013000_harden_delivery_dna_overview_non_vat_permissions.sql",
+      "utf8",
+    );
+    expect(taxMigration).toContain("fulfil_delivery_dna_overview_payment_v2");
+    expect(taxMigration).toContain(
+      "v_checkout.vat_amount_minor IS DISTINCT FROM p_vat_amount_minor",
+    );
+    expect(taxMigration).toContain("customer_total_minor = subtotal_minor + vat_amount_minor");
+    expect(taxMigration).toContain("No VAT charged — DeliveryIQ is not VAT registered.");
+    expect(hardening).toContain("FROM PUBLIC, anon, authenticated");
+    expect(hardening).toContain("REVOKE MAINTAIN");
+    const paymentService = readFileSync("src/lib/delivery-dna/overview-payment.server.ts", "utf8");
+    expect(paymentService).toContain('"automatic_tax[enabled]": "false"');
+    expect(paymentService).toContain("session?.amount_total");
+    expect(paymentService).toContain("session?.total_details?.amount_tax");
     expect(sql).not.toMatch(/INSERT INTO public\.assessment_analysis_runs/i);
   });
 

@@ -93,27 +93,7 @@ async function stripeCheckout(input: {
   origin: string;
   scope: CheckoutScope;
 }): Promise<{ id: string; url: string }> {
-  const offer = deliveryDnaOverviewOffer;
-  const params = new URLSearchParams({
-    mode: "payment",
-    "line_items[0][price]": input.configuration.priceReference,
-    "line_items[0][quantity]": "1",
-    customer_email: input.customerEmail,
-    client_reference_id: input.checkoutId,
-    success_url: `${input.origin}/snapshot?continue=1&checkout=success`,
-    cancel_url: `${input.origin}/snapshot?continue=1&checkout=cancelled`,
-    "automatic_tax[enabled]": "true",
-    "metadata[checkout_id]": input.checkoutId,
-    "metadata[purchaser_user_id]": input.scope.linked_user_id,
-    "metadata[organisation_id]": input.scope.organisation_id,
-    "metadata[workspace_id]": input.scope.workspace_id,
-    "metadata[saved_snapshot_id]": input.scope.id,
-    "metadata[assessment_session_id]": input.scope.assessment_session_id,
-    "metadata[offer_id]": offer.offerId,
-    "metadata[offer_version]": offer.offerVersion,
-    "metadata[access_key]": offer.accessKey,
-    "metadata[access_version]": offer.accessVersion,
-  });
+  const params = deliveryDnaOverviewStripeCheckoutParameters(input);
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",
     headers: {
@@ -137,6 +117,40 @@ async function stripeCheckout(input: {
     );
   }
   return { id: body.id, url: body.url };
+}
+
+export function deliveryDnaOverviewStripeCheckoutParameters(input: {
+  configuration: Pick<PaymentConfiguration, "priceReference">;
+  checkoutId: string;
+  customerEmail: string;
+  origin: string;
+  scope: CheckoutScope;
+}): URLSearchParams {
+  const offer = deliveryDnaOverviewOffer;
+  return new URLSearchParams({
+    mode: "payment",
+    "line_items[0][price]": input.configuration.priceReference,
+    "line_items[0][quantity]": "1",
+    customer_email: input.customerEmail,
+    client_reference_id: input.checkoutId,
+    success_url: `${input.origin}/snapshot?continue=1&checkout=success`,
+    cancel_url: `${input.origin}/snapshot?continue=1&checkout=cancelled`,
+    "automatic_tax[enabled]": "false",
+    "tax_id_collection[enabled]": "false",
+    "custom_text[submit][message]": offer.taxDisplay,
+    "custom_text[after_submit][message]": offer.taxDisplay,
+    "payment_intent_data[description]": offer.taxDisplay,
+    "metadata[checkout_id]": input.checkoutId,
+    "metadata[purchaser_user_id]": input.scope.linked_user_id,
+    "metadata[organisation_id]": input.scope.organisation_id,
+    "metadata[workspace_id]": input.scope.workspace_id,
+    "metadata[saved_snapshot_id]": input.scope.id,
+    "metadata[assessment_session_id]": input.scope.assessment_session_id,
+    "metadata[offer_id]": offer.offerId,
+    "metadata[offer_version]": offer.offerVersion,
+    "metadata[access_key]": offer.accessKey,
+    "metadata[access_version]": offer.accessVersion,
+  });
 }
 
 export async function createDeliveryDnaOverviewCheckout(request: Request, assessmentId: string) {
@@ -179,7 +193,7 @@ export async function createDeliveryDnaOverviewCheckout(request: Request, assess
     ].join(":"),
   );
   const { data: checkoutId, error: createError } = await db.rpc(
-    "create_delivery_dna_overview_checkout",
+    "create_delivery_dna_overview_checkout_v2",
     {
       p_purchaser_user_id: scope.linked_user_id,
       p_organisation_id: scope.organisation_id,
@@ -192,8 +206,14 @@ export async function createDeliveryDnaOverviewCheckout(request: Request, assess
       p_product_version: offer.productVersion,
       p_access_key: offer.accessKey,
       p_access_version: offer.accessVersion,
-      p_amount_minor: offer.unitAmountMinor,
+      p_unit_amount_minor: offer.unitAmountMinor,
+      p_subtotal_minor: offer.unitAmountMinor,
+      p_vat_amount_minor: offer.vatAmountMinor,
+      p_customer_total_minor: offer.customerTotalMinor,
       p_currency: offer.currency,
+      p_tax_status: offer.taxStatus,
+      p_tax_policy: offer.taxPolicy,
+      p_tax_display: offer.taxDisplay,
       p_provider: configuration.provider,
       p_provider_price_reference: configuration.priceReference,
       p_idempotency_scope_key: idempotencyScopeKey,
@@ -290,6 +310,29 @@ function stringMetadata(value: unknown): Record<string, string> {
   );
 }
 
+export function stripeCheckoutTotals(value: unknown): {
+  subtotalMinor: number | null;
+  vatAmountMinor: number | null;
+  customerTotalMinor: number | null;
+} {
+  const session = value as {
+    amount_subtotal?: unknown;
+    amount_total?: unknown;
+    total_details?: { amount_tax?: unknown } | null;
+  } | null;
+  return {
+    subtotalMinor: Number.isInteger(session?.amount_subtotal)
+      ? (session?.amount_subtotal as number)
+      : null,
+    vatAmountMinor: Number.isInteger(session?.total_details?.amount_tax)
+      ? (session?.total_details?.amount_tax as number)
+      : null,
+    customerTotalMinor: Number.isInteger(session?.amount_total)
+      ? (session?.amount_total as number)
+      : null,
+  };
+}
+
 export async function handleDeliveryDnaOverviewWebhook(request: Request): Promise<Response> {
   const configuration = paymentConfiguration();
   if (!configuration) return new Response("Unavailable", { status: 503 });
@@ -318,6 +361,7 @@ export async function handleDeliveryDnaOverviewWebhook(request: Request): Promis
     });
   const session = event?.data?.object;
   const metadata = stringMetadata(session?.metadata);
+  const totals = stripeCheckoutTotals(session);
   const paymentStatus =
     (event.type === "checkout.session.completed" ||
       event.type === "checkout.session.async_payment_succeeded") &&
@@ -326,15 +370,12 @@ export async function handleDeliveryDnaOverviewWebhook(request: Request): Promis
       : event.type === "checkout.session.expired"
         ? "cancelled"
         : "failed";
-  const result = await db.rpc("fulfil_delivery_dna_overview_payment", {
+  const shared = {
     p_provider: configuration.provider,
     p_provider_event_id: event.id,
     p_provider_checkout_id: typeof session?.id === "string" ? session.id : "",
     p_event_type: event.type,
     p_payment_status: paymentStatus,
-    // The governed £295 amount is the Checkout subtotal. Applicable tax is
-    // disclosed and collected by the provider as part of the final total.
-    p_amount_minor: Number.isInteger(session?.amount_subtotal) ? session.amount_subtotal : null,
     p_currency: typeof session?.currency === "string" ? session.currency.toUpperCase() : "",
     p_payload_digest: sha256(body),
     p_checkout_id: metadata.checkout_id ?? "00000000-0000-0000-0000-000000000000",
@@ -348,7 +389,19 @@ export async function handleDeliveryDnaOverviewWebhook(request: Request): Promis
     p_offer_version: metadata.offer_version ?? "",
     p_access_key: metadata.access_key ?? "",
     p_access_version: metadata.access_version ?? "",
-  });
+  };
+  const result =
+    metadata.offer_version === "1.0.0"
+      ? await db.rpc("fulfil_delivery_dna_overview_payment", {
+          ...shared,
+          p_amount_minor: totals.subtotalMinor,
+        })
+      : await db.rpc("fulfil_delivery_dna_overview_payment_v2", {
+          ...shared,
+          p_subtotal_minor: totals.subtotalMinor,
+          p_vat_amount_minor: totals.vatAmountMinor,
+          p_customer_total_minor: totals.customerTotalMinor,
+        });
   if (result.error) {
     console.error("[overview-payment] verified event processing failed", { eventId: event.id });
     return new Response("Temporary failure", { status: 500 });

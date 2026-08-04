@@ -634,6 +634,11 @@ function SnapshotResultView({
               <p className="mt-4 text-lg font-extrabold text-[#60A5FA]">
                 {access.data?.offer?.displayPrice}
               </p>
+              {access.data?.offer?.taxDisplay ? (
+                <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">
+                  {access.data.offer.taxDisplay}
+                </p>
+              ) : null}
               {access.data?.permitted ? (
                 <Button
                   asChild
