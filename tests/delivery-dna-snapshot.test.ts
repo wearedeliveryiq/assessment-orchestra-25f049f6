@@ -342,6 +342,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(markAsset).toMatchObject({
       asset_id: "85519077-9014-4033-b924-06c965dc5a68",
       project_id: "a3f77a8e-ca53-4497-8623-bd83d9046aa1",
+      url: "https://deliveryiq.co.uk/__l5e/assets-v1/85519077-9014-4033-b924-06c965dc5a68/deliveryiq-mark.png",
     });
     expect(horizontalAsset).toMatchObject({
       asset_id: "06c48f5f-1879-40dc-92c4-ca0b5da43b1e",
