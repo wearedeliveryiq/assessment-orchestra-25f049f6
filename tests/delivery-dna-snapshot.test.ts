@@ -274,6 +274,9 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(preparation).toContain("copy.slowPreparationBody");
     expect(preparation).toContain("copy.readyHeading");
     expect(preparation).toContain("Your saved responses are safe.");
+    expect(preparation).toMatch(
+      /setShowReady\(true\);\s*\}, \[elapsed, resultReady, showReady\]\);\s*useEffect\(\(\) => \{\s*if \(!showReady\) return;\s*finishTimer\.current = setTimeout\(onReady, 700\)/,
+    );
     for (const step of deliveryDnaSnapshotConfiguration.preparationPolicy.steps) {
       expect(preparation).toContain("step.copy");
       expect(step.copy).not.toMatch(
