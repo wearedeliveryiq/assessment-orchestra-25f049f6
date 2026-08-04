@@ -273,7 +273,7 @@ describe("PDR-003-004 commercial access", () => {
     );
     expect(resultBoundary).toContain("recommendationPortfolioService.ensure(run)");
     expect(resultBoundary.indexOf("recommendationPortfolioService.ensure(run)")).toBeGreaterThan(
-      resultBoundary.indexOf("resolveDeliveryDnaCommercialAccess"),
+      resultBoundary.indexOf("resolveDeliveryDnaOverviewAccess"),
     );
   });
 });

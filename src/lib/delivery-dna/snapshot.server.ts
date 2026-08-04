@@ -374,7 +374,7 @@ export async function continueSnapshot(request: Request, input: Record<string, u
     recordEvent("snapshot_continue_selected"),
     recordEvent("snapshot_registration_completed"),
   ]);
-  return { assessmentId };
+  return { assessmentId, saved: true as const };
 }
 
 export async function handleSnapshotRoute(

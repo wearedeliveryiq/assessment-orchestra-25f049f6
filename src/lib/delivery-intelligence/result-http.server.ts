@@ -2,11 +2,9 @@ import { assessmentRequestContext } from "../identity/assessment-auth.server";
 import { IdentityError } from "../identity/errors";
 import { AnalysisServiceError, assessmentAnalysisService } from "../analysis/service.server";
 import { getResult } from "./result-repository.server";
-import { freePresentedRecommendationIds, projectCommercialWorkspaceResult } from "./projection";
-import { resolveProductRecommendations } from "./product-recommendations.server";
-import { getTrace } from "./trace-repository.server";
+import { projectDeliveryDnaOverviewResult } from "./projection";
 import { recommendationPortfolioService } from "../recommendation-portfolio/service.server";
-import { resolveDeliveryDnaCommercialAccess } from "./commercial-access.server";
+import { resolveDeliveryDnaOverviewAccess } from "../delivery-dna/overview-access.server";
 
 const json = (body: unknown, status: number, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), {
@@ -53,40 +51,40 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
     }
     // The complete governed portfolio is generated and persisted independently
     // of commercial tier. Access affects projection only, never calculation.
-    const [access, ensuredPortfolio] = await Promise.all([
-      resolveDeliveryDnaCommercialAccess({
-        organisationId: context.organisationId,
-        workspaceId: context.workspaceId,
-        permitted: verified.identity.permissions.includes("assessment:read"),
-      }),
-      recommendationPortfolioService.ensure(run),
-    ]);
+    const linkedAccess = await resolveDeliveryDnaOverviewAccess({
+      assessmentId: run.assessmentSessionId,
+      context: verified,
+    });
+    // Direct authenticated full-assessment starts and genuine pre-v1.1 results
+    // remain available. Snapshot-linked assessments are governed by the scoped
+    // Overview grant returned above.
+    const access = linkedAccess ?? {
+      assessmentId: run.assessmentSessionId,
+      savedSnapshotId: "direct-assessment",
+      access: "grandfathered" as const,
+      permitted: true,
+      offer: null,
+      safeStatus: "available" as const,
+    };
+    if (!access.permitted) {
+      return json(
+        {
+          error: "Unlock your Delivery DNA Overview to view this result.",
+          code: "DELIVERY_DNA_OVERVIEW_REQUIRED",
+        },
+        403,
+      );
+    }
+    const ensuredPortfolio = await recommendationPortfolioService.ensure(run);
     const portfolio = ensuredPortfolio.portfolio;
-    const etag = `"${stored.resultHash}:${access.policyVersion}:${access.accessTier}:${access.state}"`;
+    const etag = `"${stored.resultHash}:PDR-003-004/1.1:${access.access}"`;
     if (request.headers.get("if-none-match") === etag) {
       return new Response(null, {
         status: 304,
         headers: { etag, "cache-control": "private, no-cache" },
       });
     }
-    const projected = projectCommercialWorkspaceResult({ stored, portfolio, access });
-    const recommendationIds =
-      access.accessTier === "entitled"
-        ? stored.canonicalResult.recommendations.ranked.map((item) => item.id)
-        : freePresentedRecommendationIds(stored, portfolio);
-    const productRecommendations = await resolveProductRecommendations({
-      analysisRunId: run.id,
-      organisationId: context.organisationId,
-      workspaceId: context.workspaceId,
-      recommendationIds,
-      permissions: verified.identity.permissions,
-    });
-    const trace = access.accessTier === "entitled" ? await getTrace(run.id, context) : null;
-    const explanations =
-      trace?.nodes
-        .filter((node) => node.visible)
-        .map((node) => ({ id: node.id, type: node.nodeType, domainId: node.domainId })) ?? [];
-    return json({ ...projected, productRecommendations, explanations }, 200, { etag });
+    return json(projectDeliveryDnaOverviewResult({ stored, portfolio, access }), 200, { etag });
   } catch (error) {
     if (error instanceof IdentityError)
       return json({ error: error.message, code: error.code }, error.status);

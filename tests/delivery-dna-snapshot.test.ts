@@ -317,7 +317,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
       "maturity.interpretation",
       "copy.positiveHeading",
       "copy.exploreHeading",
-      "copy.continuationHeading",
+      "deliveryDnaCommercialCopy.savePanel.heading",
       "copy.restartCta",
     ];
     for (let index = 1; index < orderedMarkers.length; index += 1) {

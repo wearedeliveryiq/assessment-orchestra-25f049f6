@@ -36,6 +36,7 @@ import {
 } from "../delivery-dna/submission";
 import * as executionRepo from "../orchestrator/repository.server";
 import { assertDeliveryDnaCatalogueContract } from "../delivery-dna/catalogue-contract.server";
+import { canUseDeliveryDnaAssessment } from "../delivery-dna/overview-access.server";
 
 export class RuntimeError extends Error {
   constructor(
@@ -49,6 +50,15 @@ export class RuntimeError extends Error {
 async function requireSession(id: string, ownerKey: string): Promise<AssessmentSession> {
   const session = await repo.getSession(id, ownerKey);
   if (!session) throw new RuntimeError("Assessment not found", 404);
+  if (
+    isDeliveryDnaAssessment(session.assessmentType) &&
+    !(await canUseDeliveryDnaAssessment(id, ownerKey))
+  ) {
+    throw new RuntimeError(
+      "Unlock your Delivery DNA Overview to continue with the remaining 26 questions.",
+      403,
+    );
+  }
   return session;
 }
 

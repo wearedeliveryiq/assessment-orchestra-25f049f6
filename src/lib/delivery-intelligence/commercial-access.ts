@@ -1,11 +1,12 @@
+import { deliveryDnaCommercialCopy } from "../delivery-dna/overview-offer";
+
 export const DELIVERY_DNA_COMMERCIAL_POLICY = {
   id: "PDR-003-004",
   version: "1.0",
   productType: "delivery_dna_action",
   productId: "delivery_dna_action",
   entitlementVersion: "1.0.0",
-  anonymousRegistrationLabel:
-    "Create your free DeliveryIQ account to explore your complete Delivery DNA profile, priority recommendations and personalised roadmap preview.",
+  anonymousRegistrationLabel: deliveryDnaCommercialCopy.savePanel.primaryAction,
   panel: {
     heading: "Turn your Delivery DNA priorities into action",
     body: "Unlock your complete improvement plan, success measures and action tracking to help your team deliver and evidence progress.",

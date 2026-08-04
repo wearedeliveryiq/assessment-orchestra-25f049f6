@@ -1,14 +1,8 @@
 import { assessmentAuthHeaders } from "../identity/assessment-auth";
-import type { projectCommercialWorkspaceResult } from "./projection";
+import type { projectDeliveryDnaOverviewResult } from "./projection";
 import type { AnalysisHandoffView } from "../analysis/handoff-types";
 
-export type WorkspaceIntelligenceResult = ReturnType<typeof projectCommercialWorkspaceResult> & {
-  productRecommendations: {
-    knowledgePacks: Array<{ id: string; rank: number; cta: string; copy: string }>;
-    teamMates: Array<{ id: string; cta: string; copy: string }>;
-  };
-  explanations: Array<{ id: string; type: string; domainId: string }>;
-};
+export type WorkspaceIntelligenceResult = ReturnType<typeof projectDeliveryDnaOverviewResult>;
 
 export async function fetchLatestIntelligence(
   assessmentId: string,
@@ -67,4 +61,17 @@ export async function fetchIntelligenceExplanation(runId: string, conclusionId: 
     nodes: Array<{ id: string; type: string; domainId: string; domainVersion: string }>;
     evidenceRestricted: boolean;
   }>;
+}
+
+export async function downloadDeliveryDnaOverviewReport(runId: string): Promise<void> {
+  const response = await fetch(`/api/delivery-dna-overviews/${runId}/report.pdf`, {
+    headers: await assessmentAuthHeaders(),
+  });
+  if (!response.ok) throw new Error("The board-ready Overview could not be downloaded.");
+  const url = URL.createObjectURL(await response.blob());
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "delivery-dna-overview.pdf";
+  link.click();
+  URL.revokeObjectURL(url);
 }

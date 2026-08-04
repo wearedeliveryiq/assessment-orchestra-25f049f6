@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronLeft, Loader2, RotateCcw } from "lucide-react";
 import {
   useCallback,
@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { useIdentity } from "@/hooks/use-identity";
 import { deliveryDnaCatalogue } from "@/lib/delivery-dna/catalogue";
 import { deliveryDnaSnapshotApi, type SnapshotState } from "@/lib/delivery-dna/snapshot-client";
+import { deliveryDnaOverviewApi } from "@/lib/delivery-dna/overview-client";
+import { deliveryDnaCommercialCopy } from "@/lib/delivery-dna/overview-offer";
 import {
   deliveryDnaSnapshotConfiguration,
   deliveryDnaSnapshotQuestions,
@@ -25,9 +27,16 @@ import {
 } from "@/lib/delivery-dna/snapshot";
 
 export const Route = createFileRoute("/snapshot")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    continue: search.continue === "1" || search.continue === true,
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    const checkout =
+      search.checkout === "success" || search.checkout === "cancelled"
+        ? (search.checkout as "success" | "cancelled")
+        : undefined;
+    return {
+      continue: search.continue === "1" || search.continue === true,
+      ...(checkout ? { checkout } : {}),
+    };
+  },
   head: () => ({
     meta: [
       { title: "Delivery DNA Snapshot — DeliveryIQ" },
@@ -78,6 +87,7 @@ function DeliveryDnaSnapshotPage() {
   });
 
   const snapshot = data?.snapshot ?? null;
+  const search = Route.useSearch();
   return (
     <SnapshotAcquisitionShell>
       {isLoading ? (
@@ -103,6 +113,7 @@ function DeliveryDnaSnapshotPage() {
           restarting={restart.isPending}
           restartError={restart.error?.message}
           onRestart={() => restart.mutate()}
+          checkoutState={search.checkout}
         />
       ) : (
         <SnapshotQuestions snapshot={snapshot} onPrepare={() => setPreparing(true)} />
@@ -497,6 +508,7 @@ function SnapshotResultView({
   restarting,
   restartError,
   onRestart,
+  checkoutState,
 }: {
   snapshot: SnapshotState;
   isAuthenticated: boolean;
@@ -504,13 +516,33 @@ function SnapshotResultView({
   restarting: boolean;
   restartError?: string;
   onRestart: () => void;
+  checkoutState?: "success" | "cancelled";
 }) {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [consent, setConsent] = useState(false);
   const continuation = useMutation({
     mutationFn: () => deliveryDnaSnapshotApi.continue(consent),
-    onSuccess: ({ assessmentId }) =>
-      navigate({ to: "/assessment/$id", params: { id: assessmentId } }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["delivery-dna-snapshot"] });
+    },
+  });
+  const assessmentId = snapshot.linkedAssessmentId;
+  const access = useQuery({
+    queryKey: ["delivery-dna-overview-access", assessmentId],
+    queryFn: () => deliveryDnaOverviewApi.access(assessmentId!),
+    enabled: Boolean(isAuthenticated && assessmentId),
+    refetchInterval: (query) =>
+      checkoutState === "success" && !query.state.data?.permitted ? 2_000 : false,
+  });
+  const checkout = useMutation({
+    mutationFn: () => deliveryDnaOverviewApi.checkout(assessmentId!),
+    onSuccess: (value) => {
+      if (value.status === "already_available" && value.destination) {
+        window.location.assign(value.destination);
+      } else if (value.checkoutUrl) {
+        window.location.assign(value.checkoutUrl);
+      }
+    },
   });
   const result = snapshot.result;
   if (!result?.available || !result.indicativeMaturityLevel) {
@@ -569,44 +601,128 @@ function SnapshotResultView({
         aria-labelledby="snapshot-continue-title"
       >
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
-          13 questions to engage. 39 questions to diagnose.
-        </p>
-        <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
-          {String(copy.continuationHeading)}
-        </h2>
-        <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
-          {String(copy.continuationBody)}
+          Delivery DNA Overview
         </p>
 
-        {snapshot.status === "linked" && snapshot.linkedAssessmentId ? (
-          <Button
-            asChild
-            className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
-          >
-            <Link to="/assessment/$id" params={{ id: snapshot.linkedAssessmentId }}>
-              {String(copy.continuationCtaLinked)} <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </Button>
+        {snapshot.status === "linked" && assessmentId ? (
+          <>
+            <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
+              {deliveryDnaCommercialCopy.savedState.heading}
+            </h2>
+            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+              {deliveryDnaCommercialCopy.savedState.body}
+            </p>
+            {!access.data?.permitted ? (
+              <a
+                href="#delivery-dna-overview-offer"
+                className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg border border-[#60A5FA]/50 px-5 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+              >
+                {deliveryDnaCommercialCopy.savedState.primaryAction}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </a>
+            ) : null}
+            <div
+              id="delivery-dna-overview-offer"
+              className="mt-6 scroll-mt-6 rounded-2xl border border-white/[0.1] bg-[#111827] p-5 sm:p-6"
+            >
+              <h3 className="text-xl font-extrabold">
+                {deliveryDnaCommercialCopy.overviewOffer.heading}
+              </h3>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#CBD5E1]">
+                {deliveryDnaCommercialCopy.overviewOffer.body}
+              </p>
+              <p className="mt-4 text-lg font-extrabold text-[#60A5FA]">
+                {access.data?.offer?.displayPrice}
+              </p>
+              {access.data?.permitted ? (
+                <Button
+                  asChild
+                  className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
+                >
+                  <Link to="/assessment/$id" params={{ id: assessmentId }}>
+                    {deliveryDnaCommercialCopy.purchasedState.primaryAction}
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
+                  disabled={
+                    checkout.isPending ||
+                    access.isPending ||
+                    access.isError ||
+                    access.data?.offer?.checkoutAvailable !== true
+                  }
+                  onClick={() => checkout.mutate()}
+                >
+                  {checkout.isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                  ) : null}
+                  {deliveryDnaCommercialCopy.overviewOffer.purchaseAction}
+                </Button>
+              )}
+              {checkoutState === "success" && !access.data?.permitted ? (
+                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                  Payment confirmation is pending. Access appears only after the verified provider
+                  event arrives.
+                </p>
+              ) : null}
+              {checkoutState === "cancelled" ? (
+                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                  Checkout was cancelled. Your Saved Snapshot is unchanged.
+                </p>
+              ) : null}
+              {access.data?.safeStatus === "checkout_unavailable" ? (
+                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                  Purchases are temporarily unavailable. Your Saved Snapshot is safe.
+                </p>
+              ) : null}
+              {access.isError ? (
+                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                  Purchases are temporarily unavailable. Your Saved Snapshot is safe.
+                </p>
+              ) : null}
+              {checkout.error ? (
+                <p className="mt-4 text-sm text-red-300" role="alert">
+                  {checkout.error.message}
+                </p>
+              ) : null}
+            </div>
+          </>
         ) : identityLoading ? (
           <Loader2
             className="mt-6 h-5 w-5 animate-spin text-[#60A5FA]"
             aria-label="Checking account"
           />
         ) : !isAuthenticated ? (
-          <Button
-            asChild
-            className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
-          >
-            <Link
-              to="/auth/register"
-              search={{ snapshot: "continue", source: undefined, result: undefined }}
+          <>
+            <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
+              {deliveryDnaCommercialCopy.savePanel.heading}
+            </h2>
+            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+              {deliveryDnaCommercialCopy.savePanel.body}
+            </p>
+            <Button
+              asChild
+              className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
             >
-              {String(copy.continuationCtaAnonymous)}
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </Button>
+              <Link
+                to="/auth/register"
+                search={{ snapshot: "continue", source: undefined, result: undefined }}
+              >
+                {deliveryDnaCommercialCopy.savePanel.primaryAction}
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </Button>
+          </>
         ) : (
           <div className="mt-6">
+            <h2 id="snapshot-continue-title" className="text-2xl font-extrabold sm:text-3xl">
+              {deliveryDnaCommercialCopy.savePanel.heading}
+            </h2>
+            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+              {deliveryDnaCommercialCopy.savePanel.body}
+            </p>
             <label className="flex cursor-pointer items-start gap-3 text-sm text-[#CBD5E1]">
               <input
                 type="checkbox"
@@ -615,8 +731,9 @@ function SnapshotResultView({
                 onChange={(event) => setConsent(event.target.checked)}
               />
               <span>
-                I agree to add these 13 responses to a Delivery DNA Assessment in my current
-                workspace. I can review and change them before completing it.
+                I agree to save these 13 responses in my current DeliveryIQ workspace and link them
+                to my Delivery DNA Overview. I understand the remaining questions stay locked until
+                the Overview is purchased.
               </span>
             </label>
             <Button
@@ -627,7 +744,7 @@ function SnapshotResultView({
               {continuation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
               ) : null}
-              {String(copy.continuationCtaAnonymous)}
+              {deliveryDnaCommercialCopy.savePanel.primaryAction}
             </Button>
             {continuation.error ? (
               <p className="mt-3 text-sm text-red-300" role="alert">

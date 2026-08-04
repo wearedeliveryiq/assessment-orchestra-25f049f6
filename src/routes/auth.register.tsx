@@ -114,9 +114,9 @@ function RegisterPage() {
       title="Create your account"
       subtitle={
         continuingSnapshot
-          ? "Create your free DeliveryIQ account to continue with the remaining 26 questions. Your 13 Snapshot responses will be carried forward unchanged for you to review."
+          ? "Create your secure DeliveryIQ workspace to save your Snapshot, return to your results and continue to your complete Delivery DNA Overview."
           : continuingPublicResult
-            ? "Create your free DeliveryIQ account to explore your complete Delivery DNA profile, priority recommendations and personalised roadmap preview."
+            ? "Create your secure DeliveryIQ workspace to save your result and return when you are ready."
             : "Set up secure access to the DeliveryIQ intelligence runtime."
       }
       footer={

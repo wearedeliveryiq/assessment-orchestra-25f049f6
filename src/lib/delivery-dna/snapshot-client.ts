@@ -79,7 +79,7 @@ export const deliveryDnaSnapshotApi = {
       body: "{}",
     }),
   continue: async (consent: boolean) =>
-    request<{ assessmentId: string }>("/continue", {
+    request<{ assessmentId: string; saved: true }>("/continue", {
       method: "POST",
       headers: await assessmentAuthHeaders(),
       body: JSON.stringify({ consent }),
