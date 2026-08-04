@@ -135,6 +135,6 @@ All 53 locked DIQ-203B fixtures execute by identifier in `tests/sprint03-golden.
 
 ## Final Product Owner Decision
 
-Sprint 03 is **ACCEPTED WITH RECORDED LIMITATIONS** under [SAR-003 v1.1](<../07-release/SAR-003 v1.1 Sprint 03 Product Acceptance.md>). The genuine Delivery DNA collection, automatic analysis, Snapshot continuation, restart action and authenticated-free projection gates are closed.
+Sprint 03 is **ACCEPTED WITH RECORDED LIMITATIONS** under [SAR-003 v1.2](<../07-release/SAR-003 v1.2 Sprint 03 Product Acceptance.md>). The genuine Delivery DNA collection, automatic analysis, Snapshot continuation, restart action, authenticated-free projection and premium Snapshot experience gates are closed.
 
 Before the first customer `delivery_dna_action` 1.0.0 offer or grant, an authorised-tenant activation rehearsal must confirm the same immutable run/result is retained, one permitted decision/action/outcome write succeeds, denied cross-tenant reads/writes do not leak and entitlement removal removes access without deleting history. Automated entitlement, tenant-isolation and immutability fixtures already pass. The inherited repository-wide lint baseline remains recorded debt and PDR-003-002 must not be weakened.
