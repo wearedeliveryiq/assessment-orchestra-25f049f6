@@ -1,12 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 
-import { AppShell } from "@/components/deliveryiq/app-shell";
 import { DeliveryIntelligenceDashboard } from "@/components/dashboard/delivery-intelligence-dashboard";
+import { SnapshotAcquisitionShell } from "@/components/delivery-dna/snapshot-shell";
 
-const TITLE = "Executive dashboard — DeliveryIQ";
+const TITLE = "Delivery DNA Overview — DeliveryIQ";
 const DESCRIPTION =
-  "Evidence-backed delivery maturity intelligence: capability scores, organisational patterns, priority recommendations and full provenance for every figure.";
+  "Your bounded Delivery DNA Overview: capability scores, evidence confidence, priority findings and practical next steps.";
 
 export const Route = createFileRoute("/dashboard/$id")({
   head: () => ({
@@ -21,19 +20,19 @@ export const Route = createFileRoute("/dashboard/$id")({
   }),
   component: DashboardPage,
   errorComponent: ({ error }) => (
-    <AppShell>
+    <SnapshotAcquisitionShell>
       <p
         role="alert"
         className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive"
       >
         {error.message}
       </p>
-    </AppShell>
+    </SnapshotAcquisitionShell>
   ),
   notFoundComponent: () => (
-    <AppShell>
+    <SnapshotAcquisitionShell>
       <p className="text-sm text-muted-foreground">That assessment could not be found.</p>
-    </AppShell>
+    </SnapshotAcquisitionShell>
   ),
 });
 
@@ -41,26 +40,22 @@ function DashboardPage() {
   const { id } = Route.useParams();
 
   return (
-    <AppShell>
-      <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-        <div className="min-w-0">
-          <h1 className="truncate font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Executive dashboard
+    <SnapshotAcquisitionShell>
+      <div className="delivery-dna-overview-screen">
+        <div className="mb-7 max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#14B8A6]">
+            Delivery DNA™
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+            Your Delivery DNA Overview
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Every figure below is produced by the Intelligence Runtime and traceable to a source
-            answer.
+          <p className="mt-3 text-sm leading-6 text-[#CBD5E1] sm:text-base">
+            A decision-ready view of your delivery capability, grounded in your recorded evidence
+            and the locked DeliveryIQ analysis rules.
           </p>
         </div>
-        <Link
-          to="/assessment/$id/results"
-          params={{ id }}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Results
-        </Link>
+        <DeliveryIntelligenceDashboard assessmentId={id} />
       </div>
-      <DeliveryIntelligenceDashboard assessmentId={id} />
-    </AppShell>
+    </SnapshotAcquisitionShell>
   );
 }

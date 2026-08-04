@@ -115,3 +115,32 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+@media print {
+  .snapshot-public-shell {
+    background: #fff !important;
+  }
+
+  .snapshot-public-shell > header,
+  .snapshot-public-shell > footer {
+    display: none !important;
+  }
+
+  .delivery-dna-overview-screen {
+    color: #0f172a;
+  }
+
+  .delivery-dna-overview-screen button,
+  .delivery-dna-overview-screen a[target="_blank"] {
+    display: none !important;
+  }
+
+  .delivery-dna-overview-screen section,
+  .delivery-dna-overview-screen article {
+    break-inside: avoid;
+    border-color: #cbd5e1 !important;
+    background: #fff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+  }
+}

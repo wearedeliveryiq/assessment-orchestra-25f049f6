@@ -29,7 +29,7 @@ The current local regression contains 606 passing tests across 46 files, includi
 
 - Operational catalogue, availability and entitlement tables intentionally ship without invented commercial seed data; authorised operations must configure real product availability.
 - No real customer currently holds `delivery_dna_action` 1.0.0, so the entitled production projection and protected writes have not been smoke-tested against customer data. Automated entitlement, permission, tenant-isolation and immutability coverage passes.
-- Pricing, checkout and subscription packaging remain out of scope. No commercial contact route is configured, so the approved fail-safe suppresses the contact action.
+- PDR-003-004/A v1.1 supersedes the earlier no-checkout position with a configurable one-off Overview checkout. Live activation remains fail-closed until approved provider credentials, price reference, webhook secret and checkout tax/legal settings are configured.
 
 No unresolved product decision or conflict with DIQ-002/PB-003 remains.
 
@@ -127,4 +127,33 @@ The public Delivery DNA Snapshot now provides a premium, branded acquisition exp
 
 ### Limitations
 
-Pricing, checkout and subscription packaging remain out of scope. The existing pre-first-entitlement activation condition for `delivery_dna_action` 1.0.0 is unchanged. No Snapshot result is presented as a complete Delivery DNA diagnosis or comparative benchmark.
+This section records the v1.1 Snapshot release position before the later PDR-003-004/A v1.1 commercial journey. The current commercial position is recorded below. The existing pre-first-entitlement activation condition for `delivery_dna_action` 1.0.0 is unchanged. No Snapshot result is presented as a complete Delivery DNA diagnosis or comparative benchmark.
+
+## PDR-003-004/A v1.1 Saved Snapshot and Overview update — 4 August 2026
+
+### Customer value delivered
+
+The live Snapshot remains unchanged. After verified registration and explicit consent, a customer now receives a Saved Snapshot rather than immediate access to the remaining assessment. The Saved Snapshot presents the active, versioned £295 one-off Delivery DNA Overview offer. A verified purchase unlocks the existing remaining 26 questions; completion uses the unchanged deterministic engine and produces a premium bounded web Overview and board-ready downloadable report from one immutable result.
+
+The Overview provides capability scores and bands, evidence confidence and limitations, up to five strengths and five priority opportunities, the top three approved recommendations and a maximum-three 30/60/90-day direction. Materially relevant DIQ-204A-approved context may be shown with publisher, year, source and caveats. It has no scoring, confidence, ranking, benchmark, prediction or causality effect. Delivery DNA Action, Knowledge Packs and TeamMates remain separate and unavailable.
+
+### Architecture, commerce and data integrity
+
+- PDR-003-004A is loaded and fail-closed by one versioned server offer service. Checkout, payment and grant rows pin the offer ID/version, amount, currency and deployment price reference.
+- Checkout scope binds one verified purchaser, organisation, workspace, Saved Snapshot and linked Delivery DNA assessment. The database revalidates the link and active membership.
+- Access is granted only inside an idempotent atomic database function after a recent provider-signed event matches paid status, provider, offer, price, currency and every scope identifier. Redirects and browser input never grant access.
+- New post-cutover Saved Snapshots are gated on every remaining-assessment read/write and Overview/API/report read. One existing genuine pre-cutover linked draft remains accessible from its immutable `linked_at`; no synthetic grant or customer evidence is created.
+- Payment events and grants are append-only, service-role-only and RLS deny-by-default. The report endpoint is authenticated, tenant-scoped, no-store and uses the same server projection as the web result.
+- The two migrations contain no seed or customer DML. They add checkout, verified-event and access-grant records plus Cloud permission hardening.
+
+### Verification actually run
+
+- All 11 PDR-003-004A fixtures: pass.
+- Existing PDR-003-005A v1.0/v1.1 and all 53 DIQ-203B fixtures: unchanged regression coverage.
+- Focused unit/integration checks cover offer resolution, exact copy, linked-Snapshot gating, signature verification, event freshness, wrong price/currency/scope, replay, cross-tenant denial, historical price pinning, bounded projection and web/PDF reconciliation.
+- The generated seven-page A4 report passed text extraction and rendered-page visual inspection with no clipping or overlap.
+- Type checking, changed-file lint/format and the production build passed. The complete regression passed 615/615 tests across 47 files, including all locked DIQ-203B and Snapshot fixtures.
+
+### Activation limitation
+
+No approved Stripe deployment configuration is currently present. The implementation requires `DELIVERYIQ_PAYMENT_PROVIDER=stripe`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and `DELIVERYIQ_OVERVIEW_STRIPE_PRICE_ID`. Until those are configured and checkout tax/legal settings are confirmed, the purchase action is unavailable with safe copy, no checkout is created and no access can be granted. After configuration, one authorised purchase-to-result hosted smoke must verify payment, unlock, completion, immutable Overview web/PDF reconciliation and denied cross-tenant access. No customer payment or grant was manufactured for evidence.

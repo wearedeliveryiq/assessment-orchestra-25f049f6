@@ -1,21 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { AlertTriangle, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
+import { useEffect } from "react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Download,
+  ExternalLink,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
 import {
   fetchLatestIntelligence,
   fetchAnalysisStatus,
+  downloadDeliveryDnaOverviewReport,
   retryAnalysis,
-  fetchIntelligenceExplanation,
-  type WorkspaceIntelligenceResult,
 } from "@/lib/delivery-intelligence/client";
-import { RecommendationPortfolioSection } from "@/components/dashboard/recommendation-portfolio-section";
 import { useHydrated } from "@/hooks/use-hydrated";
-import { fetchRecommendationPortfolio } from "@/lib/recommendation-decisions/client";
 
 export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: string }) {
   const hydrated = useHydrated();
   const queryClient = useQueryClient();
-  const [conclusionId, setConclusionId] = useState<string | null>(null);
   const statusQuery = useQuery({
     queryKey: ["delivery-intelligence-status", assessmentId],
     queryFn: () => fetchAnalysisStatus(assessmentId),
@@ -40,17 +43,11 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
       await queryClient.invalidateQueries({ queryKey: ["delivery-intelligence", assessmentId] });
     },
   });
-  const portfolioQuery = useQuery({
-    queryKey: ["recommendation-portfolio", query.data?.analysisRunId],
-    queryFn: () => fetchRecommendationPortfolio(query.data!.analysisRunId),
-    enabled:
-      Boolean(query.data?.analysisRunId) && query.data?.commercialAccess.accessTier === "entitled",
-    staleTime: 60_000,
-  });
-  const explanation = useQuery({
-    queryKey: ["delivery-intelligence-explanation", query.data?.analysisRunId, conclusionId],
-    queryFn: () => fetchIntelligenceExplanation(query.data!.analysisRunId, conclusionId!),
-    enabled: Boolean(query.data && conclusionId),
+  const report = useMutation({
+    mutationFn: async () => {
+      if (!query.data?.analysisRunId) throw new Error("The board-ready Overview is not ready.");
+      await downloadDeliveryDnaOverviewReport(query.data.analysisRunId);
+    },
   });
   useEffect(() => {
     if (statusQuery.data?.state === "completed") {
@@ -207,7 +204,7 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
         <div className="grid gap-6 md:grid-cols-[1fr_auto]">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-              DeliveryIQ intelligence
+              Delivery DNA Overview
             </p>
             <h2 className="mt-3 text-2xl font-semibold">
               {result.executiveSummary.overallPosition}
@@ -233,6 +230,11 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
             </span>
             <span className="text-xs capitalize text-muted-foreground">
               {result.confidence.band} confidence
+            </span>
+            <span className="mt-2 block text-xs text-muted-foreground">
+              {result.capabilities.reduce((total, item) => total + item.eligibleAnswerCount, 0)} of{" "}
+              {result.capabilities.reduce((total, item) => total + item.totalQuestionCount, 0)}{" "}
+              responses contribute
             </span>
           </div>
         </div>
@@ -281,131 +283,78 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           empty="No capability meets the approved priority threshold."
         />
       </div>
-      {result.commercialAccess.accessTier === "entitled" && (
-        <section className="rounded-2xl border border-border bg-card p-6">
-          <h2 className="text-xl font-semibold">Detected patterns</h2>
-          {(result.patterns ?? []).length ? (
-            <ul className="mt-4 space-y-3">
-              {(result.patterns ?? []).map((pattern) => (
-                <li key={pattern.id} className="rounded-xl border border-border/70 p-4">
-                  <h3 className="font-medium">{pattern.id.replaceAll("_", " ")}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {pattern.explanation}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-3 text-sm text-muted-foreground">
-              No approved pattern matched the available evidence.
-            </p>
-          )}
-        </section>
-      )}
-      <CommercialAccessPanel access={result.commercialAccess} />
-      {result.commercialAccess.accessTier === "free" && (
-        <FreeRecommendationPreview recommendations={result.recommendations} />
-      )}
-      {result.commercialAccess.accessTier === "entitled" &&
-        (portfolioQuery.data ? (
-          <div id="delivery-dna-improvement-plan">
-            <RecommendationPortfolioSection portfolio={portfolioQuery.data} />
-          </div>
-        ) : (
-          <section aria-live="polite" className="rounded-2xl border border-border bg-card p-6">
-            <h2 className="text-xl font-semibold">Recommendation portfolio</h2>
-            <p className="mt-3 text-sm text-muted-foreground">
-              {portfolioQuery.error
-                ? "The governed recommendation portfolio is temporarily unavailable. No customer decision has been changed."
-                : "Preparing your governed recommendation portfolio…"}
-            </p>
-          </section>
-        ))}
-      <ProductPanel
-        title="Recommended Knowledge Packs"
-        items={result.productRecommendations.knowledgePacks}
-        empty="No currently available Knowledge Pack matches these priorities."
-      />
-      <ProductPanel
-        title="Recommended Team Mates"
-        items={result.productRecommendations.teamMates}
-        empty="Accept a recommendation to review an available Team Mate."
-      />
-      {result.commercialAccess.accessTier === "entitled" && (
-        <section className="rounded-2xl border border-border bg-card p-6">
-          <h2 className="text-xl font-semibold">Explainable intelligence</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Review the governed evidence and rule lineage behind a published conclusion.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {result.explanations.slice(0, 12).map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className="min-h-11 rounded-lg border border-border px-3 text-sm"
-                onClick={() => setConclusionId(item.id)}
-              >
-                Explain {item.domainId.replaceAll("_", " ")}
-              </button>
+      <RecommendationOverview recommendations={result.recommendations} />
+      {result.roadmapPreview ? <RoadmapPreview result={result.roadmapPreview} /> : null}
+      <section className="rounded-2xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">How this connects to your evidence</h2>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          The capability profile, findings and priorities are calculated from the recorded
+          39-question Delivery DNA evidence using the locked scoring and confidence rules. Missing
+          and not-applicable evidence remain visible in coverage and limitations; restricted
+          internal rule predicates and respondent identity are not included in this Overview.
+        </p>
+      </section>
+      {result.industryContext.length ? (
+        <section
+          className="rounded-2xl border border-border bg-card p-6"
+          aria-labelledby="industry-context-title"
+        >
+          <h2 id="industry-context-title" className="text-xl font-semibold">
+            Why this matters now
+          </h2>
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            {result.industryContext.map((item) => (
+              <article key={item.id} className="rounded-xl border border-border/70 p-4">
+                <p className="text-sm leading-6">{item.approvedCustomerSafeWording}</p>
+                <p className="mt-3 text-xs font-medium text-muted-foreground">
+                  {item.publisher} · {item.evidenceYear}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                  {item.scopeOrMethodCaveat}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                  {item.notCustomerPredictionCaveat}
+                </p>
+                <a
+                  href={item.originalSourceReference}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  View source <ExternalLink className="h-4 w-4" aria-hidden />
+                </a>
+              </article>
             ))}
           </div>
-          {explanation.data && (
-            <div className="mt-4 rounded-xl border border-border/70 p-4" aria-live="polite">
-              <h3 className="font-medium">{explanation.data.conclusion.domainId}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Version {explanation.data.conclusion.domainVersion} ·{" "}
-                {explanation.data.nodes.length}
-                {" governed lineage items"}
-              </p>
-              {explanation.data.evidenceRestricted && (
-                <p className="mt-2 text-sm">Raw evidence is restricted for your role.</p>
-              )}
-            </div>
-          )}
-          {explanation.error && (
-            <p role="alert" className="mt-4 text-sm text-destructive">
-              {explanation.error.message}
-            </p>
-          )}
         </section>
-      )}
-      {result.commercialAccess.accessTier === "entitled" && result.roadmap ? (
-        <Roadmap result={result.roadmap} />
-      ) : result.roadmapPreview ? (
-        <RoadmapPreview result={result.roadmapPreview} />
+      ) : null}
+      <section className="rounded-2xl border border-primary/30 bg-primary/5 p-6">
+        <h2 className="text-xl font-semibold">Overview now. Action later.</h2>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{result.action.message}</p>
+      </section>
+      <button
+        type="button"
+        disabled={report.isPending}
+        onClick={() => report.mutate()}
+        className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground"
+      >
+        {report.isPending ? (
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        ) : (
+          <Download className="h-4 w-4" aria-hidden />
+        )}
+        {result.downloadableReport.label}
+      </button>
+      {report.error ? (
+        <p className="text-sm text-destructive" role="alert">
+          {report.error.message}
+        </p>
       ) : null}
     </div>
   );
 }
 
-function CommercialAccessPanel({
-  access,
-}: {
-  access: WorkspaceIntelligenceResult["commercialAccess"];
-}) {
-  return (
-    <section
-      aria-labelledby="delivery-dna-action-title"
-      className="rounded-2xl border border-primary/30 bg-primary/5 p-6"
-    >
-      <h2 id="delivery-dna-action-title" className="text-xl font-semibold">
-        {access.panel.heading}
-      </h2>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">{access.panel.body}</p>
-      {access.panel.message && <p className="mt-3 text-sm font-medium">{access.panel.message}</p>}
-      {access.panel.action && (
-        <a
-          href={access.panel.action.destination}
-          className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
-        >
-          {access.panel.action.label}
-        </a>
-      )}
-    </section>
-  );
-}
-
-function FreeRecommendationPreview({
+function RecommendationOverview({
   recommendations,
 }: {
   recommendations: Array<{
@@ -415,6 +364,7 @@ function FreeRecommendationPreview({
     effort: string;
     safeReason?: string;
     expectedOutcome?: string;
+    practicalFirstStep?: string;
   }>;
 }) {
   return (
@@ -440,6 +390,9 @@ function FreeRecommendationPreview({
                 {item.safeReason ?? ""}
               </p>
               <p className="mt-2 text-sm">Expected outcome: {item.expectedOutcome ?? ""}</p>
+              <p className="mt-2 text-sm">
+                What to do first: {item.practicalFirstStep ?? item.title}
+              </p>
             </li>
           ))}
         </ol>
@@ -467,7 +420,7 @@ function RoadmapPreview({
       className="rounded-2xl border border-border bg-card p-6"
     >
       <h2 id="roadmap-preview-title" className="text-xl font-semibold">
-        Personalised roadmap preview
+        30/60/90-day direction
       </h2>
       <div className="mt-4 grid gap-4 md:grid-cols-3">
         {(["day30", "day60", "day90"] as const).map((horizon) => {
@@ -491,37 +444,6 @@ function RoadmapPreview({
           );
         })}
       </div>
-    </section>
-  );
-}
-
-function ProductPanel({
-  title,
-  items,
-  empty,
-}: {
-  title: string;
-  items: Array<{ id: string; cta: string; copy: string }>;
-  empty: string;
-}) {
-  return (
-    <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl font-semibold">{title}</h2>
-      {items.length ? (
-        <ul className="mt-4 space-y-3">
-          {items.map((item) => (
-            <li key={item.id} className="rounded-xl border border-border/70 p-4">
-              <h3 className="font-medium">{item.id.replaceAll("_", " ")}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{item.copy}</p>
-              <span className="mt-3 inline-block text-sm font-medium text-primary">
-                {item.cta.replaceAll("_", " ")}
-              </span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-3 text-sm text-muted-foreground">{empty}</p>
-      )}
     </section>
   );
 }
@@ -552,46 +474,6 @@ function ListPanel({
       ) : (
         <p className="mt-3 text-sm text-muted-foreground">{empty}</p>
       )}
-    </section>
-  );
-}
-function Roadmap({ result }: { result: NonNullable<WorkspaceIntelligenceResult["roadmap"]> }) {
-  if (!("day30" in result))
-    return (
-      <section role="alert" className="rounded-2xl border border-warning/40 bg-warning/10 p-6">
-        <h2 className="text-xl font-semibold">Improvement roadmap unavailable</h2>
-        <p className="mt-2 text-sm">
-          The approved recommendation dependencies could not be scheduled safely.
-        </p>
-      </section>
-    );
-  return (
-    <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl font-semibold">30/60/90-day roadmap</h2>
-      <div className="mt-4 grid gap-4 md:grid-cols-3">
-        {(
-          [
-            ["30 days", result.day30],
-            ["60 days", result.day60],
-            ["90 days", result.day90],
-          ] as const
-        ).map(([label, items = []]) => (
-          <div key={label}>
-            <h3 className="font-medium">{label}</h3>
-            {items.length ? (
-              <ol className="mt-3 space-y-2">
-                {items.map((item) => (
-                  <li key={item.id} className="rounded-lg border border-border/70 p-3 text-sm">
-                    {item.id.replaceAll("_", " ")}
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <p className="mt-3 text-sm text-muted-foreground">No item scheduled.</p>
-            )}
-          </div>
-        ))}
-      </div>
     </section>
   );
 }

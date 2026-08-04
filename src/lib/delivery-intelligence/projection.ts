@@ -2,6 +2,8 @@ import type { StoredIntelligenceResult } from "./result-repository.server";
 import type { RecommendationPortfolioRecord } from "../recommendation-portfolio/types";
 import type { DeliveryDnaCommercialAccessDecision } from "./commercial-access";
 import { customerSafeConfidenceGuidance } from "./narrative";
+import { projectOverviewIndustryContext } from "./industry-context";
+import type { DeliveryDnaOverviewAccess } from "../delivery-dna/overview-access.server";
 
 /** Workspace presentation contract: display-ready data, never calculation inputs or rule source. */
 export function projectWorkspaceResult(stored: StoredIntelligenceResult) {
@@ -61,7 +63,7 @@ export function freePresentedRecommendationIds(
     .map((item) => item.id);
 }
 
-/** PDR-003-004 authenticated free-account projection. */
+/** Superseded PDR-003-004 v1.0 authenticated projection, retained for compatibility tests. */
 export function projectFreeWorkspaceResult(
   stored: StoredIntelligenceResult,
   portfolio: RecommendationPortfolioRecord | null,
@@ -84,6 +86,7 @@ export function projectFreeWorkspaceResult(
         effort: item.effort,
         safeReason: result.narrative.recommendations[narrativeIndex] ?? "",
         expectedOutcome: item.outcome,
+        practicalFirstStep: item.title,
       };
     });
   const presented = presentedAll.slice(0, 3);
@@ -138,10 +141,7 @@ export function projectFreeWorkspaceResult(
       strengths: result.findings.strengths.slice(0, 5),
       priorityOpportunities: result.findings.priorityOpportunities.slice(0, 5),
     },
-    patterns: undefined,
     recommendations: presented.map(({ id: _id, ...item }) => item),
-    withheldRecommendations: undefined,
-    roadmap: undefined,
     roadmapPreview: {
       day30: horizon("day30", "30 days"),
       day60: horizon("day60", "60 days"),
@@ -150,6 +150,65 @@ export function projectFreeWorkspaceResult(
     executiveSummary: {
       ...result.narrative,
       recommendations: result.narrative.recommendations.slice(0, 3),
+    },
+  };
+}
+
+/** PDR-003-004 v1.1 bounded paid Overview projection. */
+export function projectDeliveryDnaOverviewResult(input: {
+  stored: StoredIntelligenceResult;
+  portfolio: RecommendationPortfolioRecord | null;
+  access: DeliveryDnaOverviewAccess;
+}) {
+  if (!input.access.permitted) throw new Error("DELIVERY_DNA_OVERVIEW_ACCESS_REQUIRED");
+  const result = projectFreeWorkspaceResult(input.stored, input.portfolio);
+  const relevantCapabilityIds = [
+    ...result.findings.strengths,
+    ...result.findings.priorityOpportunities,
+  ];
+  return {
+    schemaVersion: "deliveryiq.delivery-dna-overview/1.0.0" as const,
+    resultId: result.resultId,
+    analysisRunId: result.analysisRunId,
+    generatedAt: result.generatedAt,
+    overall: {
+      displayScore: result.overall.displayScore,
+      band: result.overall.band,
+    },
+    confidence: {
+      displayIndex: result.confidence.displayIndex,
+      band: result.confidence.band,
+      caveat: result.confidence.limitations[0] ?? null,
+      improvementPrompts: result.confidence.improvementPrompts,
+    },
+    capabilities: result.capabilities.slice(0, 13),
+    findings: {
+      strengths: result.findings.strengths.slice(0, 5),
+      priorityOpportunities: result.findings.priorityOpportunities.slice(0, 5),
+    },
+    recommendations: result.recommendations.slice(0, 3),
+    roadmapPreview: result.roadmapPreview,
+    executiveSummary: {
+      overallPosition: result.executiveSummary.overallPosition,
+      confidence: result.executiveSummary.confidence,
+      caveat: result.executiveSummary.caveat,
+    },
+    overviewAccess: {
+      access: input.access.access,
+      productId: "delivery-dna-overview" as const,
+      accessKey: "delivery_dna_overview" as const,
+      accessVersion: "1.0.0" as const,
+    },
+    industryContext: projectOverviewIndustryContext(relevantCapabilityIds),
+    downloadableReport: {
+      available: true as const,
+      href: `/api/delivery-dna-overviews/${input.stored.analysisRunId}/report.pdf`,
+      label: "Download board-ready Overview",
+    },
+    action: {
+      available: false as const,
+      message:
+        "Your Overview identifies what matters now. Decision tracking, assigned actions and outcome measurement are not included.",
     },
   };
 }
