@@ -7,6 +7,18 @@ import type {
   SnapshotResponse,
 } from "./snapshot";
 
+const snapshotSessionKey = "deliveryiq_dna_snapshot_session";
+
+function snapshotSessionToken(): string | null {
+  return typeof window === "undefined" ? null : window.sessionStorage.getItem(snapshotSessionKey);
+}
+
+function rememberSnapshotSession(response: Response): void {
+  if (typeof window === "undefined") return;
+  const token = response.headers.get("x-deliveryiq-snapshot-session");
+  if (token) window.sessionStorage.setItem(snapshotSessionKey, token);
+}
+
 export type SnapshotResult = {
   available: boolean;
   reasonCode: string | null;
@@ -28,10 +40,17 @@ export type SnapshotState = {
 };
 
 async function request<T>(path = "", init: RequestInit = {}): Promise<T> {
+  const sessionToken = snapshotSessionToken();
   const response = await fetch(`/api/delivery-dna-snapshot${path}`, {
     ...init,
-    headers: { "content-type": "application/json", ...(init.headers ?? {}) },
+    credentials: "same-origin",
+    headers: {
+      "content-type": "application/json",
+      ...(sessionToken ? { "x-deliveryiq-snapshot-session": sessionToken } : {}),
+      ...(init.headers ?? {}),
+    },
   });
+  rememberSnapshotSession(response);
   const payload = (await response.json().catch(() => null)) as ({ error?: string } & T) | null;
   if (!response.ok) throw new Error(payload?.error ?? "The Snapshot is temporarily unavailable.");
   return payload as T;

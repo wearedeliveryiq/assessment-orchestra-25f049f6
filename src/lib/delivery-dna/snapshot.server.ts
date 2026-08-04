@@ -17,6 +17,7 @@ import {
 } from "./snapshot";
 
 const COOKIE_NAME = "deliveryiq_dna_snapshot";
+const SESSION_HEADER = "x-deliveryiq-snapshot-session";
 const CACHE_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "private, no-store",
@@ -63,6 +64,8 @@ function sha256(value: string): string {
 }
 
 function cookieValue(request: Request): string | null {
+  const headerToken = request.headers.get(SESSION_HEADER)?.trim();
+  if (headerToken) return headerToken;
   const cookies = request.headers.get("cookie") ?? "";
   for (const item of cookies.split(";")) {
     const [name, ...value] = item.trim().split("=");
@@ -76,7 +79,7 @@ function snapshotCookie(token: string, request?: Request): string {
   // cookies are dropped by the browser. Over HTTPS use SameSite=None; Secure so
   // the Snapshot session survives; CSRF is covered by the origin check below.
   const secure = request ? new URL(request.url).protocol === "https:" : false;
-  const sameSite = secure ? "None; Secure" : "Lax";
+  const sameSite = secure ? "None; Secure; Partitioned" : "Lax";
   return `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=86400; HttpOnly; SameSite=${sameSite}`;
 }
 
@@ -215,12 +218,13 @@ export async function getSnapshot(request: Request) {
 export async function startSnapshot(
   request: Request,
   restart = false,
-): Promise<{ data: unknown; cookie: string }> {
+): Promise<{ data: unknown; cookie: string; token: string }> {
   const existing = restart ? null : await sessionForRequest(request);
   if (existing) {
     return {
       data: { snapshot: await project(existing.session, await responsesFor(existing.session.id)) },
       cookie: "",
+      token: "",
     };
   }
   const token = randomBytes(32).toString("base64url");
@@ -239,7 +243,11 @@ export async function startSnapshot(
       .single(),
   );
   await Promise.all([recordEvent("snapshot_landing_viewed"), recordEvent("snapshot_started")]);
-  return { data: { snapshot: await project(session, []) }, cookie: snapshotCookie(token, request) };
+  return {
+    data: { snapshot: await project(session, []) },
+    cookie: snapshotCookie(token, request),
+    token,
+  };
 }
 
 export async function saveSnapshotResponse(request: Request, input: Record<string, unknown>) {
@@ -412,9 +420,13 @@ export async function handleSnapshotRoute(
   }
 }
 
-export function snapshotResponse(body: unknown, cookie = ""): Response {
+export function snapshotResponse(body: unknown, cookie = "", token = ""): Response {
   return new Response(JSON.stringify(body), {
     status: 200,
-    headers: { ...CACHE_HEADERS, ...(cookie ? { "set-cookie": cookie } : {}) },
+    headers: {
+      ...CACHE_HEADERS,
+      ...(cookie ? { "set-cookie": cookie } : {}),
+      ...(token ? { [SESSION_HEADER]: token } : {}),
+    },
   });
 }

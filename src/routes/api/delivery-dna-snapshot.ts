@@ -14,7 +14,7 @@ export const Route = createFileRoute("/api/delivery-dna-snapshot")({
         return handleSnapshotRoute(request, async () => {
           const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
           const started = await startSnapshot(request, body.restart === true);
-          return snapshotResponse(started.data, started.cookie);
+          return snapshotResponse(started.data, started.cookie, started.token);
         });
       },
       PUT: async ({ request }) => {

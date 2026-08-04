@@ -386,7 +386,10 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
   it("keeps anonymous acquisition data private, opaque, bounded and PII-free", () => {
     expect(server).toContain('randomBytes(32).toString("base64url")');
     expect(server).toContain("HttpOnly; SameSite=${sameSite}");
-    expect(server).toContain('secure ? "None; Secure" : "Lax"');
+    expect(server).toContain('secure ? "None; Secure; Partitioned" : "Lax"');
+    expect(server).toContain("request.headers.get(SESSION_HEADER)?.trim()");
+    expect(client).toContain("window.sessionStorage.setItem(snapshotSessionKey, token)");
+    expect(client).toContain('"x-deliveryiq-snapshot-session": sessionToken');
     expect(migration).toContain("expires_at = created_at + interval '24 hours'");
     expect(migration).toContain("cleanup_expired_delivery_dna_snapshots");
     expect(migration).not.toMatch(
