@@ -71,8 +71,13 @@ function cookieValue(request: Request): string | null {
   return null;
 }
 
-function snapshotCookie(token: string): string {
-  return `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
+function snapshotCookie(token: string, request?: Request): string {
+  // The app is rendered inside a cross-site preview iframe, where SameSite=Lax
+  // cookies are dropped by the browser. Over HTTPS use SameSite=None; Secure so
+  // the Snapshot session survives; CSRF is covered by the origin check below.
+  const secure = request ? new URL(request.url).protocol === "https:" : false;
+  const sameSite = secure ? "None; Secure" : "Lax";
+  return `${COOKIE_NAME}=${encodeURIComponent(token)}; Path=/; Max-Age=86400; HttpOnly; SameSite=${sameSite}`;
 }
 
 function clientIpHash(request: Request): string {
