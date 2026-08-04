@@ -1774,6 +1774,7 @@ export type Database = {
           assessment_session_id: string
           checkout_id: string
           currency: string
+          customer_total_minor: number | null
           granted_at: string
           id: string
           offer_id: string
@@ -1784,6 +1785,11 @@ export type Database = {
           product_version: string
           purchaser_user_id: string
           saved_snapshot_id: string
+          subtotal_minor: number | null
+          tax_display: string | null
+          tax_policy: string | null
+          tax_status: string | null
+          vat_amount_minor: number | null
           workspace_id: string
         }
         Insert: {
@@ -1793,6 +1799,7 @@ export type Database = {
           assessment_session_id: string
           checkout_id: string
           currency: string
+          customer_total_minor?: number | null
           granted_at?: string
           id?: string
           offer_id: string
@@ -1803,6 +1810,11 @@ export type Database = {
           product_version: string
           purchaser_user_id: string
           saved_snapshot_id: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
+          vat_amount_minor?: number | null
           workspace_id: string
         }
         Update: {
@@ -1812,6 +1824,7 @@ export type Database = {
           assessment_session_id?: string
           checkout_id?: string
           currency?: string
+          customer_total_minor?: number | null
           granted_at?: string
           id?: string
           offer_id?: string
@@ -1822,6 +1835,11 @@ export type Database = {
           product_version?: string
           purchaser_user_id?: string
           saved_snapshot_id?: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
+          vat_amount_minor?: number | null
           workspace_id?: string
         }
         Relationships: [
@@ -1879,6 +1897,7 @@ export type Database = {
           completed_at: string | null
           created_at: string
           currency: string
+          customer_total_minor: number | null
           expires_at: string
           id: string
           idempotency_scope_key: string
@@ -1895,7 +1914,12 @@ export type Database = {
           safe_status: string | null
           saved_snapshot_id: string
           status: string
+          subtotal_minor: number | null
+          tax_display: string | null
+          tax_policy: string | null
+          tax_status: string | null
           updated_at: string
+          vat_amount_minor: number | null
           workspace_id: string
         }
         Insert: {
@@ -1907,6 +1931,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           currency: string
+          customer_total_minor?: number | null
           expires_at: string
           id?: string
           idempotency_scope_key: string
@@ -1923,7 +1948,12 @@ export type Database = {
           safe_status?: string | null
           saved_snapshot_id: string
           status?: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
           updated_at?: string
+          vat_amount_minor?: number | null
           workspace_id: string
         }
         Update: {
@@ -1935,6 +1965,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           currency?: string
+          customer_total_minor?: number | null
           expires_at?: string
           id?: string
           idempotency_scope_key?: string
@@ -1951,7 +1982,12 @@ export type Database = {
           safe_status?: string | null
           saved_snapshot_id?: string
           status?: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
           updated_at?: string
+          vat_amount_minor?: number | null
           workspace_id?: string
         }
         Relationships: [
@@ -1990,6 +2026,7 @@ export type Database = {
           amount_minor: number | null
           checkout_id: string | null
           currency: string | null
+          customer_total_minor: number | null
           event_type: string
           id: number
           payload_digest: string
@@ -1999,12 +2036,18 @@ export type Database = {
           provider_checkout_id: string | null
           provider_event_id: string
           safe_status: string
+          subtotal_minor: number | null
+          tax_display: string | null
+          tax_policy: string | null
+          tax_status: string | null
+          vat_amount_minor: number | null
           verification_status: string
         }
         Insert: {
           amount_minor?: number | null
           checkout_id?: string | null
           currency?: string | null
+          customer_total_minor?: number | null
           event_type: string
           id?: never
           payload_digest: string
@@ -2014,12 +2057,18 @@ export type Database = {
           provider_checkout_id?: string | null
           provider_event_id: string
           safe_status: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
+          vat_amount_minor?: number | null
           verification_status: string
         }
         Update: {
           amount_minor?: number | null
           checkout_id?: string | null
           currency?: string | null
+          customer_total_minor?: number | null
           event_type?: string
           id?: never
           payload_digest?: string
@@ -2029,6 +2078,11 @@ export type Database = {
           provider_checkout_id?: string | null
           provider_event_id?: string
           safe_status?: string
+          subtotal_minor?: number | null
+          tax_display?: string | null
+          tax_policy?: string | null
+          tax_status?: string | null
+          vat_amount_minor?: number | null
           verification_status?: string
         }
         Relationships: [
@@ -8658,6 +8712,34 @@ export type Database = {
         }
         Returns: string
       }
+      create_delivery_dna_overview_checkout_v2: {
+        Args: {
+          p_access_key: string
+          p_access_version: string
+          p_assessment_session_id: string
+          p_currency: string
+          p_customer_total_minor: number
+          p_expires_at: string
+          p_idempotency_scope_key: string
+          p_offer_id: string
+          p_offer_version: string
+          p_organisation_id: string
+          p_product_id: string
+          p_product_version: string
+          p_provider: string
+          p_provider_price_reference: string
+          p_purchaser_user_id: string
+          p_saved_snapshot_id: string
+          p_subtotal_minor: number
+          p_tax_display: string
+          p_tax_policy: string
+          p_tax_status: string
+          p_unit_amount_minor: number
+          p_vat_amount_minor: number
+          p_workspace_id: string
+        }
+        Returns: string
+      }
       create_delivery_dna_snapshot: {
         Args: { p_ip_hash: string; p_token_hash: string }
         Returns: string
@@ -8926,6 +9008,31 @@ export type Database = {
           p_provider_event_id: string
           p_purchaser_user_id: string
           p_saved_snapshot_id: string
+          p_workspace_id: string
+        }
+        Returns: Json
+      }
+      fulfil_delivery_dna_overview_payment_v2: {
+        Args: {
+          p_access_key: string
+          p_access_version: string
+          p_assessment_session_id: string
+          p_checkout_id: string
+          p_currency: string
+          p_customer_total_minor: number
+          p_event_type: string
+          p_offer_id: string
+          p_offer_version: string
+          p_organisation_id: string
+          p_payload_digest: string
+          p_payment_status: string
+          p_provider: string
+          p_provider_checkout_id: string
+          p_provider_event_id: string
+          p_purchaser_user_id: string
+          p_saved_snapshot_id: string
+          p_subtotal_minor: number
+          p_vat_amount_minor: number
           p_workspace_id: string
         }
         Returns: Json
