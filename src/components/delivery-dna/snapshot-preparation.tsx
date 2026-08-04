@@ -41,11 +41,15 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
   useEffect(() => {
     if (!resultReady || elapsed < policy.minimumVisibleMilliseconds || showReady) return;
     setShowReady(true);
+  }, [elapsed, resultReady, showReady]);
+
+  useEffect(() => {
+    if (!showReady) return;
     finishTimer.current = setTimeout(onReady, 700);
     return () => {
       if (finishTimer.current) clearTimeout(finishTimer.current);
     };
-  }, [elapsed, onReady, resultReady, showReady]);
+  }, [onReady, showReady]);
 
   const activeStep = Math.min(policy.steps.length - 1, Math.floor(elapsed / 800));
   const slow = elapsed >= policy.slowStateAtMilliseconds && !resultReady;
