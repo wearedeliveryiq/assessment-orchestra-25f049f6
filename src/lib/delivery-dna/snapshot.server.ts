@@ -239,7 +239,7 @@ export async function startSnapshot(
       .single(),
   );
   await Promise.all([recordEvent("snapshot_landing_viewed"), recordEvent("snapshot_started")]);
-  return { data: { snapshot: await project(session, []) }, cookie: snapshotCookie(token) };
+  return { data: { snapshot: await project(session, []) }, cookie: snapshotCookie(token, request) };
 }
 
 export async function saveSnapshotResponse(request: Request, input: Record<string, unknown>) {
