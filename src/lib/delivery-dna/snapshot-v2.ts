@@ -7,7 +7,7 @@ import {
   type DeliveryDnaV2Level,
 } from "./catalogue-v2";
 
-export type SnapshotV2ConfigurationVersion = "2.0.0";
+export type SnapshotV2ConfigurationVersion = "2.1.0";
 export type SnapshotV2Response = {
   questionId: string;
   status: "answered" | "not_applicable" | "missing";
@@ -27,7 +27,7 @@ export type SnapshotV2DomainProfile = {
 };
 
 export const deliveryDnaSnapshotV2Configuration = Object.freeze({
-  version: "2.0.0" as const,
+  version: "2.1.0" as const,
   productName: "Delivery DNA Snapshot",
   questionIds: deliveryDnaV2SnapshotQuestions.map((item) => item.question.id),
   responsePolicy: {
@@ -47,7 +47,7 @@ export const deliveryDnaSnapshotV2Configuration = Object.freeze({
     body: "We’re reviewing the patterns across your 15 responses.",
     ready: "Your Snapshot is ready",
     steps: [
-      "Reviewing your delivery-practice responses",
+      "Reviewing your Snapshot responses",
       "Building your five-domain profile",
       "Identifying positive signals",
       "Highlighting areas to explore",
@@ -150,7 +150,7 @@ export function snapshotV2ContinuationRecord(response: SnapshotV2Response) {
     notApplicableReasonCode: response.notApplicableReasonCode,
     notApplicableReasonText: response.notApplicableReasonText,
     respondedAt: response.respondedAt,
-    provenance: "delivery-dna-snapshot@2.0.0" as const,
+    provenance: "delivery-dna-snapshot@2.1.0" as const,
     fullAssessmentCompleted: false as const,
     analysisRunCreated: false as const,
   };

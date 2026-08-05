@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- locked fixture inputs are intentionally heterogeneous by stage */
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 
-import golden from "../docs/01-product/delivery-dna/DIQ-100B Delivery DNA 2.0 Golden Fixtures.json";
-import commercial from "../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.0.0 Delivery DNA Commercial Offer Configuration.json";
+import golden from "../docs/01-product/delivery-dna/DIQ-100B v2.1.0 Delivery DNA Golden Fixtures.json";
+import commercial from "../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.1.0 Delivery DNA Commercial Offer Configuration.json";
 import {
   analyseCanonicalInputV2,
   aggregateDeliveryDnaV2Domain,
@@ -24,6 +25,7 @@ import {
   sortDeliveryDnaV2RecommendationCandidates,
 } from "@/lib/delivery-dna/analysis-v2";
 import {
+  DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST,
   deliveryDnaV2Capabilities,
   deliveryDnaV2Catalogue,
   deliveryDnaV2CutoverDecision,
@@ -58,8 +60,7 @@ const fixture = (id: string) => golden.fixtures.find((item) => item.id === id)!;
 const capability = deliveryDnaV2Capabilities[0];
 const responseSet = (values: Record<string, { value?: number; status: string; reason?: string }>) =>
   capability.questions.map((question) => {
-    const key = { foundation: "f", practice: "p", evidence: "e" }[question.dimension];
-    const value = values[key] ?? values[question.dimension];
+    const value = values[question.role];
     return {
       questionId: question.id,
       status: value.status as "answered" | "missing" | "not_applicable",
@@ -91,14 +92,14 @@ const canonicalInputV2 = {
     evidenceRecencyDeclaration: "within_90_days",
     perspectiveBreadthDeclaration: "three_or_more_groups",
   },
-  knowledgePack: { id: "delivery-dna", version: "2.0.0", questionSetVersion: "2.0.0" },
+  knowledgePack: { id: "delivery-dna", version: "2.1.0", questionSetVersion: "2.1.0" },
   requestedMode: "workspace" as const,
   responses: deliveryDnaV2Capabilities.flatMap((capability) =>
     capability.questions.map((question) => ({
       answerId: `assessment-v2:${question.id}`,
       answerVersion: "2026-08-05T00:00:00.000Z",
       questionId: question.id,
-      questionVersion: "2.0.0",
+      questionVersion: "2.1.0",
       sectionId: capability.id,
       value: 1,
       status: "answered" as const,
@@ -109,10 +110,10 @@ const canonicalInputV2 = {
   ),
 };
 
-describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
-  it("registers all 43 locked fixtures exactly once", () => {
-    expect(golden.fixtures).toHaveLength(43);
-    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(43);
+describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
+  it("registers all 45 locked fixtures exactly once", () => {
+    expect(golden.fixtures).toHaveLength(45);
+    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(45);
   });
 
   it("validates the exact five-domain, 15-capability, 45-question, 180-anchor catalogue", () => {
@@ -131,7 +132,7 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       snapshotExpected.questionIds,
     );
     const migration = readFileSync(
-      "supabase/migrations/20260805010000_delivery_dna_2_cutover.sql",
+      "supabase/migrations/20260805020000_delivery_dna_2_1_cutover.sql",
       "utf8",
     );
     for (const item of deliveryDnaV2SnapshotQuestions) {
@@ -139,10 +140,34 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
         `question_id = '${item.question.id}' AND capability_id = '${item.capabilityId}' AND capability_order = ${item.capabilityOrder}`,
       );
     }
-    expect(migration).toContain("answer BETWEEN 1 AND 4");
-    expect(migration).toContain("step_number BETWEEN 1 AND 15");
-    expect(migration).toContain("REVOKE EXECUTE ON FUNCTION public.create_delivery_dna_snapshot");
+    expect(migration).not.toContain("DROP CONSTRAINT delivery_dna_snapshot_responses_answer_check");
+    expect(migration).not.toContain(
+      "DROP CONSTRAINT delivery_dna_snapshot_funnel_events_step_number_check",
+    );
+    expect(migration).toContain("public.create_delivery_dna_snapshot_v2(text, text, text, text)");
+    expect(migration).toContain("FROM service_role");
     expect(migration).not.toMatch(/INSERT INTO public\.delivery_dna_overview_access_grants/i);
+  });
+
+  it("matches the locked founder wording reconciliation and canonical content digest", () => {
+    const expected = fixture("catalogue_source_reconciliation").expected as Record<string, unknown>;
+    const { runtimeParaphraseAllowed, ...reconciliation } = expected;
+    expect(runtimeParaphraseAllowed).toBe(false);
+    expect(deliveryDnaV2Catalogue.sourceReconciliation).toMatchObject(reconciliation);
+    const canonical = deliveryDnaV2Capabilities.flatMap((capability) =>
+      capability.questions.map((question) => ({
+        questionId: question.id,
+        prompt: question.prompt,
+        role: question.role,
+        weight: question.weight,
+        answers: deliveryDnaV2Catalogue.answerOptionsByQuestionId[
+          question.id as keyof typeof deliveryDnaV2Catalogue.answerOptionsByQuestionId
+        ].map(({ id, value, text }) => ({ id, value, text })),
+      })),
+    );
+    expect(createHash("sha256").update(JSON.stringify(canonical)).digest("hex")).toBe(
+      DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST,
+    );
   });
 
   it("passes scoring, availability and boundary fixtures", () => {
@@ -156,7 +181,7 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
     }
     for (const id of [
       "capability_weighted_midpoint",
-      "capability_missing_practice_two_answers_available",
+      "capability_missing_snapshot_two_answers_available",
       "capability_not_applicable_renormalises",
       "capability_single_answer_unavailable",
     ]) {
@@ -427,7 +452,7 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       sourcePublisher: "Wellingtone",
       evidenceYear: 2026,
       mandatoryDisclosure:
-        "General industry context; not a benchmark or comparison with the assessed organisation.",
+        "General industry context; not a benchmark or comparison with your organisation.",
     });
     expect(fixture("context_never_changes_result").expected).toMatchObject({
       scoringChanged: false,
@@ -453,9 +478,9 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
         id: "run-v2",
         organisationId: "organisation-a",
         workspaceId: "workspace-a",
-        configurationSetId: "delivery-dna-product-config-2.0.0",
-        configurationVersion: "2.0.0",
-        questionSetVersion: "2.0.0",
+        configurationSetId: "delivery-dna-product-config-2.1.0",
+        configurationVersion: "2.1.0",
+        questionSetVersion: "2.1.0",
         input: canonicalInputV2,
       } as never,
       core,
@@ -480,7 +505,7 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       positiveSignals: snapshot.available ? snapshot.positiveSignals : [],
       areasToExplore: snapshot.available ? snapshot.areasToExplore : [],
       industryContext: [],
-      caveat: deliveryDnaSnapshotV2Configuration.copy.resultCaveat,
+      caveat: deliveryDnaSnapshotV2Configuration.copy.caveat,
       savedSnapshotCta: deliveryDnaSnapshotV2Configuration.copy.saveAction,
     };
     expect(Object.keys(snapshotProjection)).toEqual(disclosure.snapshot.allowed);
@@ -489,8 +514,8 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
     const snapshotPdf = new TextDecoder().decode(
       renderDeliveryDnaSnapshotPdf({
         status: "linked",
-        configurationVersion: "2.0.0",
-        presentationPolicyVersion: "2.0.0",
+        configurationVersion: "2.1.0",
+        presentationPolicyVersion: "2.1.0",
         expiresAt: "2026-08-06T00:00:00.000Z",
         scopeType: "whole_organisation",
         scopeDisplayName: "Example organisation",
@@ -502,10 +527,10 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
     expect(snapshotPdf.startsWith("%PDF-1.4")).toBe(true);
     expect(snapshotPdf).toContain("Your indicative Delivery DNA profile");
     expect(snapshotPdf).toContain(
-      "This is an indicative view based on one practice signal from each Delivery DNA capability.",
+      "This is an indicative view based on one Snapshot signal from each Delivery DNA capability.",
     );
     expect(snapshotPdf).toContain(
-      "Delivery DNA result and may change when foundations and supporting evidence are assessed.",
+      "Delivery DNA result and may change when the supporting questions are assessed.",
     );
     expect(snapshotPdf).not.toContain("confidence");
     expect(snapshotPdf).not.toContain("recommendation");
@@ -531,7 +556,7 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       },
     });
     expect(overview).toMatchObject({
-      schemaVersion: "deliveryiq.delivery-dna-overview/2.0.0",
+      schemaVersion: "deliveryiq.delivery-dna-overview/2.1.0",
       domains: expect.any(Array),
       capabilities: expect.any(Array),
       confidence: expect.any(Object),
@@ -551,8 +576,10 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
     expect(report).toContain("Method, limitations and sources");
     expect(report).not.toContain("customerDecisionControls");
 
-    const cutover = fixture("clean_2_cutover") as any;
+    const cutover = fixture("clean_21_cutover_from_1") as any;
     expect(deliveryDnaV2CutoverDecision(cutover.input)).toEqual(cutover.expected);
+    const version20 = fixture("version20_to_21_translation_prohibited") as any;
+    expect(deliveryDnaV2CutoverDecision(version20.input)).toEqual(version20.expected);
     const before = JSON.stringify(core);
     const tenant = fixture("tenant_and_immutable_projection_contract") as any;
     const tenantDecision = await evaluateAnalysisEligibility({
@@ -565,11 +592,11 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       completed: true,
       assessmentType: "delivery-dna",
       packId: "delivery-dna",
-      packVersion: "2.0.0",
+      packVersion: "2.1.0",
       questionSetId: "delivery-dna",
-      questionSetVersion: "2.0.0",
+      questionSetVersion: "2.1.0",
       questionIds: [...deliveryDnaV2QuestionManifest],
-      configurationSetId: "delivery-dna-product-config-2.0.0",
+      configurationSetId: "delivery-dna-product-config-2.1.0",
     });
     expect(tenantDecision.status).toBe("ineligible");
     expect(tenantDecision.primaryReason).toBe("ANALYSIS_ELIGIBILITY_TENANT_MISMATCH");
@@ -583,27 +610,27 @@ describe("DIQ-100B Delivery DNA 2.0 locked golden fixtures", () => {
       completed: true,
       assessmentType: "delivery-dna",
       packId: "delivery-dna",
-      packVersion: "2.0.0",
+      packVersion: "2.1.0",
       questionSetId: "delivery-dna",
-      questionSetVersion: "2.0.0",
+      questionSetVersion: "2.1.0",
       questionIds: [...deliveryDnaV2QuestionManifest],
-      configurationSetId: "delivery-dna-product-config-2.0.0",
+      configurationSetId: "delivery-dna-product-config-2.1.0",
     });
     expect(eligibleDecision).toMatchObject({ status: "eligible", reasons: [] });
     expect(JSON.stringify(core)).toBe(before);
   });
 });
 
-describe("PDR-003-004A 2.0 locked commercial fixtures", () => {
-  it("registers all nine fixtures and the exact server-side offer", () => {
-    expect(commercial.fixtures).toHaveLength(9);
+describe("PDR-003-004A 2.1 locked commercial fixtures", () => {
+  it("registers all ten fixtures and the exact server-side offer", () => {
+    expect(commercial.fixtures).toHaveLength(10);
     expect(deliveryDnaOverviewOffer).toMatchObject({
-      offerId: "delivery-dna-overview-gbp-2",
-      offerVersion: "2.0.0",
+      offerId: "delivery-dna-overview-gbp-21",
+      offerVersion: "2.1.0",
       unitAmountMinor: 29500,
       vatAmountMinor: 0,
       customerTotalMinor: 29500,
-      accessVersion: "2.0.0",
+      accessVersion: "2.1.0",
     });
   });
 
@@ -625,8 +652,9 @@ describe("PDR-003-004A 2.0 locked commercial fixtures", () => {
       }),
     ).toMatchObject({
       accessGrantCount: 1,
-      accessVersion: "2.0.0",
+      accessVersion: "2.1.0",
       remainingAssessmentAccessible: true,
+      remainingQuestionsAccessible: 30,
       deliveryDnaActionAccessible: false,
     });
     expect(

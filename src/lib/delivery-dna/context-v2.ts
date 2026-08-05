@@ -1,7 +1,7 @@
 import rawEvidence from "../../../docs/01-product/delivery-intelligence/configuration/DIQ-204A Delivery Evidence Catalogue.json";
 
 const MANDATORY_DISCLOSURE =
-  "General industry context; not a benchmark or comparison with the assessed organisation.";
+  "General industry context; not a benchmark or comparison with your organisation.";
 
 type ContextSurface = "snapshot_context" | "overview_context" | "report_context";
 

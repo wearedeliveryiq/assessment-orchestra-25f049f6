@@ -1,0 +1,3327 @@
+{
+  "document": {
+    "id": "DIQ-100A",
+    "version": "2.1.0",
+    "status": "locked",
+    "title": "Delivery DNA 2.1 Model and Question Catalogue",
+    "owner": "Product Owner",
+    "architectureAuthority": "Chief Solution Architect",
+    "approver": "Matt Prust",
+    "approvalStatus": "approved_and_implementation_authority",
+    "authoredAt": "2026-08-04",
+    "approvedAt": "2026-08-05",
+    "locale": "en-GB",
+    "parentDocumentId": "DIQ-100",
+    "parentDocumentVersion": "2.1",
+    "supersedes": "DIQ-100A@2.0.0"
+  },
+  "identity": {
+    "assessmentType": "delivery-dna",
+    "knowledgePackId": "delivery-dna",
+    "knowledgePackVersion": "2.1.0",
+    "questionSetId": "delivery-dna",
+    "questionSetVersion": "2.1.0",
+    "configurationSetId": "delivery-dna-product-config-2.1.0",
+    "domainCount": 5,
+    "capabilityCount": 15,
+    "fullQuestionCount": 45,
+    "snapshotQuestionCount": 15,
+    "implementationAuthorised": true
+  },
+  "assessmentUnit": {
+    "productScale": "sme_to_enterprise",
+    "oneExplicitScopePerAssessment": true,
+    "recommendedAllowedScopeTypes": [
+      "whole_organisation",
+      "business_unit_or_division",
+      "function",
+      "defined_delivery_portfolio_or_delivery_system"
+    ],
+    "individualProjectScopeAllowed": false,
+    "requiredScopeFields": [
+      "scope_id",
+      "scope_type",
+      "scope_display_name",
+      "parent_organisation_id"
+    ],
+    "customerScopeStatement": "For this assessment, “the organisation” means {assessment_scope_name}. Answer for how project and change delivery usually works across this scope today.",
+    "singleRespondentDisclosure": "lead_perspective_not_independently_verified_truth_for_enterprise_or_assessed_scope",
+    "answerFrame": "usual_practice_across_declared_scope_not_one_exceptional_project",
+    "multipleScopesPerEnterpriseAllowed": true,
+    "crossScopeAggregationOrComparisonAuthority": "separate_delivery_dna_perspectives_or_enterprise_authority_required",
+    "silentAveragingAllowed": false
+  },
+  "journey": {
+    "title": "Delivery DNA assessment",
+    "introduction": "Delivery DNA looks at how the organisation or area selected for this assessment directs, governs, delivers, enables and improves project-based change.",
+    "instructions": "For this assessment, “the organisation” means the scope named above. Choose the statement that most closely reflects how project and change delivery usually works across this scope today, not one exceptional initiative. If you cannot support a response, skip it rather than estimate. Use Not applicable only where the question genuinely does not apply and explain why.",
+    "responseScale": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "customerNumbersDisplayed": false,
+      "options": [
+        {
+          "value": 1,
+          "id": "emerging",
+          "label": "Emerging",
+          "description": "Practice is absent, reactive, informal, isolated or materially inconsistent."
+        },
+        {
+          "value": 2,
+          "id": "developing",
+          "label": "Developing",
+          "description": "Some relevant practice exists, but application, ownership or evidence remains uneven."
+        },
+        {
+          "value": 3,
+          "id": "established",
+          "label": "Established",
+          "description": "The practice is defined and applied across most relevant delivery activity with useful supporting evidence."
+        },
+        {
+          "value": 4,
+          "id": "leading",
+          "label": "Leading",
+          "description": "The practice is embedded, outcome-led, reviewed and improved using current evidence."
+        }
+      ]
+    },
+    "evidenceStatusPresentation": {
+      "answered": {
+        "customerSelectable": true,
+        "valueRequired": true,
+        "scoreTreatment": "eligible"
+      },
+      "not_applicable": {
+        "customerSelectable": true,
+        "reasonTextRequired": true,
+        "scoreTreatment": "non_contributing",
+        "customerHelp": "Use this only when the question genuinely does not apply, not when you do not know. It is not scored and may limit the result."
+      },
+      "missing": {
+        "customerSelectable": false,
+        "customerControl": "skip_for_now",
+        "scoreTreatment": "non_contributing"
+      },
+      "excluded": {
+        "customerSelectable": false,
+        "scoreTreatment": "non_contributing"
+      }
+    },
+    "questionRoleLabels": {
+      "snapshot": "Snapshot",
+      "supporting_1": "Supporting question",
+      "supporting_2": "Supporting question"
+    }
+  },
+  "domains": [
+    {
+      "id": "direction_value",
+      "label": "Direction & Value",
+      "order": 1,
+      "executiveQuestion": "Are we investing in the right change and realising the value?",
+      "capabilities": [
+        {
+          "id": "strategic_alignment",
+          "label": "Strategic Alignment",
+          "order": 1,
+          "domainId": "direction_value",
+          "weight": 1,
+          "definition": "Connects delivery priorities and outcomes to organisational strategy and context.",
+          "customerHelp": "Think about the organisation's normal portfolio of projects and change, not one exceptional initiative.",
+          "snapshotQuestionId": "ddna2.strategic_alignment.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.strategic_alignment.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How clearly is our delivery portfolio connected to organisational strategy?"
+            },
+            {
+              "id": "ddna2.strategic_alignment.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently do teams understand why their work matters to the wider business?"
+            },
+            {
+              "id": "ddna2.strategic_alignment.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "When strategy shifts, how quickly does that translate into changed delivery priorities?"
+            }
+          ]
+        },
+        {
+          "id": "portfolio_prioritisation",
+          "label": "Portfolio & Prioritisation",
+          "order": 2,
+          "domainId": "direction_value",
+          "weight": 1,
+          "definition": "Selects, sequences, starts, stops and rebalances work within realistic constraints.",
+          "customerHelp": "Portfolio means the combined set of projects and change competing for the organisation's money, people and attention.",
+          "snapshotQuestionId": "ddna2.portfolio_prioritisation.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.portfolio_prioritisation.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How confident are we that we're working on the right things, not just busy things?"
+            },
+            {
+              "id": "ddna2.portfolio_prioritisation.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How is competing demand for delivery capacity resolved across the organisation?"
+            },
+            {
+              "id": "ddna2.portfolio_prioritisation.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How visible is the full portfolio of active and planned work to those who need to see it?"
+            }
+          ]
+        },
+        {
+          "id": "benefits_value",
+          "label": "Benefits & Value Realisation",
+          "order": 3,
+          "domainId": "direction_value",
+          "weight": 1,
+          "definition": "Defines, owns, measures and sustains the value expected from change.",
+          "customerHelp": "Consider measurable business, customer, operational or societal outcomes—not delivery outputs alone.",
+          "snapshotQuestionId": "ddna2.benefits_value.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.benefits_value.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How reliably do we know whether delivered work actually created the value expected?"
+            },
+            {
+              "id": "ddna2.benefits_value.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "Are benefits defined and owned before delivery starts, or assessed only after the fact?"
+            },
+            {
+              "id": "ddna2.benefits_value.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How is benefits tracking used to inform future prioritisation decisions?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "leadership_governance",
+      "label": "Leadership & Governance",
+      "order": 2,
+      "executiveQuestion": "Do leaders provide the ownership, decisions and control delivery needs?",
+      "capabilities": [
+        {
+          "id": "sponsorship_accountability",
+          "label": "Sponsorship & Accountability",
+          "order": 4,
+          "domainId": "leadership_governance",
+          "weight": 1,
+          "definition": "Establishes active executive ownership for outcomes, decisions and barrier removal.",
+          "customerHelp": "Assess what accountable sponsors do in practice, not whether a sponsor name appears in a document.",
+          "snapshotQuestionId": "ddna2.sponsorship_accountability.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.sponsorship_accountability.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How actively engaged are executive sponsors in the delivery of their initiatives?"
+            },
+            {
+              "id": "ddna2.sponsorship_accountability.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "When priorities conflict, how willing are sponsors to make and stand behind trade-off decisions?"
+            },
+            {
+              "id": "ddna2.sponsorship_accountability.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How clearly is accountability for delivery outcomes assigned and understood?"
+            }
+          ]
+        },
+        {
+          "id": "governance_decision_making",
+          "label": "Governance & Decision-Making",
+          "order": 5,
+          "domainId": "leadership_governance",
+          "weight": 1,
+          "definition": "Provides proportionate decision rights, forums, escalation and accountability.",
+          "customerHelp": "Governance can be lightweight; consider whether the right people make timely decisions with clear accountability.",
+          "snapshotQuestionId": "ddna2.governance_decision_making.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.governance_decision_making.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How quickly can a delivery blocker get in front of someone who can actually resolve it?"
+            },
+            {
+              "id": "ddna2.governance_decision_making.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently are governance forums used for genuine decisions rather than status reporting?"
+            },
+            {
+              "id": "ddna2.governance_decision_making.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well understood are decision rights across sponsors, delivery leads, and teams?"
+            }
+          ]
+        },
+        {
+          "id": "risk_assurance_resilience",
+          "label": "Risk, Assurance & Resilience",
+          "order": 6,
+          "domainId": "leadership_governance",
+          "weight": 1,
+          "definition": "Anticipates uncertainty, tests confidence and responds to threats, opportunities and disruption.",
+          "customerHelp": "Include proportionate independent challenge, continuity and resilience where these are relevant to the organisation's delivery.",
+          "snapshotQuestionId": "ddna2.risk_assurance_resilience.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.risk_assurance_resilience.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How early do delivery risks typically surface relative to when they start to bite?"
+            },
+            {
+              "id": "ddna2.risk_assurance_resilience.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently is risk owned and actively managed, rather than just logged?"
+            },
+            {
+              "id": "ddna2.risk_assurance_resilience.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How independent and useful is assurance activity in practice?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delivery_system",
+      "label": "Delivery System",
+      "order": 3,
+      "executiveQuestion": "Can work move from intent to outcome predictably and proportionately?",
+      "capabilities": [
+        {
+          "id": "delivery_approach_lifecycle",
+          "label": "Delivery Approach & Lifecycle",
+          "order": 7,
+          "domainId": "delivery_system",
+          "weight": 1,
+          "definition": "Selects and tailors predictive, iterative, incremental or hybrid approaches to the work.",
+          "customerHelp": "No method is preferred. Assess whether the approach fits the value, uncertainty, risk and complexity of the work.",
+          "snapshotQuestionId": "ddna2.delivery_approach_lifecycle.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.delivery_approach_lifecycle.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How consistent and fit-for-purpose are our ways of working across delivery teams?"
+            },
+            {
+              "id": "ddna2.delivery_approach_lifecycle.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently is a shared delivery approach used and adapted, regardless of who leads the work?"
+            },
+            {
+              "id": "ddna2.delivery_approach_lifecycle.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently do teams adapt their delivery approach using feedback, risk and current evidence?"
+            }
+          ]
+        },
+        {
+          "id": "planning_control_dependencies",
+          "label": "Planning, Control & Dependencies",
+          "order": 8,
+          "domainId": "delivery_system",
+          "weight": 1,
+          "definition": "Creates realistic plans, manages interdependencies and uses forecasts and change control to act early.",
+          "customerHelp": "Consider the level of planning and control appropriate to the work rather than the use of a particular tool.",
+          "snapshotQuestionId": "ddna2.planning_control_dependencies.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.planning_control_dependencies.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How much confidence do we have in our delivery plans and forecasts?"
+            },
+            {
+              "id": "ddna2.planning_control_dependencies.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well are dependencies across delivery work identified and actively managed?"
+            },
+            {
+              "id": "ddna2.planning_control_dependencies.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently are baselines maintained and changes properly controlled?"
+            }
+          ]
+        },
+        {
+          "id": "capacity_delivery_ecosystem",
+          "label": "Capacity & Delivery Ecosystem",
+          "order": 9,
+          "domainId": "delivery_system",
+          "weight": 1,
+          "definition": "Aligns people, funding, skills, suppliers and operational constraints with delivery demand.",
+          "customerHelp": "Include internal teams, specialist partners, suppliers and business-as-usual constraints where relevant.",
+          "snapshotQuestionId": "ddna2.capacity_delivery_ecosystem.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.capacity_delivery_ecosystem.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How consistently are resources and internal or external commitments rebalanced as priorities and constraints change?"
+            },
+            {
+              "id": "ddna2.capacity_delivery_ecosystem.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How clearly can leaders see capacity, critical skills and supplier constraints before committing delivery work?"
+            },
+            {
+              "id": "ddna2.capacity_delivery_ecosystem.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How scalable is our delivery support and capacity model as the volume or complexity of work grows?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "people_enablement",
+      "label": "People & Enablement",
+      "order": 4,
+      "executiveQuestion": "Do people have the environment, engagement and support to deliver change?",
+      "capabilities": [
+        {
+          "id": "leadership_culture_collaboration",
+          "label": "Leadership, Culture & Collaboration",
+          "order": 10,
+          "domainId": "people_enablement",
+          "weight": 1,
+          "definition": "Creates clarity, constructive challenge, psychological safety and cross-boundary collaboration.",
+          "customerHelp": "Consider whether people can raise delivery problems early and work across functions without avoidable friction.",
+          "snapshotQuestionId": "ddna2.leadership_culture_collaboration.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.leadership_culture_collaboration.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How consistently do leaders create clarity, invite constructive challenge and remove cross-team barriers?"
+            },
+            {
+              "id": "ddna2.leadership_culture_collaboration.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well do delivery teams surface and resolve issues before they escalate?"
+            },
+            {
+              "id": "ddna2.leadership_culture_collaboration.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How much say do delivery teams have in improving how they work?"
+            }
+          ]
+        },
+        {
+          "id": "stakeholder_change_adoption",
+          "label": "Stakeholder Engagement & Change Adoption",
+          "order": 11,
+          "domainId": "people_enablement",
+          "weight": 1,
+          "definition": "Understands affected people, prepares change and sustains adoption.",
+          "customerHelp": "Consider the people who use, experience, support or are affected by what delivery produces.",
+          "snapshotQuestionId": "ddna2.stakeholder_change_adoption.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.stakeholder_change_adoption.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How effectively does the organisation bring people along with change, not just deliver it?"
+            },
+            {
+              "id": "ddna2.stakeholder_change_adoption.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well are stakeholder needs and concerns understood before they become resistance?"
+            },
+            {
+              "id": "ddna2.stakeholder_change_adoption.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How embedded is change and adoption planning within delivery, rather than bolted on at the end?"
+            }
+          ]
+        },
+        {
+          "id": "delivery_capability_enablement",
+          "label": "Delivery Capability & Enablement",
+          "order": 12,
+          "domainId": "people_enablement",
+          "weight": 1,
+          "definition": "Builds delivery skills and provides proportionate standards, coaching, tools and PMO-style support.",
+          "customerHelp": "The enabling function may be a PMO, operations team, delivery lead or shared service; assess the outcome, not its name.",
+          "snapshotQuestionId": "ddna2.delivery_capability_enablement.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.delivery_capability_enablement.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How much genuine support (not just process) does delivery get from central enablement?"
+            },
+            {
+              "id": "ddna2.delivery_capability_enablement.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well equipped are our delivery people with the skills the work actually demands?"
+            },
+            {
+              "id": "ddna2.delivery_capability_enablement.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How well do templates, tools, and standards actually help rather than hinder delivery?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insight_adaptation",
+      "label": "Insight & Adaptation",
+      "order": 5,
+      "executiveQuestion": "Does the organisation use evidence, learning and technology to improve delivery?",
+      "capabilities": [
+        {
+          "id": "data_reporting_decision_insight",
+          "label": "Data, Reporting & Decision Insight",
+          "order": 13,
+          "domainId": "insight_adaptation",
+          "weight": 1,
+          "definition": "Produces trusted, timely information that supports decisions and exposes uncertainty.",
+          "customerHelp": "Assess whether information changes decisions, not the volume or visual polish of reporting.",
+          "snapshotQuestionId": "ddna2.data_reporting_decision_insight.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.data_reporting_decision_insight.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How much do leaders trust the delivery reporting they receive?"
+            },
+            {
+              "id": "ddna2.data_reporting_decision_insight.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How easily can someone get a true picture of delivery health without chasing people for it?"
+            },
+            {
+              "id": "ddna2.data_reporting_decision_insight.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How consistently does reporting drive action, rather than just record status?"
+            }
+          ]
+        },
+        {
+          "id": "learning_adaptability_improvement",
+          "label": "Learning, Adaptability & Improvement",
+          "order": 14,
+          "domainId": "insight_adaptation",
+          "weight": 1,
+          "definition": "Uses feedback, outcomes and experience to adapt delivery and embed improvement.",
+          "customerHelp": "Consider whether learning changes subsequent behaviour, methods or controls—not whether lessons are merely recorded.",
+          "snapshotQuestionId": "ddna2.learning_adaptability_improvement.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.learning_adaptability_improvement.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How systematically do we learn from delivery and change how we work as a result?"
+            },
+            {
+              "id": "ddna2.learning_adaptability_improvement.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How are lessons from one project or programme shared and applied to others?"
+            },
+            {
+              "id": "ddna2.learning_adaptability_improvement.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How much appetite and space exists for teams to experiment and improve?"
+            }
+          ]
+        },
+        {
+          "id": "digital_automation_responsible_ai",
+          "label": "Digital, Automation & Responsible AI",
+          "order": 15,
+          "domainId": "insight_adaptation",
+          "weight": 1,
+          "definition": "Applies digital tools, automation and AI where they improve delivery, with accountable human oversight and proportionate safeguards.",
+          "customerHelp": "Do not reward technology use for its own sake. Consider relevant business outcomes, workflow fit, data permissions, human review and realised value.",
+          "snapshotQuestionId": "ddna2.digital_automation_responsible_ai.snapshot",
+          "questions": [
+            {
+              "id": "ddna2.digital_automation_responsible_ai.snapshot",
+              "role": "snapshot",
+              "weight": 0.4,
+              "required": true,
+              "snapshot": true,
+              "prompt": "How effectively is delivery data used to support decisions, versus just collected?"
+            },
+            {
+              "id": "ddna2.digital_automation_responsible_ai.supporting_1",
+              "role": "supporting_1",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How much manual, repeatable delivery admin has been automated or streamlined?"
+            },
+            {
+              "id": "ddna2.digital_automation_responsible_ai.supporting_2",
+              "role": "supporting_2",
+              "weight": 0.3,
+              "required": true,
+              "snapshot": false,
+              "prompt": "How considered and governed is our use of AI and automation within delivery?"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "answerOptionsByQuestionId": {
+    "ddna2.strategic_alignment.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Delivery work is largely disconnected from stated strategy; teams can't easily explain the link."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some initiatives are clearly linked to strategy, but many are not, or the link is assumed rather than shown."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most delivery work is explicitly mapped to strategic priorities and reviewed periodically."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Every active initiative has a clear, current line of sight to strategy, and this drives prioritisation decisions."
+      }
+    ],
+    "ddna2.strategic_alignment.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Teams mostly know *what* to deliver, not *why* it matters."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Understanding varies significantly by team or leader."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most teams can articulate the business rationale for their work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Purpose and business context are built into how work is briefed and reviewed."
+      }
+    ],
+    "ddna2.strategic_alignment.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Strategy changes rarely reach delivery teams in a timely or actionable way."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Changes filter through eventually, often with delay or inconsistency."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "There's a reasonably reliable process for re-prioritising when strategy shifts."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Delivery priorities adjust rapidly and visibly when strategic direction changes."
+      }
+    ],
+    "ddna2.portfolio_prioritisation.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Low confidence — prioritisation feels reactive or driven by whoever shouts loudest."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some confidence, but prioritisation is inconsistent or politically influenced."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Reasonable confidence, based on a defined prioritisation approach."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "High confidence — prioritisation is transparent, criteria-based, and regularly revisited."
+      }
+    ],
+    "ddna2.portfolio_prioritisation.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Informally, often through escalation or seniority rather than a clear process."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "There's a process, but it's not consistently followed or trusted."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "A defined process resolves most capacity conflicts effectively."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Capacity trade-offs are resolved transparently against agreed criteria, with minimal friction."
+      }
+    ],
+    "ddna2.portfolio_prioritisation.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "No single view exists; visibility depends on who you ask."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "A view exists but is incomplete, outdated, or hard to access."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "A reasonably current, accessible portfolio view exists for key stakeholders."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "A live, trusted portfolio view is used routinely for decision-making."
+      }
+    ],
+    "ddna2.benefits_value.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "We rarely check — value is assumed once something is delivered."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Value is checked sometimes, usually informally or inconsistently."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Benefits are tracked for most significant initiatives."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Benefits are systematically tracked and reported against original expectations."
+      }
+    ],
+    "ddna2.benefits_value.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Benefits are rarely defined up front, if at all."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Benefits are sometimes defined but not clearly owned."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Benefits are typically defined and owned before delivery begins."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Defined, owned benefits are a standard gate before initiatives are approved."
+      }
+    ],
+    "ddna2.benefits_value.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "It isn't — past outcomes don't inform future decisions."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Occasionally referenced, but not systematically."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Past benefits performance regularly informs new prioritisation."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Benefits data is a core input to portfolio decisions, with clear feedback loops."
+      }
+    ],
+    "ddna2.sponsorship_accountability.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Sponsors are largely disengaged once an initiative is approved."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Engagement varies significantly by sponsor and initiative."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most sponsors stay actively engaged through delivery."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Sponsors are consistently and visibly engaged, with clear ongoing ownership."
+      }
+    ],
+    "ddna2.sponsorship_accountability.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Trade-offs are avoided or pushed back down to delivery teams."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Sponsors sometimes engage in trade-offs, but decisions can be slow or reversed."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Sponsors generally make timely trade-off decisions and stand by them."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Sponsors proactively resolve trade-offs and are accountable for the consequences."
+      }
+    ],
+    "ddna2.sponsorship_accountability.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Accountability is diffuse or unclear when things go wrong."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Accountability exists on paper but isn't consistently applied in practice."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Accountability is clearly assigned for most initiatives."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Accountability is unambiguous, understood, and reinforced through how outcomes are reviewed."
+      }
+    ],
+    "ddna2.governance_decision_making.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Slowly — blockers often stall for weeks with no clear escalation route."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "There's a route, but it's inconsistent or bottlenecked."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most blockers reach the right person within a reasonable time."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Escalation is fast, well understood, and rarely a source of delay."
+      }
+    ],
+    "ddna2.governance_decision_making.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Forums are mostly status updates; real decisions happen elsewhere or not at all."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some forums make decisions, others are purely informational."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most governance forums are decision-focused and effective."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Governance forums consistently drive timely, well-informed decisions."
+      }
+    ],
+    "ddna2.governance_decision_making.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Unclear — people often aren't sure who can actually decide what."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Understood by some, but inconsistently applied."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Decision rights are documented and generally followed."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Decision rights are clear, well understood, and rarely contested."
+      }
+    ],
+    "ddna2.risk_assurance_resilience.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Risks usually surface only once they've become live issues."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some risks are caught early, others emerge too late."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most significant risks are identified with enough lead time to act."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Risks are consistently surfaced early, with time to mitigate before impact."
+      }
+    ],
+    "ddna2.risk_assurance_resilience.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Risks are logged but rarely actively managed."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some risks have owners and mitigation activity, many don't."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most risks have clear owners and active mitigation plans."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Risk ownership and mitigation are consistently applied and reviewed."
+      }
+    ],
+    "ddna2.risk_assurance_resilience.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Assurance is minimal, a formality, or absent."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Assurance happens but adds limited value or isn't independent."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Assurance is reasonably independent and produces useful findings."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Assurance is genuinely independent, valued, and acted upon."
+      }
+    ],
+    "ddna2.delivery_approach_lifecycle.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Ways of working vary widely and often don't fit the work."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some consistency exists, but fit and adoption are patchy."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Ways of working are generally consistent and reasonably well suited to the work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Ways of working are consistent, well suited, and actively adapted where needed."
+      }
+    ],
+    "ddna2.delivery_approach_lifecycle.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Approach varies entirely by individual — no shared method."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some common elements exist but are applied inconsistently."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "A shared approach is generally used across delivery work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "A consistent, well-adopted approach is used and adapted appropriately by context."
+      }
+    ],
+    "ddna2.delivery_approach_lifecycle.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Teams follow whatever approach they inherit or change it reactively, with little use of feedback, risk or evidence."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some teams adapt their approach, but changes are inconsistent or depend mainly on individual judgement."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most teams adapt a shared approach using feedback, risk and current delivery evidence."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Teams continuously refine proportionate delivery approaches using outcomes, learning, risk and current evidence."
+      }
+    ],
+    "ddna2.planning_control_dependencies.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Little confidence — plans and forecasts are often wrong or ignored."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some confidence, but plans require frequent significant rework."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Reasonable confidence in most plans and forecasts."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "High confidence — plans and forecasts are reliable and used to guide decisions."
+      }
+    ],
+    "ddna2.planning_control_dependencies.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Dependencies are often discovered only when they cause a problem."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some dependencies are tracked, but management is reactive."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Dependencies are generally identified early and actively managed."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Dependency management is proactive, visible, and rarely a source of surprise."
+      }
+    ],
+    "ddna2.planning_control_dependencies.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Baselines shift informally without a clear change process."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "A change process exists but isn't consistently followed."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Baselines are generally well maintained with proper change control."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Baseline and change control is consistently rigorous and well understood."
+      }
+    ],
+    "ddna2.capacity_delivery_ecosystem.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Commitments remain in place even when priorities change or capacity constraints become clear."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some rebalancing occurs, but usually late, inconsistently or through escalation."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Resources and commitments are generally rebalanced when priorities and material constraints change."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Demand, capacity and internal or external commitments are continuously balanced through timely, transparent trade-offs."
+      }
+    ],
+    "ddna2.capacity_delivery_ecosystem.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Commitments are made with little reliable view of available capacity, critical skills or supplier constraints."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some constraints are visible, but the view is incomplete, inconsistent or assembled after commitments are made."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Leaders usually have a current enough view of capacity, critical skills and supplier constraints before committing work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "A trusted, forward-looking capacity and constraint view routinely shapes investment, sequencing and sourcing decisions."
+      }
+    ],
+    "ddna2.capacity_delivery_ecosystem.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "The support model struggles even at current volume or complexity."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "It copes for now, but strain is visible."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "The model scales reasonably well with growing demand."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "The support model is designed to scale and flexes well with demand."
+      }
+    ],
+    "ddna2.leadership_culture_collaboration.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Leaders provide inconsistent direction, challenge is discouraged or barriers persist between teams."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some leaders create clarity and invite challenge, but experience varies and cross-team barriers remain."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most leaders create clear direction, constructive challenge and effective collaboration across teams."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Leaders consistently create psychological safety, shared ownership and rapid collaboration across organisational boundaries."
+      }
+    ],
+    "ddna2.leadership_culture_collaboration.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Issues tend to surface late, often as a crisis."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some issues are caught early, others aren't."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most issues are surfaced and resolved before significant escalation."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Issues are consistently surfaced early and resolved at the right level."
+      }
+    ],
+    "ddna2.leadership_culture_collaboration.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Ways of working are imposed with little team input."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some input is sought, but it rarely leads to change."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Teams have meaningful input and can influence how they work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Teams actively shape and continuously improve their own ways of working."
+      }
+    ],
+    "ddna2.stakeholder_change_adoption.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Change is largely imposed, with limited attention to adoption."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some change activity happens, but it's inconsistent or late."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Change and adoption are generally planned and managed well."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Change leadership is a consistent strength, with strong, sustained adoption."
+      }
+    ],
+    "ddna2.stakeholder_change_adoption.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Concerns typically surface as resistance rather than being anticipated."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some stakeholder engagement happens, but gaps remain."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Stakeholder needs are generally well understood in advance."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Stakeholder engagement is proactive and consistently prevents avoidable resistance."
+      }
+    ],
+    "ddna2.stakeholder_change_adoption.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Change planning is an afterthought, if it happens at all."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Change planning exists but is often added late."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Change and adoption planning is generally built in from early on."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Change and adoption planning is fully integrated from initiation onward."
+      }
+    ],
+    "ddna2.delivery_capability_enablement.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Central support feels like oversight or admin, not help."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some genuine support exists, but it's inconsistent."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Central enablement generally provides useful, practical support."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Central enablement is seen as a genuine, trusted enabler of delivery."
+      }
+    ],
+    "ddna2.delivery_capability_enablement.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Significant, widely felt skills gaps affect delivery."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Skills gaps exist in specific areas or teams."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most delivery people have the skills needed for their work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Skills are consistently strong, with clear investment in ongoing development."
+      }
+    ],
+    "ddna2.delivery_capability_enablement.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Templates and tools mostly add overhead without clear benefit."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some are useful, others feel like box-ticking."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most templates and tools genuinely support delivery work."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Templates, tools, and standards are well designed and consistently valued."
+      }
+    ],
+    "ddna2.data_reporting_decision_insight.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Reporting is widely distrusted or routinely double-checked informally."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Trust varies — some reports are relied on, others aren't."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Most leaders generally trust the reporting they receive."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Reporting is consistently trusted and used directly for decisions."
+      }
+    ],
+    "ddna2.data_reporting_decision_insight.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Getting a true picture requires significant chasing and informal checking."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some information is readily available, but gaps require chasing."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "A reasonably true picture is available without much extra effort."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "An accurate, current picture is readily accessible with minimal effort."
+      }
+    ],
+    "ddna2.data_reporting_decision_insight.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Reporting is largely passive — status is recorded, little follows."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some reports prompt action, others are filed and forgotten."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Reporting generally leads to follow-up action where needed."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Reporting consistently and directly drives timely action."
+      }
+    ],
+    "ddna2.learning_adaptability_improvement.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Lessons are rarely captured, or captured but not acted on."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some lessons are captured, but follow-through is inconsistent."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Lessons are generally captured and lead to some changes in practice."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Learning is systematic and consistently translates into improved practice."
+      }
+    ],
+    "ddna2.learning_adaptability_improvement.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Lessons stay within the team or project where they occurred."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some sharing happens, but it's informal or inconsistent."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Lessons are generally shared and applied across relevant teams."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Lessons are systematically shared and consistently applied organisation-wide."
+      }
+    ],
+    "ddna2.learning_adaptability_improvement.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Little appetite or space — delivery pressure crowds out improvement."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some space exists, but it's inconsistent or deprioritised under pressure."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Teams generally have reasonable space to experiment and improve."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Experimentation and improvement are actively encouraged and protected."
+      }
+    ],
+    "ddna2.digital_automation_responsible_ai.snapshot": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Data is collected but rarely used to inform decisions."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Data informs some decisions, but usage is inconsistent."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "Data generally supports decision-making in a meaningful way."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Data is consistently and effectively used to drive decisions."
+      }
+    ],
+    "ddna2.digital_automation_responsible_ai.supporting_1": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "Little to no automation — most admin is manual and repetitive."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some automation exists in specific areas."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "A reasonable amount of repeatable admin has been streamlined."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "Automation is widely applied to repeatable admin, freeing capacity for higher-value work."
+      }
+    ],
+    "ddna2.digital_automation_responsible_ai.supporting_2": [
+      {
+        "value": 1,
+        "id": "emerging",
+        "text": "AI/automation use is ad hoc, ungoverned, or not yet considered."
+      },
+      {
+        "value": 2,
+        "id": "developing",
+        "text": "Some use exists, with limited governance or consistency."
+      },
+      {
+        "value": 3,
+        "id": "established",
+        "text": "AI/automation use is reasonably considered and governed."
+      },
+      {
+        "value": 4,
+        "id": "leading",
+        "text": "AI/automation use is deliberate, well governed, and integrated into ways of working."
+      }
+    ]
+  },
+  "snapshotPolicy": {
+    "questionCount": 15,
+    "expectedCompletionMinutes": {
+      "minimum": 6,
+      "maximum": 8
+    },
+    "indicativeOverallLevel": true,
+    "indicativeDomainLevels": 5,
+    "numericScoreDisplayed": false,
+    "capabilityResultsDisplayed": false,
+    "profileAxes": 5,
+    "profilePresentation": "premium_accessible_five_axis_spider_chart",
+    "minimumAnsweredPerDomain": 2,
+    "minimumAnsweredOverall": 12,
+    "levels": [
+      {
+        "id": "emerging",
+        "minimumInclusive": 1,
+        "maximumExclusive": 1.75
+      },
+      {
+        "id": "developing",
+        "minimumInclusive": 1.75,
+        "maximumExclusive": 2.5
+      },
+      {
+        "id": "established",
+        "minimumInclusive": 2.5,
+        "maximumExclusive": 3.25
+      },
+      {
+        "id": "leading",
+        "minimumInclusive": 3.25,
+        "maximumInclusive": 4
+      }
+    ],
+    "maximumPositiveSignals": 2,
+    "maximumAreasToExplore": 2,
+    "maximumIndustryContextItems": 1,
+    "industryContextScoringEffect": "none",
+    "industryContextSourcePresentation": "asterisk_with_visible_bottom_of_page_source_note",
+    "primaryCta": {
+      "label": "Save my Snapshot",
+      "supportingMessage": "Download your results by saving your Snapshot",
+      "destination": "verified_registration_and_consent",
+      "paymentRequired": false
+    },
+    "requiredExperience": [
+      "branded_preparation_transition",
+      "clear_overall_outcome",
+      "five_domain_levels",
+      "accessible_spider_chart",
+      "concise_executive_narrative",
+      "obvious_saved_snapshot_continuation"
+    ],
+    "prohibited": [
+      "numeric_score",
+      "percentage",
+      "fifteen_capability_results",
+      "confidence_index",
+      "patterns",
+      "recommendations",
+      "roadmap",
+      "benchmark",
+      "industry_relative_claim"
+    ],
+    "mandatoryCaveat": "This is an indicative view based on one Snapshot signal from each Delivery DNA capability. It is not your complete Delivery DNA result and may change when the supporting questions are assessed.",
+    "savedSnapshot": {
+      "additionalIntelligenceUnlocked": false,
+      "benefits": [
+        "download_same_indicative_result",
+        "return_to_result",
+        "retain_exact_fifteen_responses",
+        "continue_to_overview_without_repeating_answers"
+      ],
+      "privacyMessageRequired": true,
+      "commercialCtaAfterSave": "Unlock your complete Delivery DNA — £295"
+    },
+    "selectedRole": "snapshot"
+  },
+  "overviewPolicy": {
+    "remainingQuestionCountAfterSnapshot": 30,
+    "minimumEligibleQuestionsPerCapability": 2,
+    "minimumEligibleWeightPerCapability": 0.6,
+    "minimumAvailableCapabilitiesPerDomain": 2,
+    "minimumAvailableCapabilitiesForOverall": 11,
+    "allDomainsRequireMinimumCoverage": true,
+    "capabilityAggregation": "renormalised_weighted_mean",
+    "domainAggregation": "equal_weight_mean_of_available_capabilities",
+    "overallAggregation": "equal_weight_mean_of_available_capabilities",
+    "transformation": "(answer-1)/3*100",
+    "storagePrecisionDecimals": 6,
+    "displayPrecisionDecimals": 1,
+    "roundingMode": "half_up",
+    "bands": [
+      {
+        "id": "emerging",
+        "minimumInclusive": 0,
+        "maximumExclusive": 25
+      },
+      {
+        "id": "developing",
+        "minimumInclusive": 25,
+        "maximumExclusive": 50
+      },
+      {
+        "id": "established",
+        "minimumInclusive": 50,
+        "maximumExclusive": 75
+      },
+      {
+        "id": "leading",
+        "minimumInclusive": 75,
+        "maximumInclusive": 100
+      }
+    ],
+    "requiredOutputs": [
+      "overall_score_and_level",
+      "five_domain_results",
+      "fifteen_capability_results",
+      "confidence_and_limitations",
+      "strengths_and_priority_opportunities",
+      "cross_domain_patterns",
+      "top_three_recommendations",
+      "bounded_30_60_90_direction",
+      "approved_industry_context",
+      "customer_safe_explainability",
+      "board_ready_report"
+    ],
+    "assuranceBoundary": "self_service_evidence_led_not_independently_verified",
+    "humanEvidenceReviewProduct": "future_delivery_dna_assured",
+    "maximumIndustryContextItemsOnMainDashboard": 3,
+    "industryContext": {
+      "scoringEffect": "none",
+      "findingEligibilityEffect": "none",
+      "rankingEffect": "none",
+      "sourcePresentation": "asterisk_or_numbered_note_with_visible_bottom_of_page_source",
+      "requiredSourceFields": [
+        "evidence_id",
+        "evidence_version",
+        "publisher",
+        "publication_title",
+        "evidence_year",
+        "scope_caveat"
+      ],
+      "mandatoryDisclosure": "General industry context; not a benchmark or comparison with the assessed organisation."
+    },
+    "webResultHierarchy": [
+      "overall_position_and_confidence",
+      "five_domain_profile",
+      "priority_opportunities",
+      "strengths",
+      "cross_domain_tensions",
+      "top_three_recommendations",
+      "bounded_30_60_90_direction",
+      "industry_context",
+      "explainability",
+      "report_download",
+      "capability_detail"
+    ],
+    "reportSections": [
+      "executive_position",
+      "five_domain_profile",
+      "capability_detail",
+      "what_stands_out",
+      "what_to_do_first",
+      "direction_for_next_90_days",
+      "method_limitations_and_sources"
+    ],
+    "primaryResultAction": "Download my Delivery DNA Overview",
+    "unavailableFutureCtaTreatment": "omit",
+    "questionRoleWeights": {
+      "snapshot": 0.4,
+      "supporting_1": 0.3,
+      "supporting_2": 0.3
+    }
+  },
+  "confidencePolicy": {
+    "purpose": "evidential_support_not_truth_or_independent_verification",
+    "storagePrecisionDecimals": 6,
+    "displayPrecisionDecimals": 0,
+    "roundingMode": "half_up",
+    "requiredCompletionMethod": "eligible_required_answers/45",
+    "capabilityCoverageMethod": "available_capabilities/15",
+    "responseConsistencyMethod": "mean(1-min(population_sd(normalised_eligible_answers)/50,1))",
+    "requiredMetadata": {
+      "evidenceRecencyDeclaration": {
+        "customerPrompt": "How current is the evidence you mainly used when answering?",
+        "options": [
+          {
+            "id": "within_90_days",
+            "value": 1
+          },
+          {
+            "id": "within_180_days",
+            "value": 0.75
+          },
+          {
+            "id": "within_365_days",
+            "value": 0.5
+          },
+          {
+            "id": "older_than_365_days",
+            "value": 0.25
+          },
+          {
+            "id": "unknown_or_not_available",
+            "value": 0
+          }
+        ]
+      },
+      "perspectiveBreadthDeclaration": {
+        "customerPrompt": "How many relevant stakeholder groups informed your answers?",
+        "collectIdentity": false,
+        "options": [
+          {
+            "id": "own_view_only",
+            "groups": 0,
+            "value": 0
+          },
+          {
+            "id": "one_group",
+            "groups": 1,
+            "value": 0.4
+          },
+          {
+            "id": "two_groups",
+            "groups": 2,
+            "value": 0.7
+          },
+          {
+            "id": "three_or_more_groups",
+            "minimumGroups": 3,
+            "value": 1
+          }
+        ]
+      }
+    },
+    "factors": [
+      {
+        "id": "required_completion",
+        "weight": 0.35
+      },
+      {
+        "id": "capability_coverage",
+        "weight": 0.25
+      },
+      {
+        "id": "response_consistency",
+        "weight": 0.2
+      },
+      {
+        "id": "evidence_recency",
+        "weight": 0.1
+      },
+      {
+        "id": "perspective_breadth",
+        "weight": 0.1
+      }
+    ],
+    "formula": "100*sum(factor.value*factor.weight)",
+    "capabilityConfidence": {
+      "formula": "100*(eligible_question_count/3*0.5 + within_capability_consistency*0.3 + evidence_recency*0.1 + perspective_breadth*0.1)",
+      "missingMetadataValue": 0
+    },
+    "bands": [
+      {
+        "id": "low",
+        "minimumInclusive": 0,
+        "maximumExclusive": 50
+      },
+      {
+        "id": "moderate",
+        "minimumInclusive": 50,
+        "maximumExclusive": 75
+      },
+      {
+        "id": "high",
+        "minimumInclusive": 75,
+        "maximumInclusive": 100
+      }
+    ],
+    "limitationThresholdExclusive": 0.75,
+    "limitations": {
+      "required_completion": {
+        "text": "Some required responses are missing.",
+        "prompt": "Complete the unanswered questions where you have sufficient visibility."
+      },
+      "capability_coverage": {
+        "text": "The assessment does not cover enough Delivery DNA capabilities.",
+        "prompt": "Add responses across every applicable domain."
+      },
+      "response_consistency": {
+        "text": "Some responses within the same capability differ materially.",
+        "prompt": "Review the available evidence and explain significant differences before committing material action."
+      },
+      "evidence_recency": {
+        "text": "Some evidence may no longer reflect current practice.",
+        "prompt": "Refresh the assessment using evidence from the last 180 days where practical."
+      },
+      "perspective_breadth": {
+        "text": "This result reflects a limited range of perspectives.",
+        "prompt": "Validate material priorities with additional stakeholder groups before committing significant action."
+      }
+    }
+  },
+  "findingPolicy": {
+    "strength": {
+      "scoreMinimumInclusive": 75,
+      "capabilityConfidenceMinimumInclusive": 50,
+      "maximumOverview": 5,
+      "sort": [
+        "score_desc",
+        "confidence_desc",
+        "capability_order_asc",
+        "capability_id_asc"
+      ]
+    },
+    "priorityOpportunity": {
+      "scoreMaximumExclusive": 50,
+      "capabilityConfidenceMinimumInclusive": 50,
+      "maximumOverview": 5,
+      "sort": [
+        "score_asc",
+        "confidence_desc",
+        "capability_order_asc",
+        "capability_id_asc"
+      ]
+    },
+    "insufficientEvidence": {
+      "capabilityConfidenceMaximumExclusive": 50
+    },
+    "customerTerm": "priority opportunity",
+    "prohibitedCustomerTerms": [
+      "weakness",
+      "failure",
+      "poor performer"
+    ],
+    "forceFindingWhenThresholdNotMet": false
+  },
+  "patterns": [
+    {
+      "id": "ddna2.pat_leadership_decision_gap",
+      "version": "2.0.0",
+      "order": 1,
+      "priority": 100,
+      "severity": "critical",
+      "exclusiveGroup": "leadership_control_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "sponsorship_accountability",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "capability": "governance_decision_making",
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Executive sponsorship and decision-making both need attention, increasing the likelihood that barriers and trade-offs remain unresolved."
+    },
+    {
+      "id": "ddna2.pat_strategy_portfolio_disconnect",
+      "version": "2.0.0",
+      "order": 2,
+      "priority": 85,
+      "severity": "high",
+      "exclusiveGroup": "direction_value_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "strategic_alignment",
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "capability": "portfolio_prioritisation",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "difference": {
+            "leftMean": [
+              "strategic_alignment"
+            ],
+            "rightMean": [
+              "portfolio_prioritisation"
+            ]
+          },
+          "operator": "gte",
+          "value": 25
+        }
+      ],
+      "explanation": "Strategic intent is clearer than the choices used to start, stop and sequence delivery work."
+    },
+    {
+      "id": "ddna2.pat_overcommitted_delivery_system",
+      "version": "2.0.0",
+      "order": 3,
+      "priority": 95,
+      "severity": "critical",
+      "exclusiveGroup": "delivery_balance_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "portfolio_prioritisation",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "capability": "capacity_delivery_ecosystem",
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Prioritisation and capacity both need attention, indicating that commitments may exceed the delivery system's realistic ability to deliver."
+    },
+    {
+      "id": "ddna2.pat_delivery_without_control",
+      "version": "2.0.0",
+      "order": 4,
+      "priority": 80,
+      "severity": "high",
+      "exclusiveGroup": "delivery_balance_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "delivery_approach_lifecycle",
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "capability": "planning_control_dependencies",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "difference": {
+            "leftMean": [
+              "delivery_approach_lifecycle"
+            ],
+            "rightMean": [
+              "planning_control_dependencies"
+            ]
+          },
+          "operator": "gte",
+          "value": 25
+        }
+      ],
+      "explanation": "Teams have workable delivery approaches, but planning, dependency and control evidence is not keeping pace."
+    },
+    {
+      "id": "ddna2.pat_value_visibility_gap",
+      "version": "2.0.0",
+      "order": 5,
+      "priority": 85,
+      "severity": "high",
+      "exclusiveGroup": "value_visibility_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "benefits_value",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "capability": "data_reporting_decision_insight",
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Benefits and decision insight both need attention, limiting visibility of whether delivery is creating the intended value."
+    },
+    {
+      "id": "ddna2.pat_delivery_adoption_gap",
+      "version": "2.0.0",
+      "order": 6,
+      "priority": 75,
+      "severity": "high",
+      "exclusiveGroup": "people_adoption_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "delivery_approach_lifecycle",
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "capability": "stakeholder_change_adoption",
+          "operator": "lt",
+          "value": 50
+        },
+        {
+          "difference": {
+            "leftMean": [
+              "delivery_approach_lifecycle"
+            ],
+            "rightMean": [
+              "stakeholder_change_adoption"
+            ]
+          },
+          "operator": "gte",
+          "value": 25
+        }
+      ],
+      "explanation": "Delivery mechanics are stronger than the organisation's ability to prepare people for change and sustain adoption."
+    },
+    {
+      "id": "ddna2.pat_insight_without_learning",
+      "version": "2.0.0",
+      "order": 7,
+      "priority": 70,
+      "severity": "medium",
+      "exclusiveGroup": "learning_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "data_reporting_decision_insight",
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "capability": "learning_adaptability_improvement",
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Useful delivery information exists, but it is not consistently producing sustained improvements."
+    },
+    {
+      "id": "ddna2.pat_digital_governance_gap",
+      "version": "2.0.0",
+      "order": 8,
+      "priority": 80,
+      "severity": "high",
+      "exclusiveGroup": "digital_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "digital_automation_responsible_ai",
+          "operator": "gte",
+          "value": 50
+        },
+        {
+          "aggregate": "mean",
+          "capabilities": [
+            "governance_decision_making",
+            "risk_assurance_resilience"
+          ],
+          "operator": "lt",
+          "value": 50
+        }
+      ],
+      "explanation": "Digital, automation or AI use is progressing while the wider governance and risk environment needs attention."
+    },
+    {
+      "id": "ddna2.pat_resilient_delivery_foundation",
+      "version": "2.0.0",
+      "order": 9,
+      "priority": 40,
+      "severity": "positive",
+      "exclusiveGroup": "leadership_control_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "governance_decision_making",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "planning_control_dependencies",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "risk_assurance_resilience",
+          "operator": "gte",
+          "value": 75
+        }
+      ],
+      "explanation": "Governance, planning and risk evidence indicate a resilient foundation for delivery."
+    },
+    {
+      "id": "ddna2.pat_adaptive_learning_system",
+      "version": "2.0.0",
+      "order": 10,
+      "priority": 40,
+      "severity": "positive",
+      "exclusiveGroup": "learning_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "data_reporting_decision_insight",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "learning_adaptability_improvement",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "leadership_culture_collaboration",
+          "operator": "gte",
+          "value": 75
+        }
+      ],
+      "explanation": "Trusted insight, collaborative leadership and embedded improvement indicate an adaptive learning system."
+    },
+    {
+      "id": "ddna2.pat_value_led_portfolio",
+      "version": "2.0.0",
+      "order": 11,
+      "priority": 40,
+      "severity": "positive",
+      "exclusiveGroup": "direction_value_state",
+      "minimumCapabilityConfidence": 50,
+      "predicates": [
+        {
+          "capability": "strategic_alignment",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "portfolio_prioritisation",
+          "operator": "gte",
+          "value": 75
+        },
+        {
+          "capability": "benefits_value",
+          "operator": "gte",
+          "value": 75
+        }
+      ],
+      "explanation": "Strategy, portfolio choices and benefits evidence combine to create a value-led investment system."
+    }
+  ],
+  "patternConflictPolicy": {
+    "withinExclusiveGroup": "highest_priority_then_order_then_pattern_id",
+    "crossGroup": "retain_all",
+    "customerMaximum": 5
+  },
+  "recommendationPolicy": {
+    "maximumOverview": 3,
+    "rankFormula": {
+      "impact": 0.4,
+      "urgency": 0.25,
+      "confidence": 0.15,
+      "effortEase": 0.1,
+      "dependencyReadiness": 0.1
+    },
+    "impactValues": {
+      "low": 25,
+      "medium": 60,
+      "high": 90
+    },
+    "effortEaseValues": {
+      "low": 100,
+      "medium": 60,
+      "high": 25
+    },
+    "urgencyMethod": "max_trigger_severity_or_100_minus_opportunity_score",
+    "confidenceGates": {
+      "highMinimum": 75,
+      "moderateMinimum": 50,
+      "lowMaximumExclusive": 50,
+      "lowConfidenceWithholdEffort": [
+        "medium",
+        "high"
+      ]
+    },
+    "sort": [
+      "rank_score_desc",
+      "impact_desc",
+      "urgency_desc",
+      "effort_ease_desc",
+      "catalogue_order_asc",
+      "recommendation_id_asc"
+    ],
+    "deduplication": "merge_by_dedupe_group_into_lowest_catalogue_order",
+    "dependencyReadiness": {
+      "ready": 100,
+      "selectedDependency": 60,
+      "unavailableDependency": 0
+    }
+  },
+  "recommendations": [
+    {
+      "id": "ddna2.rec_strategy_line_of_sight",
+      "order": 1,
+      "title": "Create a clear line of sight from strategy to delivery",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "strategy_direction",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "strategic_alignment"
+          },
+          {
+            "pattern": "ddna2.pat_strategy_portfolio_disconnect"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_value_led_portfolio"
+        }
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Agree the intended outcome and strategic contribution for each current priority.",
+      "outcome": "Delivery choices and trade-offs are visibly connected to current organisational priorities.",
+      "successMeasures": [
+        "Every material delivery priority has an agreed strategic outcome",
+        "Priority reviews record changes made when strategy or context shifts"
+      ]
+    },
+    {
+      "id": "ddna2.rec_portfolio_choices",
+      "order": 2,
+      "title": "Make portfolio choices against value and capacity",
+      "impact": "high",
+      "effort": "high",
+      "dedupeGroup": "portfolio_direction",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "portfolio_prioritisation"
+          },
+          {
+            "pattern": "ddna2.pat_strategy_portfolio_disconnect"
+          },
+          {
+            "pattern": "ddna2.pat_overcommitted_delivery_system"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_value_led_portfolio"
+        }
+      ],
+      "dependencies": [
+        "ddna2.rec_strategy_line_of_sight"
+      ],
+      "firstStep": "Create one current list of active and proposed work with agreed selection criteria.",
+      "outcome": "Work is started, stopped and sequenced through transparent value and capacity trade-offs.",
+      "successMeasures": [
+        "All active initiatives have an agreed priority and accountable decision",
+        "Portfolio reviews record at least one explicit start, stop, sequence or capacity decision where needed"
+      ]
+    },
+    {
+      "id": "ddna2.rec_benefits_ownership",
+      "order": 3,
+      "title": "Assign benefits ownership and measures",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "value_realisation",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "benefits_value"
+          },
+          {
+            "pattern": "ddna2.pat_value_visibility_gap"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_value_led_portfolio"
+        }
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Name an owner, baseline, target and review date for each priority benefit.",
+      "outcome": "Expected value remains owned and measurable through delivery and after implementation.",
+      "successMeasures": [
+        "Every priority benefit has a named owner, baseline, target and review date",
+        "Benefit reviews record corrective action where value is off track"
+      ]
+    },
+    {
+      "id": "ddna2.rec_sponsor_contract",
+      "order": 4,
+      "title": "Establish an active sponsor contract",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "sponsor_foundation",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "sponsorship_accountability"
+          },
+          {
+            "pattern": "ddna2.pat_leadership_decision_gap"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Agree each sponsor's outcome accountability, decision rights and intervention cadence.",
+      "outcome": "Sponsors provide timely direction, trade-off decisions and barrier removal.",
+      "successMeasures": [
+        "Named sponsor accountabilities are agreed for every material initiative",
+        "Sponsor decisions and barrier-removal actions are reviewed at the agreed cadence"
+      ]
+    },
+    {
+      "id": "ddna2.rec_decision_governance",
+      "order": 5,
+      "title": "Define decision rights and a proportionate governance cadence",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "governance_foundation",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "governance_decision_making"
+          },
+          {
+            "pattern": "ddna2.pat_leadership_decision_gap"
+          },
+          {
+            "pattern": "ddna2.pat_digital_governance_gap"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_resilient_delivery_foundation"
+        }
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "List the priority decision types, accountable decision-makers and escalation thresholds.",
+      "outcome": "Decisions have clear owners, forums, thresholds and follow-through.",
+      "successMeasures": [
+        "All priority decision types have an accountable owner and route",
+        "Material decisions and actions are recorded and reviewed to closure"
+      ]
+    },
+    {
+      "id": "ddna2.rec_risk_assurance",
+      "order": 6,
+      "title": "Strengthen risk, assurance and resilience action",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "risk_control",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "risk_assurance_resilience"
+          },
+          {
+            "pattern": "ddna2.pat_digital_governance_gap"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_resilient_delivery_foundation"
+        }
+      ],
+      "dependencies": [
+        "ddna2.rec_decision_governance"
+      ],
+      "firstStep": "Agree the material exposure thresholds that require escalation or independent challenge.",
+      "outcome": "Material risks and assurance findings reach accountable decision-makers in time to act.",
+      "successMeasures": [
+        "Material risks and findings have owners, deadlines and escalation thresholds",
+        "Overdue actions and consciously accepted exposure are reviewed at the agreed cadence"
+      ]
+    },
+    {
+      "id": "ddna2.rec_fit_delivery_approach",
+      "order": 7,
+      "title": "Tailor the delivery approach to the work",
+      "impact": "medium",
+      "effort": "medium",
+      "dedupeGroup": "delivery_approach",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "delivery_approach_lifecycle"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Define the outcomes, uncertainty, feedback needs and quality expectations for one priority initiative.",
+      "outcome": "Teams use proportionate lifecycles and ways of working suited to value, complexity and uncertainty.",
+      "successMeasures": [
+        "Priority initiatives record why their delivery approach fits the work",
+        "Review points demonstrate at least one evidence-led adaptation where needed"
+      ]
+    },
+    {
+      "id": "ddna2.rec_integrated_planning",
+      "order": 8,
+      "title": "Create an integrated planning and dependency baseline",
+      "impact": "high",
+      "effort": "high",
+      "dedupeGroup": "delivery_controls",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "planning_control_dependencies"
+          },
+          {
+            "pattern": "ddna2.pat_delivery_without_control"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_resilient_delivery_foundation"
+        }
+      ],
+      "dependencies": [
+        "ddna2.rec_decision_governance"
+      ],
+      "firstStep": "Identify the critical outcomes, milestones, dependencies, tolerances and owners for priority work.",
+      "outcome": "Current plans, forecasts and dependencies support timely decisions and corrective action.",
+      "successMeasures": [
+        "Critical milestones and dependencies have named owners and current forecasts",
+        "Variance and dependency impacts are reviewed through the agreed decision route"
+      ]
+    },
+    {
+      "id": "ddna2.rec_balance_capacity",
+      "order": 9,
+      "title": "Balance delivery demand with realistic capacity",
+      "impact": "high",
+      "effort": "high",
+      "dedupeGroup": "capacity_balance",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "capacity_delivery_ecosystem"
+          },
+          {
+            "pattern": "ddna2.pat_overcommitted_delivery_system"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+        "ddna2.rec_portfolio_choices"
+      ],
+      "firstStep": "Compare committed demand with available critical roles, skills, funding and supplier capacity.",
+      "outcome": "Commitments reflect realistic capacity and material constraints are addressed before they disrupt delivery.",
+      "successMeasures": [
+        "Priority work has an agreed capacity position and named constraint owners",
+        "Portfolio reviews record demand reductions or capacity changes when commitments exceed constraints"
+      ]
+    },
+    {
+      "id": "ddna2.rec_collaborative_leadership",
+      "order": 10,
+      "title": "Create the conditions for early challenge and collaboration",
+      "impact": "medium",
+      "effort": "medium",
+      "dedupeGroup": "delivery_culture",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "leadership_culture_collaboration"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_adaptive_learning_system"
+        }
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Agree observable leadership behaviours for raising concerns, making decisions and resolving cross-team barriers.",
+      "outcome": "Teams surface problems early and collaborate across boundaries with shared accountability.",
+      "successMeasures": [
+        "Teams can describe the agreed route for constructive challenge",
+        "Material cross-team barriers have owners and resolution dates"
+      ]
+    },
+    {
+      "id": "ddna2.rec_change_adoption",
+      "order": 11,
+      "title": "Integrate stakeholder adoption into delivery",
+      "impact": "high",
+      "effort": "medium",
+      "dedupeGroup": "change_adoption",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "stakeholder_change_adoption"
+          },
+          {
+            "pattern": "ddna2.pat_delivery_adoption_gap"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+        "ddna2.rec_sponsor_contract"
+      ],
+      "firstStep": "Identify the groups most affected by priority change and define the adoption outcome for each.",
+      "outcome": "Stakeholders shape the change and receive the support needed for sustained adoption.",
+      "successMeasures": [
+        "Priority stakeholder groups have owners, impacts and adoption measures",
+        "Adoption evidence is reviewed and leads to corrective action where needed"
+      ]
+    },
+    {
+      "id": "ddna2.rec_enablement_service",
+      "order": 12,
+      "title": "Shape delivery enablement around team needs",
+      "impact": "medium",
+      "effort": "medium",
+      "dedupeGroup": "delivery_enablement",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "delivery_capability_enablement"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "List current enablement services and ask delivery teams which remove friction or add avoidable effort.",
+      "outcome": "Coaching, standards, tools and coordination improve delivery rather than add ceremony.",
+      "successMeasures": [
+        "Every enablement service has a clear customer need and intended outcome",
+        "Low-value services are improved or retired using team feedback and evidence"
+      ]
+    },
+    {
+      "id": "ddna2.rec_decision_insight",
+      "order": 13,
+      "title": "Create trusted outcome-led delivery insight",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "delivery_visibility",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "data_reporting_decision_insight"
+          },
+          {
+            "pattern": "ddna2.pat_value_visibility_gap"
+          },
+          {
+            "pattern": "ddna2.pat_insight_without_learning"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_adaptive_learning_system"
+        }
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Remove one low-value status measure and replace it with the outcome, forecast or decision evidence leaders need.",
+      "outcome": "Leaders receive timely, trusted evidence about outcomes, forecasts, risks and decisions.",
+      "successMeasures": [
+        "Executive reporting identifies intended decisions and material exceptions",
+        "Manual collation effort and disputed data are measured and reduced"
+      ]
+    },
+    {
+      "id": "ddna2.rec_improvement_cadence",
+      "order": 14,
+      "title": "Turn delivery learning into completed improvements",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "learning_system",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "learning_adaptability_improvement"
+          },
+          {
+            "pattern": "ddna2.pat_insight_without_learning"
+          }
+        ]
+      },
+      "exclusions": [
+        {
+          "pattern": "ddna2.pat_adaptive_learning_system"
+        }
+      ],
+      "dependencies": [
+        "ddna2.rec_decision_insight"
+      ],
+      "firstStep": "Select one recurring delivery friction and assign an owner, experiment and review date.",
+      "outcome": "Lessons and performance signals produce owned, measurable and reusable improvements.",
+      "successMeasures": [
+        "Improvement actions have owners, measures and review dates",
+        "Completed improvements record their effect and where they were reused"
+      ]
+    },
+    {
+      "id": "ddna2.rec_responsible_digital",
+      "order": 15,
+      "title": "Focus digital, automation and AI on governed value",
+      "impact": "medium",
+      "effort": "medium",
+      "dedupeGroup": "responsible_digital",
+      "triggers": {
+        "any": [
+          {
+            "opportunity": "digital_automation_responsible_ai"
+          },
+          {
+            "pattern": "ddna2.pat_digital_governance_gap"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+        "ddna2.rec_decision_governance",
+        "ddna2.rec_decision_insight"
+      ],
+      "firstStep": "Choose one relevant use case and define its intended outcome, owner, data permissions, human review and success measure.",
+      "outcome": "Useful digital, automation and AI capabilities are adopted with accountable human oversight and proportionate safeguards.",
+      "successMeasures": [
+        "Each active priority use case has an owner, outcome, approved data access and human review route",
+        "Adoption, quality, realised value and unintended effects are reviewed against agreed measures"
+      ]
+    },
+    {
+      "id": "ddna2.rec_deepen_evidence",
+      "order": 16,
+      "title": "Validate the result with broader and more current evidence",
+      "impact": "medium",
+      "effort": "low",
+      "dedupeGroup": "evidence_quality",
+      "triggers": {
+        "any": [
+          {
+            "analysisConfidence": "low"
+          }
+        ]
+      },
+      "exclusions": [
+
+      ],
+      "dependencies": [
+
+      ],
+      "firstStep": "Identify the material priorities supported by the least current or narrowest evidence.",
+      "outcome": "Material decisions are supported by broader, more current and more consistent evidence.",
+      "successMeasures": [
+        "Confidence reaches at least moderate before significant action is committed",
+        "Material disagreements and missing evidence are explicitly recorded"
+      ]
+    }
+  ],
+  "roadmapPolicy": {
+    "horizons": [
+      "day30",
+      "day60",
+      "day90"
+    ],
+    "capacity": {
+      "day30": 3,
+      "day60": 3,
+      "day90": 4
+    },
+    "sequence": "topological_then_recommendation_rank",
+    "dependencyCycleError": "ROADMAP_DEPENDENCY_CYCLE",
+    "unscheduledReasons": [
+      "capacity_exceeded",
+      "dependency_unavailable"
+    ],
+    "customerBoundary": "bounded_direction_not_guaranteed_transformation_plan"
+  },
+  "narrativePolicy": {
+    "overviewWordLimit": 700,
+    "snapshotWordLimit": 220,
+    "sectionLimits": {
+      "overall_position": 55,
+      "confidence": 40,
+      "strength_item": 35,
+      "opportunity_item": 45,
+      "recommendation_item": 55,
+      "industry_context_item": 45
+    },
+    "tone": [
+      "executive",
+      "neutral",
+      "constructive",
+      "concise",
+      "evidence_led",
+      "non_alarmist",
+      "plain_english"
+    ],
+    "mandatorySections": [
+      "overall_position",
+      "domain_profile",
+      "strengths",
+      "priority_opportunities",
+      "confidence_and_limitations",
+      "recommendations",
+      "industry_context",
+      "next_step"
+    ],
+    "templates": {
+      "overall_position": "Your overall Delivery DNA is {overallBand}. {leadingFact} {priorityFact}",
+      "confidence": "Confidence in this result is {confidenceBand}. {confidenceLimitationSummary}",
+      "strength": "{capabilityLabel} is a relative strength. {strengthReason}",
+      "opportunity": "{capabilityLabel} is a priority opportunity. {opportunityReason}",
+      "recommendation": "{recommendationTitle}. Start by {firstStep} Expected outcome: {expectedOutcome}",
+      "industry_context": "{approvedCustomerWording}{footnoteMarker}",
+      "industry_source_note": "{footnoteMarker}Source: {publisher}, {publicationTitle}, {evidenceYear}. {scopeCaveat} General industry context; not a benchmark or comparison with your organisation.",
+      "low_confidence_caveat": "This result is directional because the available evidence has low confidence. Validate material priorities before committing significant action.",
+      "overall_unavailable_caveat": "An overall Delivery DNA result is unavailable because fewer than eleven capabilities, or fewer than two capabilities in a domain, have sufficient evidence."
+    },
+    "prohibitedClaims": [
+      "causal_certainty",
+      "guarantee",
+      "legal_compliance",
+      "regulatory_compliance",
+      "cross_organisation_comparison",
+      "predictive_success_or_failure",
+      "respondent_intent",
+      "untraced_root_cause",
+      "independent_verification",
+      "certification"
+    ]
+  },
+  "contextSelectionPolicy": {
+    "catalogueAuthority": "DIQ-204A",
+    "catalogueVersion": "1.2.0",
+    "requiredEvidenceStatus": "approved_for_customer_context",
+    "scoringEffect": "none",
+    "snapshotMaximum": 1,
+    "overviewDashboardMaximum": 3,
+    "reportMaximumPerOpportunity": 1,
+    "eligibility": "mapped_to_displayed_domain_or_priority_opportunity",
+    "sort": [
+      "mapping_priority_asc",
+      "evidence_grade_asc",
+      "published_at_desc",
+      "evidence_id_asc"
+    ],
+    "expiredOrUnavailableTreatment": "omit_without_replacement_claim",
+    "projectionRequiredFields": [
+      "evidenceId",
+      "evidenceVersion",
+      "approvedCustomerWording",
+      "footnoteMarker",
+      "sourcePublisher",
+      "sourceTitle",
+      "evidenceYear",
+      "scopeCaveat",
+      "selectionReason"
+    ],
+    "snapshotDomainFallback": "omit_when_no_approved_mapping"
+  },
+  "traceabilityPolicy": {
+    "requiredNodeTypes": [
+      "response",
+      "question",
+      "capability_contribution",
+      "capability_score",
+      "domain_score",
+      "overall_score",
+      "confidence_factor",
+      "confidence_result",
+      "finding",
+      "pattern",
+      "recommendation",
+      "roadmap_item",
+      "industry_context_item",
+      "narrative_fact",
+      "presentation_item"
+    ],
+    "requiredVersionFields": [
+      "questionSetVersion",
+      "configurationSetId",
+      "ruleId",
+      "ruleVersion",
+      "evidenceId",
+      "evidenceVersion",
+      "analysisRunId"
+    ],
+    "immutableProjectionInputs": true,
+    "customerExplainability": "plain_language_reason_and_evidence_summary_without_restricted_logic"
+  },
+  "compatibility": {
+    "cutoverMode": "clean_replacement",
+    "deliveryDna21OnlySupportedCustomerJourneyAfterCutover": true,
+    "responseTranslationFrom1To21Allowed": false,
+    "scoreRecalculationFrom1To21Allowed": false,
+    "directTrendClaimAllowed": false,
+    "deliveryDna1CompletionGracePeriodRequired": false,
+    "deliveryDna1CustomerFacingResultPreservationRequired": false,
+    "inProgress1Journey": "restart_delivery_dna_21_snapshot",
+    "newIdPrefix": "ddna2.",
+    "existingImmutableRecordsTreatment": "retain_internally_under_existing_immutability_audit_and_retention_rules_until_authorised_disposal",
+    "destructiveDeletionAuthorisedByCutover": false,
+    "genuinePaid1PurchasePreflightRequired": false,
+    "genuinePaid1CustomersConfirmed": 0,
+    "genuinePaid1CustomersConfirmedAt": "2026-08-04",
+    "genuinePaid1CustomersConfirmedBy": "Matt Prust",
+    "deliveryDna1CommerceActivationBefore21CutoverAllowed": false,
+    "paidCustomerMigrationRequired": false,
+    "paidCustomerFulfilmentOrRefundRemediationRequired": false,
+    "responseTranslationFrom20To21Allowed": false,
+    "scoreRecalculationFrom20To21Allowed": false,
+    "deliveryDna20JourneyAfter21Cutover": "restart_delivery_dna_21_snapshot",
+    "existing20RecordsTreatment": "retain_with_2.0.0_provenance_no_2.1_analysis"
+  },
+  "unresolvedFounderDecisions": [
+
+  ],
+  "approvedFounderDecisions": [
+    {
+      "id": "DDNA2-05",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "delivery_dna_2_cleanly_replaces_1_without_customer_facing_result_preservation_mapping_recalculation_or_completion_grace_period"
+    },
+    {
+      "id": "DDNA2-05A",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "zero_paid_customers_confirmed_delivery_dna_1_commerce_remains_paused_no_paid_customer_cutover_remediation"
+    },
+    {
+      "id": "DDNA2-01A",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "delivery_dna_2_must_be_scale_neutral_and_support_enterprise_as_well_as_sme_use"
+    },
+    {
+      "id": "DDNA2-01",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "supported_scopes_are_whole_organisation_business_unit_or_division_function_and_defined_delivery_portfolio_or_system_individual_projects_excluded"
+    },
+    {
+      "id": "DDNA2-02",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "five_domains_and_fifteen_capabilities_approved_project_programme_and_portfolio_are_contexts_not_separate_capability_slots"
+    },
+    {
+      "id": "DDNA2-03",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "snapshot_has_non_numeric_overall_and_five_domain_levels_spider_chart_clear_outcomes_limited_signals_one_context_item_and_saved_snapshot_cta"
+    },
+    {
+      "id": "DDNA2-04",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "digital_automation_and_responsible_ai_is_named_outcome_led_capability_without_automatic_penalty_for_non_use"
+    },
+    {
+      "id": "DDNA2-06",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "saved_snapshot_adds_persistence_return_download_and_exact_continuation_but_no_additional_diagnosis_primary_snapshot_cta_is_save_my_snapshot"
+    },
+    {
+      "id": "DDNA2-07",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "customer_maturity_labels_are_emerging_developing_established_and_leading"
+    },
+    {
+      "id": "DDNA2-08",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "all_questions_use_four_submitted_style_behavioural_anchors_emerging_developing_established_leading_plus_reason_required_not_applicable"
+    },
+    {
+      "id": "DDNA2-09",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "overview_is_self_service_and_evidence_led_not_independently_verified_human_review_reserved_for_future_assured_product"
+    },
+    {
+      "id": "DDNA2-10",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "contextual_evidence_has_no_scoring_effect_one_item_on_snapshot_up_to_three_on_overview_dashboard_with_visible_source_notes"
+    },
+    {
+      "id": "DDNA2-11",
+      "decidedAt": "2026-08-04",
+      "approver": "Matt Prust",
+      "decision": "single_lead_overview_launches_before_perspectives_model_remains_compatible_and_silent_respondent_averaging_is_prohibited"
+    },
+    {
+      "id": "DDNA2-12",
+      "decidedAt": "2026-08-05",
+      "approver": "Matt Prust",
+      "decision": "diq_100c_2.1_approved_37_submitted_questions_and_163_submitted_anchors_restored_exactly_with_four_edits_four_new_questions_and_snapshot_supporting_40_30_30_roles"
+    }
+  ],
+  "sourceReconciliation": {
+    "authority": "DIQ-100C@2.1",
+    "submittedQuestionCount": 45,
+    "submittedAnchorCount": 180,
+    "exactSubmittedQuestionsRetained": 37,
+    "founderApprovedEditedQuestions": 4,
+    "founderApprovedNewQuestions": 4,
+    "exactSubmittedAnchorsRetained": 163,
+    "founderApprovedEditedAnchors": 1,
+    "founderApprovedNewAnchors": 16,
+    "canonicalContentDigest": {
+      "algorithm": "sha256",
+      "canonicalisation": "compact JSON array in domain, capability and question order; each object contains questionId, prompt, role, weight and answers; each answer contains id, value and text",
+      "value": "3a7cf219fbdbc51902248e21ef6489ca6dc67ddab5cdc22f41081f885668d7a3"
+    },
+    "retiredSubmittedQuestionIds": [
+      "Q19",
+      "Q21",
+      "Q22",
+      "Q26"
+    ],
+    "questionTrace": {
+      "ddna2.strategic_alignment.snapshot": {
+        "sourceQuestion": "Q1",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.strategic_alignment.supporting_1": {
+        "sourceQuestion": "Q2",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.strategic_alignment.supporting_2": {
+        "sourceQuestion": "Q3",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.portfolio_prioritisation.snapshot": {
+        "sourceQuestion": "Q4",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.portfolio_prioritisation.supporting_1": {
+        "sourceQuestion": "Q5",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.portfolio_prioritisation.supporting_2": {
+        "sourceQuestion": "Q6",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.benefits_value.snapshot": {
+        "sourceQuestion": "Q7",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.benefits_value.supporting_1": {
+        "sourceQuestion": "Q8",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.benefits_value.supporting_2": {
+        "sourceQuestion": "Q9",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.sponsorship_accountability.snapshot": {
+        "sourceQuestion": "Q13",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.sponsorship_accountability.supporting_1": {
+        "sourceQuestion": "Q14",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.sponsorship_accountability.supporting_2": {
+        "sourceQuestion": "Q15",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.governance_decision_making.snapshot": {
+        "sourceQuestion": "Q10",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.governance_decision_making.supporting_1": {
+        "sourceQuestion": "Q11",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.governance_decision_making.supporting_2": {
+        "sourceQuestion": "Q12",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.risk_assurance_resilience.snapshot": {
+        "sourceQuestion": "Q16",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.risk_assurance_resilience.supporting_1": {
+        "sourceQuestion": "Q17",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.risk_assurance_resilience.supporting_2": {
+        "sourceQuestion": "Q18",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.delivery_approach_lifecycle.snapshot": {
+        "sourceQuestion": "Q31",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.delivery_approach_lifecycle.supporting_1": {
+        "sourceQuestion": "Q23",
+        "wordingStatus": "founder_approved_edit"
+      },
+      "ddna2.delivery_approach_lifecycle.supporting_2": {
+        "sourceQuestion": null,
+        "wordingStatus": "new_founder_approved"
+      },
+      "ddna2.planning_control_dependencies.snapshot": {
+        "sourceQuestion": "Q25",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.planning_control_dependencies.supporting_1": {
+        "sourceQuestion": "Q20",
+        "wordingStatus": "founder_approved_edit"
+      },
+      "ddna2.planning_control_dependencies.supporting_2": {
+        "sourceQuestion": "Q27",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.capacity_delivery_ecosystem.snapshot": {
+        "sourceQuestion": null,
+        "wordingStatus": "new_founder_approved"
+      },
+      "ddna2.capacity_delivery_ecosystem.supporting_1": {
+        "sourceQuestion": null,
+        "wordingStatus": "new_founder_approved"
+      },
+      "ddna2.capacity_delivery_ecosystem.supporting_2": {
+        "sourceQuestion": "Q36",
+        "wordingStatus": "founder_approved_edit"
+      },
+      "ddna2.leadership_culture_collaboration.snapshot": {
+        "sourceQuestion": null,
+        "wordingStatus": "new_founder_approved"
+      },
+      "ddna2.leadership_culture_collaboration.supporting_1": {
+        "sourceQuestion": "Q24",
+        "wordingStatus": "founder_approved_edit"
+      },
+      "ddna2.leadership_culture_collaboration.supporting_2": {
+        "sourceQuestion": "Q33",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.stakeholder_change_adoption.snapshot": {
+        "sourceQuestion": "Q28",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.stakeholder_change_adoption.supporting_1": {
+        "sourceQuestion": "Q29",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.stakeholder_change_adoption.supporting_2": {
+        "sourceQuestion": "Q30",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.delivery_capability_enablement.snapshot": {
+        "sourceQuestion": "Q34",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.delivery_capability_enablement.supporting_1": {
+        "sourceQuestion": "Q32",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.delivery_capability_enablement.supporting_2": {
+        "sourceQuestion": "Q35",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.data_reporting_decision_insight.snapshot": {
+        "sourceQuestion": "Q37",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.data_reporting_decision_insight.supporting_1": {
+        "sourceQuestion": "Q38",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.data_reporting_decision_insight.supporting_2": {
+        "sourceQuestion": "Q39",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.learning_adaptability_improvement.snapshot": {
+        "sourceQuestion": "Q40",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.learning_adaptability_improvement.supporting_1": {
+        "sourceQuestion": "Q41",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.learning_adaptability_improvement.supporting_2": {
+        "sourceQuestion": "Q42",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.digital_automation_responsible_ai.snapshot": {
+        "sourceQuestion": "Q43",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.digital_automation_responsible_ai.supporting_1": {
+        "sourceQuestion": "Q44",
+        "wordingStatus": "submitted_exact"
+      },
+      "ddna2.digital_automation_responsible_ai.supporting_2": {
+        "sourceQuestion": "Q45",
+        "wordingStatus": "submitted_exact"
+      }
+    }
+  }
+}

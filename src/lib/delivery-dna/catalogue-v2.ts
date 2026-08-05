@@ -1,14 +1,16 @@
-import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A Delivery DNA 2.0 Model Catalogue.json";
+import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A v2.1.0 Delivery DNA Model Catalogue.json";
 
 export const DELIVERY_DNA_V2_ASSESSMENT_TYPE = "delivery-dna";
-export const DELIVERY_DNA_V2_VERSION = "2.0.0";
-export const DELIVERY_DNA_V2_CONFIGURATION_SET_ID = "delivery-dna-product-config-2.0.0";
-/** SHA-256 of the exact locked DIQ-100A v2.0.0 catalogue bytes. */
+export const DELIVERY_DNA_V2_VERSION = "2.1.0";
+export const DELIVERY_DNA_V2_CONFIGURATION_SET_ID = "delivery-dna-product-config-2.1.0";
+/** SHA-256 of the exact locked DIQ-100A v2.1.0 catalogue bytes. */
 export const DELIVERY_DNA_V2_CONFIGURATION_DIGEST =
-  "ba5479607b361a1037977394066b98e852234f4917ba1b8829eee032e45a571e";
+  "ad4c21feb0076a5fb46190caafca978e782874907a9fcad3ab4cb77ca50dc1e7";
+export const DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST =
+  "3a7cf219fbdbc51902248e21ef6489ca6dc67ddab5cdc22f41081f885668d7a3";
 export const DELIVERY_DNA_V2_NOT_APPLICABLE_REASON = "customer_declared_not_applicable";
 
-export type DeliveryDnaV2Dimension = "foundation" | "practice" | "evidence";
+export type DeliveryDnaV2Dimension = "snapshot" | "supporting_1" | "supporting_2";
 export type DeliveryDnaV2Level = "emerging" | "developing" | "established" | "leading";
 
 export interface DeliveryDnaV2AnswerOption {
@@ -19,7 +21,7 @@ export interface DeliveryDnaV2AnswerOption {
 
 export interface DeliveryDnaV2Question {
   id: string;
-  dimension: DeliveryDnaV2Dimension;
+  role: DeliveryDnaV2Dimension;
   weight: number;
   required: boolean;
   snapshot: boolean;
@@ -56,7 +58,17 @@ function validateCatalogue(value: RawCatalogue): RawCatalogue {
     value.identity.assessmentType !== DELIVERY_DNA_V2_ASSESSMENT_TYPE ||
     value.identity.knowledgePackVersion !== DELIVERY_DNA_V2_VERSION ||
     value.identity.questionSetVersion !== DELIVERY_DNA_V2_VERSION ||
-    value.identity.configurationSetId !== DELIVERY_DNA_V2_CONFIGURATION_SET_ID
+    value.identity.configurationSetId !== DELIVERY_DNA_V2_CONFIGURATION_SET_ID ||
+    value.sourceReconciliation.authority !== "DIQ-100C@2.1" ||
+    value.sourceReconciliation.exactSubmittedQuestionsRetained !== 37 ||
+    value.sourceReconciliation.founderApprovedEditedQuestions !== 4 ||
+    value.sourceReconciliation.founderApprovedNewQuestions !== 4 ||
+    value.sourceReconciliation.exactSubmittedAnchorsRetained !== 163 ||
+    value.sourceReconciliation.founderApprovedEditedAnchors !== 1 ||
+    value.sourceReconciliation.founderApprovedNewAnchors !== 16 ||
+    value.sourceReconciliation.canonicalContentDigest.value !==
+      DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST ||
+    value.unresolvedFounderDecisions.length !== 0
   ) {
     throw new Error("DELIVERY_DNA_V2_CATALOGUE_INVALID: identity");
   }
@@ -78,13 +90,19 @@ function validateCatalogue(value: RawCatalogue): RawCatalogue {
     new Set(questionIds).size !== 45 ||
     snapshotIds.length !== 15 ||
     new Set(snapshotIds).size !== 15 ||
+    !questions.every((question) =>
+      /^ddna2\.[a-z_]+\.(snapshot|supporting_1|supporting_2)$/.test(question.id),
+    ) ||
     !capabilities.every(
       (capability) =>
         capability.questions.length === 3 &&
         capability.questions.filter((question) => question.snapshot).length === 1 &&
+        capability.questions.map((question) => question.role).join(",") ===
+          "snapshot,supporting_1,supporting_2" &&
+        capability.questions.map((question) => question.weight).join(",") === "0.4,0.3,0.3" &&
         capability.questions.some(
           (question) =>
-            question.id === capability.snapshotQuestionId && question.dimension === "practice",
+            question.id === capability.snapshotQuestionId && question.role === "snapshot",
         ),
     ) ||
     !exactQuestionSets ||
@@ -186,13 +204,16 @@ export function deliveryDnaV2CutoverDecision(input: {
   if (
     input.sourceQuestionSetVersion !== DELIVERY_DNA_V2_VERSION &&
     input.targetQuestionSetVersion === DELIVERY_DNA_V2_VERSION &&
-    input.requestedAction === "translate_responses"
+    ["translate_responses", "translate_or_analyse_responses"].includes(input.requestedAction)
   ) {
     return {
       allowed: false as const,
       reasonCode: "DELIVERY_DNA_VERSION_TRANSLATION_PROHIBITED" as const,
-      restartTarget: "delivery-dna-snapshot-2.0.0" as const,
+      restartTarget: "delivery-dna-snapshot-2.1.0" as const,
       historyMutated: false as const,
+      ...(input.requestedAction === "translate_or_analyse_responses"
+        ? { analysisRunCreated: false as const }
+        : {}),
     };
   }
   return { allowed: input.sourceQuestionSetVersion === input.targetQuestionSetVersion };

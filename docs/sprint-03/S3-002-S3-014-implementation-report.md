@@ -196,3 +196,33 @@ PR #46 merged as `11475df7d8b4e48a54464d499cf1c4150aacf36f`. Production prefligh
 Hosted Snapshot `cab3e03d-10ef-42a6-89ae-f9b659d6d0be` completed the exact 15-ID 2.0 manifest with a save-before-advance and Back/edit check. It returned the locked overall and five-domain non-numeric result after a measured 5.4-second preparation interval, exposed the accessible profile and source-caveated context, and routed “Save my Snapshot” to the approved registration boundary. Database evidence shows version/presentation `2.0.0`, 15 answered responses in order, 24-hour anonymous expiry, no linked identity or tenant and no change to the 30 assessments, three hand-offs/runs or two intelligence results. Eleven historical 1.x sessions, 66 historical responses and 96 historical funnel events remain intact. An unauthenticated checkout attempt returned 401 and all commerce tables remained empty.
 
 Stripe credentials and the approved provider price reference remain unavailable, so checkout remains safely unavailable and an authorised purchase-to-result smoke cannot be manufactured. The hosted browser was not authenticated and its temporary 390px/1440px viewport override did not take effect; private Saved Snapshot persistence/download and paid fulfilment therefore remain externally blocked hosted checks, while their focused tenant, projection, PDF and responsive tests pass. Snapshot and all non-provider-dependent 2.0 behaviour are live.
+
+## Delivery DNA 2.1 corrected replacement — 5 August 2026
+
+### Customer value and corrected product model
+
+Delivery DNA 2.1 replaces new 2.0 collection with the founder-reconciled wording while retaining the same smallest customer journey: 15-question anonymous Snapshot, Saved Snapshot, configurable £295 Overview offer, 30 supporting questions after verified payment and one bounded web/download Overview. The runtime uses exactly five domains, 15 capabilities, 45 question IDs and 180 answer anchors from DIQ-100A v2.1.0. Snapshot/supporting roles and weights are 40/30/30; the obsolete Foundation/Practice/Evidence role model is not used for 2.1.
+
+The deterministic catalogue validator pins the locked identity and canonical digest and checks the approved reconciliation totals: 37 exact submitted questions, four founder-approved edits, four approved new questions, 163 exact anchors, one edited anchor and 16 new anchors. No prompt or answer anchor is duplicated into presentation conditionals.
+
+### Cutover, security and history
+
+- New service-role-only database functions create and link only 2.1 Snapshots. Linking validates the versioned collection metadata, exact coverage, current 45-ID manifest, consent, verified identity, active membership and workspace ownership before creating an in-progress assessment with the 15 unchanged carried responses.
+- The hardening migration removes service-role execution from the 1.x and 2.0 collection/link entry points while preserving their tables, rows and immutable provenance. It contains no translation, recalculation, customer DML, synthetic checkout, payment or grant.
+- Existing 1.0 and 2.0 rows remain readable only under their historical rules. They cannot receive current 2.1 paid access or be analysed under 2.1. The current projection is an explicit allow-list and does not expose internal recommendation rules, success measures, raw evidence or unscheduled roadmap content.
+- The versioned 2.1 offer retains the £295 one-off GBP total, £0 VAT and exact non-VAT disclosure. Verified-event fulfilment remains idempotent, exact-scope and fail-closed. Stripe activation remains paused because approved provider credentials and a price reference are unavailable.
+
+### Verification actually run
+
+- All 45 DIQ-100B v2.1.0 fixtures: pass.
+- All 10 PDR-003-004A v2.1.0 fixtures: pass.
+- Historical Snapshot and all 53 DIQ-203B fixtures: pass unchanged.
+- Full Vitest regression: 633/633 tests across 48 files.
+- TypeScript `--noEmit`: pass.
+- Changed-file ESLint and Prettier: pass.
+- Migration security and privilege-shape tests: pass.
+- Production Vite/Nitro client, server and scheduled-task build: pass.
+
+### Remaining release evidence
+
+The managed cutover and hardening migrations, regenerated database types, fresh hosted 2.1 Snapshot completion and Product Owner visual promotion decision are recorded after deployment. Provider activation and the purchase-to-result smoke remain legitimately unavailable; checkout continues to fail closed and no customer evidence is manufactured.

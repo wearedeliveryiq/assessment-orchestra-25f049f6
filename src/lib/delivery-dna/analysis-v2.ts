@@ -593,7 +593,7 @@ export function analyseDeliveryDnaV2(input: {
     capabilityIds: findings.opportunities.map((item) => item.id),
   });
   return {
-    version: "2.0.0" as const,
+    version: "2.1.0" as const,
     capabilities,
     domains,
     overall,
@@ -617,7 +617,7 @@ export function analyseCanonicalInputV2(input: CanonicalAnalysisInput) {
     input.responses.length !== 45 ||
     input.responses.some((response) => !expected.has(response.questionId))
   ) {
-    throw new Error("ANALYSIS_INPUT_INVALID: incompatible Delivery DNA 2.0 manifest");
+    throw new Error("ANALYSIS_INPUT_INVALID: incompatible Delivery DNA 2.1 manifest");
   }
   const metadata = deliveryDnaV2EvidenceMetadataValues({
     evidenceRecencyDeclaration: input.assessment.evidenceRecencyDeclaration,
@@ -695,10 +695,10 @@ export function analyseCanonicalInputV2(input: CanonicalAnalysisInput) {
     rankScore: recommendation.rankScore,
   }));
   return {
-    schemaVersion: "deliveryiq.intelligence-result/2.0.0",
+    schemaVersion: "deliveryiq.intelligence-result/2.1.0",
     versions: {
-      configurationSetId: "delivery-dna-product-config-2.0.0",
-      configurationVersion: "2.0.0",
+      configurationSetId: "delivery-dna-product-config-2.1.0",
+      configurationVersion: "2.1.0",
       configurationDigest: DELIVERY_DNA_V2_CONFIGURATION_DIGEST,
     },
     scope: {

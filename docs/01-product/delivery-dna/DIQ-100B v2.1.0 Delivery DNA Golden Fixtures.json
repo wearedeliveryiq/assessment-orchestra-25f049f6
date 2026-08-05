@@ -1,0 +1,1799 @@
+{
+  "document": {
+    "id": "DIQ-100B",
+    "version": "2.1.0",
+    "status": "locked",
+    "title": "Delivery DNA 2.1 Golden Fixtures",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-05",
+    "configurationSetId": "delivery-dna-product-config-2.1.0",
+    "questionSetVersion": "2.1.0",
+    "supersedes": "DIQ-100B@2.0.0"
+  },
+  "contract": {
+    "allFixturesMandatory": true,
+    "numericTolerance": 1.0e-06,
+    "decimalStoragePrecision": 6,
+    "displayRounding": "half_up",
+    "unknownFieldsIgnored": false,
+    "fixtureFailureBlocksRelease": true,
+    "historicalD1FixturesRemainUnchanged": true,
+    "historicalD20FixturesRemainUnchanged": true
+  },
+  "fixtures": [
+    {
+      "id": "catalogue_exact_structure",
+      "stage": "catalogue_integrity",
+      "input": {
+        "configurationSetId": "delivery-dna-product-config-2.1.0"
+      },
+      "expected": {
+        "domainCount": 5,
+        "capabilityCount": 15,
+        "questionCount": 45,
+        "snapshotQuestionCount": 15,
+        "answerSetCount": 45,
+        "answersPerQuestion": 4,
+        "answerIds": [
+          "emerging",
+          "developing",
+          "established",
+          "leading"
+        ],
+        "unmappedQuestionIds": [
+
+        ],
+        "extraAnswerSetIds": [
+
+        ],
+        "duplicateIds": [
+
+        ]
+      }
+    },
+    {
+      "id": "catalogue_exact_snapshot_questions",
+      "stage": "catalogue_integrity",
+      "input": {
+        "selection": "snapshot"
+      },
+      "expected": {
+        "questionIds": [
+          "ddna2.strategic_alignment.snapshot",
+          "ddna2.portfolio_prioritisation.snapshot",
+          "ddna2.benefits_value.snapshot",
+          "ddna2.sponsorship_accountability.snapshot",
+          "ddna2.governance_decision_making.snapshot",
+          "ddna2.risk_assurance_resilience.snapshot",
+          "ddna2.delivery_approach_lifecycle.snapshot",
+          "ddna2.planning_control_dependencies.snapshot",
+          "ddna2.capacity_delivery_ecosystem.snapshot",
+          "ddna2.leadership_culture_collaboration.snapshot",
+          "ddna2.stakeholder_change_adoption.snapshot",
+          "ddna2.delivery_capability_enablement.snapshot",
+          "ddna2.data_reporting_decision_insight.snapshot",
+          "ddna2.learning_adaptability_improvement.snapshot",
+          "ddna2.digital_automation_responsible_ai.snapshot"
+        ],
+        "allRole": "snapshot",
+        "onePerCapability": true,
+        "onePerDomainCapabilityCount": 3
+      }
+    },
+    {
+      "id": "capability_score_four_anchor_levels",
+      "stage": "capability_scoring",
+      "input": {
+        "questionWeights": {
+          "snapshot": 0.4,
+          "supporting_1": 0.3,
+          "supporting_2": 0.3
+        },
+        "cases": [
+          {
+            "id": "all_emerging",
+            "responses": {
+              "snapshot": {
+                "value": 1,
+                "status": "answered"
+              },
+              "supporting_1": {
+                "value": 1,
+                "status": "answered"
+              },
+              "supporting_2": {
+                "value": 1,
+                "status": "answered"
+              }
+            }
+          },
+          {
+            "id": "all_developing",
+            "responses": {
+              "snapshot": {
+                "value": 2,
+                "status": "answered"
+              },
+              "supporting_1": {
+                "value": 2,
+                "status": "answered"
+              },
+              "supporting_2": {
+                "value": 2,
+                "status": "answered"
+              }
+            }
+          },
+          {
+            "id": "all_established",
+            "responses": {
+              "snapshot": {
+                "value": 3,
+                "status": "answered"
+              },
+              "supporting_1": {
+                "value": 3,
+                "status": "answered"
+              },
+              "supporting_2": {
+                "value": 3,
+                "status": "answered"
+              }
+            }
+          },
+          {
+            "id": "all_leading",
+            "responses": {
+              "snapshot": {
+                "value": 4,
+                "status": "answered"
+              },
+              "supporting_1": {
+                "value": 4,
+                "status": "answered"
+              },
+              "supporting_2": {
+                "value": 4,
+                "status": "answered"
+              }
+            }
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "all_emerging",
+            "available": true,
+            "rawScore": 0.0,
+            "displayScore": 0.0,
+            "band": "emerging",
+            "eligibleWeight": 1.0
+          },
+          {
+            "id": "all_developing",
+            "available": true,
+            "rawScore": 33.333333,
+            "displayScore": 33.3,
+            "band": "developing",
+            "eligibleWeight": 1.0
+          },
+          {
+            "id": "all_established",
+            "available": true,
+            "rawScore": 66.666667,
+            "displayScore": 66.7,
+            "band": "established",
+            "eligibleWeight": 1.0
+          },
+          {
+            "id": "all_leading",
+            "available": true,
+            "rawScore": 100.0,
+            "displayScore": 100.0,
+            "band": "leading",
+            "eligibleWeight": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "id": "capability_weighted_midpoint",
+      "stage": "capability_scoring",
+      "input": {
+        "responses": {
+          "snapshot": {
+            "value": 2,
+            "status": "answered"
+          },
+          "supporting_1": {
+            "value": 1,
+            "status": "answered"
+          },
+          "supporting_2": {
+            "value": 3,
+            "status": "answered"
+          }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 33.333333,
+        "displayScore": 33.3,
+        "band": "developing",
+        "eligibleWeight": 1.0
+      }
+    },
+    {
+      "id": "band_exact_boundaries",
+      "stage": "band_classification",
+      "input": {
+        "rawScores": [
+          0,
+          24.999999,
+          25,
+          49.999999,
+          50,
+          74.999999,
+          75,
+          100
+        ]
+      },
+      "expected": {
+        "bands": [
+          "emerging",
+          "emerging",
+          "developing",
+          "developing",
+          "established",
+          "established",
+          "leading",
+          "leading"
+        ]
+      }
+    },
+    {
+      "id": "capability_missing_snapshot_two_answers_available",
+      "stage": "capability_scoring",
+      "input": {
+        "responses": {
+          "snapshot": {
+            "status": "missing"
+          },
+          "supporting_1": {
+            "value": 4,
+            "status": "answered"
+          },
+          "supporting_2": {
+            "value": 4,
+            "status": "answered"
+          }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 100.0,
+        "displayScore": 100.0,
+        "band": "leading",
+        "eligibleWeight": 0.6,
+        "missingTreatedAsZero": false
+      }
+    },
+    {
+      "id": "capability_not_applicable_renormalises",
+      "stage": "capability_scoring",
+      "input": {
+        "responses": {
+          "snapshot": {
+            "value": 4,
+            "status": "answered"
+          },
+          "supporting_1": {
+            "value": 1,
+            "status": "answered"
+          },
+          "supporting_2": {
+            "status": "not_applicable",
+            "reason": "No relevant evidence dimension applies to the declared scope."
+          }
+        }
+      },
+      "expected": {
+        "available": true,
+        "rawScore": 57.142857,
+        "displayScore": 57.1,
+        "band": "established",
+        "eligibleWeight": 0.7,
+        "notApplicableTreatedAsZero": false
+      }
+    },
+    {
+      "id": "capability_single_answer_unavailable",
+      "stage": "capability_scoring",
+      "input": {
+        "responses": {
+          "snapshot": {
+            "value": 4,
+            "status": "answered"
+          },
+          "supporting_1": {
+            "status": "missing"
+          },
+          "supporting_2": {
+            "status": "not_applicable",
+            "reason": "Genuinely not applicable."
+          }
+        }
+      },
+      "expected": {
+        "available": false,
+        "rawScore": null,
+        "displayScore": null,
+        "band": null,
+        "eligibleWeight": 0.4,
+        "reason": "insufficient_eligible_questions_and_weight"
+      }
+    },
+    {
+      "id": "not_applicable_reason_required",
+      "stage": "response_validation",
+      "input": {
+        "status": "not_applicable",
+        "reason": ""
+      },
+      "expected": {
+        "valid": false,
+        "reasonCode": "NOT_APPLICABLE_REASON_REQUIRED",
+        "retryable": true
+      }
+    },
+    {
+      "id": "skip_is_missing_not_not_applicable",
+      "stage": "response_validation",
+      "input": {
+        "customerAction": "skip_for_now"
+      },
+      "expected": {
+        "status": "missing",
+        "scoreContribution": null,
+        "confidenceCoverageContribution": 0,
+        "notApplicable": false
+      }
+    },
+    {
+      "id": "domain_aggregation_and_availability",
+      "stage": "domain_scoring",
+      "input": {
+        "cases": [
+          {
+            "id": "three_available",
+            "capabilities": [
+              0,
+              50,
+              100
+            ]
+          },
+          {
+            "id": "two_available",
+            "capabilities": [
+              33.333333,
+              66.666667,
+              null
+            ]
+          },
+          {
+            "id": "one_available",
+            "capabilities": [
+              100,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "three_available",
+            "available": true,
+            "rawScore": 50.0,
+            "displayScore": 50.0,
+            "band": "established",
+            "availableCapabilities": 3
+          },
+          {
+            "id": "two_available",
+            "available": true,
+            "rawScore": 50.0,
+            "displayScore": 50.0,
+            "band": "established",
+            "availableCapabilities": 2
+          },
+          {
+            "id": "one_available",
+            "available": false,
+            "rawScore": null,
+            "band": null,
+            "reason": "domain_requires_two_capabilities"
+          }
+        ]
+      }
+    },
+    {
+      "id": "overall_aggregation_coverage",
+      "stage": "overall_scoring",
+      "input": {
+        "cases": [
+          {
+            "id": "eleven_all_domains",
+            "domainCapabilityScores": [
+              [
+                100,
+                100,
+                100
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ]
+            ]
+          },
+          {
+            "id": "ten_all_domains",
+            "domainCapabilityScores": [
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ]
+            ]
+          },
+          {
+            "id": "eleven_one_domain_undercovered",
+            "domainCapabilityScores": [
+              [
+                100,
+                null,
+                null
+              ],
+              [
+                100,
+                100,
+                100
+              ],
+              [
+                100,
+                100,
+                100
+              ],
+              [
+                100,
+                100,
+                null
+              ],
+              [
+                100,
+                100,
+                null
+              ]
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "eleven_all_domains",
+            "available": true,
+            "rawScore": 100.0,
+            "band": "leading",
+            "availableCapabilities": 11
+          },
+          {
+            "id": "ten_all_domains",
+            "available": false,
+            "reason": "overall_requires_eleven_capabilities"
+          },
+          {
+            "id": "eleven_one_domain_undercovered",
+            "available": false,
+            "reason": "every_domain_requires_two_capabilities"
+          }
+        ]
+      }
+    },
+    {
+      "id": "snapshot_four_level_outputs",
+      "stage": "snapshot_scoring",
+      "input": {
+        "cases": [
+          {
+            "id": "all_1",
+            "answers": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "all_2",
+            "answers": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2
+            ]
+          },
+          {
+            "id": "all_3",
+            "answers": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "all_4",
+            "answers": [
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "all_1",
+            "available": true,
+            "overallLevel": "emerging",
+            "domainLevels": [
+              "emerging",
+              "emerging",
+              "emerging",
+              "emerging",
+              "emerging"
+            ]
+          },
+          {
+            "id": "all_2",
+            "available": true,
+            "overallLevel": "developing",
+            "domainLevels": [
+              "developing",
+              "developing",
+              "developing",
+              "developing",
+              "developing"
+            ]
+          },
+          {
+            "id": "all_3",
+            "available": true,
+            "overallLevel": "established",
+            "domainLevels": [
+              "established",
+              "established",
+              "established",
+              "established",
+              "established"
+            ]
+          },
+          {
+            "id": "all_4",
+            "available": true,
+            "overallLevel": "leading",
+            "domainLevels": [
+              "leading",
+              "leading",
+              "leading",
+              "leading",
+              "leading"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "snapshot_exact_level_boundaries",
+      "stage": "snapshot_level_classification",
+      "input": {
+        "means": [
+          1,
+          1.749999,
+          1.75,
+          2.499999,
+          2.5,
+          3.249999,
+          3.25,
+          4
+        ]
+      },
+      "expected": {
+        "levels": [
+          "emerging",
+          "emerging",
+          "developing",
+          "developing",
+          "established",
+          "established",
+          "leading",
+          "leading"
+        ]
+      }
+    },
+    {
+      "id": "snapshot_minimum_coverage",
+      "stage": "snapshot_scoring",
+      "input": {
+        "cases": [
+          {
+            "id": "twelve_two_each",
+            "answeredByDomain": [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          },
+          {
+            "id": "eleven",
+            "answeredByDomain": [
+              2,
+              2,
+              2,
+              2,
+              3
+            ]
+          },
+          {
+            "id": "twelve_one_domain_short",
+            "answeredByDomain": [
+              1,
+              2,
+              3,
+              3,
+              3
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "twelve_two_each",
+            "available": true
+          },
+          {
+            "id": "eleven",
+            "available": false,
+            "reason": "snapshot_requires_twelve_answers"
+          },
+          {
+            "id": "twelve_one_domain_short",
+            "available": false,
+            "reason": "every_snapshot_domain_requires_two_answers"
+          }
+        ]
+      }
+    },
+    {
+      "id": "snapshot_signal_ties",
+      "stage": "snapshot_findings",
+      "input": {
+        "domains": [
+          {
+            "id": "direction_value",
+            "order": 1,
+            "mean": 3
+          },
+          {
+            "id": "leadership_governance",
+            "order": 2,
+            "mean": 3
+          },
+          {
+            "id": "delivery_system",
+            "order": 3,
+            "mean": 2
+          },
+          {
+            "id": "people_enablement",
+            "order": 4,
+            "mean": 2
+          },
+          {
+            "id": "insight_adaptation",
+            "order": 5,
+            "mean": 2
+          }
+        ]
+      },
+      "expected": {
+        "positiveSignals": [
+          "direction_value",
+          "leadership_governance"
+        ],
+        "areasToExplore": [
+          "delivery_system",
+          "people_enablement"
+        ],
+        "tieBreaker": "domain_order_asc"
+      }
+    },
+    {
+      "id": "snapshot_disclosure_and_cta",
+      "stage": "snapshot_projection",
+      "input": {
+        "completed": true,
+        "authenticated": false
+      },
+      "expected": {
+        "numericScoresPresent": false,
+        "capabilityResultsPresent": false,
+        "confidencePresent": false,
+        "recommendationsPresent": false,
+        "roadmapPresent": false,
+        "profileAxes": 5,
+        "primaryCtaLabel": "Save my Snapshot",
+        "supportingMessage": "Download your results by saving your Snapshot",
+        "paymentRequired": false
+      }
+    },
+    {
+      "id": "saved_snapshot_value_boundary",
+      "stage": "saved_snapshot_projection",
+      "input": {
+        "registered": true,
+        "consent": true
+      },
+      "expected": {
+        "downloadEnabled": true,
+        "returnAccess": true,
+        "exactResponsesRetained": 15,
+        "additionalIntelligence": false,
+        "commercialCtaLabel": "Unlock your complete Delivery DNA — £295",
+        "priceGbpMinor": 29500
+      }
+    },
+    {
+      "id": "confidence_factor_independence",
+      "stage": "confidence",
+      "input": {
+        "cases": [
+          {
+            "id": "all_full",
+            "factors": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "completion_zero",
+            "factors": [
+              0,
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "coverage_zero",
+            "factors": [
+              1,
+              0,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "consistency_zero",
+            "factors": [
+              1,
+              1,
+              0,
+              1,
+              1
+            ]
+          },
+          {
+            "id": "recency_zero",
+            "factors": [
+              1,
+              1,
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "id": "breadth_zero",
+            "factors": [
+              1,
+              1,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "all_full",
+            "rawConfidence": 100,
+            "band": "high"
+          },
+          {
+            "id": "completion_zero",
+            "rawConfidence": 65,
+            "band": "moderate"
+          },
+          {
+            "id": "coverage_zero",
+            "rawConfidence": 75,
+            "band": "high"
+          },
+          {
+            "id": "consistency_zero",
+            "rawConfidence": 80,
+            "band": "high"
+          },
+          {
+            "id": "recency_zero",
+            "rawConfidence": 90,
+            "band": "high"
+          },
+          {
+            "id": "breadth_zero",
+            "rawConfidence": 90,
+            "band": "high"
+          }
+        ]
+      }
+    },
+    {
+      "id": "confidence_exact_boundaries",
+      "stage": "confidence_band",
+      "input": {
+        "values": [
+          0,
+          49.999999,
+          50,
+          74.999999,
+          75,
+          100
+        ]
+      },
+      "expected": {
+        "bands": [
+          "low",
+          "low",
+          "moderate",
+          "moderate",
+          "high",
+          "high"
+        ]
+      }
+    },
+    {
+      "id": "capability_confidence_formula",
+      "stage": "capability_confidence",
+      "input": {
+        "cases": [
+          {
+            "id": "full",
+            "eligibleQuestionCount": 3,
+            "consistency": 1,
+            "recency": 1,
+            "breadth": 1
+          },
+          {
+            "id": "two_questions",
+            "eligibleQuestionCount": 2,
+            "consistency": 1,
+            "recency": 1,
+            "breadth": 1
+          },
+          {
+            "id": "unknown_metadata",
+            "eligibleQuestionCount": 3,
+            "consistency": 1,
+            "recency": 0,
+            "breadth": 0
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "full",
+            "confidence": 100.0
+          },
+          {
+            "id": "two_questions",
+            "confidence": 83.333333
+          },
+          {
+            "id": "unknown_metadata",
+            "confidence": 80.0
+          }
+        ]
+      }
+    },
+    {
+      "id": "finding_exact_thresholds",
+      "stage": "findings",
+      "input": {
+        "cases": [
+          {
+            "id": "strength_at",
+            "score": 75,
+            "confidence": 50
+          },
+          {
+            "id": "not_strength_below",
+            "score": 74.999999,
+            "confidence": 100
+          },
+          {
+            "id": "opportunity_below",
+            "score": 49.999999,
+            "confidence": 50
+          },
+          {
+            "id": "not_opportunity_at",
+            "score": 50,
+            "confidence": 100
+          },
+          {
+            "id": "insufficient_confidence",
+            "score": 0,
+            "confidence": 49.999999
+          }
+        ]
+      },
+      "expected": {
+        "cases": [
+          {
+            "id": "strength_at",
+            "classification": "strength"
+          },
+          {
+            "id": "not_strength_below",
+            "classification": "neutral"
+          },
+          {
+            "id": "opportunity_below",
+            "classification": "priority_opportunity"
+          },
+          {
+            "id": "not_opportunity_at",
+            "classification": "neutral"
+          },
+          {
+            "id": "insufficient_confidence",
+            "classification": "insufficient_evidence"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finding_tie_breakers",
+      "stage": "findings",
+      "input": {
+        "candidates": [
+          {
+            "id": "benefits_value",
+            "order": 3,
+            "score": 33.333333,
+            "confidence": 80
+          },
+          {
+            "id": "strategic_alignment",
+            "order": 1,
+            "score": 33.333333,
+            "confidence": 80
+          },
+          {
+            "id": "portfolio_prioritisation",
+            "order": 2,
+            "score": 33.333333,
+            "confidence": 80
+          }
+        ]
+      },
+      "expected": {
+        "orderedOpportunityIds": [
+          "strategic_alignment",
+          "portfolio_prioritisation",
+          "benefits_value"
+        ]
+      }
+    },
+    {
+      "id": "pattern_positive_and_negative_cases",
+      "stage": "patterns",
+      "input": {
+        "cases": [
+          {
+            "patternId": "ddna2.pat_leadership_decision_gap",
+            "positive": {
+              "sponsorship_accountability": 49,
+              "governance_decision_making": 49
+            },
+            "negative": {
+              "sponsorship_accountability": 50,
+              "governance_decision_making": 49
+            }
+          },
+          {
+            "patternId": "ddna2.pat_strategy_portfolio_disconnect",
+            "positive": {
+              "strategic_alignment": 75,
+              "portfolio_prioritisation": 49
+            },
+            "negative": {
+              "strategic_alignment": 74,
+              "portfolio_prioritisation": 50
+            }
+          },
+          {
+            "patternId": "ddna2.pat_overcommitted_delivery_system",
+            "positive": {
+              "portfolio_prioritisation": 49,
+              "capacity_delivery_ecosystem": 49
+            },
+            "negative": {
+              "portfolio_prioritisation": 50,
+              "capacity_delivery_ecosystem": 49
+            }
+          },
+          {
+            "patternId": "ddna2.pat_delivery_without_control",
+            "positive": {
+              "delivery_approach_lifecycle": 75,
+              "planning_control_dependencies": 49
+            },
+            "negative": {
+              "delivery_approach_lifecycle": 74,
+              "planning_control_dependencies": 50
+            }
+          },
+          {
+            "patternId": "ddna2.pat_value_visibility_gap",
+            "positive": {
+              "benefits_value": 49,
+              "data_reporting_decision_insight": 49
+            },
+            "negative": {
+              "benefits_value": 50,
+              "data_reporting_decision_insight": 49
+            }
+          },
+          {
+            "patternId": "ddna2.pat_delivery_adoption_gap",
+            "positive": {
+              "delivery_approach_lifecycle": 75,
+              "stakeholder_change_adoption": 49
+            },
+            "negative": {
+              "delivery_approach_lifecycle": 74,
+              "stakeholder_change_adoption": 50
+            }
+          },
+          {
+            "patternId": "ddna2.pat_insight_without_learning",
+            "positive": {
+              "data_reporting_decision_insight": 50,
+              "learning_adaptability_improvement": 49
+            },
+            "negative": {
+              "data_reporting_decision_insight": 49,
+              "learning_adaptability_improvement": 49
+            }
+          },
+          {
+            "patternId": "ddna2.pat_digital_governance_gap",
+            "positive": {
+              "digital_automation_responsible_ai": 50,
+              "governance_decision_making": 49,
+              "risk_assurance_resilience": 49
+            },
+            "negative": {
+              "digital_automation_responsible_ai": 49,
+              "governance_decision_making": 49,
+              "risk_assurance_resilience": 49
+            }
+          },
+          {
+            "patternId": "ddna2.pat_resilient_delivery_foundation",
+            "positive": {
+              "governance_decision_making": 75,
+              "planning_control_dependencies": 75,
+              "risk_assurance_resilience": 75
+            },
+            "negative": {
+              "governance_decision_making": 74.999999,
+              "planning_control_dependencies": 75,
+              "risk_assurance_resilience": 75
+            }
+          },
+          {
+            "patternId": "ddna2.pat_adaptive_learning_system",
+            "positive": {
+              "data_reporting_decision_insight": 75,
+              "learning_adaptability_improvement": 75,
+              "leadership_culture_collaboration": 75
+            },
+            "negative": {
+              "data_reporting_decision_insight": 75,
+              "learning_adaptability_improvement": 74.999999,
+              "leadership_culture_collaboration": 75
+            }
+          },
+          {
+            "patternId": "ddna2.pat_value_led_portfolio",
+            "positive": {
+              "strategic_alignment": 75,
+              "portfolio_prioritisation": 75,
+              "benefits_value": 75
+            },
+            "negative": {
+              "strategic_alignment": 75,
+              "portfolio_prioritisation": 75,
+              "benefits_value": 74.999999
+            }
+          }
+        ],
+        "allCapabilityConfidences": 75
+      },
+      "expected": {
+        "positiveCaseMatched": true,
+        "negativeCaseMatched": false,
+        "evaluatedPatternCount": 11
+      }
+    },
+    {
+      "id": "pattern_confidence_gate",
+      "stage": "patterns",
+      "input": {
+        "patternId": "ddna2.pat_leadership_decision_gap",
+        "scores": {
+          "sponsorship_accountability": 0,
+          "governance_decision_making": 0
+        },
+        "confidences": {
+          "sponsorship_accountability": 49.999999,
+          "governance_decision_making": 100
+        }
+      },
+      "expected": {
+        "matched": false,
+        "reason": "minimum_capability_confidence_not_met"
+      }
+    },
+    {
+      "id": "pattern_exclusive_group_resolution",
+      "stage": "pattern_conflict",
+      "input": {
+        "matched": [
+          {
+            "id": "ddna2.pat_leadership_decision_gap",
+            "exclusiveGroup": "leadership_control_state",
+            "priority": 100,
+            "order": 1
+          },
+          {
+            "id": "ddna2.pat_resilient_delivery_foundation",
+            "exclusiveGroup": "leadership_control_state",
+            "priority": 40,
+            "order": 9
+          }
+        ]
+      },
+      "expected": {
+        "retained": [
+          "ddna2.pat_leadership_decision_gap"
+        ],
+        "suppressed": [
+          {
+            "id": "ddna2.pat_resilient_delivery_foundation",
+            "reason": "exclusive_group_lower_priority"
+          }
+        ]
+      }
+    },
+    {
+      "id": "recommendation_capability_eligibility",
+      "stage": "recommendation_eligibility",
+      "input": {
+        "opportunityIds": [
+          "strategic_alignment",
+          "portfolio_prioritisation",
+          "benefits_value",
+          "sponsorship_accountability",
+          "governance_decision_making",
+          "risk_assurance_resilience",
+          "delivery_approach_lifecycle",
+          "planning_control_dependencies",
+          "capacity_delivery_ecosystem",
+          "leadership_culture_collaboration",
+          "stakeholder_change_adoption",
+          "delivery_capability_enablement",
+          "data_reporting_decision_insight",
+          "learning_adaptability_improvement",
+          "digital_automation_responsible_ai"
+        ],
+        "patterns": [
+
+        ],
+        "analysisConfidence": "high"
+      },
+      "expected": {
+        "eligibleRecommendationIds": [
+          "ddna2.rec_strategy_line_of_sight",
+          "ddna2.rec_portfolio_choices",
+          "ddna2.rec_benefits_ownership",
+          "ddna2.rec_sponsor_contract",
+          "ddna2.rec_decision_governance",
+          "ddna2.rec_risk_assurance",
+          "ddna2.rec_fit_delivery_approach",
+          "ddna2.rec_integrated_planning",
+          "ddna2.rec_balance_capacity",
+          "ddna2.rec_collaborative_leadership",
+          "ddna2.rec_change_adoption",
+          "ddna2.rec_enablement_service",
+          "ddna2.rec_decision_insight",
+          "ddna2.rec_improvement_cadence",
+          "ddna2.rec_responsible_digital"
+        ]
+      }
+    },
+    {
+      "id": "recommendation_low_confidence_only",
+      "stage": "recommendation_eligibility",
+      "input": {
+        "opportunityIds": [
+
+        ],
+        "patterns": [
+
+        ],
+        "analysisConfidence": "low"
+      },
+      "expected": {
+        "eligibleRecommendationIds": [
+          "ddna2.rec_deepen_evidence"
+        ]
+      }
+    },
+    {
+      "id": "recommendation_exclusions",
+      "stage": "recommendation_eligibility",
+      "input": {
+        "opportunityIds": [
+          "strategic_alignment",
+          "portfolio_prioritisation",
+          "benefits_value",
+          "governance_decision_making",
+          "risk_assurance_resilience",
+          "data_reporting_decision_insight",
+          "learning_adaptability_improvement",
+          "leadership_culture_collaboration"
+        ],
+        "patterns": [
+          "ddna2.pat_value_led_portfolio",
+          "ddna2.pat_resilient_delivery_foundation",
+          "ddna2.pat_adaptive_learning_system"
+        ],
+        "analysisConfidence": "high"
+      },
+      "expected": {
+        "excludedRecommendationIds": [
+          "ddna2.rec_strategy_line_of_sight",
+          "ddna2.rec_portfolio_choices",
+          "ddna2.rec_benefits_ownership",
+          "ddna2.rec_decision_governance",
+          "ddna2.rec_risk_assurance",
+          "ddna2.rec_collaborative_leadership",
+          "ddna2.rec_decision_insight",
+          "ddna2.rec_improvement_cadence"
+        ],
+        "exclusionReason": "matched_positive_pattern"
+      }
+    },
+    {
+      "id": "recommendation_rank_tie_break",
+      "stage": "recommendation_ranking",
+      "input": {
+        "candidates": [
+          {
+            "id": "ddna2.rec_benefits_ownership",
+            "rankScore": 80,
+            "impactValue": 90,
+            "urgency": 75,
+            "effortEase": 60,
+            "order": 3
+          },
+          {
+            "id": "ddna2.rec_sponsor_contract",
+            "rankScore": 80,
+            "impactValue": 90,
+            "urgency": 75,
+            "effortEase": 60,
+            "order": 4
+          }
+        ]
+      },
+      "expected": {
+        "orderedIds": [
+          "ddna2.rec_benefits_ownership",
+          "ddna2.rec_sponsor_contract"
+        ],
+        "tieBreaker": "catalogue_order_asc"
+      }
+    },
+    {
+      "id": "recommendation_deduplication",
+      "stage": "recommendation_deduplication",
+      "input": {
+        "candidates": [
+          {
+            "id": "candidate_a",
+            "dedupeGroup": "delivery_visibility",
+            "order": 13,
+            "reasonIds": [
+              "opportunity"
+            ]
+          },
+          {
+            "id": "candidate_b",
+            "dedupeGroup": "delivery_visibility",
+            "order": 99,
+            "reasonIds": [
+              "pattern"
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "retained": {
+          "id": "candidate_a",
+          "reasonIds": [
+            "opportunity",
+            "pattern"
+          ]
+        },
+        "removed": [
+          "candidate_b"
+        ]
+      }
+    },
+    {
+      "id": "roadmap_dependency_sequence",
+      "stage": "roadmap",
+      "input": {
+        "selected": [
+          "ddna2.rec_portfolio_choices",
+          "ddna2.rec_strategy_line_of_sight",
+          "ddna2.rec_balance_capacity"
+        ],
+        "ranks": {
+          "ddna2.rec_balance_capacity": 100,
+          "ddna2.rec_portfolio_choices": 90,
+          "ddna2.rec_strategy_line_of_sight": 80
+        }
+      },
+      "expected": {
+        "sequence": [
+          "ddna2.rec_strategy_line_of_sight",
+          "ddna2.rec_portfolio_choices",
+          "ddna2.rec_balance_capacity"
+        ],
+        "dependencyOrderOverridesRank": true
+      }
+    },
+    {
+      "id": "roadmap_capacity_and_unscheduled",
+      "stage": "roadmap",
+      "input": {
+        "readyItemCount": 11,
+        "dependenciesAvailable": true
+      },
+      "expected": {
+        "day30Count": 3,
+        "day60Count": 3,
+        "day90Count": 4,
+        "unscheduledCount": 1,
+        "unscheduledReason": "capacity_exceeded"
+      }
+    },
+    {
+      "id": "roadmap_dependency_cycle",
+      "stage": "roadmap",
+      "input": {
+        "dependencies": {
+          "a": [
+            "b"
+          ],
+          "b": [
+            "a"
+          ]
+        }
+      },
+      "expected": {
+        "success": false,
+        "errorCode": "ROADMAP_DEPENDENCY_CYCLE",
+        "partialRoadmapPublished": false
+      }
+    },
+    {
+      "id": "context_snapshot_domain_mapping",
+      "stage": "industry_context_selection",
+      "input": {
+        "surface": "snapshot",
+        "areaToExploreDomainId": "insight_adaptation",
+        "availableEvidenceIds": [
+          "context_wellingtone_2026_reporting",
+          "context_wellingtone_2026_delivery_skills"
+        ]
+      },
+      "expected": {
+        "selectedEvidenceIds": [
+          "context_wellingtone_2026_reporting"
+        ],
+        "maximumItems": 1,
+        "scoringEffect": "none",
+        "footnoteMarker": "*"
+      }
+    },
+    {
+      "id": "context_overview_limits_and_source",
+      "stage": "industry_context_projection",
+      "input": {
+        "surface": "overview",
+        "eligibleEvidenceIds": [
+          "context_wellingtone_2026_portfolio_capacity",
+          "context_wellingtone_2026_benefits",
+          "context_wellingtone_2026_sponsorship",
+          "context_wellingtone_2026_reporting"
+        ]
+      },
+      "expected": {
+        "displayedEvidenceIds": [
+          "context_wellingtone_2026_portfolio_capacity",
+          "context_wellingtone_2026_benefits",
+          "context_wellingtone_2026_sponsorship"
+        ],
+        "maximumItems": 3,
+        "sourceNotePosition": "bottom_of_page",
+        "sourcePublisher": "Wellingtone",
+        "sourceTitle": "The State of Project Management 2026",
+        "evidenceYear": 2026,
+        "mandatoryDisclosure": "General industry context; not a benchmark or comparison with your organisation."
+      }
+    },
+    {
+      "id": "context_never_changes_result",
+      "stage": "industry_context_isolation",
+      "input": {
+        "analysisWithoutContext": {
+          "score": 49.999999,
+          "band": "developing",
+          "opportunities": [
+            "benefits_value"
+          ]
+        },
+        "contextEvidenceId": "context_wellingtone_2026_benefits"
+      },
+      "expected": {
+        "analysisWithContext": {
+          "score": 49.999999,
+          "band": "developing",
+          "opportunities": [
+            "benefits_value"
+          ]
+        },
+        "changedFields": [
+          "presentation.industryContext"
+        ],
+        "scoringChanged": false,
+        "rankingChanged": false
+      }
+    },
+    {
+      "id": "context_unavailable_omitted",
+      "stage": "industry_context_selection",
+      "input": {
+        "mappedEvidenceId": "context_wellingtone_2026_reporting",
+        "evidenceStatus": "retired"
+      },
+      "expected": {
+        "selectedEvidenceIds": [
+
+        ],
+        "replacementClaimInvented": false,
+        "customerErrorDisplayed": false
+      }
+    },
+    {
+      "id": "workspace_vs_snapshot_disclosure",
+      "stage": "projection_allow_list",
+      "input": {
+        "resultAvailable": true
+      },
+      "expected": {
+        "snapshot": {
+          "allowed": [
+            "overallIndicativeLevel",
+            "domainIndicativeLevels",
+            "profile",
+            "positiveSignals",
+            "areasToExplore",
+            "industryContext",
+            "caveat",
+            "savedSnapshotCta"
+          ],
+          "denied": [
+            "numericScores",
+            "capabilityResults",
+            "confidence",
+            "patterns",
+            "recommendations",
+            "roadmap"
+          ]
+        },
+        "overview": {
+          "allowed": [
+            "overallScore",
+            "overallBand",
+            "domainResults",
+            "capabilityResults",
+            "confidence",
+            "strengths",
+            "priorityOpportunities",
+            "patterns",
+            "recommendations",
+            "roadmapDirection",
+            "industryContext",
+            "explainability",
+            "reportDownload"
+          ]
+        }
+      }
+    },
+    {
+      "id": "traceability_complete_chain",
+      "stage": "traceability",
+      "input": {
+        "projectionIncludesIndustryContext": true
+      },
+      "expected": {
+        "requiredNodeTypes": [
+          "response",
+          "question",
+          "capability_contribution",
+          "capability_score",
+          "domain_score",
+          "overall_score",
+          "confidence_factor",
+          "confidence_result",
+          "finding",
+          "pattern",
+          "recommendation",
+          "roadmap_item",
+          "industry_context_item",
+          "narrative_fact",
+          "presentation_item"
+        ],
+        "missingNodes": [
+
+        ],
+        "versionFieldsPresent": [
+          "questionSetVersion",
+          "configurationSetId",
+          "ruleId",
+          "ruleVersion",
+          "evidenceId",
+          "evidenceVersion",
+          "analysisRunId"
+        ]
+      }
+    },
+    {
+      "id": "clean_21_cutover_from_1",
+      "stage": "compatibility",
+      "input": {
+        "sourceQuestionSetVersion": "1.0.0",
+        "targetQuestionSetVersion": "2.1.0",
+        "requestedAction": "translate_responses"
+      },
+      "expected": {
+        "allowed": false,
+        "reasonCode": "DELIVERY_DNA_VERSION_TRANSLATION_PROHIBITED",
+        "restartTarget": "delivery-dna-snapshot-2.1.0",
+        "historyMutated": false
+      }
+    },
+    {
+      "id": "digital_ai_not_applicable_no_penalty",
+      "stage": "capability_scoring",
+      "input": {
+        "capabilityId": "digital_automation_responsible_ai",
+        "responses": {
+          "snapshot": {
+            "status": "not_applicable",
+            "reason": "No relevant digital, automation or AI use applies after explicit consideration."
+          },
+          "supporting_1": {
+            "status": "not_applicable",
+            "reason": "No relevant digital, automation or AI use applies after explicit consideration."
+          },
+          "supporting_2": {
+            "status": "not_applicable",
+            "reason": "No relevant digital, automation or AI use applies after explicit consideration."
+          }
+        }
+      },
+      "expected": {
+        "available": false,
+        "rawScore": null,
+        "penaltyApplied": false,
+        "reason": "capability_not_applicable"
+      }
+    },
+    {
+      "id": "tenant_and_immutable_projection_contract",
+      "stage": "security_and_integrity",
+      "input": {
+        "analysisRunTenantId": "tenant-a",
+        "assessmentTenantId": "tenant-b",
+        "existingCompletedProjection": true
+      },
+      "expected": {
+        "analysisAllowed": false,
+        "reasonCode": "TENANT_SCOPE_MISMATCH",
+        "existingProjectionMutated": false,
+        "crossTenantDataDisclosed": false
+      }
+    },
+    {
+      "id": "catalogue_source_reconciliation",
+      "stage": "catalogue_integrity",
+      "input": {
+        "authority": "DIQ-100C@2.1"
+      },
+      "expected": {
+        "submittedQuestionCount": 45,
+        "submittedAnchorCount": 180,
+        "exactSubmittedQuestionsRetained": 37,
+        "founderApprovedEditedQuestions": 4,
+        "founderApprovedNewQuestions": 4,
+        "exactSubmittedAnchorsRetained": 163,
+      "founderApprovedEditedAnchors": 1,
+      "founderApprovedNewAnchors": 16,
+      "canonicalContentDigest": {
+        "algorithm": "sha256",
+        "canonicalisation": "compact JSON array in domain, capability and question order; each object contains questionId, prompt, role, weight and answers; each answer contains id, value and text",
+        "value": "3a7cf219fbdbc51902248e21ef6489ca6dc67ddab5cdc22f41081f885668d7a3"
+      },
+      "retiredSubmittedQuestionIds": [
+          "Q19",
+          "Q21",
+          "Q22",
+          "Q26"
+        ],
+        "runtimeParaphraseAllowed": false
+      }
+    },
+    {
+      "id": "version20_to_21_translation_prohibited",
+      "stage": "compatibility",
+      "input": {
+        "sourceQuestionSetVersion": "2.0.0",
+        "targetQuestionSetVersion": "2.1.0",
+        "requestedAction": "translate_or_analyse_responses"
+      },
+      "expected": {
+        "allowed": false,
+        "reasonCode": "DELIVERY_DNA_VERSION_TRANSLATION_PROHIBITED",
+        "restartTarget": "delivery-dna-snapshot-2.1.0",
+        "historyMutated": false,
+        "analysisRunCreated": false
+      }
+    }
+  ]
+}

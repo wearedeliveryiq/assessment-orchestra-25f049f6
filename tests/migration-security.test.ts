@@ -711,3 +711,42 @@ describe("S4-011 product hand-off migration security", () => {
     );
   });
 });
+
+describe("Delivery DNA 2.1 cutover security", () => {
+  const cutover = readFileSync(
+    new URL("../supabase/migrations/20260805020000_delivery_dna_2_1_cutover.sql", import.meta.url),
+    "utf8",
+  );
+  const hardening = readFileSync(
+    new URL(
+      "../supabase/migrations/20260805021000_harden_delivery_dna_2_1_permissions.sql",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+
+  it("pins new collection and linking to 2.1 without customer-data migration", () => {
+    expect(cutover).toContain("p_token_hash, '2.1.0', '2.1.0'");
+    expect(cutover).toContain("v_snapshot.configuration_version <> '2.1.0'");
+    expect(cutover).toContain("'delivery-dna-snapshot', '2.1.0', responded_at");
+    expect(cutover).toContain("configurationSetId}' <> 'delivery-dna-product-config-2.1.0'");
+    expect(cutover).not.toMatch(/UPDATE public\.assessment_responses/i);
+    expect(cutover).not.toMatch(/INSERT INTO public\.delivery_dna_overview_access_grants/i);
+    expect(cutover).not.toMatch(/INSERT INTO public\.assessment_analysis_runs/i);
+  });
+
+  it("disables superseded entry points and exposes only service-role 2.1 functions", () => {
+    for (const source of [cutover, hardening]) {
+      expect(source).toContain("public.create_delivery_dna_snapshot_v21(text, text, text, text)");
+      expect(source).toContain(
+        "public.link_delivery_dna_snapshot_v21(text, uuid, uuid, uuid, text, jsonb, boolean)",
+      );
+      expect(source).toContain("FROM PUBLIC, anon, authenticated");
+    }
+    expect(hardening).toContain("public.create_delivery_dna_snapshot_v2(text, text, text, text)");
+    expect(hardening).toContain("FROM PUBLIC, anon, authenticated, service_role");
+    expect(cutover).toContain("membership.user_id = p_user_id");
+    expect(cutover).toContain("workspace.organisation_id = p_organisation_id");
+    expect(cutover).toContain("FOR UPDATE");
+  });
+});

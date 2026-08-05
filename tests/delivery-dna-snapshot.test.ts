@@ -373,7 +373,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(v11Migration).toContain("SNAPSHOT_CONFIGURATION_VERSION_IMMUTABLE");
     expect(v11Migration).toContain("SNAPSHOT_PRESENTATION_VERSION_TRANSITION_INVALID");
     expect(v11Migration).toContain("delivery_dna_snapshot_versions_guard");
-    expect(server).toContain('.eq("configuration_version", "2.0.0")');
+    expect(server).toContain('.eq("configuration_version", "2.1.0")');
     expect(server).toContain("snapshotV2ContinuationRecord(response)");
     expect(server).not.toMatch(
       /presentation_policy_version[\s\S]{0,300}(delivery_intelligence|assessment_analysis_runs)/,

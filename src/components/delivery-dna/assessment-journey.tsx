@@ -11,17 +11,16 @@ import type { AssessmentAnswerInput, AssessmentDetail } from "@/lib/assessment/t
 import { deliveryDnaV2Capabilities, deliveryDnaV2Catalogue } from "@/lib/delivery-dna/catalogue-v2";
 import { snapshotV2AnswerOptions } from "@/lib/delivery-dna/snapshot-v2";
 
-const dimensionLabels = {
-  foundation: "Foundation",
-  practice: "Practice",
-  evidence: "Evidence",
+const roleLabels = {
+  snapshot: "Snapshot",
+  supporting_1: "Supporting question",
+  supporting_2: "Supporting question",
 } as const;
 
-const dimensionInstructions = {
-  foundation:
-    "Consider how clearly the organisation has established the conditions for this capability.",
-  practice: "Consider what happens consistently in normal delivery work.",
-  evidence: "Consider what current evidence shows about the organisation's actual position.",
+const roleInstructions = {
+  snapshot: "Review the answer carried forward from your Snapshot.",
+  supporting_1: "Consider how delivery usually works across the organisation in scope.",
+  supporting_2: "Consider how delivery usually works across the organisation in scope.",
 } as const;
 
 type DraftAnswer =
@@ -107,7 +106,7 @@ export function DeliveryDnaAssessmentJourney({
   const carriedResponseCount = detail.responses.filter(
     (response) =>
       response.provenanceSource === "delivery-dna-snapshot" &&
-      response.provenanceVersion === "2.0.0",
+      response.provenanceVersion === "2.1.0",
   ).length;
 
   const save = useMutation({
@@ -287,8 +286,8 @@ export function DeliveryDnaAssessmentJourney({
         </p>
         <h1 className="mt-2 text-3xl font-semibold">Complete your Delivery DNA</h1>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          Complete the remaining Foundation and Evidence questions to build your full five-domain
-          Delivery DNA Overview.
+          Complete the remaining supporting questions to build your full five-domain Delivery DNA
+          Overview.
         </p>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
           Choose the anchored response that best reflects the organisation in scope. Use Not
@@ -342,14 +341,14 @@ export function DeliveryDnaAssessmentJourney({
             <div className="mt-6 space-y-8">
               {capability.questions.map((question) => {
                 const answer = answers[question.id];
-                const dimensionLabel = dimensionLabels[question.dimension];
+                const roleLabel = roleLabels[question.role];
                 return (
                   <fieldset key={question.id} disabled={locked} className="min-w-0">
                     <legend className="text-sm font-semibold leading-relaxed">
                       {question.prompt}
                     </legend>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {dimensionLabel}: {dimensionInstructions[question.dimension]}
+                      {roleLabel}: {roleInstructions[question.role]}
                     </p>
                     <div className="mt-3 grid gap-2 sm:grid-cols-5">
                       {snapshotV2AnswerOptions(question.id).map((option) => (
