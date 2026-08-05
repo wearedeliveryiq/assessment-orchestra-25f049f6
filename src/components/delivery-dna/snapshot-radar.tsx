@@ -81,7 +81,12 @@ export function SnapshotRadar({ profile }: { profile: SnapshotV2DomainProfile[] 
               fillOpacity={0.22}
               strokeWidth={3}
               connectNulls={false}
-              dot={{ r: 3.5, fill: "var(--foreground)", stroke: "var(--background)", strokeWidth: 2 }}
+              dot={{
+                r: 3.5,
+                fill: "var(--foreground)",
+                stroke: "var(--background)",
+                strokeWidth: 2,
+              }}
               isAnimationActive={!reducedMotion}
               animationDuration={900}
               animationEasing="ease-out"
@@ -106,7 +111,9 @@ export function SnapshotRadar({ profile }: { profile: SnapshotV2DomainProfile[] 
               {axis.axisNumber}
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-sm font-semibold text-foreground">{axis.domainLabel}</span>
+              <span className="block text-sm font-semibold text-foreground">
+                {axis.domainLabel}
+              </span>
               <span className="mt-2 inline-flex rounded-full border border-primary/45 bg-accent px-2.5 py-1 text-xs font-semibold text-foreground">
                 {axis.level ? axis.level[0].toUpperCase() + axis.level.slice(1) : "Not applicable"}
               </span>

@@ -391,8 +391,8 @@ function SnapshotQuestions({
       <div className="mx-auto max-w-4xl">
         <p className="eyebrow">Delivery DNA Snapshot</p>
         <p className="mt-3 rounded-[14px] border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
-          For this assessment, “the organisation” means <strong>{snapshot.scopeDisplayName}</strong>.
-          Answer for how project and change delivery usually works across this scope today.
+          For this assessment, “the organisation” means <strong>{snapshot.scopeDisplayName}</strong>
+          . Answer for how project and change delivery usually works across this scope today.
         </p>
         <div className="mt-4 flex items-end justify-between gap-4">
           <div>
@@ -591,10 +591,7 @@ function SnapshotQuestions({
         </div>
 
         {completionError ? (
-          <div
-            className="mt-6 rounded-[18px] border border-border bg-panel p-5"
-            role="alert"
-          >
+          <div className="mt-6 rounded-[18px] border border-border bg-panel p-5" role="alert">
             <h2 className="font-bold">{String(copy.insufficientHeading)}</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{completionError}</p>
           </div>
@@ -692,7 +689,10 @@ function SnapshotResultView({
         </section>
       ) : null}
 
-      <section className="on-navy mt-7 rounded-[22px] p-5 sm:p-8" aria-labelledby="snapshot-profile-title">
+      <section
+        className="on-navy mt-7 rounded-[22px] p-5 sm:p-8"
+        aria-labelledby="snapshot-profile-title"
+      >
         <h2 id="snapshot-profile-title" className="text-2xl font-extrabold tracking-tight">
           {String(copy.profileHeading)}
         </h2>
@@ -857,7 +857,10 @@ function SnapshotResultView({
             </div>
           </>
         ) : identityLoading ? (
-          <Loader2 className="mt-6 h-5 w-5 animate-spin text-primary" aria-label="Checking account" />
+          <Loader2
+            className="mt-6 h-5 w-5 animate-spin text-primary"
+            aria-label="Checking account"
+          />
         ) : !isAuthenticated ? (
           <>
             <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
@@ -966,10 +969,7 @@ function SignalGroup({
       ) : null}
       <div className="mt-4 space-y-3">
         {items.map((item) => (
-          <article
-            key={item.domainId}
-            className="rounded-[14px] border border-border bg-panel p-4"
-          >
+          <article key={item.domainId} className="rounded-[14px] border border-border bg-panel p-4">
             <h3 className="flex items-center gap-2 text-sm font-bold">
               <Check className="h-4 w-4 text-primary" aria-hidden /> {item.domainLabel}
             </h3>
