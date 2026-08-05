@@ -5,15 +5,21 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assessmentRequestContext } from "@/lib/identity/assessment-auth.server";
 import { IdentityError } from "@/lib/identity/errors";
 
-import { deliveryDnaV2ManifestDigest, deliveryDnaV2SessionMetadata } from "./catalogue-v2";
+import {
+  DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
+  deliveryDnaV2ManifestDigest,
+  deliveryDnaV2SessionMetadata,
+} from "./catalogue-v2";
 import { selectSnapshotContext } from "./context-v2";
 import {
   deliveryDnaSnapshotV2Questions,
   evaluateDeliveryDnaSnapshotV2,
   normaliseSnapshotV2Response,
   safeSnapshotV2AnalyticsEvent,
+  snapshotV2ContextDomainId,
   snapshotV2ContinuationRecord,
   type SnapshotV2ConfigurationVersion,
+  type SnapshotV2PresentationPolicyVersion,
   type SnapshotV2Response,
 } from "./snapshot-v2";
 
@@ -33,7 +39,7 @@ type SessionRow = {
   id: string;
   status: "in_progress" | "completed" | "linked";
   configuration_version: SnapshotV2ConfigurationVersion;
-  presentation_policy_version: "2.1.0";
+  presentation_policy_version: "2.1.0" | SnapshotV2PresentationPolicyVersion;
   expires_at: string;
   assessment_session_id: string | null;
   linked_user_id: string | null;
@@ -225,18 +231,19 @@ async function project(session: SessionRow, responses: SnapshotV2Response[]) {
     session.status === "completed" || session.status === "linked"
       ? evaluateDeliveryDnaSnapshotV2(responses)
       : null;
+  const contextDomainId = evaluated?.available
+    ? snapshotV2ContextDomainId(evaluated.profile)
+    : null;
   const result = evaluated?.available
     ? {
         ...evaluated,
-        industryContext: evaluated.areasToExplore[0]
-          ? selectSnapshotContext(evaluated.areasToExplore[0].domainId)
-          : [],
+        industryContext: contextDomainId ? selectSnapshotContext(contextDomainId) : [],
       }
     : evaluated;
   return {
     status: session.status,
     configurationVersion: session.configuration_version,
-    presentationPolicyVersion: session.presentation_policy_version,
+    presentationPolicyVersion: DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
     expiresAt: session.expires_at,
     scopeType: session.scope_type,
     scopeDisplayName: session.scope_display_name,

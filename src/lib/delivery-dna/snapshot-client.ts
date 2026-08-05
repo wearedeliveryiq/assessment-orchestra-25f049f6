@@ -3,6 +3,7 @@ import { assessmentAuthHeaders, openAuthenticatedDownload } from "@/lib/identity
 import type {
   SnapshotV2ConfigurationVersion,
   SnapshotV2DomainProfile,
+  SnapshotV2PresentationPolicyVersion,
   SnapshotV2Response,
 } from "./snapshot-v2";
 import type { DeliveryDnaV2Level } from "./catalogue-v2";
@@ -42,7 +43,7 @@ export type SnapshotResult = {
 export type SnapshotState = {
   status: "in_progress" | "completed" | "linked";
   configurationVersion: SnapshotV2ConfigurationVersion;
-  presentationPolicyVersion: "2.1.0";
+  presentationPolicyVersion: SnapshotV2PresentationPolicyVersion;
   expiresAt: string;
   scopeType: string;
   scopeDisplayName: string;

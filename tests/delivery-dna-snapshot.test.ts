@@ -22,6 +22,10 @@ const v11Migration = readFileSync(
   "supabase/migrations/20260803220000_delivery_dna_snapshot_v1_1.sql",
   "utf8",
 );
+const v211PresentationMigration = readFileSync(
+  "supabase/migrations/20260805030000_delivery_dna_2_1_1_snapshot_presentation.sql",
+  "utf8",
+);
 const hardening = readFileSync(
   "supabase/migrations/20260803211000_harden_delivery_dna_snapshot_permissions.sql",
   "utf8",
@@ -378,6 +382,18 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(server).not.toMatch(
       /presentation_policy_version[\s\S]{0,300}(delivery_intelligence|assessment_analysis_runs)/,
     );
+  });
+
+  it("pins new 2.1 sessions to presentation policy 2.1.1 and omits empty signal sections", () => {
+    expect(v211PresentationMigration).toContain("p_token_hash, '2.1.0', '2.1.1', p_scope_type");
+    expect(v211PresentationMigration).not.toMatch(
+      /UPDATE public\.delivery_dna_snapshot_(sessions|responses)/i,
+    );
+    expect(server).toContain(
+      "presentationPolicyVersion: DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION",
+    );
+    expect(route).toContain("result.positiveSignals.length || result.areasToExplore.length");
+    expect(route).not.toContain("No directional signals to show here.");
   });
 
   it("keeps anonymous acquisition data private, opaque, bounded and PII-free", () => {

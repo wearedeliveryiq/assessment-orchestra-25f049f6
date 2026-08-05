@@ -4,10 +4,12 @@ import {
   deliveryDnaV2Catalogue,
   deliveryDnaV2Domains,
   deliveryDnaV2SnapshotQuestions,
+  DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
   type DeliveryDnaV2Level,
 } from "./catalogue-v2";
 
 export type SnapshotV2ConfigurationVersion = "2.1.0";
+export type SnapshotV2PresentationPolicyVersion = "2.1.1";
 export type SnapshotV2Response = {
   questionId: string;
   status: "answered" | "not_applicable" | "missing";
@@ -28,6 +30,7 @@ export type SnapshotV2DomainProfile = {
 
 export const deliveryDnaSnapshotV2Configuration = Object.freeze({
   version: "2.1.0" as const,
+  presentationPolicyVersion: DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
   productName: "Delivery DNA Snapshot",
   questionIds: deliveryDnaV2SnapshotQuestions.map((item) => item.question.id),
   responsePolicy: {
@@ -89,6 +92,52 @@ export function snapshotV2Level(mean: number): DeliveryDnaV2Level {
   if (mean < 2.5) return "developing";
   if (mean < 3.25) return "established";
   return "leading";
+}
+
+export function classifySnapshotV2Signals(profile: SnapshotV2DomainProfile[]) {
+  const available = profile.filter(
+    (domain): domain is SnapshotV2DomainProfile & { value: number; level: DeliveryDnaV2Level } =>
+      domain.value !== null && domain.level !== null,
+  );
+  const positiveCandidates = available.filter((domain) =>
+    available.some((other) => domain.value > other.value),
+  );
+  const positiveSignals = [...positiveCandidates]
+    .sort((left, right) => right.value - left.value || left.axisNumber - right.axisNumber)
+    .slice(0, deliveryDnaV2Catalogue.snapshotPolicy.maximumPositiveSignals)
+    .map((item) => ({
+      domainId: item.domainId,
+      domainLabel: item.domainLabel,
+      level: item.level,
+      text: `${item.domainLabel} is showing the strongest practice signal in this Snapshot.`,
+    }));
+  const positiveIds = new Set(positiveSignals.map((item) => item.domainId));
+  const areaCandidates = available.filter(
+    (domain) =>
+      !positiveIds.has(domain.domainId) && available.some((other) => domain.value < other.value),
+  );
+  const areasToExplore = [...areaCandidates]
+    .sort((left, right) => left.value - right.value || left.axisNumber - right.axisNumber)
+    .slice(0, deliveryDnaV2Catalogue.snapshotPolicy.maximumAreasToExplore)
+    .map((item) => ({
+      domainId: item.domainId,
+      domainLabel: item.domainLabel,
+      level: item.level,
+      text: `${item.domainLabel} is an area to explore in the complete Delivery DNA.`,
+    }));
+  return { positiveSignals, areasToExplore };
+}
+
+/** Preserves the pre-amendment calculation-neutral context selector. */
+export function snapshotV2ContextDomainId(profile: SnapshotV2DomainProfile[]): string | null {
+  return (
+    [...profile]
+      .filter(
+        (domain): domain is SnapshotV2DomainProfile & { value: number } => domain.value !== null,
+      )
+      .sort((left, right) => left.value - right.value || left.axisNumber - right.axisNumber)[0]
+      ?.domainId ?? null
+  );
 }
 
 export function normaliseSnapshotV2Response(input: {
@@ -204,28 +253,7 @@ export function evaluateDeliveryDnaSnapshotV2(responses: SnapshotV2Response[]) {
     };
   }
   const overallMean = answered.reduce((sum, item) => sum + item.answer, 0) / answered.length;
-  const ordered = profile.filter(
-    (domain): domain is SnapshotV2DomainProfile & { value: number; level: DeliveryDnaV2Level } =>
-      domain.value !== null && domain.level !== null,
-  );
-  const positiveSignals = [...ordered]
-    .sort((left, right) => right.value - left.value || left.axisNumber - right.axisNumber)
-    .slice(0, 2)
-    .map((item) => ({
-      domainId: item.domainId,
-      domainLabel: item.domainLabel,
-      level: item.level,
-      text: `${item.domainLabel} is showing the strongest practice signal in this Snapshot.`,
-    }));
-  const areasToExplore = [...ordered]
-    .sort((left, right) => left.value - right.value || left.axisNumber - right.axisNumber)
-    .slice(0, 2)
-    .map((item) => ({
-      domainId: item.domainId,
-      domainLabel: item.domainLabel,
-      level: item.level,
-      text: `${item.domainLabel} is an area to explore in the complete Delivery DNA.`,
-    }));
+  const { positiveSignals, areasToExplore } = classifySnapshotV2Signals(profile);
   return {
     available: true as const,
     reasonCode: null,

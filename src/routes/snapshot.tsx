@@ -683,10 +683,20 @@ function SnapshotResultView({
         <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">{maturity.interpretation}</p>
       </section>
 
-      <div className="mt-7 grid gap-5 md:grid-cols-2">
-        <SignalGroup title={String(copy.positiveHeading)} items={result.positiveSignals} />
-        <SignalGroup title={String(copy.exploreHeading)} items={result.areasToExplore} />
-      </div>
+      {result.positiveSignals.length || result.areasToExplore.length ? (
+        <div
+          className={`mt-7 grid gap-5 ${
+            result.positiveSignals.length && result.areasToExplore.length ? "md:grid-cols-2" : ""
+          }`}
+        >
+          {result.positiveSignals.length ? (
+            <SignalGroup title={String(copy.positiveHeading)} items={result.positiveSignals} />
+          ) : null}
+          {result.areasToExplore.length ? (
+            <SignalGroup title={String(copy.exploreHeading)} items={result.areasToExplore} />
+          ) : null}
+        </div>
+      ) : null}
 
       {result.industryContext?.[0] ? (
         <aside className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#111827] p-5 sm:p-6">
@@ -939,23 +949,19 @@ function SignalGroup({
   return (
     <section className="rounded-[24px] border border-white/[0.08] bg-[#182131] p-5 sm:p-6">
       <h2 className="text-lg font-extrabold">{title}</h2>
-      {items.length ? (
-        <div className="mt-4 space-y-3">
-          {items.map((item) => (
-            <article
-              key={item.domainId}
-              className="rounded-2xl border border-white/[0.06] bg-[#111827] p-4"
-            >
-              <h3 className="flex items-center gap-2 text-sm font-bold">
-                <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.domainLabel}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{item.text}</p>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-4 text-sm text-[#94A3B8]">No directional signals to show here.</p>
-      )}
+      <div className="mt-4 space-y-3">
+        {items.map((item) => (
+          <article
+            key={item.domainId}
+            className="rounded-2xl border border-white/[0.06] bg-[#111827] p-4"
+          >
+            <h3 className="flex items-center gap-2 text-sm font-bold">
+              <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.domainLabel}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{item.text}</p>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

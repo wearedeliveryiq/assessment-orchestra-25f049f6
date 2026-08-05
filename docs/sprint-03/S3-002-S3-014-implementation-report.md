@@ -201,7 +201,7 @@ Stripe credentials and the approved provider price reference remain unavailable,
 
 ### Customer value and corrected product model
 
-Delivery DNA 2.1 replaces new 2.0 collection with the founder-reconciled wording while retaining the same smallest customer journey: 15-question anonymous Snapshot, Saved Snapshot, configurable £295 Overview offer, 30 supporting questions after verified payment and one bounded web/download Overview. The runtime uses exactly five domains, 15 capabilities, 45 question IDs and 180 answer anchors from DIQ-100A v2.1.0. Snapshot/supporting roles and weights are 40/30/30; the obsolete Foundation/Practice/Evidence role model is not used for 2.1.
+Delivery DNA 2.1 replaces new 2.0 collection with the founder-reconciled wording while retaining the same smallest customer journey: 15-question anonymous Snapshot, Saved Snapshot, configurable £295 Overview offer, 30 supporting questions after verified payment and one bounded web/download Overview. The runtime uses exactly five domains, 15 capabilities, 45 question IDs and 180 answer anchors from DIQ-100A v2.1.1. Snapshot/supporting roles and weights are 40/30/30; the obsolete Foundation/Practice/Evidence role model is not used for 2.1. DIQ-100D changes Snapshot signal presentation only; the question set, calculation configuration, canonical content digest and £295 offer remain pinned to 2.1.0.
 
 The deterministic catalogue validator pins the locked identity and canonical digest and checks the approved reconciliation totals: 37 exact submitted questions, four founder-approved edits, four approved new questions, 163 exact anchors, one edited anchor and 16 new anchors. No prompt or answer anchor is duplicated into presentation conditionals.
 
@@ -214,7 +214,7 @@ The deterministic catalogue validator pins the locked identity and canonical dig
 
 ### Verification actually run
 
-- All 45 DIQ-100B v2.1.0 fixtures: pass.
+- All 47 DIQ-100B v2.1.1 fixtures: pass, including all-equal omission, partial ties and exhaustive no-overlap coverage.
 - All 10 PDR-003-004A v2.1.0 fixtures: pass.
 - Historical Snapshot and all 53 DIQ-203B fixtures: pass unchanged.
 - Full Vitest regression: 633/633 tests across 48 files.
@@ -231,6 +231,8 @@ Production preflight and postflight preserved the three completed unlinked 2.0 S
 
 The Product Owner accepted the Delivery DNA 2.1 wording, behaviour and hosted result but identified one presentation-only promotion blocker: Lovable's hosting-injected `Edit with Lovable` badge. The supported project publishing control `hide_badge` was changed from `false` to `true` and republished without application-code, CSP, data, migration or product-rule changes. Fresh anonymous 390×844 and 1280×1800 checks found no visible text, link, button, accessibility attribute, iframe, shadow-root element or fixed overlay containing or linking to Lovable on the Snapshot start, question, result and Saved Snapshot registration surfaces; the result had no horizontal overflow or obscured content. The focused Snapshot suite passed 45/45, type checking passed and the production build passed on production code revision `bcff163` (which contains Delivery DNA 2.1 merge `e869a589bc4d37870fc7b2d30ced621f9bf79f45`). The publishing-setting change is deployment metadata and has no separate Git revision. The live response header identifies deployment `f24031f260c322f732a0619c5c514b32fa611368b554bb2c2ce0ccdca03fd7cd`, reverified at 2026-08-05 10:09:23 UTC. Product accepted the badge remediation.
 
-The same live replay exposed a separate unresolved product-rule gap: tied domains can currently appear in both `Positive signals` and `Areas to explore`, producing contradictory customer copy. Customer promotion remains paused pending founder approval of Product's proposed disjoint-set and strict relative-difference rule. No interpretation change has been implemented from that proposal.
+Founder-approved DIQ-100D v1.0 resolves the live-review contradiction. Signal classification now uses unrounded available domain means, strict relative-difference eligibility and the locked mean/domain-order sort, with at most two disjoint items per list. All-equal profiles return empty lists; the web and Snapshot PDF omit both sections without replacement copy. The calculation-neutral industry-context selector remains unchanged, and completed 2.1 results are safely reprojected with presentation-policy provenance `2.1.1` without mutating responses, domain means or history. New 2.1 sessions pin presentation policy `2.1.1`; the additive migration changes no customer rows.
+
+Targeted verification passes 88/88 across the six Snapshot, journey, commerce and migration suites; all 47 locked DIQ-100B fixtures are instrumented as executed exactly by ID. The complete regression passes 636/636 across 48 files. Type checking, changed-file lint/format and the production Vite/Nitro build pass. Customer promotion remains paused only until the managed migration, publication and narrow hosted 390px/1280px re-check complete.
 
 Provider activation and the purchase-to-result smoke remain legitimately unavailable; checkout continues to fail closed and no customer or payment evidence is manufactured.

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- locked fixture inputs are intentionally heterogeneous by stage */
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 
-import golden from "../docs/01-product/delivery-dna/DIQ-100B v2.1.0 Delivery DNA Golden Fixtures.json";
+import golden from "../docs/01-product/delivery-dna/DIQ-100B v2.1.1 Delivery DNA Golden Fixtures.json";
 import commercial from "../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.1.0 Delivery DNA Commercial Offer Configuration.json";
 import {
   analyseCanonicalInputV2,
@@ -26,6 +26,8 @@ import {
 } from "@/lib/delivery-dna/analysis-v2";
 import {
   DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST,
+  DELIVERY_DNA_V2_CATALOGUE_AUTHORITY_DIGEST,
+  DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
   deliveryDnaV2Capabilities,
   deliveryDnaV2Catalogue,
   deliveryDnaV2CutoverDecision,
@@ -39,8 +41,10 @@ import {
 } from "@/lib/delivery-dna/context-v2";
 import {
   deliveryDnaSnapshotV2Configuration,
+  classifySnapshotV2Signals,
   evaluateDeliveryDnaSnapshotV2,
   normaliseSnapshotV2Response,
+  snapshotV2ContextDomainId,
   snapshotV2Level,
 } from "@/lib/delivery-dna/snapshot-v2";
 import {
@@ -56,7 +60,13 @@ import { projectDeliveryDnaOverviewResult } from "@/lib/delivery-intelligence/pr
 import { evaluateAnalysisEligibility } from "@/lib/analysis/eligibility";
 import evidenceCatalogue from "../docs/01-product/delivery-intelligence/configuration/DIQ-204A Delivery Evidence Catalogue.json";
 
-const fixture = (id: string) => golden.fixtures.find((item) => item.id === id)!;
+const executedFixtureIds = new Set<string>();
+const fixture = (id: string) => {
+  const found = golden.fixtures.find((item) => item.id === id);
+  if (!found) throw new Error(`Missing locked fixture: ${id}`);
+  executedFixtureIds.add(id);
+  return found;
+};
 const capability = deliveryDnaV2Capabilities[0];
 const responseSet = (values: Record<string, { value?: number; status: string; reason?: string }>) =>
   capability.questions.map((question) => {
@@ -111,9 +121,13 @@ const canonicalInputV2 = {
 };
 
 describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
-  it("registers all 45 locked fixtures exactly once", () => {
-    expect(golden.fixtures).toHaveLength(45);
-    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(45);
+  afterAll(() => {
+    expect([...executedFixtureIds].sort()).toEqual(golden.fixtures.map((item) => item.id).sort());
+  });
+  it("registers all 47 locked fixtures exactly once", () => {
+    expect(golden.fixtures).toHaveLength(47);
+    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(47);
+    expect(golden.document.snapshotPresentationPolicyVersion).toBe("2.1.1");
   });
 
   it("validates the exact five-domain, 15-capability, 45-question, 180-anchor catalogue", () => {
@@ -167,6 +181,15 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     );
     expect(createHash("sha256").update(JSON.stringify(canonical)).digest("hex")).toBe(
       DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST,
+    );
+    const authority = readFileSync(
+      "docs/01-product/delivery-dna/DIQ-100A v2.1.1 Delivery DNA Model Catalogue.json",
+    );
+    expect(createHash("sha256").update(authority).digest("hex")).toBe(
+      DELIVERY_DNA_V2_CATALOGUE_AUTHORITY_DIGEST,
+    );
+    expect(deliveryDnaSnapshotV2Configuration.presentationPolicyVersion).toBe(
+      DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
     );
   });
 
@@ -261,6 +284,81 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       ties.expected.positiveSignals,
     );
     expect(tied.areasToExplore.map((item) => item.domainId)).toEqual(ties.expected.areasToExplore);
+    expect(
+      tied.positiveSignals.filter((positive) =>
+        tied.areasToExplore.some((area) => area.domainId === positive.domainId),
+      ),
+    ).toEqual([]);
+
+    const allEqualFixture = fixture("snapshot_signal_all_equal_no_forced_differentiation") as any;
+    const allEqual = evaluateDeliveryDnaSnapshotV2(snapshotResponses(Array(15).fill(3)));
+    expect(allEqual.positiveSignals.map((item) => item.domainId)).toEqual(
+      allEqualFixture.expected.positiveSignals,
+    );
+    expect(allEqual.areasToExplore.map((item) => item.domainId)).toEqual(
+      allEqualFixture.expected.areasToExplore,
+    );
+    expect(snapshotV2ContextDomainId(allEqual.profile)).toBe("direction_value");
+    expect(selectSnapshotContext(snapshotV2ContextDomainId(allEqual.profile)!)).toEqual(
+      selectSnapshotContext("direction_value"),
+    );
+
+    const partialFixture = fixture("snapshot_signal_partial_ties_and_no_overlap") as any;
+    const partialProfile = partialFixture.input.domains.map((domain: any) => {
+      const configured = deliveryDnaV2Catalogue.domains.find((item) => item.id === domain.id)!;
+      return {
+        axisNumber: domain.order,
+        domainId: domain.id,
+        domainLabel: configured.label,
+        value: domain.mean,
+        level: snapshotV2Level(domain.mean),
+        answeredCount: 3,
+      };
+    });
+    const partial = classifySnapshotV2Signals(partialProfile);
+    expect(partial.positiveSignals.map((item) => item.domainId)).toEqual(
+      partialFixture.expected.positiveSignals,
+    );
+    expect(partial.areasToExplore.map((item) => item.domainId)).toEqual(
+      partialFixture.expected.areasToExplore,
+    );
+    expect(
+      partial.positiveSignals
+        .map((item) => item.domainId)
+        .filter((id) => partial.areasToExplore.some((item) => item.domainId === id)),
+    ).toEqual(partialFixture.expected.overlap);
+
+    const withUnavailable = classifySnapshotV2Signals([
+      ...partialProfile.slice(0, 4),
+      { ...partialProfile[4], value: null, level: null, answeredCount: 0 },
+    ]);
+    expect(
+      [...withUnavailable.positiveSignals, ...withUnavailable.areasToExplore].some(
+        (item) => item.domainId === partialProfile[4].domainId,
+      ),
+    ).toBe(false);
+
+    for (let state = 0; state < 3 ** 5; state += 1) {
+      let remaining = state;
+      const profile = deliveryDnaV2Catalogue.domains.map((domain, index) => {
+        const value = (remaining % 3) + 1;
+        remaining = Math.floor(remaining / 3);
+        return {
+          axisNumber: index + 1,
+          domainId: domain.id,
+          domainLabel: domain.label,
+          value,
+          level: snapshotV2Level(value),
+          answeredCount: 3,
+        };
+      });
+      const classified = classifySnapshotV2Signals(profile);
+      expect(
+        classified.positiveSignals.some((positive) =>
+          classified.areasToExplore.some((area) => area.domainId === positive.domainId),
+        ),
+      ).toBe(false);
+    }
     expect(deliveryDnaSnapshotV2Configuration.copy.saveAction).toBe("Save my Snapshot");
     expect(deliveryDnaSnapshotV2Configuration.copy.saveSupporting).toBe(
       "Download your results by saving your Snapshot",
@@ -515,12 +613,15 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       renderDeliveryDnaSnapshotPdf({
         status: "linked",
         configurationVersion: "2.1.0",
-        presentationPolicyVersion: "2.1.0",
+        presentationPolicyVersion: "2.1.1",
         expiresAt: "2026-08-06T00:00:00.000Z",
         scopeType: "whole_organisation",
         scopeDisplayName: "Example organisation",
         responses: snapshotResponses(Array(15).fill(2)),
-        result: { ...snapshot, industryContext: [] },
+        result: {
+          ...snapshot,
+          industryContext: selectSnapshotContext(snapshotV2ContextDomainId(snapshot.profile)!),
+        },
         linkedAssessmentId: "assessment-v2",
       } as never),
     );
@@ -532,6 +633,9 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     expect(snapshotPdf).toContain(
       "Delivery DNA result and may change when the supporting questions are assessed.",
     );
+    expect(snapshotPdf).not.toContain("Positive signals");
+    expect(snapshotPdf).not.toContain("Areas to explore");
+    expect(snapshotPdf).toContain("Wellingtone");
     expect(snapshotPdf).not.toContain("confidence");
     expect(snapshotPdf).not.toContain("recommendation");
 
