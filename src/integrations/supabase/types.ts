@@ -8768,15 +8768,6 @@ export type Database = {
         }
         Returns: string
       }
-      create_delivery_dna_snapshot_v22: {
-        Args: {
-          p_ip_hash: string
-          p_scope_display_name: string
-          p_scope_type: string
-          p_token_hash: string
-        }
-        Returns: string
-      }
       create_recommendation_action_outcome: {
         Args: { p_input: Json }
         Returns: {
@@ -9110,18 +9101,6 @@ export type Database = {
         Returns: string
       }
       link_delivery_dna_snapshot_v21: {
-        Args: {
-          p_consent: boolean
-          p_manifest_metadata: Json
-          p_organisation_id: string
-          p_organisation_name: string
-          p_token_hash: string
-          p_user_id: string
-          p_workspace_id: string
-        }
-        Returns: string
-      }
-      link_delivery_dna_snapshot_v22: {
         Args: {
           p_consent: boolean
           p_manifest_metadata: Json
