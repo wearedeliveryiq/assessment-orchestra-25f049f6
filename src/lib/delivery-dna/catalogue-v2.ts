@@ -1,18 +1,18 @@
-import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A v2.1.1 Delivery DNA Model Catalogue.json";
+import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A v2.2.0 Delivery DNA Model Catalogue.json";
 
 export const DELIVERY_DNA_V2_ASSESSMENT_TYPE = "delivery-dna";
-export const DELIVERY_DNA_V2_VERSION = "2.1.0";
-export const DELIVERY_DNA_V2_CATALOGUE_VERSION = "2.1.1";
-export const DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION = "2.1.1";
-export const DELIVERY_DNA_V2_CONFIGURATION_SET_ID = "delivery-dna-product-config-2.1.0";
-/** Analysis configuration digest remains pinned because DIQ-100D changes presentation only. */
+export const DELIVERY_DNA_V2_VERSION = "2.2.0";
+export const DELIVERY_DNA_V2_CATALOGUE_VERSION = "2.2.0";
+export const DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION = "2.2.0";
+export const DELIVERY_DNA_V2_CONFIGURATION_SET_ID = "delivery-dna-product-config-2.2.0";
+/** Exact canonical question and anchor projection governed by DIQ-100E. */
 export const DELIVERY_DNA_V2_CONFIGURATION_DIGEST =
-  "ad4c21feb0076a5fb46190caafca978e782874907a9fcad3ab4cb77ca50dc1e7";
-/** SHA-256 of the exact locked DIQ-100A v2.1.1 authority bytes. */
+  "405ac1f20558aff464c997bedc286fd921dd34e2fd4f0ad54e2501b68b3f37b4";
+/** SHA-256 of the exact locked DIQ-100A v2.2.0 authority bytes. */
 export const DELIVERY_DNA_V2_CATALOGUE_AUTHORITY_DIGEST =
-  "980faf091e824f97b11652ece8226ead1576f84c653eb005382b038848846526";
+  "52df143f0009620bb1909d350ba7aa073318ee86bc19e35f83f9282a4f90cd5f";
 export const DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST =
-  "3a7cf219fbdbc51902248e21ef6489ca6dc67ddab5cdc22f41081f885668d7a3";
+  "405ac1f20558aff464c997bedc286fd921dd34e2fd4f0ad54e2501b68b3f37b4";
 export const DELIVERY_DNA_V2_NOT_APPLICABLE_REASON = "customer_declared_not_applicable";
 
 export type DeliveryDnaV2Dimension = "snapshot" | "supporting_1" | "supporting_2";
@@ -80,6 +80,11 @@ function validateCatalogue(value: RawCatalogue): RawCatalogue {
     value.snapshotPolicy.signalSelection.unavailableDomains !== "excluded" ||
     value.snapshotPolicy.signalSelection.emptyListPresentation !==
       "omit_without_replacement_claim" ||
+    value.document.amendmentAuthority !== "DIQ-100E@1.0" ||
+    value.snapshotPolicy.languagePolicy.authority !== "DIQ-100E@1.0" ||
+    value.snapshotPolicy.languagePolicy.nonEnumeratedContent !== "unchanged_from_DIQ-100A@2.1.1" ||
+    value.snapshotPolicy.resultPresentation.areasOfStrength.selectionAuthority !== "DIQ-100D@1.0" ||
+    value.snapshotPolicy.industryContextPresentation.scoringEffect !== "none" ||
     value.sourceReconciliation.authority !== "DIQ-100C@2.1" ||
     value.sourceReconciliation.exactSubmittedQuestionsRetained !== 37 ||
     value.sourceReconciliation.founderApprovedEditedQuestions !== 4 ||
@@ -87,6 +92,10 @@ function validateCatalogue(value: RawCatalogue): RawCatalogue {
     value.sourceReconciliation.exactSubmittedAnchorsRetained !== 163 ||
     value.sourceReconciliation.founderApprovedEditedAnchors !== 1 ||
     value.sourceReconciliation.founderApprovedNewAnchors !== 16 ||
+    value.sourceReconciliation.languageExperienceAmendment.questionPromptReplacements !== 10 ||
+    value.sourceReconciliation.languageExperienceAmendment.answerAnchorReplacements !== 5 ||
+    value.sourceReconciliation.languageExperienceAmendment.allNonEnumeratedContentUnchanged !==
+      true ||
     value.sourceReconciliation.canonicalContentDigest.value !==
       DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST ||
     value.unresolvedFounderDecisions.length !== 0
@@ -230,7 +239,7 @@ export function deliveryDnaV2CutoverDecision(input: {
     return {
       allowed: false as const,
       reasonCode: "DELIVERY_DNA_VERSION_TRANSLATION_PROHIBITED" as const,
-      restartTarget: "delivery-dna-snapshot-2.1.0" as const,
+      restartTarget: "delivery-dna-snapshot-2.2.0" as const,
       historyMutated: false as const,
       ...(input.requestedAction === "translate_or_analyse_responses"
         ? { analysisRunCreated: false as const }

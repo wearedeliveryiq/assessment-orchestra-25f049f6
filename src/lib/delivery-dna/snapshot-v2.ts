@@ -8,8 +8,8 @@ import {
   type DeliveryDnaV2Level,
 } from "./catalogue-v2";
 
-export type SnapshotV2ConfigurationVersion = "2.1.0";
-export type SnapshotV2PresentationPolicyVersion = "2.1.1";
+export type SnapshotV2ConfigurationVersion = "2.2.0";
+export type SnapshotV2PresentationPolicyVersion = "2.2.0";
 export type SnapshotV2Response = {
   questionId: string;
   status: "answered" | "not_applicable" | "missing";
@@ -29,7 +29,7 @@ export type SnapshotV2DomainProfile = {
 };
 
 export const deliveryDnaSnapshotV2Configuration = Object.freeze({
-  version: "2.1.0" as const,
+  version: "2.2.0" as const,
   presentationPolicyVersion: DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
   productName: "Delivery DNA Snapshot",
   questionIds: deliveryDnaV2SnapshotQuestions.map((item) => item.question.id),
@@ -43,35 +43,33 @@ export const deliveryDnaSnapshotV2Configuration = Object.freeze({
     advanceOnPersistenceFailure: false,
   },
   preparationPolicy: {
-    minimumVisibleMilliseconds: 4000,
-    targetMaximumMilliseconds: 6000,
-    slowStateAtMilliseconds: 6000,
-    heading: "Building your Delivery DNA Snapshot",
-    body: "We’re reviewing the patterns across your 15 responses.",
-    ready: "Your Snapshot is ready",
-    steps: [
-      "Reviewing your Snapshot responses",
-      "Building your five-domain profile",
-      "Identifying positive signals",
-      "Highlighting areas to explore",
-      "Preparing your personalised Snapshot",
-    ],
+    minimumVisibleMilliseconds:
+      deliveryDnaV2Catalogue.snapshotPolicy.preparation.minimumVisibleMilliseconds,
+    targetMaximumMilliseconds:
+      deliveryDnaV2Catalogue.snapshotPolicy.preparation.targetMaximumMilliseconds,
+    slowStateAtMilliseconds:
+      deliveryDnaV2Catalogue.snapshotPolicy.preparation.delayedStateAtMilliseconds,
+    heading: deliveryDnaV2Catalogue.snapshotPolicy.preparation.heading,
+    body: deliveryDnaV2Catalogue.snapshotPolicy.preparation.body,
+    ready: deliveryDnaV2Catalogue.snapshotPolicy.preparation.ready,
+    delayedHeading: deliveryDnaV2Catalogue.snapshotPolicy.preparation.delayedHeading,
+    steps: deliveryDnaV2Catalogue.snapshotPolicy.preparation.steps,
   },
   copy: {
     heading: "Your Delivery DNA Snapshot",
     caveat: deliveryDnaV2Catalogue.snapshotPolicy.mandatoryCaveat,
-    saveHeading: "Keep your Delivery DNA Snapshot",
-    saveBody:
-      "Save your Snapshot for free to download your results, return at any time and continue to your complete Delivery DNA without starting again.",
-    saveSupporting: "Download your results by saving your Snapshot",
+    saveHeading: deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot.fullValuePanel.heading,
+    saveBody: deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot.fullValuePanel.body,
+    saveSupporting:
+      deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot.compactAction.supportingMessage,
     saveBenefits: [
       "Download a polished copy of your indicative results",
       "Return to your results at any time",
       "Keep your 15 answers securely saved",
       "Continue to your complete Delivery DNA without repeating questions",
     ],
-    saveAction: "Save my Snapshot",
-    saveAssurance: "Free to save. No payment required. Your results remain private.",
+    saveAction: deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot.compactAction.primaryAction,
+    saveAssurance: deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot.compactAction.reassurance,
     commercialAction: "Unlock your complete Delivery DNA — £295",
   },
   analyticsAllowedEvents: [
@@ -199,7 +197,7 @@ export function snapshotV2ContinuationRecord(response: SnapshotV2Response) {
     notApplicableReasonCode: response.notApplicableReasonCode,
     notApplicableReasonText: response.notApplicableReasonText,
     respondedAt: response.respondedAt,
-    provenance: "delivery-dna-snapshot@2.1.0" as const,
+    provenance: "delivery-dna-snapshot@2.2.0" as const,
     fullAssessmentCompleted: false as const,
     analysisRunCreated: false as const,
   };

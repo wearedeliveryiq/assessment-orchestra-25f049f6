@@ -154,7 +154,7 @@ export function projectFreeWorkspaceResult(
   };
 }
 
-/** PDR-003-004 v2.1 bounded paid Overview projection (with historical 2.0 read support). */
+/** Bounded paid Overview projection with immutable historical 2.0/2.1 read support. */
 export function projectDeliveryDnaOverviewResult(input: {
   stored: StoredIntelligenceResult;
   portfolio: RecommendationPortfolioRecord | null;
@@ -222,9 +222,10 @@ export function projectDeliveryDnaOverviewResult(input: {
   };
   if (
     canonical.schemaVersion === "deliveryiq.intelligence-result/2.0.0" ||
-    canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0"
+    canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0" ||
+    canonical.schemaVersion === "deliveryiq.intelligence-result/2.2.0"
   ) {
-    const current = canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0";
+    const current = canonical.schemaVersion === "deliveryiq.intelligence-result/2.2.0";
     const recommendationById = new Map(
       canonical.recommendations.ranked.map((item) => [String(item.id), item]),
     );
@@ -256,8 +257,10 @@ export function projectDeliveryDnaOverviewResult(input: {
     };
     return {
       schemaVersion: current
-        ? ("deliveryiq.delivery-dna-overview/2.1.0" as const)
-        : ("deliveryiq.delivery-dna-overview/2.0.0" as const),
+        ? ("deliveryiq.delivery-dna-overview/2.2.0" as const)
+        : canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0"
+          ? ("deliveryiq.delivery-dna-overview/2.1.0" as const)
+          : ("deliveryiq.delivery-dna-overview/2.0.0" as const),
       resultId: input.stored.id,
       analysisRunId: input.stored.analysisRunId,
       generatedAt: input.stored.publishedAt,

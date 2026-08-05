@@ -79,7 +79,7 @@ async function scopeFor(assessmentId: string): Promise<CheckoutScope | null> {
     )
     .eq("assessment_session_id", assessmentId)
     .eq("status", "linked")
-    .eq("configuration_version", "2.1.0")
+    .eq("configuration_version", "2.2.0")
     .maybeSingle();
   if (error)
     throw new OverviewPaymentError(

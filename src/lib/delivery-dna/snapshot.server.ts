@@ -39,7 +39,7 @@ type SessionRow = {
   id: string;
   status: "in_progress" | "completed" | "linked";
   configuration_version: SnapshotV2ConfigurationVersion;
-  presentation_policy_version: "2.1.0" | SnapshotV2PresentationPolicyVersion;
+  presentation_policy_version: SnapshotV2PresentationPolicyVersion;
   expires_at: string;
   assessment_session_id: string | null;
   linked_user_id: string | null;
@@ -150,7 +150,7 @@ async function sessionForRequest(
       .from("delivery_dna_snapshot_sessions")
       .select(SESSION_PROJECTION)
       .eq("token_hash", tokenHash)
-      .eq("configuration_version", "2.1.0")
+      .eq("configuration_version", "2.2.0")
       .maybeSingle(),
   );
   if (!session || new Date(session.expires_at).getTime() <= Date.now()) return null;
@@ -182,7 +182,7 @@ async function savedSnapshotForRequest(request: Request): Promise<SessionRow | n
     await sb
       .from("delivery_dna_snapshot_sessions")
       .select(SESSION_PROJECTION)
-      .eq("configuration_version", "2.1.0")
+      .eq("configuration_version", "2.2.0")
       .eq("status", "linked")
       .eq("linked_user_id", context.identity.user.id)
       .eq("organisation_id", context.organisationId)
@@ -295,7 +295,7 @@ export async function startSnapshot(
     );
   }
   const sessionId = unwrapRpc<string>(
-    await sb.rpc("create_delivery_dna_snapshot_v21", {
+    await sb.rpc("create_delivery_dna_snapshot_v22", {
       p_token_hash: tokenHash,
       p_ip_hash: clientIpHash(request),
       p_scope_type: scopeType,
@@ -427,7 +427,7 @@ export async function continueSnapshot(request: Request, input: Record<string, u
   }
   const manifestMetadata = deliveryDnaV2SessionMetadata(await deliveryDnaV2ManifestDigest());
   const assessmentId = unwrapRpc<string>(
-    await sb.rpc("link_delivery_dna_snapshot_v21", {
+    await sb.rpc("link_delivery_dna_snapshot_v22", {
       p_token_hash: resolved.tokenHash,
       p_user_id: context.identity.user.id,
       p_organisation_id: context.organisationId,

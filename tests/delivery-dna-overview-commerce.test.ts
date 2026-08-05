@@ -250,7 +250,7 @@ describe("PDR-003-004/A v2.1 commercial journey", () => {
     expect(route).not.toContain("Buy my Delivery DNA Overview — £295");
     expect(route).toContain("deliveryDnaCommercialCopy.overviewOffer.purchaseAction");
     expect(route).toContain("access.data.offer.taxDisplay");
-    expect(route).toContain("deliveryDnaCommercialCopy.savePanel.primaryAction");
+    expect(route).toContain("savedSnapshotCopy.saveAction");
     expect(readFileSync("src/routes/auth.register.tsx", "utf8")).not.toMatch(/free account/i);
   });
 

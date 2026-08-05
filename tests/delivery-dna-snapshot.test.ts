@@ -26,6 +26,10 @@ const v211PresentationMigration = readFileSync(
   "supabase/migrations/20260805030000_delivery_dna_2_1_1_snapshot_presentation.sql",
   "utf8",
 );
+const v22Migration = readFileSync(
+  "supabase/migrations/20260805040000_delivery_dna_2_2_cutover.sql",
+  "utf8",
+);
 const hardening = readFileSync(
   "supabase/migrations/20260803211000_harden_delivery_dna_snapshot_permissions.sql",
   "utf8",
@@ -273,6 +277,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
   it("provides the truthful timed preparation, slow, error and reduced-motion states", () => {
     expect(preparation).toContain("policy.minimumVisibleMilliseconds");
     expect(preparation).toContain("policy.slowStateAtMilliseconds");
+    expect(preparation).toContain("policy.delayedHeading");
     expect(preparation).toContain("policy.heading");
     expect(preparation).toContain("policy.body");
     expect(preparation).toContain("policy.ready");
@@ -280,8 +285,8 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(preparation).toMatch(
       /setShowReady\(true\);\s*\}, \[elapsed, resultReady, showReady\]\);\s*useEffect\(\(\) => \{\s*if \(!showReady\) return;\s*finishTimer\.current = setTimeout\(onReady, 700\)/,
     );
+    expect(preparation).toContain("policy.steps[displayedStep]");
     for (const step of deliveryDnaSnapshotConfiguration.preparationPolicy.steps) {
-      expect(preparation).toContain("{step}");
       expect(step.copy).not.toMatch(
         /AI analysis|benchmarking|external data comparison|evidence validation|Delivery Intelligence Engine analysis/i,
       );
@@ -315,12 +320,14 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     const orderedMarkers = [
       "copy.readyHeading",
       "copy.resultHeading",
-      "copy.resultCaveat",
-      "copy.profileHeading",
+      "copy.interpretationHeading",
       "maturity.interpretation",
+      "copy.resultCaveat",
+      "savedSnapshotCopy.saveSupporting",
+      "copy.profileHeading",
       "copy.positiveHeading",
       "copy.exploreHeading",
-      "deliveryDnaCommercialCopy.savePanel.heading",
+      "savedSnapshotCopy.saveHeading",
       "copy.restartCta",
     ];
     for (let index = 1; index < orderedMarkers.length; index += 1) {
@@ -377,7 +384,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(v11Migration).toContain("SNAPSHOT_CONFIGURATION_VERSION_IMMUTABLE");
     expect(v11Migration).toContain("SNAPSHOT_PRESENTATION_VERSION_TRANSITION_INVALID");
     expect(v11Migration).toContain("delivery_dna_snapshot_versions_guard");
-    expect(server).toContain('.eq("configuration_version", "2.1.0")');
+    expect(server).toContain('.eq("configuration_version", "2.2.0")');
     expect(server).toContain("snapshotV2ContinuationRecord(response)");
     expect(server).not.toMatch(
       /presentation_policy_version[\s\S]{0,300}(delivery_intelligence|assessment_analysis_runs)/,
@@ -394,6 +401,19 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     );
     expect(route).toContain("result.positiveSignals.length || result.areasToExplore.length");
     expect(route).not.toContain("No directional signals to show here.");
+  });
+
+  it("pins new 2.2 sessions and exact continuation provenance without rewriting 2.1 history", () => {
+    expect(v22Migration).toContain("p_token_hash, '2.2.0', '2.2.0', p_scope_type");
+    expect(v22Migration).toContain("v_snapshot.configuration_version <> '2.2.0'");
+    expect(v22Migration).toContain("'delivery-dna-snapshot', '2.2.0', responded_at");
+    expect(v22Migration).toContain("delivery-dna-product-config-2.2.0");
+    expect(v22Migration).not.toMatch(
+      /UPDATE public\.delivery_dna_snapshot_sessions SET[\s\S]{0,120}configuration_version/i,
+    );
+    expect(v22Migration).not.toMatch(/INSERT INTO public\.assessment_analysis_runs/i);
+    expect(server).toContain('sb.rpc("create_delivery_dna_snapshot_v22"');
+    expect(server).toContain('sb.rpc("link_delivery_dna_snapshot_v22"');
   });
 
   it("keeps anonymous acquisition data private, opaque, bounded and PII-free", () => {

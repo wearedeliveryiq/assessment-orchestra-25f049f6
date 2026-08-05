@@ -52,6 +52,7 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
 
   const activeStep = Math.min(policy.steps.length - 1, Math.floor(elapsed / 800));
   const slow = elapsed >= policy.slowStateAtMilliseconds && !resultReady;
+  const displayedStep = showReady ? policy.steps.length - 1 : activeStep;
 
   return (
     <section
@@ -59,45 +60,63 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
       role="status"
       aria-live="polite"
     >
-      <RibbonStage size="md" className="mx-auto" onNavy />
+      <div className="relative mx-auto w-fit">
+        <div
+          className="snapshot-preparation-orbit absolute inset-[-22px] rounded-full border border-[#60A5FA]/25"
+          aria-hidden="true"
+        />
+        <RibbonStage size="md" className="snapshot-preparation-ribbon relative mx-auto" onNavy />
+      </div>
       <p className="mt-2 text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
         Delivery DNA Snapshot
       </p>
       <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-        {showReady ? policy.ready : policy.heading}
+        {showReady ? policy.ready : slow ? policy.delayedHeading : policy.heading}
       </h1>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#CBD5E1] sm:text-base">
-        {slow ? "We’re still preparing your Snapshot. Your responses are safe." : policy.body}
+        {policy.body}
       </p>
 
-      <ol className="mx-auto mt-8 max-w-xl space-y-3 text-left">
+      <ol
+        className="snapshot-domain-flow mx-auto mt-8 flex max-w-xl items-center justify-between gap-2"
+        aria-label="Snapshot preparation progress"
+      >
         {policy.steps.map((step, index) => {
           const completeStep = resultReady || index < activeStep;
           const current = !resultReady && index === activeStep;
           return (
             <li
               key={step}
-              className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm"
+              className="snapshot-domain-flow-node relative flex flex-1 justify-center"
+              data-state={completeStep ? "complete" : current ? "active" : "waiting"}
             >
               <span
-                className="flex h-6 w-6 shrink-0 items-center justify-center"
-                aria-hidden="true"
+                className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-[#111827]"
+                aria-label={`${step}: ${completeStep ? "complete" : current ? "in progress" : "waiting"}`}
               >
                 {completeStep ? (
                   <Check className="h-5 w-5 text-[#14B8A6]" />
                 ) : current ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-[#60A5FA]" />
+                  <span className="snapshot-preparation-pulse h-3 w-3 rounded-full bg-[#60A5FA]" />
                 ) : (
                   <span className="h-2 w-2 rounded-full bg-white/20" />
                 )}
-              </span>
-              <span className={completeStep || current ? "text-[#F8FAFC]" : "text-[#94A3B8]"}>
-                {step}
               </span>
             </li>
           );
         })}
       </ol>
+
+      <div className="mx-auto mt-5 max-w-xl rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-4 text-left">
+        <p className="flex items-center gap-3 text-sm font-semibold text-[#F8FAFC]">
+          {showReady ? (
+            <Check className="h-5 w-5 shrink-0 text-[#14B8A6]" aria-hidden="true" />
+          ) : (
+            <Loader2 className="h-5 w-5 shrink-0 animate-spin text-[#60A5FA]" aria-hidden="true" />
+          )}
+          {policy.steps[displayedStep]}
+        </p>
+      </div>
 
       {complete.error ? (
         <div className="mt-7 rounded-xl border border-red-400/30 bg-red-400/10 p-4" role="alert">

@@ -1,19 +1,19 @@
 # DIQ-204 — Delivery Evidence and Trends Register
 
-| Control | Value |
-|---|---|
-| Document ID | DIQ-204 |
-| Version | 1.3 |
-| Status | **CONTROLLED** |
-| Owner | Product Owner |
-| Approver | Matt Prust |
-| Authorised | 5 August 2026 |
-| Evidence snapshot | 5 August 2026 |
-| Classification | Internal — Controlled |
-| Machine-readable catalogue | [DIQ-204A](<configuration/DIQ-204A Delivery Evidence Catalogue.json>) |
-| Cross-references | [DIQ-002](<../../00-master-index/DIQ-002 Product Architecture.md>), [DIQ-100](<../delivery-dna/DIQ-100 v2.1 Delivery DNA Specification.md>), [DIQ-100A](<../delivery-dna/DIQ-100A v2.1.0 Delivery DNA Model Catalogue.json>), [DIQ-100B](<../delivery-dna/DIQ-100B v2.1.0 Delivery DNA Golden Fixtures.json>), [DIQ-200](<DIQ-200 Delivery Intelligence Engine.md>), [DIQ-201](<../recommendation-framework/DIQ-201 Recommendation Framework.md>), [DIQ-202](<DIQ-202 Delivery Intelligence Traceability Model.md>), [DIQ-203](<DIQ-203 Sprint 03 Product Configuration Specification.md>), [DIQ-203A](<configuration/DIQ-203A Sprint 03 Production Configuration.json>), [DIQ-203C](<configuration/DIQ-203C Delivery DNA 1.0.0 Question Catalogue.json>) |
+| Control                    | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Document ID                | DIQ-204                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Version                    | 1.4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Status                     | **CONTROLLED**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Owner                      | Product Owner                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Approver                   | Matt Prust                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Authorised                 | 5 August 2026                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Evidence snapshot          | 5 August 2026                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Classification             | Internal — Controlled                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Machine-readable catalogue | [DIQ-204A v1.3.0](<configuration/DIQ-204A Delivery Evidence Catalogue.json>)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Cross-references           | [DIQ-002](<../../00-master-index/DIQ-002 Product Architecture.md>), [DIQ-100](<../delivery-dna/DIQ-100 v2.1 Delivery DNA Specification.md>), [DIQ-100A v2.2.0](<../delivery-dna/DIQ-100A v2.2.0 Delivery DNA Model Catalogue.json>), [DIQ-100B v2.2.0](<../delivery-dna/DIQ-100B v2.2.0 Delivery DNA Golden Fixtures.json>), [DIQ-100E](<../delivery-dna/DIQ-100E v1.0 Delivery DNA 2.2 Language and Snapshot Experience Amendment.md>), [DIQ-200](<DIQ-200 Delivery Intelligence Engine.md>), [DIQ-201](<../recommendation-framework/DIQ-201 Recommendation Framework.md>), [DIQ-202](<DIQ-202 Delivery Intelligence Traceability Model.md>), [DIQ-203](<DIQ-203 Sprint 03 Product Configuration Specification.md>), [DIQ-203A](<configuration/DIQ-203A Sprint 03 Production Configuration.json>), [DIQ-203C](<configuration/DIQ-203C Delivery DNA 1.0.0 Question Catalogue.json>) |
 
-> **Controlled-document notice.** DIQ-204 governs how external delivery evidence and trends are selected, maintained and used by DeliveryIQ. It never changes scoring, confidence, pattern, recommendation or ranking at runtime. DIQ-203/A/B remain the historical authority for Delivery DNA 1.0; locked DIQ-100/A/B/C v2.1 govern new Delivery DNA journeys. Evidence may change customer scoring only through a separately approved, versioned configuration release with updated golden fixtures.
+> **Controlled-document notice.** DIQ-204 governs how external delivery evidence and trends are selected, maintained and used by DeliveryIQ. It never changes scoring, confidence, pattern, recommendation or ranking at runtime. DIQ-203/A/B remain the historical authority for Delivery DNA 1.0; locked DIQ-100/A/B/C v2.1 with DIQ-100E v1.0 and DIQ-100A/B v2.2.0 govern new Delivery DNA journeys. Evidence may change customer scoring only through a separately approved, versioned configuration release with updated golden fixtures.
 
 ## 1. Purpose
 
@@ -23,7 +23,7 @@ This register provides:
 
 - a current professional-practice baseline;
 - a machine-readable evidence and fact catalogue;
-- mappings from current trends to the applicable Delivery DNA 1.0 and 2.1 capabilities;
+- mappings from current trends to the applicable Delivery DNA 1.0 and 2.2 capabilities;
 - approved customer-safe wording and prohibited inferences;
 - a lean refresh and promotion process suitable for a startup.
 
@@ -54,16 +54,16 @@ Unattributed statistics, social-media claims, search summaries and statements th
 
 The following publications form the baseline at the evidence snapshot date:
 
-| Authority | Current publication | DeliveryIQ relevance |
-|---|---|---|
-| PMI | [PMBOK Guide — Eighth Edition](https://www.pmi.org/standards/pmbok), November 2025 | Value delivery, adaptability, accountability, AI, PMOs and procurement |
-| APM | [APM Body of Knowledge — Eighth Edition](https://www.apm.org.uk/news/apm-body-of-knowledge-8th-edition-now-available/), April 2025 | Systems thinking, leadership, sustainability, project controls, data and AI |
-| PMI and Agile Alliance | [Agile Practice Guide — Second Edition](https://www.pmi.org/standards/agile), July 2026 | Fit-for-purpose lifecycles, product and flow thinking, psychological safety, AI-enabled delivery and sustainability |
-| PMI | [The Standard for Artificial Intelligence in Portfolio, Program and Project Management](https://www.pmi.org/standards/artificial-intelligence), June 2026 | Human oversight, ethical and legal guardrails, governance, risk and data quality |
-| ISO | [ISO 21502:2020](https://www.iso.org/standard/74947.html) | Method-neutral project management, oversight, benefits and outcomes |
-| ISO | [ISO 21513:2026](https://www.iso.org/standard/63585.html), January 2026 | Post-project evaluation of objectives, outcomes, benefits, governance and management |
-| PeopleCert | [PRINCE2 7](https://www.peoplecert.org/news-and-announcements/new-prince2-7) | People, tailoring, digital/data, sustainability and compatibility with agile and lean methods |
-| UK Government Project Delivery | [GovS 002, version 2.1](https://www.gov.uk/government/publications/project-delivery-functional-standard), September 2025 | Governance roles, portfolio/programme/project management, planning, control, solution transition, use and disposal |
+| Authority                      | Current publication                                                                                                                                       | DeliveryIQ relevance                                                                                                |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| PMI                            | [PMBOK Guide — Eighth Edition](https://www.pmi.org/standards/pmbok), November 2025                                                                        | Value delivery, adaptability, accountability, AI, PMOs and procurement                                              |
+| APM                            | [APM Body of Knowledge — Eighth Edition](https://www.apm.org.uk/news/apm-body-of-knowledge-8th-edition-now-available/), April 2025                        | Systems thinking, leadership, sustainability, project controls, data and AI                                         |
+| PMI and Agile Alliance         | [Agile Practice Guide — Second Edition](https://www.pmi.org/standards/agile), July 2026                                                                   | Fit-for-purpose lifecycles, product and flow thinking, psychological safety, AI-enabled delivery and sustainability |
+| PMI                            | [The Standard for Artificial Intelligence in Portfolio, Program and Project Management](https://www.pmi.org/standards/artificial-intelligence), June 2026 | Human oversight, ethical and legal guardrails, governance, risk and data quality                                    |
+| ISO                            | [ISO 21502:2020](https://www.iso.org/standard/74947.html)                                                                                                 | Method-neutral project management, oversight, benefits and outcomes                                                 |
+| ISO                            | [ISO 21513:2026](https://www.iso.org/standard/63585.html), January 2026                                                                                   | Post-project evaluation of objectives, outcomes, benefits, governance and management                                |
+| PeopleCert                     | [PRINCE2 7](https://www.peoplecert.org/news-and-announcements/new-prince2-7)                                                                              | People, tailoring, digital/data, sustainability and compatibility with agile and lean methods                       |
+| UK Government Project Delivery | [GovS 002, version 2.1](https://www.gov.uk/government/publications/project-delivery-functional-standard), September 2025                                  | Governance roles, portfolio/programme/project management, planning, control, solution transition, use and disposal  |
 
 Active watchlist items are not product authority until published and reviewed:
 
@@ -74,16 +74,16 @@ Active watchlist items are not product authority until published and reviewed:
 
 The evidence supports eight durable themes. These are practice signals, not claims that one method is universally superior.
 
-| Theme | Product interpretation |
-|---|---|
-| Value and business acumen | Assess whether delivery choices connect to strategy, outcomes, benefits and investment value—not only time, cost and scope. |
-| Fit-for-purpose delivery | Support predictive, adaptive, agile and hybrid approaches; assess whether the approach is appropriate and effective. |
-| Complexity and systems thinking | Examine dependencies, stakeholder interests, decision friction, uncertainty and interactions across the delivery system. |
-| People and change conditions | Treat leadership, collaboration, stakeholder adoption, psychological safety and sustainable team performance as delivery conditions. |
-| Data and responsible AI | Assess data quality, decision use, human oversight, accountability, risk and ethical safeguards where AI supports delivery. |
-| Sustainability and whole-life value | Consider environmental, social and whole-life consequences as part of intended value and governance where material. |
-| Evaluation and learning | Continue benefits and governance evaluation after implementation and apply findings to subsequent delivery. |
-| Proportionate governance | Match governance, controls and assurance to value, complexity and risk while retaining clear accountability. |
+| Theme                               | Product interpretation                                                                                                               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Value and business acumen           | Assess whether delivery choices connect to strategy, outcomes, benefits and investment value—not only time, cost and scope.          |
+| Fit-for-purpose delivery            | Support predictive, adaptive, agile and hybrid approaches; assess whether the approach is appropriate and effective.                 |
+| Complexity and systems thinking     | Examine dependencies, stakeholder interests, decision friction, uncertainty and interactions across the delivery system.             |
+| People and change conditions        | Treat leadership, collaboration, stakeholder adoption, psychological safety and sustainable team performance as delivery conditions. |
+| Data and responsible AI             | Assess data quality, decision use, human oversight, accountability, risk and ethical safeguards where AI supports delivery.          |
+| Sustainability and whole-life value | Consider environmental, social and whole-life consequences as part of intended value and governance where material.                  |
+| Evaluation and learning             | Continue benefits and governance evaluation after implementation and apply findings to subsequent delivery.                          |
+| Proportionate governance            | Match governance, controls and assurance to value, complexity and risk while retaining clear accountability.                         |
 
 ## 6. Delivery DNA 1.0.0 gap assessment
 
@@ -95,21 +95,21 @@ Two topics are not explicit enough to support a future specialist conclusion wit
 
 ### 6.2 Capability mapping
 
-| Capability | Current coverage | Trend mapping and decision |
-|---|---|---|
-| `strategy_alignment` | Strong | Covers priorities, outcomes, trade-offs and strategic contribution. Whole-life and sustainability value is a future candidate, not a current scoring rule. |
-| `governance` | Strong | Covers decision rights, forums, escalation, records and follow-through. Responsible-AI accountability is not explicit. |
-| `sponsorship` | Strong | Covers sponsor direction, barriers, decisions and accountability. Business-acumen evidence strengthens existing interpretation. |
-| `portfolio` | Strong | Covers objectives, investment boundaries, capacity, start/stop/rebalance decisions, value and constraints. |
-| `programme_delivery` | Strong with a partial gap | Covers outcomes, governance, dependencies, risks and approach. Systems complexity and inter-organisational relationships could be made more explicit later. |
-| `project_delivery` | Strong | Covers outcomes, scope, delivery approach, adaptation, closure and constraints without privileging one lifecycle. |
-| `planning_controls` | Strong | Covers baselines, tolerances, forecasts, change and corrective action. Flow metrics are valid evidence where appropriate but are not mandatory. |
-| `benefits` | Strong | Covers owners, measures, timescales and tracking after implementation. ISO 21513 strengthens the interpretation of post-project evaluation. |
-| `risk_assurance` | Strong with a partial gap | Covers risk, control, assurance and escalation. AI, data and ethical risks require context-specific evidence rather than inferred scoring. |
-| `stakeholder_change` | Strong with a partial gap | Covers affected groups, impacts, engagement and sustained adoption. Psychological safety and team well-being are not explicit. |
-| `pmo_enablement` | Strong | Covers purpose, authority, proportionate support, challenge, coordination and delivery value. |
-| `reporting_insight` | Strong with a partial gap | Covers measures, ownership, data standards, validation and decision use. Human review of AI-generated insight is not explicit. |
-| `continuous_improvement` | Strong | Covers feedback, learning, performance signals, completed improvements and reuse in later delivery. |
+| Capability               | Current coverage          | Trend mapping and decision                                                                                                                                  |
+| ------------------------ | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `strategy_alignment`     | Strong                    | Covers priorities, outcomes, trade-offs and strategic contribution. Whole-life and sustainability value is a future candidate, not a current scoring rule.  |
+| `governance`             | Strong                    | Covers decision rights, forums, escalation, records and follow-through. Responsible-AI accountability is not explicit.                                      |
+| `sponsorship`            | Strong                    | Covers sponsor direction, barriers, decisions and accountability. Business-acumen evidence strengthens existing interpretation.                             |
+| `portfolio`              | Strong                    | Covers objectives, investment boundaries, capacity, start/stop/rebalance decisions, value and constraints.                                                  |
+| `programme_delivery`     | Strong with a partial gap | Covers outcomes, governance, dependencies, risks and approach. Systems complexity and inter-organisational relationships could be made more explicit later. |
+| `project_delivery`       | Strong                    | Covers outcomes, scope, delivery approach, adaptation, closure and constraints without privileging one lifecycle.                                           |
+| `planning_controls`      | Strong                    | Covers baselines, tolerances, forecasts, change and corrective action. Flow metrics are valid evidence where appropriate but are not mandatory.             |
+| `benefits`               | Strong                    | Covers owners, measures, timescales and tracking after implementation. ISO 21513 strengthens the interpretation of post-project evaluation.                 |
+| `risk_assurance`         | Strong with a partial gap | Covers risk, control, assurance and escalation. AI, data and ethical risks require context-specific evidence rather than inferred scoring.                  |
+| `stakeholder_change`     | Strong with a partial gap | Covers affected groups, impacts, engagement and sustained adoption. Psychological safety and team well-being are not explicit.                              |
+| `pmo_enablement`         | Strong                    | Covers purpose, authority, proportionate support, challenge, coordination and delivery value.                                                               |
+| `reporting_insight`      | Strong with a partial gap | Covers measures, ownership, data standards, validation and decision use. Human review of AI-generated insight is not explicit.                              |
+| `continuous_improvement` | Strong                    | Covers feedback, learning, performance signals, completed improvements and reuse in later delivery.                                                         |
 
 ### 6.3 Future configuration candidates
 
@@ -191,15 +191,15 @@ Evidence grades are:
 
 ## 10. Product usage
 
-| Use | Policy |
-|---|---|
-| Delivery DNA scoring and bands | Prohibited; contextual evidence has no scoring effect under DIQ-100/A or DIQ-203/A |
-| Pattern or recommendation eligibility | Prohibited without versioned product rules and tests |
-| Knowledge Pack educational content | Allowed for approved items with source, year and caveat |
-| Recommendation rationale | Allowed as general context; must not claim that the statistic caused the customer's finding |
-| Customer result narrative | Allowed in a separately labelled “Industry context” element under the locked DIQ-100/A selection, source-note and disclosure rules |
-| Website or marketing | Allowed with approved wording; must retain the source year and avoid predictive claims |
-| Internal product discovery | Allowed for all included items; excluded items may be retained only with their exclusion reason |
+| Use                                   | Policy                                                                                                                             |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Delivery DNA scoring and bands        | Prohibited; contextual evidence has no scoring effect under DIQ-100/A or DIQ-203/A                                                 |
+| Pattern or recommendation eligibility | Prohibited without versioned product rules and tests                                                                               |
+| Knowledge Pack educational content    | Allowed for approved items with source, year and caveat                                                                            |
+| Recommendation rationale              | Allowed as general context; must not claim that the statistic caused the customer's finding                                        |
+| Customer result narrative             | Allowed in a separately labelled “Industry context” element under the locked DIQ-100/A selection, source-note and disclosure rules |
+| Website or marketing                  | Allowed with approved wording; must retain the source year and avoid predictive claims                                             |
+| Internal product discovery            | Allowed for all included items; excluded items may be retained only with their exclusion reason                                    |
 
 ## 11. Lean maintenance cycle
 
@@ -229,15 +229,18 @@ Customer evidence and tenant data must never be added to DIQ-204A. Future outcom
 - External evidence continues to have no scoring, confidence, finding, pattern, recommendation or ranking effect.
 - The seven Wellingtone 2026 evidence items are approved as `B1` directional context for the exact surfaces and capability mappings recorded in DIQ-204A.
 - Wellingtone findings must carry a visible source note and the self-selected-survey caveat; they are not a representative benchmark or prediction.
-- Delivery DNA 2.1 may select approved contextual items only under the locked DIQ-100/A rules and retain the exact evidence ID and version in the result projection.
+- Four additional Snapshot-context items are approved under DIQ-100E: APM Conditions for Project Success 2015, PMI Maximizing Project Success 2024, UK Government AI Playbook 2025 and NISTA Major Projects Annual Report 2025–26. Their exact wording, mappings, source notes and prohibited inferences are controlled by DIQ-204A v1.3.0.
+- Delivery DNA 2.2 may select approved contextual items only under the locked DIQ-100/A/E rules and retain the exact evidence ID, version, deterministic selection reason and source in the result projection.
+- Snapshot context is calculation-neutral, limited to one item and must display the separate non-benchmark disclosure required by DIQ-100E.
 - Responsible AI questions remain context-gated and value-led; non-use of AI does not automatically reduce maturity.
 - The next scheduled evidence review is **3 November 2026**.
 
 ## 14. Change history
 
-| Version | Date | Change | Approval |
-|---|---|---|---|
-| 1.3 | 5 August 2026 | Repointed unchanged contextual-evidence mappings and controls to the locked source-reconciled Delivery DNA 2.1 authority | Product Owner |
-| 1.2 | 5 August 2026 | Added seven Wellingtone 2026 directional context items, Delivery DNA 2.0 mappings and result-page source-note controls without changing scoring | Matt Prust |
-| 1.1 | 3 August 2026 | Added the commercial and question-design policy for proportionate, value-led AI adoption without penalising non-use | Matt Prust |
-| 1.0 | 3 August 2026 | Established the evidence hierarchy, current-practice baseline, 13-capability/39-question gap assessment, customer fact policy and initial catalogue | Matt Prust |
+| Version | Date          | Change                                                                                                                                                                                 | Approval                       |
+| ------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| 1.4     | 5 August 2026 | Added four DIQ-100E-approved, deterministically mapped Snapshot context items and the shortened source-note/non-benchmark presentation contract without changing calculation behaviour | Matt Prust under DIQ-100E v1.0 |
+| 1.3     | 5 August 2026 | Repointed unchanged contextual-evidence mappings and controls to the locked source-reconciled Delivery DNA 2.1 authority                                                               | Product Owner                  |
+| 1.2     | 5 August 2026 | Added seven Wellingtone 2026 directional context items, Delivery DNA 2.0 mappings and result-page source-note controls without changing scoring                                        | Matt Prust                     |
+| 1.1     | 3 August 2026 | Added the commercial and question-design policy for proportionate, value-led AI adoption without penalising non-use                                                                    | Matt Prust                     |
+| 1.0     | 3 August 2026 | Established the evidence hierarchy, current-practice baseline, 13-capability/39-question gap assessment, customer fact policy and initial catalogue                                    | Matt Prust                     |

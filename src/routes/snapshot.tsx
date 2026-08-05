@@ -64,35 +64,39 @@ const copy = {
     "Answer at least 12 questions, including two in every domain, to prepare your Snapshot.",
   readyHeading: "Your Snapshot is ready",
   resultHeading: "Your indicative delivery maturity",
+  interpretationHeading: "What this means",
   profileHeading: "Your indicative Delivery DNA profile",
   profileBody:
     "This chart shows the directional level for each domain. Not applicable responses remain visible gaps.",
-  positiveHeading: "Positive signals",
-  exploreHeading: "Areas to explore",
+  positiveHeading: deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.areasOfStrength.heading,
+  positiveHelper:
+    deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.areasOfStrength.helperText,
+  exploreHeading: deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.areasToExploreHeading,
   resultCaveat: deliveryDnaV2Catalogue.snapshotPolicy.mandatoryCaveat,
   restartCta: "Start a new Snapshot",
 };
 const interaction = deliveryDnaSnapshotV2Configuration.interactionPolicy;
+const savedSnapshotCopy = deliveryDnaSnapshotV2Configuration.copy;
 const maturityLevels: Record<DeliveryDnaV2Level, { label: string; interpretation: string }> = {
   emerging: {
     label: "Emerging",
     interpretation:
-      "Delivery practice is currently more reactive, informal or inconsistent across the assessed scope.",
+      deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations.emerging,
   },
   developing: {
     label: "Developing",
     interpretation:
-      "Relevant delivery practice exists, but application and ownership remain uneven across the assessed scope.",
+      deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations.developing,
   },
   established: {
     label: "Established",
     interpretation:
-      "Delivery practice is defined and applied across most relevant activity in the assessed scope.",
+      deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations.established,
   },
   leading: {
     label: "Leading",
     interpretation:
-      "Delivery practice is embedded, outcome-led and regularly improved across the assessed scope.",
+      deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations.leading,
   },
 };
 
@@ -433,7 +437,7 @@ function SnapshotQuestions({
         <p className="text-sm leading-relaxed text-[#CBD5E1]">{item.customerHelp}</p>
 
         <div
-          className="mt-6 grid gap-3 sm:grid-cols-5"
+          className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
           role="radiogroup"
           aria-label="Choose the response that best reflects your organisation"
           aria-busy={save.isPending}
@@ -472,7 +476,7 @@ function SnapshotQuestions({
                     answer: option.value,
                   })
                 }
-                className={`min-h-28 rounded-2xl border p-4 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] sm:text-center ${
+                className={`h-full min-h-32 rounded-2xl border p-4 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] ${
                   selected
                     ? "scale-[1.02] border-[#60A5FA] bg-[#2563EB]/25 shadow-[0_12px_34px_-20px_rgba(37,99,235,0.9)]"
                     : "border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
@@ -490,8 +494,7 @@ function SnapshotQuestions({
         <div className="mt-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
           <button
             type="button"
-            role="radio"
-            aria-checked={selectingNotApplicable}
+            aria-pressed={selectingNotApplicable}
             className="flex min-h-11 w-full items-center gap-3 text-left text-sm font-semibold text-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
             onClick={() => {
               setLocalAnswer(null);
@@ -656,14 +659,34 @@ function SnapshotResultView({
         <h1 className="relative mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">
           {String(copy.resultHeading)}
         </h1>
-        <p className="snapshot-gradient-text relative mt-5 text-5xl font-extrabold tracking-tight sm:text-6xl">
+        <p className="snapshot-gradient-text relative mt-5 break-words px-2 py-2 text-5xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
           {maturity.label}
         </p>
+        <div className="relative mx-auto mt-7 max-w-3xl border-t border-white/[0.08] pt-6 text-left">
+          <h2 className="text-xl font-extrabold">{String(copy.interpretationHeading)}</h2>
+          <p className="mt-3 leading-relaxed text-[#CBD5E1]">{maturity.interpretation}</p>
+        </div>
       </section>
 
       <p className="mt-6 rounded-2xl border border-white/[0.08] bg-[#111827] p-5 text-sm leading-relaxed text-[#CBD5E1]">
         {copy.resultCaveat}
       </p>
+
+      {snapshot.status !== "linked" ? (
+        <section className="mt-6 flex flex-col items-start gap-4 rounded-[22px] border border-[#60A5FA]/40 bg-[#2563EB]/15 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <p className="font-bold text-[#F8FAFC]">{savedSnapshotCopy.saveSupporting}</p>
+            <p className="mt-1 text-sm text-[#CBD5E1]">{savedSnapshotCopy.saveAssurance}</p>
+          </div>
+          <a
+            href="#snapshot-save-panel"
+            className="snapshot-gradient-button inline-flex min-h-12 shrink-0 items-center gap-2 rounded-lg px-6 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+          >
+            {savedSnapshotCopy.saveAction}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </a>
+        </section>
+      ) : null}
 
       <section
         className="snapshot-acquisition-panel mt-7 rounded-[28px] p-5 sm:p-8"
@@ -678,11 +701,6 @@ function SnapshotResultView({
         </div>
       </section>
 
-      <section className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#182131] p-6 sm:p-8">
-        <h2 className="text-xl font-extrabold">{maturity.label}</h2>
-        <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">{maturity.interpretation}</p>
-      </section>
-
       {result.positiveSignals.length || result.areasToExplore.length ? (
         <div
           className={`mt-7 grid gap-5 ${
@@ -690,7 +708,11 @@ function SnapshotResultView({
           }`}
         >
           {result.positiveSignals.length ? (
-            <SignalGroup title={String(copy.positiveHeading)} items={result.positiveSignals} />
+            <SignalGroup
+              title={String(copy.positiveHeading)}
+              helper={String(copy.positiveHelper)}
+              items={result.positiveSignals}
+            />
           ) : null}
           {result.areasToExplore.length ? (
             <SignalGroup title={String(copy.exploreHeading)} items={result.areasToExplore} />
@@ -700,20 +722,33 @@ function SnapshotResultView({
 
       {result.industryContext?.[0] ? (
         <aside className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#111827] p-5 sm:p-6">
+          <h2 className="text-lg font-extrabold">Industry context</h2>
           <p className="text-sm leading-relaxed text-[#CBD5E1]">
             {result.industryContext[0].approvedCustomerWording}
             <sup className="ml-1">{result.industryContext[0].footnoteMarker}</sup>
           </p>
-          <p className="mt-4 border-t border-white/[0.08] pt-4 text-xs leading-relaxed text-[#94A3B8]">
-            {result.industryContext[0].footnoteMarker} {result.industryContext[0].sourcePublisher},{" "}
-            <cite>{result.industryContext[0].sourceTitle}</cite>,{" "}
-            {result.industryContext[0].evidenceYear}. {result.industryContext[0].scopeCaveat}{" "}
+          <p className="mt-4 text-sm font-semibold leading-relaxed text-[#F8FAFC]">
             {result.industryContext[0].mandatoryDisclosure}
           </p>
+          <details className="mt-4 text-xs text-[#94A3B8]">
+            <summary className="cursor-pointer font-semibold text-[#CBD5E1]">
+              About this source
+            </summary>
+            <p className="mt-2 leading-relaxed">{result.industryContext[0].scopeCaveat}</p>
+          </details>
+          <a
+            href={result.industryContext[0].originalSourceReference}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 block border-t border-white/[0.08] pt-4 text-xs leading-relaxed text-[#94A3B8] underline decoration-white/30 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+          >
+            {result.industryContext[0].sourceNote}
+          </a>
         </aside>
       ) : null}
 
       <section
+        id="snapshot-save-panel"
         className="snapshot-acquisition-panel mt-8 rounded-[28px] p-6 sm:p-9"
         aria-labelledby="snapshot-continue-title"
       >
@@ -833,13 +868,10 @@ function SnapshotResultView({
         ) : !isAuthenticated ? (
           <>
             <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
-              {deliveryDnaCommercialCopy.savePanel.heading}
+              {savedSnapshotCopy.saveHeading}
             </h2>
             <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
-              {deliveryDnaCommercialCopy.savePanel.body}
-            </p>
-            <p className="mt-3 text-sm font-semibold text-[#F8FAFC]">
-              {deliveryDnaCommercialCopy.savePanel.supportingMessage}
+              {savedSnapshotCopy.saveBody}
             </p>
             <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
               {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
@@ -857,24 +889,19 @@ function SnapshotResultView({
                 to="/auth/register"
                 search={{ snapshot: "continue", source: undefined, result: undefined }}
               >
-                {deliveryDnaCommercialCopy.savePanel.primaryAction}
+                {savedSnapshotCopy.saveAction}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
             </Button>
-            <p className="mt-3 text-xs text-[#94A3B8]">
-              {deliveryDnaCommercialCopy.savePanel.assuranceLine}
-            </p>
+            <p className="mt-3 text-xs text-[#94A3B8]">{savedSnapshotCopy.saveAssurance}</p>
           </>
         ) : (
           <div className="mt-6">
             <h2 id="snapshot-continue-title" className="text-2xl font-extrabold sm:text-3xl">
-              {deliveryDnaCommercialCopy.savePanel.heading}
+              {savedSnapshotCopy.saveHeading}
             </h2>
             <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
-              {deliveryDnaCommercialCopy.savePanel.body}
-            </p>
-            <p className="mt-3 text-sm font-semibold text-[#F8FAFC]">
-              {deliveryDnaCommercialCopy.savePanel.supportingMessage}
+              {savedSnapshotCopy.saveBody}
             </p>
             <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
               {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
@@ -905,11 +932,9 @@ function SnapshotResultView({
               {continuation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
               ) : null}
-              {deliveryDnaCommercialCopy.savePanel.primaryAction}
+              {savedSnapshotCopy.saveAction}
             </Button>
-            <p className="mt-3 text-xs text-[#94A3B8]">
-              {deliveryDnaCommercialCopy.savePanel.assuranceLine}
-            </p>
+            <p className="mt-3 text-xs text-[#94A3B8]">{savedSnapshotCopy.saveAssurance}</p>
             {continuation.error ? (
               <p className="mt-3 text-sm text-red-300" role="alert">
                 {continuation.error.message}
@@ -941,14 +966,17 @@ function SnapshotResultView({
 
 function SignalGroup({
   title,
+  helper,
   items,
 }: {
   title: string;
+  helper?: string;
   items: { domainId: string; domainLabel: string; text: string }[];
 }) {
   return (
     <section className="rounded-[24px] border border-white/[0.08] bg-[#182131] p-5 sm:p-6">
       <h2 className="text-lg font-extrabold">{title}</h2>
+      {helper ? <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{helper}</p> : null}
       <div className="mt-4 space-y-3">
         {items.map((item) => (
           <article

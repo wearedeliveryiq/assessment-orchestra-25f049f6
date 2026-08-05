@@ -30,12 +30,16 @@ export type SnapshotResult = {
   areasToExplore: { domainId: string; domainLabel: string; text: string }[];
   industryContext?: Array<{
     evidenceId: string;
+    evidenceVersion: string;
     approvedCustomerWording: string;
     footnoteMarker: string;
     sourcePublisher: string;
     sourceTitle: string;
+    sourceNote: string;
+    originalSourceReference: string;
     evidenceYear: number;
     scopeCaveat: string;
+    selectionReason: string;
     mandatoryDisclosure: string;
   }>;
 };
