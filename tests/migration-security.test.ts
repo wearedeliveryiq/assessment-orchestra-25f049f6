@@ -750,3 +750,28 @@ describe("Delivery DNA 2.1 cutover security", () => {
     expect(cutover).toContain("FOR UPDATE");
   });
 });
+
+describe("Delivery DNA 2.1.1 Snapshot presentation security", () => {
+  const presentation = readFileSync(
+    new URL(
+      "../supabase/migrations/20260805030000_delivery_dna_2_1_1_snapshot_presentation.sql",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+
+  it("pins only presentation policy 2.1.1 without migrating customer data", () => {
+    expect(presentation).toContain("'2.0.0', '2.1.0', '2.1.1'");
+    expect(presentation).toContain("p_token_hash, '2.1.0', '2.1.1', p_scope_type");
+    expect(presentation).not.toMatch(/UPDATE public\.delivery_dna_snapshot_/i);
+    expect(presentation).not.toMatch(/INSERT INTO public\.assessment_/i);
+    expect(presentation).not.toMatch(/INSERT INTO public\.assessment_analysis_runs/i);
+  });
+
+  it("retains service-role-only creation with no client execution grant", () => {
+    expect(presentation).toContain("SECURITY DEFINER SET search_path = public, pg_temp");
+    expect(presentation).toContain("FROM PUBLIC, anon, authenticated");
+    expect(presentation).toContain("TO service_role");
+    expect(presentation).not.toContain("CREATE POLICY");
+  });
+});

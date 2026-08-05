@@ -1,11 +1,16 @@
-import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A v2.1.0 Delivery DNA Model Catalogue.json";
+import rawCatalogue from "../../../docs/01-product/delivery-dna/DIQ-100A v2.1.1 Delivery DNA Model Catalogue.json";
 
 export const DELIVERY_DNA_V2_ASSESSMENT_TYPE = "delivery-dna";
 export const DELIVERY_DNA_V2_VERSION = "2.1.0";
+export const DELIVERY_DNA_V2_CATALOGUE_VERSION = "2.1.1";
+export const DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION = "2.1.1";
 export const DELIVERY_DNA_V2_CONFIGURATION_SET_ID = "delivery-dna-product-config-2.1.0";
-/** SHA-256 of the exact locked DIQ-100A v2.1.0 catalogue bytes. */
+/** Analysis configuration digest remains pinned because DIQ-100D changes presentation only. */
 export const DELIVERY_DNA_V2_CONFIGURATION_DIGEST =
   "ad4c21feb0076a5fb46190caafca978e782874907a9fcad3ab4cb77ca50dc1e7";
+/** SHA-256 of the exact locked DIQ-100A v2.1.1 authority bytes. */
+export const DELIVERY_DNA_V2_CATALOGUE_AUTHORITY_DIGEST =
+  "980faf091e824f97b11652ece8226ead1576f84c653eb005382b038848846526";
 export const DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST =
   "3a7cf219fbdbc51902248e21ef6489ca6dc67ddab5cdc22f41081f885668d7a3";
 export const DELIVERY_DNA_V2_NOT_APPLICABLE_REASON = "customer_declared_not_applicable";
@@ -53,12 +58,28 @@ type RawCatalogue = typeof rawCatalogue;
 function validateCatalogue(value: RawCatalogue): RawCatalogue {
   if (
     value.document.id !== "DIQ-100A" ||
-    value.document.version !== DELIVERY_DNA_V2_VERSION ||
+    value.document.version !== DELIVERY_DNA_V2_CATALOGUE_VERSION ||
     value.document.status !== "locked" ||
     value.identity.assessmentType !== DELIVERY_DNA_V2_ASSESSMENT_TYPE ||
     value.identity.knowledgePackVersion !== DELIVERY_DNA_V2_VERSION ||
     value.identity.questionSetVersion !== DELIVERY_DNA_V2_VERSION ||
     value.identity.configurationSetId !== DELIVERY_DNA_V2_CONFIGURATION_SET_ID ||
+    value.snapshotPolicy.presentationPolicyVersion !==
+      DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION ||
+    value.snapshotPolicy.signalSelection.authority !== "DIQ-100D@1.0" ||
+    value.snapshotPolicy.signalSelection.basis !== "unrounded_available_domain_mean" ||
+    value.snapshotPolicy.signalSelection.positiveEligibility !==
+      "strictly_greater_than_at_least_one_other_available_domain_mean" ||
+    value.snapshotPolicy.signalSelection.areaToExploreEligibility !==
+      "strictly_lower_than_at_least_one_other_available_domain_mean" ||
+    value.snapshotPolicy.signalSelection.positiveSort.join(",") !== "mean_desc,domain_order_asc" ||
+    value.snapshotPolicy.signalSelection.areaToExploreSort.join(",") !==
+      "mean_asc,domain_order_asc" ||
+    value.snapshotPolicy.signalSelection.setsDisjoint !== true ||
+    value.snapshotPolicy.signalSelection.allAvailableMeansEqual !== "omit_both_lists" ||
+    value.snapshotPolicy.signalSelection.unavailableDomains !== "excluded" ||
+    value.snapshotPolicy.signalSelection.emptyListPresentation !==
+      "omit_without_replacement_claim" ||
     value.sourceReconciliation.authority !== "DIQ-100C@2.1" ||
     value.sourceReconciliation.exactSubmittedQuestionsRetained !== 37 ||
     value.sourceReconciliation.founderApprovedEditedQuestions !== 4 ||

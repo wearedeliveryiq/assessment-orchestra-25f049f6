@@ -78,13 +78,17 @@ export function renderDeliveryDnaSnapshotPdf(snapshot: SnapshotProjection): Uint
   const signals = new PdfPage();
   title(signals, "What this suggests", "Signals to carry forward");
   y = 700;
-  signals.text("Positive signals", MARGIN, y, 14, "bold", COLOURS.teal);
-  y -= 30;
-  for (const item of result.positiveSignals) y = paragraph(signals, `• ${item.text}`, y) - 8;
-  y -= 14;
-  signals.text("Areas to explore", MARGIN, y, 14, "bold", COLOURS.blue);
-  y -= 30;
-  for (const item of result.areasToExplore) y = paragraph(signals, `• ${item.text}`, y) - 8;
+  if (result.positiveSignals.length) {
+    signals.text("Positive signals", MARGIN, y, 14, "bold", COLOURS.teal);
+    y -= 30;
+    for (const item of result.positiveSignals) y = paragraph(signals, `• ${item.text}`, y) - 8;
+    y -= 14;
+  }
+  if (result.areasToExplore.length) {
+    signals.text("Areas to explore", MARGIN, y, 14, "bold", COLOURS.blue);
+    y -= 30;
+    for (const item of result.areasToExplore) y = paragraph(signals, `• ${item.text}`, y) - 8;
+  }
   if (result.industryContext?.[0]) {
     const item = result.industryContext[0];
     y -= 14;
