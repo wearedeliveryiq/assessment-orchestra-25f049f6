@@ -2293,6 +2293,8 @@ export type Database = {
           linking_consent_at: string | null
           organisation_id: string | null
           presentation_policy_version: string
+          scope_display_name: string | null
+          scope_type: string | null
           status: string
           token_hash: string
           updated_at: string
@@ -2310,6 +2312,8 @@ export type Database = {
           linking_consent_at?: string | null
           organisation_id?: string | null
           presentation_policy_version?: string
+          scope_display_name?: string | null
+          scope_type?: string | null
           status?: string
           token_hash: string
           updated_at?: string
@@ -2327,6 +2331,8 @@ export type Database = {
           linking_consent_at?: string | null
           organisation_id?: string | null
           presentation_policy_version?: string
+          scope_display_name?: string | null
+          scope_type?: string | null
           status?: string
           token_hash?: string
           updated_at?: string
@@ -8742,6 +8748,15 @@ export type Database = {
       }
       create_delivery_dna_snapshot: {
         Args: { p_ip_hash: string; p_token_hash: string }
+        Returns: string
+      }
+      create_delivery_dna_snapshot_v2: {
+        Args: {
+          p_ip_hash: string
+          p_scope_display_name: string
+          p_scope_type: string
+          p_token_hash: string
+        }
         Returns: string
       }
       create_recommendation_action_outcome: {
