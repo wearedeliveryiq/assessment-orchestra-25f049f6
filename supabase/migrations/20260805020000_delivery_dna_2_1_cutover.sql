@@ -158,11 +158,11 @@ BEGIN
      OR p_manifest_metadata #>> '{deliveryDna,questionSetVersion}' <> '2.1.0'
      OR p_manifest_metadata #>> '{deliveryDna,configurationSetId}' <> 'delivery-dna-product-config-2.1.0'
      OR jsonb_typeof(p_manifest_metadata #> '{deliveryDna,questionManifest}') IS DISTINCT FROM 'array'
-     OR CASE
+     OR (CASE
           WHEN jsonb_typeof(p_manifest_metadata #> '{deliveryDna,questionManifest}') = 'array'
           THEN jsonb_array_length(p_manifest_metadata #> '{deliveryDna,questionManifest}')
           ELSE 0
-        END <> 45
+        END) <> 45
      OR COALESCE(p_manifest_metadata #>> '{deliveryDna,questionManifestDigest}', '') !~ '^[0-9a-f]{64}$' THEN
     RAISE EXCEPTION 'SNAPSHOT_LINK_UNAVAILABLE';
   END IF;
