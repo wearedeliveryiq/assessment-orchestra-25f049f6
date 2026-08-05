@@ -1,8 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ClipboardList, FileCheck2, Loader2, PlusCircle } from "lucide-react";
-import { toast } from "sonner";
 
 import { AppShell } from "@/components/deliveryiq/app-shell";
 import { IdentityMenu } from "@/components/identity/identity-menu";
@@ -45,8 +43,6 @@ function LandingPage() {
   const hydrated = useHydrated();
   const { isAuthenticated, isLoading: identityLoading } = useIdentity();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const [organisation, setOrganisation] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: assessmentKeys.list,
@@ -59,19 +55,6 @@ function LandingPage() {
   const running = sessions.filter((s) => ["submitted", "processing"].includes(s.status));
   const completed = sessions.filter((s) => s.status === "completed");
 
-  const create = useMutation({
-    mutationFn: () =>
-      assessmentApi.create({
-        organisationName: organisation,
-        assessmentType: DELIVERY_DNA_ASSESSMENT_TYPE,
-      }),
-    onSuccess: ({ session }) => {
-      queryClient.invalidateQueries({ queryKey: assessmentKeys.list });
-      navigate({ to: "/assessment/$id", params: { id: session.id } });
-    },
-    onError: (error: Error) => toast.error(error.message),
-  });
-
   return (
     <AppShell action={<IdentityMenu />}>
       <section className="ribbon-panel rounded-xl px-6 py-10 sm:px-10 sm:py-14">
@@ -83,8 +66,8 @@ function LandingPage() {
           <span className="text-gradient-ribbon">then focus improvement where it matters.</span>
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Complete the 39-question Delivery DNA assessment to receive evidence-backed delivery
-          intelligence, priorities and practical next steps.
+          Start with the 15-question Delivery DNA Snapshot, then unlock the complete 45-question
+          Delivery DNA Overview when you are ready.
         </p>
         <Link
           to="/snapshot"
@@ -106,51 +89,17 @@ function LandingPage() {
             </h2>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-            Start a Delivery DNA assessment and save your progress as you go.
+            Complete the 15-question Delivery DNA Snapshot anonymously. Save it privately when you
+            want to return or continue.
           </p>
-          {!isAuthenticated ? (
-            <Link
-              to="/auth/login"
-              className="ribbon-bar mt-5 inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground"
-            >
-              Sign in to start
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          ) : (
-            <form
-              className="mt-5 flex flex-col gap-3"
-              onSubmit={(event) => {
-                event.preventDefault();
-                if (!organisation.trim()) {
-                  toast.error("Enter an organisation name to continue");
-                  return;
-                }
-                create.mutate();
-              }}
-            >
-              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Organisation
-                <input
-                  value={organisation}
-                  onChange={(event) => setOrganisation(event.target.value)}
-                  placeholder="e.g. Northwind Logistics"
-                  className="mt-1.5 w-full rounded-md border border-input bg-background/70 px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring"
-                />
-              </label>
-              <button
-                type="submit"
-                disabled={create.isPending}
-                className="ribbon-bar inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-              >
-                {create.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <ArrowRight className="h-4 w-4" />
-                )}
-                Start assessment
-              </button>
-            </form>
-          )}
+          <Link
+            to="/snapshot"
+            search={{ continue: false }}
+            className="ribbon-bar mt-5 inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            Start the Delivery DNA Snapshot
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </article>
 
         {/* Continue draft */}

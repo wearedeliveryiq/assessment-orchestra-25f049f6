@@ -17,9 +17,9 @@ import {
   deliveryDnaSessionMetadata,
 } from "@/lib/delivery-dna/catalogue";
 import {
-  normaliseCustomerAnswer,
-  prepareDeliveryDnaCompletion,
-} from "@/lib/delivery-dna/submission";
+  normaliseCustomerAnswerV1 as normaliseCustomerAnswer,
+  prepareDeliveryDnaCompletionV1 as prepareDeliveryDnaCompletion,
+} from "@/lib/delivery-dna/submission-v1";
 
 async function completedSession(): Promise<AssessmentSession> {
   return {

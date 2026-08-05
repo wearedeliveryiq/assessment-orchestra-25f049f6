@@ -1,6 +1,5 @@
 import * as assessmentRepo from "../assessment/repository.server";
 import * as executionRepo from "../orchestrator/repository.server";
-import { SPRINT03_CONFIGURATION_SET_ID } from "../delivery-intelligence/config";
 import { driveAnalysisRun } from "./executor.server";
 import {
   ANALYSIS_ELIGIBILITY_EVALUATOR_VERSION,
@@ -167,7 +166,7 @@ export class AnalysisHandoffService {
       organisation_id: handoff.organisationId,
       workspace_id: handoff.workspaceId,
       assessment_revision: handoff.assessmentRevision,
-      configuration_set_id: SPRINT03_CONFIGURATION_SET_ID,
+      configuration_set_id: handoff.configurationSetId,
       assessment_type: session.assessmentType,
       knowledge_pack_id: execution.knowledgePackId,
       knowledge_pack_version: execution.knowledgePackVersion,

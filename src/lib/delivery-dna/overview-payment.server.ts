@@ -26,6 +26,7 @@ type CheckoutScope = {
   organisation_id: string;
   workspace_id: string;
   assessment_session_id: string;
+  configuration_version: string;
 };
 
 type CheckoutRow = {
@@ -73,9 +74,12 @@ function publicOrigin(request: Request): string {
 async function scopeFor(assessmentId: string): Promise<CheckoutScope | null> {
   const { data, error } = await db
     .from("delivery_dna_snapshot_sessions")
-    .select("id,linked_user_id,organisation_id,workspace_id,assessment_session_id")
+    .select(
+      "id,linked_user_id,organisation_id,workspace_id,assessment_session_id,configuration_version",
+    )
     .eq("assessment_session_id", assessmentId)
     .eq("status", "linked")
+    .eq("configuration_version", "2.0.0")
     .maybeSingle();
   if (error)
     throw new OverviewPaymentError(
@@ -361,6 +365,16 @@ export async function handleDeliveryDnaOverviewWebhook(request: Request): Promis
     });
   const session = event?.data?.object;
   const metadata = stringMetadata(session?.metadata);
+  if (
+    metadata.offer_id !== deliveryDnaOverviewOffer.offerId ||
+    metadata.offer_version !== deliveryDnaOverviewOffer.offerVersion ||
+    metadata.access_version !== deliveryDnaOverviewOffer.accessVersion
+  ) {
+    return new Response(JSON.stringify({ received: true }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  }
   const totals = stripeCheckoutTotals(session);
   const paymentStatus =
     (event.type === "checkout.session.completed" ||
@@ -390,18 +404,12 @@ export async function handleDeliveryDnaOverviewWebhook(request: Request): Promis
     p_access_key: metadata.access_key ?? "",
     p_access_version: metadata.access_version ?? "",
   };
-  const result =
-    metadata.offer_version === "1.0.0"
-      ? await db.rpc("fulfil_delivery_dna_overview_payment", {
-          ...shared,
-          p_amount_minor: totals.subtotalMinor,
-        })
-      : await db.rpc("fulfil_delivery_dna_overview_payment_v2", {
-          ...shared,
-          p_subtotal_minor: totals.subtotalMinor,
-          p_vat_amount_minor: totals.vatAmountMinor,
-          p_customer_total_minor: totals.customerTotalMinor,
-        });
+  const result = await db.rpc("fulfil_delivery_dna_overview_payment_v2", {
+    ...shared,
+    p_subtotal_minor: totals.subtotalMinor,
+    p_vat_amount_minor: totals.vatAmountMinor,
+    p_customer_total_minor: totals.customerTotalMinor,
+  });
   if (result.error) {
     console.error("[overview-payment] verified event processing failed", { eventId: event.id });
     return new Response("Temporary failure", { status: 500 });

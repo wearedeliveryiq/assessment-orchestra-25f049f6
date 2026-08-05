@@ -2,16 +2,18 @@
 
 ## Activate the offer
 
-1. Apply the base migrations `20260804010000_delivery_dna_overview_commerce.sql` and `20260804011000_harden_delivery_dna_overview_commerce_permissions.sql` if not already present. Then apply `20260804012000_delivery_dna_overview_non_vat_offer.sql` followed immediately by `20260804013000_harden_delivery_dna_overview_non_vat_permissions.sql` through the Lovable-managed migration path.
-2. Verify RLS is enabled with zero client policies; `anon`, `authenticated` and `PUBLIC` have no table, sequence, function or `MAINTAIN` privileges; only `service_role` can call the commerce functions.
-3. In Stripe, create and approve one GBP one-off price whose subtotal and final total are exactly 29500 minor units. Do not enable automatic tax or tax-ID collection. The customer must see exactly: “No VAT charged — DeliveryIQ is not VAT registered.” No VAT amount, VAT registration number or VAT-inclusive claim may appear.
-4. Configure deployment secrets without exposing their values:
+1. Before the 2.0 cutover, confirm there are zero succeeded 1.0 checkouts, verified payments and 1.0 access grants. If any genuine paid customer exists, preserve that access and stop only the access-migration decision; do not translate evidence or delete history.
+2. Apply `20260805010000_delivery_dna_2_cutover.sql` followed immediately by `20260805011000_harden_delivery_dna_2_permissions.sql` through the Lovable-managed migration path. Existing commerce and non-VAT migrations must already be present.
+3. Verify new Snapshot sessions pin 2.0.0, the old creation function is no longer executable, exact 15-ID linking is tenant scoped, historical 1.x rows are unchanged, and client roles hold no new table/function privileges.
+4. Verify RLS is enabled with zero client policies; `anon`, `authenticated` and `PUBLIC` have no table, sequence, function or `MAINTAIN` privileges; only `service_role` can call the commerce functions.
+5. In Stripe, create and approve one GBP one-off price whose subtotal and final total are exactly 29500 minor units. Do not enable automatic tax or tax-ID collection. The customer must see exactly: “No VAT charged — DeliveryIQ is not VAT registered.” No VAT amount, VAT registration number or VAT-inclusive claim may appear.
+6. Configure deployment secrets without exposing their values:
    - `DELIVERYIQ_PAYMENT_PROVIDER=stripe`
    - `STRIPE_SECRET_KEY`
    - `STRIPE_WEBHOOK_SECRET`
    - `DELIVERYIQ_OVERVIEW_STRIPE_PRICE_ID`
-5. Register the HTTPS webhook endpoint `/api/delivery-dna-overview/webhook` for completed, asynchronous-success, asynchronous-failure and expired Checkout Session events.
-6. Deploy and verify the Saved Snapshot page resolves the server offer and enables the purchase action.
+7. Register the HTTPS webhook endpoint `/api/delivery-dna-overview/webhook` for completed, asynchronous-success, asynchronous-failure and expired Checkout Session events.
+8. Deploy and verify the Saved Snapshot page resolves the server offer and enables the purchase action.
 
 ## First authorised purchase smoke
 
@@ -21,7 +23,7 @@ Use one named test purchaser in an authorised non-customer or approved tenant. C
 - success redirect alone remains pending and grants nothing;
 - one valid signed paid event reporting subtotal 29500, tax 0 and total 29500 creates exactly one immutable scoped grant;
 - replay creates no second grant or fulfilment;
-- the remaining 26 questions open only for the purchaser in the matching organisation/workspace;
+- the remaining 30 questions open only for the purchaser in the matching organisation/workspace;
 - completion uses the existing automatic analysis hand-off;
 - the web Overview and downloaded report contain the same bounded projection;
 - a different tenant and an unsigned/wrong-price/wrong-tax/wrong-total event are denied without leakage;

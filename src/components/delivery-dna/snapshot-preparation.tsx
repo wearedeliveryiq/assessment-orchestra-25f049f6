@@ -5,10 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { RibbonStage } from "@/components/ribbon";
 import { Button } from "@/components/ui/button";
 import { deliveryDnaSnapshotApi } from "@/lib/delivery-dna/snapshot-client";
-import { deliveryDnaSnapshotConfiguration } from "@/lib/delivery-dna/snapshot";
+import { deliveryDnaSnapshotV2Configuration } from "@/lib/delivery-dna/snapshot-v2";
 
-const policy = deliveryDnaSnapshotConfiguration.preparationPolicy;
-const copy = deliveryDnaSnapshotConfiguration.copy;
+const policy = deliveryDnaSnapshotV2Configuration.preparationPolicy;
 
 export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
   const queryClient = useQueryClient();
@@ -65,10 +64,10 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
         Delivery DNA Snapshot
       </p>
       <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-        {showReady ? String(copy.readyHeading) : String(copy.preparationHeading)}
+        {showReady ? policy.ready : policy.heading}
       </h1>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#CBD5E1] sm:text-base">
-        {slow ? String(copy.slowPreparationBody) : String(copy.preparationBody)}
+        {slow ? "We’re still preparing your Snapshot. Your responses are safe." : policy.body}
       </p>
 
       <ol className="mx-auto mt-8 max-w-xl space-y-3 text-left">
@@ -77,7 +76,7 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
           const current = !resultReady && index === activeStep;
           return (
             <li
-              key={step.id}
+              key={step}
               className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm"
             >
               <span
@@ -93,7 +92,7 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
                 )}
               </span>
               <span className={completeStep || current ? "text-[#F8FAFC]" : "text-[#94A3B8]"}>
-                {step.copy}
+                {step}
               </span>
             </li>
           );

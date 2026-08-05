@@ -1,6 +1,12 @@
 import * as assessmentRepo from "../assessment/repository.server";
 import type { AssessmentResponse, AssessmentSession } from "../assessment/types";
 import { componentDigests, sprint03Configuration } from "../delivery-intelligence/config";
+import {
+  DELIVERY_DNA_V2_CONFIGURATION_DIGEST,
+  DELIVERY_DNA_V2_CONFIGURATION_SET_ID,
+  DELIVERY_DNA_V2_VERSION,
+  deliveryDnaV2Catalogue,
+} from "../delivery-dna/catalogue-v2";
 import * as executionRepo from "../orchestrator/repository.server";
 import type { Execution } from "../orchestrator/types";
 import {
@@ -153,7 +159,18 @@ export class AssessmentAnalysisService {
       }
 
       const now = this.deps.now();
-      const digest = componentDigests();
+      const digest =
+        execution.knowledgePackVersion === DELIVERY_DNA_V2_VERSION
+          ? {
+              configurationSetId: DELIVERY_DNA_V2_CONFIGURATION_SET_ID,
+              configurationVersion: DELIVERY_DNA_V2_VERSION,
+              configurationDigest: DELIVERY_DNA_V2_CONFIGURATION_DIGEST,
+            }
+          : componentDigests();
+      const configurationSnapshot =
+        execution.knowledgePackVersion === DELIVERY_DNA_V2_VERSION
+          ? deliveryDnaV2Catalogue
+          : sprint03Configuration;
       const proposed: Omit<AssessmentAnalysisRun, "id" | "createdAt" | "updatedAt"> = {
         assessmentSessionId: session.id,
         runtimeExecutionId: execution.id,
@@ -170,7 +187,7 @@ export class AssessmentAnalysisService {
         configurationSetId: digest.configurationSetId,
         configurationVersion: digest.configurationVersion,
         configurationDigest: digest.configurationDigest,
-        configurationSnapshot: structuredClone(sprint03Configuration) as Record<string, unknown>,
+        configurationSnapshot: structuredClone(configurationSnapshot) as Record<string, unknown>,
         schemaVersion: canonicalInput.schemaVersion,
         engineVersion: canonicalInput.engineVersion,
         inputHash,

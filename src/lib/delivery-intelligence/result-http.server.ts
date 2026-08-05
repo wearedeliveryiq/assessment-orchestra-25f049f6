@@ -55,17 +55,32 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
       assessmentId: run.assessmentSessionId,
       context: verified,
     });
-    // Direct authenticated full-assessment starts and genuine pre-v1.1 results
-    // remain available. Snapshot-linked assessments are governed by the scoped
-    // Overview grant returned above.
-    const access = linkedAccess ?? {
-      assessmentId: run.assessmentSessionId,
-      savedSnapshotId: "direct-assessment",
-      access: "grandfathered" as const,
-      permitted: true,
-      offer: null,
-      safeStatus: "available" as const,
-    };
+    const isV2 =
+      (stored.canonicalResult as { schemaVersion?: string }).schemaVersion ===
+      "deliveryiq.intelligence-result/2.0.0";
+    // Only historical 1.0 direct assessments retain their original access.
+    // Delivery DNA 2.0 always requires the verified Saved Snapshot scope.
+    const access =
+      linkedAccess ??
+      (isV2
+        ? null
+        : {
+            assessmentId: run.assessmentSessionId,
+            savedSnapshotId: "direct-assessment",
+            access: "grandfathered" as const,
+            permitted: true,
+            offer: null,
+            safeStatus: "available" as const,
+          });
+    if (!access) {
+      return json(
+        {
+          error: "This Delivery DNA Overview is not available for this account.",
+          code: "DELIVERY_DNA_OVERVIEW_REQUIRED",
+        },
+        403,
+      );
+    }
     if (!access.permitted) {
       return json(
         {
@@ -75,9 +90,8 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
         403,
       );
     }
-    const ensuredPortfolio = await recommendationPortfolioService.ensure(run);
-    const portfolio = ensuredPortfolio.portfolio;
-    const etag = `"${stored.resultHash}:PDR-003-004/1.1:${access.access}"`;
+    const portfolio = isV2 ? null : (await recommendationPortfolioService.ensure(run)).portfolio;
+    const etag = `"${stored.resultHash}:PDR-003-004/${isV2 ? "2.0" : "1.1"}:${access.access}"`;
     if (request.headers.get("if-none-match") === etag) {
       return new Response(null, {
         status: 304,

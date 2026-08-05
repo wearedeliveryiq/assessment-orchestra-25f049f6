@@ -93,6 +93,7 @@ import { Route as ApiDeliveryDnaOverviewCheckoutRouteImport } from './routes/api
 import { Route as ApiDeliveryDnaOverviewWebhookRouteImport } from './routes/api/delivery-dna-overview.webhook'
 import { Route as ApiDeliveryDnaSnapshotCompleteRouteImport } from './routes/api/delivery-dna-snapshot.complete'
 import { Route as ApiDeliveryDnaSnapshotContinueRouteImport } from './routes/api/delivery-dna-snapshot.continue'
+import { Route as ApiDeliveryDnaSnapshotReportDotpdfRouteImport } from './routes/api/delivery-dna-snapshot.report[.]pdf'
 import { Route as ApiExecutionsIdRouteImport } from './routes/api/executions.$id'
 import { Route as ApiExecutionsHistoryRouteImport } from './routes/api/executions.history'
 import { Route as ApiExecutionsMonitorRouteImport } from './routes/api/executions.monitor'
@@ -660,6 +661,12 @@ const ApiDeliveryDnaSnapshotContinueRoute =
   ApiDeliveryDnaSnapshotContinueRouteImport.update({
     id: '/continue',
     path: '/continue',
+    getParentRoute: () => ApiDeliveryDnaSnapshotRoute,
+  } as any)
+const ApiDeliveryDnaSnapshotReportDotpdfRoute =
+  ApiDeliveryDnaSnapshotReportDotpdfRouteImport.update({
+    id: '/report.pdf',
+    path: '/report.pdf',
     getParentRoute: () => ApiDeliveryDnaSnapshotRoute,
   } as any)
 const ApiExecutionsIdRoute = ApiExecutionsIdRouteImport.update({
@@ -1500,6 +1507,7 @@ export interface FileRoutesByFullPath {
   '/api/delivery-dna-overview/webhook': typeof ApiDeliveryDnaOverviewWebhookRoute
   '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
   '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
+  '/api/delivery-dna-snapshot/report.pdf': typeof ApiDeliveryDnaSnapshotReportDotpdfRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -1724,6 +1732,7 @@ export interface FileRoutesByTo {
   '/api/delivery-dna-overview/webhook': typeof ApiDeliveryDnaOverviewWebhookRoute
   '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
   '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
+  '/api/delivery-dna-snapshot/report.pdf': typeof ApiDeliveryDnaSnapshotReportDotpdfRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -1949,6 +1958,7 @@ export interface FileRoutesById {
   '/api/delivery-dna-overview/webhook': typeof ApiDeliveryDnaOverviewWebhookRoute
   '/api/delivery-dna-snapshot/complete': typeof ApiDeliveryDnaSnapshotCompleteRoute
   '/api/delivery-dna-snapshot/continue': typeof ApiDeliveryDnaSnapshotContinueRoute
+  '/api/delivery-dna-snapshot/report.pdf': typeof ApiDeliveryDnaSnapshotReportDotpdfRoute
   '/api/executions/$id': typeof ApiExecutionsIdRouteWithChildren
   '/api/executions/history': typeof ApiExecutionsHistoryRoute
   '/api/executions/monitor': typeof ApiExecutionsMonitorRoute
@@ -2175,6 +2185,7 @@ export interface FileRouteTypes {
     | '/api/delivery-dna-overview/webhook'
     | '/api/delivery-dna-snapshot/complete'
     | '/api/delivery-dna-snapshot/continue'
+    | '/api/delivery-dna-snapshot/report.pdf'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -2399,6 +2410,7 @@ export interface FileRouteTypes {
     | '/api/delivery-dna-overview/webhook'
     | '/api/delivery-dna-snapshot/complete'
     | '/api/delivery-dna-snapshot/continue'
+    | '/api/delivery-dna-snapshot/report.pdf'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -2623,6 +2635,7 @@ export interface FileRouteTypes {
     | '/api/delivery-dna-overview/webhook'
     | '/api/delivery-dna-snapshot/complete'
     | '/api/delivery-dna-snapshot/continue'
+    | '/api/delivery-dna-snapshot/report.pdf'
     | '/api/executions/$id'
     | '/api/executions/history'
     | '/api/executions/monitor'
@@ -3505,6 +3518,13 @@ declare module '@tanstack/react-router' {
       path: '/continue'
       fullPath: '/api/delivery-dna-snapshot/continue'
       preLoaderRoute: typeof ApiDeliveryDnaSnapshotContinueRouteImport
+      parentRoute: typeof ApiDeliveryDnaSnapshotRoute
+    }
+    '/api/delivery-dna-snapshot/report.pdf': {
+      id: '/api/delivery-dna-snapshot/report.pdf'
+      path: '/report.pdf'
+      fullPath: '/api/delivery-dna-snapshot/report.pdf'
+      preLoaderRoute: typeof ApiDeliveryDnaSnapshotReportDotpdfRouteImport
       parentRoute: typeof ApiDeliveryDnaSnapshotRoute
     }
     '/api/executions/$id': {
@@ -4622,12 +4642,15 @@ const ApiAssessmentsRouteWithChildren = ApiAssessmentsRoute._addFileChildren(
 interface ApiDeliveryDnaSnapshotRouteChildren {
   ApiDeliveryDnaSnapshotCompleteRoute: typeof ApiDeliveryDnaSnapshotCompleteRoute
   ApiDeliveryDnaSnapshotContinueRoute: typeof ApiDeliveryDnaSnapshotContinueRoute
+  ApiDeliveryDnaSnapshotReportDotpdfRoute: typeof ApiDeliveryDnaSnapshotReportDotpdfRoute
 }
 
 const ApiDeliveryDnaSnapshotRouteChildren: ApiDeliveryDnaSnapshotRouteChildren =
   {
     ApiDeliveryDnaSnapshotCompleteRoute: ApiDeliveryDnaSnapshotCompleteRoute,
     ApiDeliveryDnaSnapshotContinueRoute: ApiDeliveryDnaSnapshotContinueRoute,
+    ApiDeliveryDnaSnapshotReportDotpdfRoute:
+      ApiDeliveryDnaSnapshotReportDotpdfRoute,
   }
 
 const ApiDeliveryDnaSnapshotRouteWithChildren =

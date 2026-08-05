@@ -46,7 +46,12 @@ export const assessmentApi = {
   ) => request<AssessmentDetail>(`/${id}`, { method: "PUT", body: JSON.stringify(body) }),
   submit: (
     id: string,
-    options: { reviewAcknowledged?: boolean; missingAcknowledged?: boolean } = {},
+    options: {
+      reviewAcknowledged?: boolean;
+      missingAcknowledged?: boolean;
+      evidenceRecencyDeclaration?: string;
+      perspectiveBreadthDeclaration?: string;
+    } = {},
   ) =>
     request<RuntimeStatus>(`/${id}/submit`, {
       method: "POST",

@@ -10,6 +10,8 @@ export const Route = createFileRoute("/api/assessments/$id/submit")({
           const body = await readOptionalJson<{
             reviewAcknowledged?: boolean;
             missingAcknowledged?: boolean;
+            evidenceRecencyDeclaration?: string;
+            perspectiveBreadthDeclaration?: string;
           }>(request, {});
           return rt.submitAssessment(params.id, ownerKey, body);
         });

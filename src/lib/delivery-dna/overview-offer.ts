@@ -1,26 +1,24 @@
 import { z } from "zod";
 
-import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v1.0.1 Delivery DNA Commercial Offer Configuration.json";
+import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.0.0 Delivery DNA Commercial Offer Configuration.json";
 
 const offerSchema = z
   .object({
     document: z.object({
       id: z.literal("PDR-003-004A"),
-      version: z.literal("1.0.1"),
+      version: z.literal("2.0.0"),
       status: z.literal("locked"),
       parentDecisionId: z.literal("PDR-003-004"),
-      parentDecisionVersion: z.literal("1.2"),
+      parentDecisionVersion: z.literal("2.0"),
     }),
     activeOffer: z.object({
-      offerId: z.literal("delivery-dna-overview-gbp-1"),
-      offerVersion: z.literal("1.0.1"),
+      offerId: z.literal("delivery-dna-overview-gbp-2"),
+      offerVersion: z.literal("2.0.0"),
       productId: z.literal("delivery-dna-overview"),
-      productVersion: z.literal("1.0.0"),
+      productVersion: z.literal("2.0.0"),
       accessKey: z.literal("delivery_dna_overview"),
-      accessVersion: z.literal("1.0.0"),
-      status: z.literal("active"),
-      effectiveFrom: z.iso.datetime(),
-      effectiveUntil: z.iso.datetime().nullable(),
+      accessVersion: z.literal("2.0.0"),
+      status: z.literal("active_at_delivery_dna_2_cutover"),
       chargeType: z.literal("one_off"),
       currency: z.literal("GBP"),
       unitAmountMinor: z.literal(29500),
@@ -37,11 +35,11 @@ const offerSchema = z
     purchaseScope: z
       .object({
         assessmentType: z.literal("delivery-dna"),
-        assessmentVersion: z.literal("1.0.0"),
-        questionSetVersion: z.literal("1.0.0"),
-        capabilityCount: z.literal(13),
-        questionCount: z.literal(39),
-        remainingQuestionCountAfterSnapshot: z.literal(26),
+        assessmentVersion: z.literal("2.0.0"),
+        questionSetVersion: z.literal("2.0.0"),
+        capabilityCount: z.literal(15),
+        questionCount: z.literal(45),
+        remainingQuestionCountAfterSnapshot: z.literal(30),
         overviewAssessmentsPerPurchase: z.literal(1),
         deliveryDnaActionIncluded: z.literal(false),
         knowledgePackIncluded: z.literal(false),
@@ -78,9 +76,8 @@ const offerSchema = z
     }),
     industryContextPolicy: z.object({
       catalogueId: z.literal("DIQ-204A"),
-      minimumCatalogueVersion: z.literal("1.1.0"),
+      minimumCatalogueVersion: z.literal("1.2.0"),
       eligibility: z.literal("approved_for_customer_context_and_materially_relevant"),
-      requiredFields: z.array(z.string()),
       scoringEffect: z.literal("none"),
       confidenceEffect: z.literal("none"),
       rankingEffect: z.literal("none"),
@@ -91,23 +88,25 @@ const offerSchema = z
     }),
     customerCopy: z.object({
       savePanel: z.object({
-        heading: z.literal("Keep your Delivery DNA"),
+        heading: z.literal("Keep your Delivery DNA Snapshot"),
         body: z.literal(
-          "Create your secure DeliveryIQ workspace to save your Snapshot, return to your results and continue to your complete Delivery DNA Overview.",
+          "Save your Snapshot for free to download your results, return at any time and continue to your complete Delivery DNA without starting again.",
         ),
+        supportingMessage: z.literal("Download your results by saving your Snapshot"),
         primaryAction: z.literal("Save my Snapshot"),
+        assuranceLine: z.literal("Free to save. No payment required. Your results remain private."),
       }),
       savedState: z.object({
         heading: z.literal("Your Snapshot is saved"),
         body: z.literal(
-          "Your 13 responses are secure in your DeliveryIQ workspace. Unlock your complete Delivery DNA Overview to assess all 39 questions and receive your capability profile, evidence confidence, priority recommendations and executive report.",
+          "Your 15 responses are secure in your DeliveryIQ workspace. Unlock your complete Delivery DNA Overview to assess all 45 questions and receive your five-domain profile, fifteen-capability diagnosis, evidence confidence, priority recommendations and executive report.",
         ),
-        primaryAction: z.literal("Unlock my Delivery DNA Overview — £295"),
+        primaryAction: z.literal("Unlock your complete Delivery DNA — £295"),
       }),
       overviewOffer: z.object({
         heading: z.literal("Understand what is enabling—and constraining—delivery"),
         body: z.literal(
-          "Complete the remaining 26 questions to receive an evidence-linked view of your organisation's delivery capability, the areas that matter most and the priorities to address first.",
+          "Complete the remaining 30 questions to receive an evidence-linked view of your organisation's delivery capability, the areas that matter most and the priorities to address first.",
         ),
         priceLabel: z.literal("£295 one-off"),
         purchaseAction: z.literal("Buy my Delivery DNA Overview — £295"),
@@ -115,15 +114,6 @@ const offerSchema = z
       purchasedState: z.object({ primaryAction: z.literal("Continue my Delivery DNA") }),
       prohibitedPrimaryTerms: z.array(z.string()),
       prohibitedClaims: z.array(z.string()),
-    }),
-    legacyPolicy: z.object({
-      preserveExistingSnapshotResponses: z.literal(true),
-      preserveExistingLinkedDrafts: z.literal(true),
-      preserveExistingCompletedAssessments: z.literal(true),
-      preserveExistingResults: z.literal(true),
-      preserveExistingAnalysisHistory: z.literal(true),
-      removeGenuineCustomerAccessRetroactively: z.literal(false),
-      syntheticBackfillAllowed: z.literal(false),
     }),
     fixtures: z
       .array(
@@ -133,7 +123,7 @@ const offerSchema = z
           expected: z.record(z.string(), z.unknown()),
         }),
       )
-      .length(12),
+      .length(9),
   })
   .passthrough();
 
@@ -144,7 +134,7 @@ export function validateDeliveryDnaOverviewOfferConfiguration(
 ): DeliveryDnaOverviewOfferConfiguration {
   const parsed = offerSchema.parse(value);
   const fixtureIds = parsed.fixtures.map((fixture) => fixture.id);
-  if (new Set(fixtureIds).size !== 12) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
+  if (new Set(fixtureIds).size !== 9) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
   return parsed;
 }
 
@@ -156,14 +146,8 @@ export const deliveryDnaOverviewOffer = deliveryDnaOverviewOfferConfiguration.ac
 export const deliveryDnaCommercialCopy = deliveryDnaOverviewOfferConfiguration.customerCopy;
 
 export function activeDeliveryDnaOverviewOffer(now = new Date().toISOString()) {
-  const instant = Date.parse(now);
-  const start = Date.parse(deliveryDnaOverviewOffer.effectiveFrom);
-  const end = deliveryDnaOverviewOffer.effectiveUntil
-    ? Date.parse(deliveryDnaOverviewOffer.effectiveUntil)
-    : null;
-  return deliveryDnaOverviewOffer.status === "active" &&
-    instant >= start &&
-    (end === null || instant < end)
+  void now;
+  return deliveryDnaOverviewOffer.status === "active_at_delivery_dna_2_cutover"
     ? deliveryDnaOverviewOffer
     : null;
 }

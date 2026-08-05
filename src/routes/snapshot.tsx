@@ -16,15 +16,16 @@ import { SnapshotAcquisitionShell } from "@/components/delivery-dna/snapshot-she
 import { RibbonStage } from "@/components/ribbon";
 import { Button } from "@/components/ui/button";
 import { useIdentity } from "@/hooks/use-identity";
-import { deliveryDnaCatalogue } from "@/lib/delivery-dna/catalogue";
+import { deliveryDnaV2Catalogue } from "@/lib/delivery-dna/catalogue-v2";
 import { deliveryDnaSnapshotApi, type SnapshotState } from "@/lib/delivery-dna/snapshot-client";
 import { deliveryDnaOverviewApi } from "@/lib/delivery-dna/overview-client";
 import { deliveryDnaCommercialCopy } from "@/lib/delivery-dna/overview-offer";
 import {
-  deliveryDnaSnapshotConfiguration,
-  deliveryDnaSnapshotQuestions,
-  type SnapshotMaturityLevel,
-} from "@/lib/delivery-dna/snapshot";
+  deliveryDnaSnapshotV2Configuration,
+  deliveryDnaSnapshotV2Questions,
+  snapshotV2AnswerOptions,
+} from "@/lib/delivery-dna/snapshot-v2";
+import type { DeliveryDnaV2Level } from "@/lib/delivery-dna/catalogue-v2";
 
 export const Route = createFileRoute("/snapshot")({
   validateSearch: (search: Record<string, unknown>) => {
@@ -43,19 +44,57 @@ export const Route = createFileRoute("/snapshot")({
       {
         name: "description",
         content:
-          "Answer 13 quick questions for an indicative view of your organisation's delivery practices.",
+          "Answer 15 anchored questions for an indicative view of your organisation's delivery practices.",
       },
     ],
   }),
   component: DeliveryDnaSnapshotPage,
 });
 
-const copy = deliveryDnaSnapshotConfiguration.copy;
-const interaction = deliveryDnaSnapshotConfiguration.interactionPolicy;
-const maturityLevels = copy.maturityLevels as Record<
-  SnapshotMaturityLevel,
-  { label: string; interpretation: string }
->;
+const snapshotPolicy = deliveryDnaSnapshotV2Configuration;
+const copy = {
+  startHeading: "See the delivery patterns shaping your organisation",
+  introduction:
+    "Answer one practice question from each Delivery DNA capability to build a directional five-domain view.",
+  timeEstimate: "6–8 minutes",
+  instructions:
+    "Choose the anchored statement that best reflects usual project and change delivery practice across the organisation or area in scope.",
+  insufficientHeading: "We need a little more evidence",
+  insufficientBody:
+    "Answer at least 12 questions, including two in every domain, to prepare your Snapshot.",
+  readyHeading: "Your Snapshot is ready",
+  resultHeading: "Your indicative delivery maturity",
+  profileHeading: "Your indicative Delivery DNA profile",
+  profileBody:
+    "This chart shows the directional level for each domain. Not applicable responses remain visible gaps.",
+  positiveHeading: "Positive signals",
+  exploreHeading: "Areas to explore",
+  resultCaveat: deliveryDnaV2Catalogue.snapshotPolicy.mandatoryCaveat,
+  restartCta: "Start a new Snapshot",
+};
+const interaction = deliveryDnaSnapshotV2Configuration.interactionPolicy;
+const maturityLevels: Record<DeliveryDnaV2Level, { label: string; interpretation: string }> = {
+  emerging: {
+    label: "Emerging",
+    interpretation:
+      "Delivery practice is currently more reactive, informal or inconsistent across the assessed scope.",
+  },
+  developing: {
+    label: "Developing",
+    interpretation:
+      "Relevant delivery practice exists, but application and ownership remain uneven across the assessed scope.",
+  },
+  established: {
+    label: "Established",
+    interpretation:
+      "Delivery practice is defined and applied across most relevant activity in the assessed scope.",
+  },
+  leading: {
+    label: "Leading",
+    interpretation:
+      "Delivery practice is embedded, outcome-led and regularly improved across the assessed scope.",
+  },
+};
 
 type SaveInput = {
   questionId: string;
@@ -75,11 +114,13 @@ function DeliveryDnaSnapshotPage() {
     retry: false,
   });
   const start = useMutation({
-    mutationFn: () => deliveryDnaSnapshotApi.start(),
+    mutationFn: (scope: { scopeType: string; scopeDisplayName: string }) =>
+      deliveryDnaSnapshotApi.start(false, scope),
     onSuccess: (value) => queryClient.setQueryData(["delivery-dna-snapshot"], value),
   });
   const restart = useMutation({
-    mutationFn: () => deliveryDnaSnapshotApi.start(true),
+    mutationFn: (scope: { scopeType: string; scopeDisplayName: string }) =>
+      deliveryDnaSnapshotApi.start(true, scope),
     onSuccess: (value) => {
       setPreparing(false);
       queryClient.setQueryData(["delivery-dna-snapshot"], value);
@@ -101,7 +142,7 @@ function DeliveryDnaSnapshotPage() {
         <SnapshotStart
           busy={start.isPending}
           error={start.error?.message}
-          onStart={() => start.mutate()}
+          onStart={(scope) => start.mutate(scope)}
         />
       ) : preparing ? (
         <SnapshotPreparation onReady={handlePreparationReady} />
@@ -112,7 +153,12 @@ function DeliveryDnaSnapshotPage() {
           identityLoading={identityLoading}
           restarting={restart.isPending}
           restartError={restart.error?.message}
-          onRestart={() => restart.mutate()}
+          onRestart={() =>
+            restart.mutate({
+              scopeType: snapshot.scopeType,
+              scopeDisplayName: snapshot.scopeDisplayName,
+            })
+          }
           checkoutState={search.checkout}
         />
       ) : (
@@ -129,8 +175,10 @@ function SnapshotStart({
 }: {
   busy: boolean;
   error?: string;
-  onStart: () => void;
+  onStart: (scope: { scopeType: string; scopeDisplayName: string }) => void;
 }) {
+  const [scopeType, setScopeType] = useState("whole_organisation");
+  const [scopeDisplayName, setScopeDisplayName] = useState("");
   return (
     <section className="snapshot-acquisition-panel relative overflow-hidden rounded-[30px] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
       <div
@@ -150,7 +198,7 @@ function SnapshotStart({
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#CBD5E1]">
             <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
-              13 questions
+              15 questions
             </span>
             <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
               {String(copy.timeEstimate)}
@@ -167,17 +215,49 @@ function SnapshotStart({
               {error}
             </p>
           ) : null}
+          <div className="mt-7 grid max-w-2xl gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 sm:grid-cols-2">
+            <label className="text-sm font-semibold text-[#F8FAFC]">
+              Assessment scope
+              <select
+                value={scopeType}
+                onChange={(event) => setScopeType(event.target.value)}
+                className="mt-2 min-h-11 w-full rounded-lg border border-white/10 bg-[#090E1A] px-3 text-sm"
+              >
+                <option value="whole_organisation">Whole organisation</option>
+                <option value="business_unit_or_division">Business unit or division</option>
+                <option value="function">Function</option>
+                <option value="defined_delivery_portfolio_or_delivery_system">
+                  Delivery portfolio or system
+                </option>
+              </select>
+            </label>
+            <label className="text-sm font-semibold text-[#F8FAFC]">
+              Organisation or area name
+              <input
+                value={scopeDisplayName}
+                maxLength={120}
+                onChange={(event) => setScopeDisplayName(event.target.value)}
+                placeholder="e.g. UK Operations"
+                className="mt-2 min-h-11 w-full rounded-lg border border-white/10 bg-[#090E1A] px-3 text-sm"
+              />
+            </label>
+          </div>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#CBD5E1]">
+            For this assessment, “the organisation” means{" "}
+            {scopeDisplayName.trim() || "the scope named above"}. Answer for how project and change
+            delivery usually works across this scope today.
+          </p>
           <Button
             className="snapshot-gradient-button mt-7 min-h-12 gap-2 border-0 px-6 text-white"
-            disabled={busy}
-            onClick={onStart}
+            disabled={busy || scopeDisplayName.trim().length < 2}
+            onClick={() => onStart({ scopeType, scopeDisplayName: scopeDisplayName.trim() })}
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
             Start your Snapshot <ArrowRight className="h-4 w-4" aria-hidden />
           </Button>
           <p className="mt-5 text-xs leading-relaxed text-[#94A3B8]">
-            No name, email, organisation or account is requested. An unfinished Snapshot expires
-            after 24 hours.
+            No personal name, email or account is requested. The scope name is used only for this
+            Snapshot, and an unfinished Snapshot expires after 24 hours.
           </p>
         </div>
         <RibbonStage size="lg" onNavy className="mx-auto hidden lg:grid" />
@@ -198,10 +278,10 @@ function SnapshotQuestions({
     0,
     (() => {
       const recorded = new Set(snapshot.responses.map((response) => response.questionId));
-      const next = deliveryDnaSnapshotQuestions.findIndex(
+      const next = deliveryDnaSnapshotV2Questions.findIndex(
         (question) => !recorded.has(question.question.id),
       );
-      return next === -1 ? 12 : next;
+      return next === -1 ? 14 : next;
     })(),
   );
   const [index, setIndex] = useState(initialIndex);
@@ -216,7 +296,7 @@ function SnapshotQuestions({
     () => new Map(snapshot.responses.map((response) => [response.questionId, response])),
     [snapshot.responses],
   );
-  const item = deliveryDnaSnapshotQuestions[index];
+  const item = deliveryDnaSnapshotV2Questions[index];
   const current = responses.get(item.question.id);
 
   useEffect(() => {
@@ -235,7 +315,7 @@ function SnapshotQuestions({
     },
   });
 
-  const move = useCallback((next: number) => setIndex(Math.min(12, Math.max(0, next))), []);
+  const move = useCallback((next: number) => setIndex(Math.min(14, Math.max(0, next))), []);
 
   const commit = useCallback(
     async (input: SaveInput) => {
@@ -253,15 +333,30 @@ function SnapshotQuestions({
         );
         if (remaining) await new Promise((resolve) => setTimeout(resolve, remaining));
         setFailedInput(null);
-        if (index === 12) {
-          const deliberate = value.snapshot.responses.length === 13;
+        if (index === 14) {
           const answered = value.snapshot.responses.filter(
             (response) => response.status === "answered",
-          ).length;
-          if (deliberate && answered >= 9) {
+          );
+          const answeredIds = new Set(answered.map((response) => response.questionId));
+          const domainCoverage = new Map<string, number>();
+          for (const question of deliveryDnaSnapshotV2Questions) {
+            if (answeredIds.has(question.question.id)) {
+              domainCoverage.set(
+                question.domainId,
+                (domainCoverage.get(question.domainId) ?? 0) + 1,
+              );
+            }
+          }
+          if (
+            value.snapshot.responses.length === 15 &&
+            answered.length >= 12 &&
+            deliveryDnaV2Catalogue.domains.every(
+              (domain) => (domainCoverage.get(domain.id) ?? 0) >= 2,
+            )
+          ) {
             onPrepare();
           } else {
-            setCompletionError(String(copy.insufficientBody));
+            setCompletionError(copy.insufficientBody);
           }
           return;
         }
@@ -285,7 +380,7 @@ function SnapshotQuestions({
     if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
     event.preventDefault();
     const direction = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1;
-    const next = (optionIndex + direction + 5) % 5;
+    const next = (optionIndex + direction + 4) % 4;
     optionRefs.current[next]?.focus();
   };
 
@@ -293,6 +388,10 @@ function SnapshotQuestions({
     <section className="mx-auto max-w-4xl">
       <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
         Delivery DNA Snapshot
+      </p>
+      <p className="mt-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-[#CBD5E1]">
+        For this assessment, “the organisation” means <strong>{snapshot.scopeDisplayName}</strong>.
+        Answer for how project and change delivery usually works across this scope today.
       </p>
       <div className="mt-4 flex items-end justify-between gap-4">
         <div>
@@ -307,23 +406,23 @@ function SnapshotQuestions({
         </div>
       </div>
       <p className="sr-only" aria-live="polite">
-        Question {index + 1} of 13
+        Question {index + 1} of 15
       </p>
       <div
         className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.08]"
         role="progressbar"
         aria-label="Snapshot progress"
         aria-valuemin={0}
-        aria-valuemax={13}
+        aria-valuemax={15}
         aria-valuenow={savedCount}
       >
         <div
           className="h-full rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] transition-[width] duration-500"
-          style={{ width: `${(savedCount / 13) * 100}%` }}
+          style={{ width: `${(savedCount / 15) * 100}%` }}
         />
       </div>
       <p className="mt-2 text-xs text-[#94A3B8]">
-        Question {index + 1} of 13 · {snapshot.responses.length} saved
+        Question {index + 1} of 15 · {snapshot.responses.length} saved
       </p>
 
       <fieldset
@@ -331,9 +430,7 @@ function SnapshotQuestions({
         disabled={save.isPending}
       >
         <legend className="sr-only">{item.question.prompt}</legend>
-        <p className="text-sm leading-relaxed text-[#CBD5E1]">
-          {deliveryDnaCatalogue.journey.dimensionInstructions.practice}
-        </p>
+        <p className="text-sm leading-relaxed text-[#CBD5E1]">{item.customerHelp}</p>
 
         <div
           className="mt-6 grid gap-3 sm:grid-cols-5"
@@ -343,7 +440,7 @@ function SnapshotQuestions({
           onKeyDown={(event) => {
             if (
               !save.isPending &&
-              ["1", "2", "3", "4", "5"].includes(event.key) &&
+              ["1", "2", "3", "4"].includes(event.key) &&
               !(event.target instanceof HTMLTextAreaElement)
             ) {
               event.preventDefault();
@@ -356,7 +453,7 @@ function SnapshotQuestions({
             }
           }}
         >
-          {deliveryDnaCatalogue.journey.responseScale.options.map((option, optionIndex) => {
+          {snapshotV2AnswerOptions(item.question.id).map((option, optionIndex) => {
             const selected = selectedAnswer === option.value && !selectingNotApplicable;
             return (
               <button
@@ -381,9 +478,6 @@ function SnapshotQuestions({
                     : "border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
                 }`}
               >
-                <span className="block text-xs font-extrabold text-[#60A5FA]" aria-hidden="true">
-                  {option.value}
-                </span>
                 <span className="mt-2 block text-sm font-bold text-[#F8FAFC]">{option.label}</span>
                 <span className="mt-1 block text-xs leading-snug text-[#94A3B8]">
                   {option.description}
@@ -413,15 +507,12 @@ function SnapshotQuestions({
             >
               {selectingNotApplicable ? <span className="h-2 w-2 rounded-full bg-white" /> : null}
             </span>
-            {deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable.label}
+            Not applicable
           </button>
           {selectingNotApplicable ? (
             <div className="mt-4">
               <label htmlFor="snapshot-na-reason" className="text-xs font-semibold text-[#CBD5E1]">
-                {
-                  deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable
-                    .reasonPrompt
-                }
+                Why is this not applicable to the organisation in scope?
               </label>
               <textarea
                 id="snapshot-na-reason"
@@ -479,7 +570,7 @@ function SnapshotQuestions({
         <div className="text-xs text-[#94A3B8]" aria-live="polite">
           {snapshot.responses.length} recorded · {answeredCount} applicable
         </div>
-        {index < 12 && current && !save.isPending ? (
+        {index < 14 && current && !save.isPending ? (
           <Button variant="ghost" onClick={() => move(index + 1)}>
             Continue with saved answer <ArrowRight className="h-4 w-4" aria-hidden />
           </Button>
@@ -544,6 +635,7 @@ function SnapshotResultView({
       }
     },
   });
+  const download = useMutation({ mutationFn: deliveryDnaSnapshotApi.download });
   const result = snapshot.result;
   if (!result?.available || !result.indicativeMaturityLevel) {
     return <SnapshotError message={String(copy.insufficientBody)} />;
@@ -570,7 +662,7 @@ function SnapshotResultView({
       </section>
 
       <p className="mt-6 rounded-2xl border border-white/[0.08] bg-[#111827] p-5 text-sm leading-relaxed text-[#CBD5E1]">
-        {String(copy.resultCaveat)}
+        {copy.resultCaveat}
       </p>
 
       <section
@@ -596,6 +688,21 @@ function SnapshotResultView({
         <SignalGroup title={String(copy.exploreHeading)} items={result.areasToExplore} />
       </div>
 
+      {result.industryContext?.[0] ? (
+        <aside className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#111827] p-5 sm:p-6">
+          <p className="text-sm leading-relaxed text-[#CBD5E1]">
+            {result.industryContext[0].approvedCustomerWording}
+            <sup className="ml-1">{result.industryContext[0].footnoteMarker}</sup>
+          </p>
+          <p className="mt-4 border-t border-white/[0.08] pt-4 text-xs leading-relaxed text-[#94A3B8]">
+            {result.industryContext[0].footnoteMarker} {result.industryContext[0].sourcePublisher},{" "}
+            <cite>{result.industryContext[0].sourceTitle}</cite>,{" "}
+            {result.industryContext[0].evidenceYear}. {result.industryContext[0].scopeCaveat}{" "}
+            {result.industryContext[0].mandatoryDisclosure}
+          </p>
+        </aside>
+      ) : null}
+
       <section
         className="snapshot-acquisition-panel mt-8 rounded-[28px] p-6 sm:p-9"
         aria-labelledby="snapshot-continue-title"
@@ -612,6 +719,20 @@ function SnapshotResultView({
             <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
               {deliveryDnaCommercialCopy.savedState.body}
             </p>
+            <Button
+              variant="secondary"
+              className="mt-5 min-h-12"
+              disabled={download.isPending}
+              onClick={() => download.mutate()}
+            >
+              {download.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+              Download my Snapshot
+            </Button>
+            {download.error ? (
+              <p className="mt-3 text-sm text-red-300" role="alert">
+                {download.error.message}
+              </p>
+            ) : null}
             {!access.data?.permitted ? (
               <a
                 href="#delivery-dna-overview-offer"
@@ -707,6 +828,17 @@ function SnapshotResultView({
             <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
               {deliveryDnaCommercialCopy.savePanel.body}
             </p>
+            <p className="mt-3 text-sm font-semibold text-[#F8FAFC]">
+              {deliveryDnaCommercialCopy.savePanel.supportingMessage}
+            </p>
+            <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
+              {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
+                <li key={benefit} className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#14B8A6]" aria-hidden />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
             <Button
               asChild
               className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
@@ -719,6 +851,9 @@ function SnapshotResultView({
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
             </Button>
+            <p className="mt-3 text-xs text-[#94A3B8]">
+              {deliveryDnaCommercialCopy.savePanel.assuranceLine}
+            </p>
           </>
         ) : (
           <div className="mt-6">
@@ -728,6 +863,17 @@ function SnapshotResultView({
             <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
               {deliveryDnaCommercialCopy.savePanel.body}
             </p>
+            <p className="mt-3 text-sm font-semibold text-[#F8FAFC]">
+              {deliveryDnaCommercialCopy.savePanel.supportingMessage}
+            </p>
+            <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
+              {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
+                <li key={benefit} className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#14B8A6]" aria-hidden />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
             <label className="flex cursor-pointer items-start gap-3 text-sm text-[#CBD5E1]">
               <input
                 type="checkbox"
@@ -736,7 +882,7 @@ function SnapshotResultView({
                 onChange={(event) => setConsent(event.target.checked)}
               />
               <span>
-                I agree to save these 13 responses in my current DeliveryIQ workspace and link them
+                I agree to save these 15 responses in my current DeliveryIQ workspace and link them
                 to my Delivery DNA Overview. I understand the remaining questions stay locked until
                 the Overview is purchased.
               </span>
@@ -751,6 +897,9 @@ function SnapshotResultView({
               ) : null}
               {deliveryDnaCommercialCopy.savePanel.primaryAction}
             </Button>
+            <p className="mt-3 text-xs text-[#94A3B8]">
+              {deliveryDnaCommercialCopy.savePanel.assuranceLine}
+            </p>
             {continuation.error ? (
               <p className="mt-3 text-sm text-red-300" role="alert">
                 {continuation.error.message}
@@ -785,7 +934,7 @@ function SignalGroup({
   items,
 }: {
   title: string;
-  items: { capabilityId: string; capabilityLabel: string; text: string }[];
+  items: { domainId: string; domainLabel: string; text: string }[];
 }) {
   return (
     <section className="rounded-[24px] border border-white/[0.08] bg-[#182131] p-5 sm:p-6">
@@ -794,11 +943,11 @@ function SignalGroup({
         <div className="mt-4 space-y-3">
           {items.map((item) => (
             <article
-              key={item.capabilityId}
+              key={item.domainId}
               className="rounded-2xl border border-white/[0.06] bg-[#111827] p-4"
             >
               <h3 className="flex items-center gap-2 text-sm font-bold">
-                <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.capabilityLabel}
+                <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.domainLabel}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{item.text}</p>
             </article>

@@ -1,0 +1,257 @@
+{
+  "document": {
+    "id": "PDR-003-004A",
+    "version": "2.0.0",
+    "status": "locked",
+    "title": "Delivery DNA 2.0 Commercial Offer Configuration",
+    "owner": "Product Owner",
+    "approver": "Matt Prust",
+    "approvedAt": "2026-08-05",
+    "parentDecisionId": "PDR-003-004",
+    "parentDecisionVersion": "2.0",
+    "productAuthority": "DIQ-100@2.0",
+    "modelAuthority": "DIQ-100A@2.0.0",
+    "goldenFixtureAuthority": "DIQ-100B@2.0.0",
+    "supersedesForNewOffers": "PDR-003-004A@1.0.1"
+  },
+  "activeOffer": {
+    "offerId": "delivery-dna-overview-gbp-2",
+    "offerVersion": "2.0.0",
+    "productId": "delivery-dna-overview",
+    "productVersion": "2.0.0",
+    "accessKey": "delivery_dna_overview",
+    "accessVersion": "2.0.0",
+    "status": "active_at_delivery_dna_2_cutover",
+    "chargeType": "one_off",
+    "currency": "GBP",
+    "unitAmountMinor": 29500,
+    "displayPrice": "£295 one-off",
+    "taxPolicy": "no_vat_charged_supplier_not_vat_registered",
+    "taxStatus": "supplier_not_vat_registered",
+    "vatCharged": false,
+    "vatAmountMinor": 0,
+    "customerTotalMinor": 29500,
+    "taxDisplay": "No VAT charged — DeliveryIQ is not VAT registered.",
+    "providerPriceReferenceSource": "deployment_configuration",
+    "clientSuppliedPriceTrusted": false
+  },
+  "purchaseScope": {
+    "verifiedPurchaserRequired": true,
+    "organisationRequired": true,
+    "workspaceRequired": true,
+    "savedSnapshotRequired": true,
+    "linkedAssessmentRequired": true,
+    "assessmentType": "delivery-dna",
+    "assessmentVersion": "2.0.0",
+    "questionSetVersion": "2.0.0",
+    "modelConfigurationId": "delivery-dna-product-config-2.0.0",
+    "domainCount": 5,
+    "capabilityCount": 15,
+    "snapshotQuestionCount": 15,
+    "questionCount": 45,
+    "remainingQuestionCountAfterSnapshot": 30,
+    "overviewAssessmentsPerPurchase": 1,
+    "accessScope": "one_linked_assessment_and_immutable_result",
+    "subscriptionIncluded": false,
+    "additionalAssessmentIncluded": false,
+    "perspectivesIncluded": false,
+    "deliveryDnaActionIncluded": false,
+    "knowledgePackIncluded": false,
+    "teamMateIncluded": false
+  },
+  "fulfilmentPolicy": {
+    "grantAuthority": "verified_payment_provider_event_only",
+    "successRedirectGrantsAccess": false,
+    "serverVerificationRequired": true,
+    "idempotentEventProcessingRequired": true,
+    "eventReplaySafe": true,
+    "offerVersionPinnedToCheckout": true,
+    "offerVersionPinnedToPayment": true,
+    "offerVersionPinnedToAccessGrant": true,
+    "tenantAndWorkspaceMatchRequired": true,
+    "assessmentMatchRequired": true,
+    "amountAndCurrencyMatchRequired": true,
+    "cardDataStoredByDeliveryIq": false,
+    "failedOrCancelledPaymentGrantsAccess": false,
+    "priceMismatchGrantsAccess": false,
+    "refundOrDisputePolicy": "preserve_payment_and_result_history_apply_versioned_access_state",
+    "historicalPaymentMutationAllowed": false
+  },
+  "savedSnapshotProjection": {
+    "allowed": [
+      "snapshot.status",
+      "snapshot.presentationPolicyVersion",
+      "snapshot.indicativeMaturityLevel",
+      "snapshot.domainProfile",
+      "snapshot.positiveSignals",
+      "snapshot.areasToExplore",
+      "snapshot.industryContext.maximum1",
+      "snapshot.downloadOfSameIndicativeResult",
+      "snapshot.linkedAssessmentId",
+      "assessment.progress",
+      "activeOverviewOffer.offerId",
+      "activeOverviewOffer.displayPrice",
+      "activeOverviewOffer.purchaseAction"
+    ],
+    "prohibited": [
+      "additionalIntelligence",
+      "numericScore",
+      "capabilityResults",
+      "confidenceIndex",
+      "engineFindings",
+      "recommendations",
+      "roadmap",
+      "downloadableOverviewReport",
+      "deliveryDnaActionControls"
+    ],
+    "mayCompleteFullAssessment": false,
+    "mayRequestAnalysis": false,
+    "mayGrantPaidAccess": false
+  },
+  "overviewProjection": {
+    "authority": "DIQ-100A@2.0.0.overviewPolicy",
+    "allowed": [
+      "overall.scoreAndLevel",
+      "domains.maximum5",
+      "capabilities.maximum15",
+      "confidenceAndLimitations",
+      "strengths",
+      "priorityOpportunities",
+      "eligiblePatterns",
+      "recommendations.top3",
+      "roadmap.bounded30_60_90Direction",
+      "industryContext.approvedRelevantItemsMaximum3OnMainDashboard",
+      "customerSafeExplainability",
+      "downloadableSevenSectionExecutiveReport"
+    ],
+    "prohibited": [
+      "recommendations.belowTop3",
+      "roadmap.completeManagement",
+      "customerDecisionControls",
+      "actionOwnership",
+      "actionTargetDates",
+      "actionProgress",
+      "outcomeTracking",
+      "perspectives",
+      "unrestrictedAuditTrace",
+      "respondentIdentity",
+      "paidKnowledgePackContent",
+      "teamMateActivation"
+    ],
+    "calculationSource": "immutable_delivery_intelligence_result",
+    "commercialRecalculationAllowed": false,
+    "webAndDownloadProjectionMustMatch": true,
+    "primaryResultAction": "Download my Delivery DNA Overview"
+  },
+  "industryContextPolicy": {
+    "catalogueId": "DIQ-204A",
+    "minimumCatalogueVersion": "1.2.0",
+    "eligibility": "approved_for_customer_context_and_materially_relevant",
+    "maximumSnapshotItems": 1,
+    "maximumMainDashboardItems": 3,
+    "sourcePresentation": "asterisk_or_numbered_note_with_visible_bottom_of_page_source",
+    "scoringEffect": "none",
+    "confidenceEffect": "none",
+    "rankingEffect": "none",
+    "roadmapEffect": "none",
+    "crossOrganisationComparisonAllowed": false,
+    "matchedBenchmarkClaimAllowed": false,
+    "causalClaimAllowed": false
+  },
+  "customerCopy": {
+    "savePanel": {
+      "heading": "Keep your Delivery DNA Snapshot",
+      "body": "Save your Snapshot for free to download your results, return at any time and continue to your complete Delivery DNA without starting again.",
+      "supportingMessage": "Download your results by saving your Snapshot",
+      "primaryAction": "Save my Snapshot",
+      "assuranceLine": "Free to save. No payment required. Your results remain private."
+    },
+    "savedState": {
+      "heading": "Your Snapshot is saved",
+      "body": "Your 15 responses are secure in your DeliveryIQ workspace. Unlock your complete Delivery DNA Overview to assess all 45 questions and receive your five-domain profile, fifteen-capability diagnosis, evidence confidence, priority recommendations and executive report.",
+      "primaryAction": "Unlock your complete Delivery DNA — £295"
+    },
+    "overviewOffer": {
+      "heading": "Understand what is enabling—and constraining—delivery",
+      "body": "Complete the remaining 30 questions to receive an evidence-linked view of your organisation's delivery capability, the areas that matter most and the priorities to address first.",
+      "priceLabel": "£295 one-off",
+      "taxLine": "No VAT charged — DeliveryIQ is not VAT registered.",
+      "purchaseAction": "Buy my Delivery DNA Overview — £295"
+    },
+    "purchasedState": {
+      "primaryAction": "Continue my Delivery DNA"
+    },
+    "prohibitedPrimaryTerms": [
+      "free account",
+      "free report",
+      "free complete Delivery DNA"
+    ],
+    "prohibitedClaims": [
+      "independent validation",
+      "guaranteed improvement",
+      "guaranteed project success",
+      "guaranteed savings",
+      "industry benchmark",
+      "Perspectives included",
+      "Delivery DNA Action included",
+      "TeamMate included"
+    ]
+  },
+  "cutoverPolicy": {
+    "strategy": "clean_replacement",
+    "paidCustomersConfirmedAtApproval": 0,
+    "preflightForNewPaidAccessRequired": true,
+    "translationOrMappingAllowed": false,
+    "newVersion1CollectionAfterCutoverAllowed": false,
+    "newVersion1CheckoutAfterCutoverAllowed": false,
+    "preserveExistingVersion1History": true,
+    "syntheticBackfillAllowed": false
+  },
+  "fixtures": [
+    {
+      "id": "commercial_2_saved_snapshot_boundary",
+      "input": {"snapshotVersion": "2.0.0", "authenticated": true, "paid": false},
+      "expected": {"responsesRetained": 15, "downloadSameResult": true, "additionalIntelligence": false, "remainingQuestionsAccessible": false, "analysisRunCreated": false}
+    },
+    {
+      "id": "commercial_2_verified_payment_grants_one_scope",
+      "input": {"eventVerified": true, "status": "succeeded", "amountMinor": 29500, "currency": "GBP", "tenantWorkspaceAssessmentMatch": true},
+      "expected": {"accessGrantCount": 1, "accessKey": "delivery_dna_overview", "accessVersion": "2.0.0", "remainingQuestionsAccessible": 30}
+    },
+    {
+      "id": "commercial_2_redirect_without_event_denied",
+      "input": {"successRedirectReceived": true, "eventVerified": false},
+      "expected": {"accessGrantCount": 0, "safeStatus": "payment_confirmation_pending"}
+    },
+    {
+      "id": "commercial_2_duplicate_event_idempotent",
+      "input": {"eventVerified": true, "sameEventDeliveryCount": 3, "tenantWorkspaceAssessmentMatch": true},
+      "expected": {"accessGrantCount": 1, "chargeFulfilmentCount": 1}
+    },
+    {
+      "id": "commercial_2_wrong_amount_currency_or_scope_denied",
+      "input": {"eventVerified": true, "amountMinor": 29400, "currency": "USD", "tenantWorkspaceAssessmentMatch": false},
+      "expected": {"accessGrantCount": 0, "safeStatus": "payment_verification_failed"}
+    },
+    {
+      "id": "commercial_2_no_vat_total",
+      "input": {"unitAmountMinor": 29500, "supplierVatRegistered": false, "currency": "GBP"},
+      "expected": {"subtotalMinor": 29500, "vatAmountMinor": 0, "customerTotalMinor": 29500, "taxDisplay": "No VAT charged — DeliveryIQ is not VAT registered."}
+    },
+    {
+      "id": "commercial_2_overview_projection_bounded",
+      "input": {"overviewAccess": true, "immutableResultVersion": "2.0.0"},
+      "expected": {"maximumDomains": 5, "maximumCapabilities": 15, "maximumRecommendations": 3, "downloadableReportSections": 7, "actionControlsAvailable": false}
+    },
+    {
+      "id": "commercial_2_context_is_calculation_neutral",
+      "input": {"contextEligible": true, "sourceNotePresent": true},
+      "expected": {"displayed": true, "maximumMainDashboardItems": 3, "scoringEffect": "none", "benchmarkClaim": false}
+    },
+    {
+      "id": "commercial_2_version1_history_preserved_without_translation",
+      "input": {"historicalVersion": "1.0.0", "newCutoverVersion": "2.0.0"},
+      "expected": {"historicalRecordsMutated": false, "responsesTranslated": false, "scoresTranslated": false, "syntheticGrantCreated": false}
+    }
+  ]
+}

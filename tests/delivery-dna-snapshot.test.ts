@@ -261,7 +261,7 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(route).toContain("aria-checked={selected}");
     expect(route).toContain('["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]');
     expect(route).toContain("optionRefs.current[next]?.focus()");
-    expect(route).toContain('["1", "2", "3", "4", "5"]');
+    expect(route).toContain('["1", "2", "3", "4"]');
     expect(route).toContain("headingRef.current?.focus()");
     expect(route).toContain('aria-live="polite"');
   });
@@ -269,16 +269,15 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
   it("provides the truthful timed preparation, slow, error and reduced-motion states", () => {
     expect(preparation).toContain("policy.minimumVisibleMilliseconds");
     expect(preparation).toContain("policy.slowStateAtMilliseconds");
-    expect(preparation).toContain("copy.preparationHeading");
-    expect(preparation).toContain("copy.preparationBody");
-    expect(preparation).toContain("copy.slowPreparationBody");
-    expect(preparation).toContain("copy.readyHeading");
+    expect(preparation).toContain("policy.heading");
+    expect(preparation).toContain("policy.body");
+    expect(preparation).toContain("policy.ready");
     expect(preparation).toContain("Your saved responses are safe.");
     expect(preparation).toMatch(
       /setShowReady\(true\);\s*\}, \[elapsed, resultReady, showReady\]\);\s*useEffect\(\(\) => \{\s*if \(!showReady\) return;\s*finishTimer\.current = setTimeout\(onReady, 700\)/,
     );
     for (const step of deliveryDnaSnapshotConfiguration.preparationPolicy.steps) {
-      expect(preparation).toContain("step.copy");
+      expect(preparation).toContain("{step}");
       expect(step.copy).not.toMatch(
         /AI analysis|benchmarking|external data comparison|evidence validation|Delivery Intelligence Engine analysis/i,
       );
@@ -292,8 +291,8 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(radar).toContain('" · N/A"');
     expect(radar).toContain("<ol");
     expect(radar).toContain('aria-label="Accessible indicative delivery profile"');
-    expect(radar).toContain("axis.capabilityLabel");
-    expect(radar).toContain("axis.responseLabel");
+    expect(radar).toContain("axis.domainLabel");
+    expect(radar).toContain("axis.level");
     expect(radar).toContain("sm:grid-cols-2");
     expect(radar).toContain("lg:grid-cols-3");
   });
@@ -374,11 +373,8 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
     expect(v11Migration).toContain("SNAPSHOT_CONFIGURATION_VERSION_IMMUTABLE");
     expect(v11Migration).toContain("SNAPSHOT_PRESENTATION_VERSION_TRANSITION_INVALID");
     expect(v11Migration).toContain("delivery_dna_snapshot_versions_guard");
-    expect(server).toContain('session.configuration_version === "1.0.0"');
-    expect(server).toContain('presentation_policy_version: "1.1.0"');
-    expect(server).toContain(
-      "snapshotContinuationRecord(response, resolved.session.configuration_version)",
-    );
+    expect(server).toContain('.eq("configuration_version", "2.0.0")');
+    expect(server).toContain("snapshotV2ContinuationRecord(response)");
     expect(server).not.toMatch(
       /presentation_policy_version[\s\S]{0,300}(delivery_intelligence|assessment_analysis_runs)/,
     );
@@ -402,8 +398,8 @@ describe("PDR-003-005/A v1.1 premium Delivery DNA Snapshot", () => {
 
   it("starts a fresh anonymous session without mutating a completed or linked Snapshot", () => {
     expect(route).toContain("copy.restartCta");
-    expect(route).toContain("deliveryDnaSnapshotApi.start(true)");
-    expect(client).toContain("JSON.stringify({ restart })");
+    expect(route).toContain("deliveryDnaSnapshotApi.start(true, scope)");
+    expect(client).toContain("JSON.stringify({ restart, ...scope })");
     expect(apiRoute).toContain("body.restart === true");
     expect(server).toContain("const existing = restart ? null : await sessionForRequest(request)");
     expect(server).not.toMatch(/restart[\s\S]{0,500}\.update\(/);

@@ -1,11 +1,11 @@
-import { assessmentAuthHeaders } from "@/lib/identity/assessment-auth";
+import { assessmentAuthHeaders, openAuthenticatedDownload } from "@/lib/identity/assessment-auth";
 
 import type {
-  SnapshotConfigurationVersion,
-  SnapshotMaturityLevel,
-  SnapshotProfileAxis,
-  SnapshotResponse,
-} from "./snapshot";
+  SnapshotV2ConfigurationVersion,
+  SnapshotV2DomainProfile,
+  SnapshotV2Response,
+} from "./snapshot-v2";
+import type { DeliveryDnaV2Level } from "./catalogue-v2";
 
 const snapshotSessionKey = "deliveryiq_dna_snapshot_session";
 
@@ -23,29 +23,43 @@ export type SnapshotResult = {
   available: boolean;
   reasonCode: string | null;
   answeredCount: number;
-  indicativeMaturityLevel: SnapshotMaturityLevel | null;
-  profile: SnapshotProfileAxis[];
-  positiveSignals: { capabilityId: string; capabilityLabel: string; text: string }[];
-  areasToExplore: { capabilityId: string; capabilityLabel: string; text: string }[];
+  indicativeMaturityLevel: DeliveryDnaV2Level | null;
+  profile: SnapshotV2DomainProfile[];
+  positiveSignals: { domainId: string; domainLabel: string; text: string }[];
+  areasToExplore: { domainId: string; domainLabel: string; text: string }[];
+  industryContext?: Array<{
+    evidenceId: string;
+    approvedCustomerWording: string;
+    footnoteMarker: string;
+    sourcePublisher: string;
+    sourceTitle: string;
+    evidenceYear: number;
+    scopeCaveat: string;
+    mandatoryDisclosure: string;
+  }>;
 };
 
 export type SnapshotState = {
   status: "in_progress" | "completed" | "linked";
-  configurationVersion: SnapshotConfigurationVersion;
-  presentationPolicyVersion: "1.0.0" | "1.1.0";
+  configurationVersion: SnapshotV2ConfigurationVersion;
+  presentationPolicyVersion: "2.0.0";
   expiresAt: string;
-  responses: SnapshotResponse[];
+  scopeType: string;
+  scopeDisplayName: string;
+  responses: SnapshotV2Response[];
   result: SnapshotResult | null;
   linkedAssessmentId: string | null;
 };
 
 async function request<T>(path = "", init: RequestInit = {}): Promise<T> {
   const sessionToken = snapshotSessionToken();
+  const authHeaders = await assessmentAuthHeaders();
   const response = await fetch(`/api/delivery-dna-snapshot${path}`, {
     ...init,
     credentials: "same-origin",
     headers: {
       "content-type": "application/json",
+      ...authHeaders,
       ...(sessionToken ? { "x-deliveryiq-snapshot-session": sessionToken } : {}),
       ...(init.headers ?? {}),
     },
@@ -58,10 +72,10 @@ async function request<T>(path = "", init: RequestInit = {}): Promise<T> {
 
 export const deliveryDnaSnapshotApi = {
   get: () => request<{ snapshot: SnapshotState | null }>(),
-  start: (restart = false) =>
+  start: (restart = false, scope?: { scopeType: string; scopeDisplayName: string }) =>
     request<{ snapshot: SnapshotState }>("", {
       method: "POST",
-      body: JSON.stringify({ restart }),
+      body: JSON.stringify({ restart, ...scope }),
     }),
   save: (input: {
     questionId: string;
@@ -84,4 +98,5 @@ export const deliveryDnaSnapshotApi = {
       headers: await assessmentAuthHeaders(),
       body: JSON.stringify({ consent }),
     }),
+  download: () => openAuthenticatedDownload("/api/delivery-dna-snapshot/report.pdf"),
 };

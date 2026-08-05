@@ -8,7 +8,21 @@ import { AppShell } from "@/components/deliveryiq/app-shell";
 import { StatusPill } from "@/components/deliveryiq/status-pill";
 import { assessmentApi, assessmentKeys } from "@/lib/assessment/client";
 import type { AssessmentAnswerInput, AssessmentDetail } from "@/lib/assessment/types";
-import { deliveryDnaCatalogue } from "@/lib/delivery-dna/catalogue";
+import { deliveryDnaV2Capabilities, deliveryDnaV2Catalogue } from "@/lib/delivery-dna/catalogue-v2";
+import { snapshotV2AnswerOptions } from "@/lib/delivery-dna/snapshot-v2";
+
+const dimensionLabels = {
+  foundation: "Foundation",
+  practice: "Practice",
+  evidence: "Evidence",
+} as const;
+
+const dimensionInstructions = {
+  foundation:
+    "Consider how clearly the organisation has established the conditions for this capability.",
+  practice: "Consider what happens consistently in normal delivery work.",
+  evidence: "Consider what current evidence shows about the organisation's actual position.",
+} as const;
 
 type DraftAnswer =
   | { status: "answered"; value: number; evidenceReasonText?: never }
@@ -55,17 +69,33 @@ export function DeliveryDnaAssessmentJourney({
   const [capabilityIndex, setCapabilityIndex] = useState(() =>
     Math.max(
       0,
-      deliveryDnaCatalogue.capabilities.findIndex(
+      deliveryDnaV2Capabilities.findIndex(
         (capability) => capability.id === detail.session.currentSection,
       ),
     ),
   );
   const [reviewing, setReviewing] = useState(false);
   const [missingAcknowledged, setMissingAcknowledged] = useState(false);
-  const capability = deliveryDnaCatalogue.capabilities[capabilityIndex];
+  const storedEvidenceMetadata = (
+    detail.session.metadata as {
+      deliveryDnaEvidence?: {
+        evidenceRecencyDeclaration?: string;
+        perspectiveBreadthDeclaration?: string;
+      };
+    }
+  ).deliveryDnaEvidence;
+  const [evidenceRecencyDeclaration, setEvidenceRecencyDeclaration] = useState(
+    storedEvidenceMetadata?.evidenceRecencyDeclaration ?? "",
+  );
+  const [perspectiveBreadthDeclaration, setPerspectiveBreadthDeclaration] = useState(
+    storedEvidenceMetadata?.perspectiveBreadthDeclaration ?? "",
+  );
+  const capability = deliveryDnaV2Capabilities[capabilityIndex];
   const recordedCount = Object.keys(answers).length;
-  const missingCount = deliveryDnaCatalogue.identity.questionCount - recordedCount;
-  const progress = Math.round((recordedCount / deliveryDnaCatalogue.identity.questionCount) * 100);
+  const missingCount = deliveryDnaV2Catalogue.identity.fullQuestionCount - recordedCount;
+  const progress = Math.round(
+    (recordedCount / deliveryDnaV2Catalogue.identity.fullQuestionCount) * 100,
+  );
   const locked = !["draft", "in_progress"].includes(detail.session.status);
   const invalidNotApplicable = useMemo(
     () =>
@@ -77,7 +107,7 @@ export function DeliveryDnaAssessmentJourney({
   const carriedResponseCount = detail.responses.filter(
     (response) =>
       response.provenanceSource === "delivery-dna-snapshot" &&
-      response.provenanceVersion === "1.0.0",
+      response.provenanceVersion === "2.0.0",
   ).length;
 
   const save = useMutation({
@@ -105,6 +135,8 @@ export function DeliveryDnaAssessmentJourney({
       return assessmentApi.submit(assessmentId, {
         reviewAcknowledged: true,
         missingAcknowledged: missingCount === 0 || missingAcknowledged,
+        evidenceRecencyDeclaration,
+        perspectiveBreadthDeclaration,
       });
     },
     onSuccess: () => {
@@ -128,7 +160,7 @@ export function DeliveryDnaAssessmentJourney({
           </p>
 
           <div className="mt-6 space-y-4">
-            {deliveryDnaCatalogue.capabilities.map((item, index) => {
+            {deliveryDnaV2Capabilities.map((item, index) => {
               const answered = item.questions.filter((question) => answers[question.id]).length;
               return (
                 <article key={item.id} className="rounded-xl border border-border bg-card p-5">
@@ -163,9 +195,59 @@ export function DeliveryDnaAssessmentJourney({
                 onChange={(event) => setMissingAcknowledged(event.target.checked)}
                 className="mt-0.5 h-4 w-4"
               />
-              <span>{deliveryDnaCatalogue.journey.completionPolicy.missingAcknowledgement}</span>
+              <span>
+                I understand that unanswered questions remain missing evidence and may limit this
+                result.
+              </span>
             </label>
           )}
+
+          <section className="mt-6 rounded-xl border border-border bg-card p-5">
+            <h2 className="font-display text-lg font-semibold">Evidence context</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              These two declarations inform confidence only. They do not change your Delivery DNA
+              scores.
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <label className="text-sm font-medium">
+                {
+                  deliveryDnaV2Catalogue.confidencePolicy.requiredMetadata
+                    .evidenceRecencyDeclaration.customerPrompt
+                }
+                <select
+                  required
+                  value={evidenceRecencyDeclaration}
+                  onChange={(event) => setEvidenceRecencyDeclaration(event.target.value)}
+                  className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"
+                >
+                  <option value="">Select one</option>
+                  <option value="within_90_days">Within the last 90 days</option>
+                  <option value="within_180_days">Within the last 180 days</option>
+                  <option value="within_365_days">Within the last 365 days</option>
+                  <option value="older_than_365_days">More than 365 days old</option>
+                  <option value="unknown_or_not_available">Unknown or not available</option>
+                </select>
+              </label>
+              <label className="text-sm font-medium">
+                {
+                  deliveryDnaV2Catalogue.confidencePolicy.requiredMetadata
+                    .perspectiveBreadthDeclaration.customerPrompt
+                }
+                <select
+                  required
+                  value={perspectiveBreadthDeclaration}
+                  onChange={(event) => setPerspectiveBreadthDeclaration(event.target.value)}
+                  className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"
+                >
+                  <option value="">Select one</option>
+                  <option value="own_view_only">My own view only</option>
+                  <option value="one_group">One stakeholder group</option>
+                  <option value="two_groups">Two stakeholder groups</option>
+                  <option value="three_or_more_groups">Three or more stakeholder groups</option>
+                </select>
+              </label>
+            </div>
+          </section>
 
           <div className="mt-6 flex flex-wrap justify-between gap-3">
             <button
@@ -181,6 +263,8 @@ export function DeliveryDnaAssessmentJourney({
                 locked ||
                 complete.isPending ||
                 invalidNotApplicable ||
+                !evidenceRecencyDeclaration ||
+                !perspectiveBreadthDeclaration ||
                 (missingCount > 0 && !missingAcknowledged)
               }
               onClick={() => complete.mutate()}
@@ -201,19 +285,21 @@ export function DeliveryDnaAssessmentJourney({
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">
           Delivery DNA™
         </p>
-        <h1 className="mt-2 text-3xl font-semibold">{deliveryDnaCatalogue.journey.title}</h1>
+        <h1 className="mt-2 text-3xl font-semibold">Complete your Delivery DNA</h1>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          {deliveryDnaCatalogue.journey.introduction}
+          Complete the remaining Foundation and Evidence questions to build your full five-domain
+          Delivery DNA Overview.
         </p>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          {deliveryDnaCatalogue.journey.instructions}
+          Choose the anchored response that best reflects the organisation in scope. Use Not
+          applicable only when the capability genuinely does not apply, and explain why.
         </p>
         {carriedResponseCount > 0 ? (
           <div className="mt-5 rounded-lg border border-primary/30 bg-primary/10 p-4 text-sm">
             <p className="font-semibold">Your Snapshot responses are ready to review</p>
             <p className="mt-1 leading-relaxed text-muted-foreground">
               {carriedResponseCount} responses were carried forward unchanged from your Delivery DNA
-              Snapshot. Review them alongside the remaining 26 questions before completing the
+              Snapshot. Review them alongside the remaining 30 questions before completing the
               assessment.
             </p>
           </div>
@@ -224,13 +310,13 @@ export function DeliveryDnaAssessmentJourney({
             <div className="ribbon-bar h-full" style={{ width: `${progress}%` }} />
           </div>
           <span className="text-xs tabular-nums text-muted-foreground">
-            {recordedCount} / {deliveryDnaCatalogue.identity.questionCount}
+            {recordedCount} / {deliveryDnaV2Catalogue.identity.fullQuestionCount}
           </span>
         </div>
 
         <div className="mt-7 grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
           <nav aria-label="Delivery DNA capabilities" className="space-y-1.5">
-            {deliveryDnaCatalogue.capabilities.map((item, index) => {
+            {deliveryDnaV2Capabilities.map((item, index) => {
               const complete = item.questions.every((question) => answers[question.id]);
               return (
                 <button
@@ -256,19 +342,17 @@ export function DeliveryDnaAssessmentJourney({
             <div className="mt-6 space-y-8">
               {capability.questions.map((question) => {
                 const answer = answers[question.id];
-                const dimensionLabel =
-                  deliveryDnaCatalogue.journey.dimensionLabels[question.dimension];
+                const dimensionLabel = dimensionLabels[question.dimension];
                 return (
                   <fieldset key={question.id} disabled={locked} className="min-w-0">
                     <legend className="text-sm font-semibold leading-relaxed">
                       {question.prompt}
                     </legend>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {dimensionLabel}:{" "}
-                      {deliveryDnaCatalogue.journey.dimensionInstructions[question.dimension]}
+                      {dimensionLabel}: {dimensionInstructions[question.dimension]}
                     </p>
                     <div className="mt-3 grid gap-2 sm:grid-cols-5">
-                      {deliveryDnaCatalogue.journey.responseScale.options.map((option) => (
+                      {snapshotV2AnswerOptions(question.id).map((option) => (
                         <label
                           key={option.value}
                           className={`cursor-pointer rounded-md border p-3 text-xs transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary ${
@@ -313,18 +397,12 @@ export function DeliveryDnaAssessmentJourney({
                             }))
                           }
                         />
-                        {
-                          deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable
-                            .label
-                        }
+                        Not applicable
                       </label>
                       {answer?.status === "not_applicable" && (
                         <div className="mt-3">
                           <label className="text-xs font-medium" htmlFor={`${question.id}-reason`}>
-                            {
-                              deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable
-                                .reasonPrompt
-                            }
+                            Why is this not applicable to the organisation in scope?
                           </label>
                           <textarea
                             id={`${question.id}-reason`}
@@ -344,10 +422,8 @@ export function DeliveryDnaAssessmentJourney({
                             className="mt-1.5 min-h-20 w-full rounded-md border border-input bg-background p-3 text-sm"
                           />
                           <p className="mt-1 text-xs text-muted-foreground">
-                            {
-                              deliveryDnaCatalogue.journey.evidenceStatusPresentation.not_applicable
-                                .customerHelp
-                            }
+                            This response is excluded from scoring. A reason is required so the
+                            limitation remains explicit.
                           </p>
                         </div>
                       )}
@@ -369,8 +445,12 @@ export function DeliveryDnaAssessmentJourney({
                 </button>
                 <button
                   type="button"
-                  disabled={capabilityIndex === deliveryDnaCatalogue.capabilities.length - 1}
-                  onClick={() => setCapabilityIndex((index) => Math.min(12, index + 1))}
+                  disabled={capabilityIndex === deliveryDnaV2Capabilities.length - 1}
+                  onClick={() =>
+                    setCapabilityIndex((index) =>
+                      Math.min(deliveryDnaV2Capabilities.length - 1, index + 1),
+                    )
+                  }
                   className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-2 text-sm disabled:opacity-40"
                 >
                   Next <ChevronRight className="h-4 w-4" aria-hidden />
