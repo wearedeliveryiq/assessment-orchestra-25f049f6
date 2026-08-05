@@ -387,7 +387,7 @@ function SnapshotQuestions({
   };
 
   return (
-    <section className="on-navy -mx-5 rounded-none px-5 py-8 sm:-mx-8 sm:rounded-[22px] sm:px-8 sm:py-10">
+    <section className="-mx-5 rounded-none px-5 py-8 sm:-mx-8 sm:rounded-[22px] sm:px-8 sm:py-10">
       <div className="mx-auto max-w-4xl">
         <p className="eyebrow">Delivery DNA Snapshot</p>
         <p className="mt-3 rounded-[14px] border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
@@ -653,7 +653,7 @@ function SnapshotResultView({
 
   return (
     <section className="mx-auto max-w-5xl">
-      <section className="on-navy relative overflow-hidden rounded-[22px] px-6 py-10 text-center sm:px-10 sm:py-14">
+      <section className="panel relative overflow-hidden rounded-[22px] px-6 py-10 text-center sm:px-10 sm:py-14">
         <SignalField />
         <SignalConverge className="relative mx-auto max-w-md" />
         <p className="eyebrow relative mt-4">{String(copy.readyHeading)}</p>
@@ -690,7 +690,7 @@ function SnapshotResultView({
       ) : null}
 
       <section
-        className="on-navy mt-7 rounded-[22px] p-5 sm:p-8"
+        className="panel mt-7 rounded-[22px] p-5 sm:p-8"
         aria-labelledby="snapshot-profile-title"
       >
         <h2 id="snapshot-profile-title" className="text-2xl font-extrabold tracking-tight">
