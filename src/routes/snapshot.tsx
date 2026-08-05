@@ -10,10 +10,10 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 
+import { SignalConverge, SignalField } from "@/components/brand/signal-converge";
 import { SnapshotPreparation } from "@/components/delivery-dna/snapshot-preparation";
 import { SnapshotRadar } from "@/components/delivery-dna/snapshot-radar";
 import { SnapshotAcquisitionShell } from "@/components/delivery-dna/snapshot-shell";
-import { RibbonStage } from "@/components/ribbon";
 import { Button } from "@/components/ui/button";
 import { useIdentity } from "@/hooks/use-identity";
 import { deliveryDnaV2Catalogue } from "@/lib/delivery-dna/catalogue-v2";
@@ -137,7 +137,7 @@ function DeliveryDnaSnapshotPage() {
     <SnapshotAcquisitionShell>
       {isLoading ? (
         <div className="flex min-h-[60vh] items-center justify-center" role="status">
-          <Loader2 className="h-7 w-7 animate-spin text-[#60A5FA]" aria-hidden />
+          <Loader2 className="h-7 w-7 animate-spin text-primary" aria-hidden />
           <span className="sr-only">Loading your Delivery DNA Snapshot</span>
         </div>
       ) : error ? (
@@ -184,48 +184,43 @@ function SnapshotStart({
   const [scopeType, setScopeType] = useState("whole_organisation");
   const [scopeDisplayName, setScopeDisplayName] = useState("");
   return (
-    <section className="snapshot-acquisition-panel relative overflow-hidden rounded-[30px] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
-      <div
-        className="snapshot-ribbon-glow pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] blur-[110px]"
-        aria-hidden="true"
-      />
+    <section className="panel relative overflow-hidden rounded-[22px] px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
+      <SignalField />
       <div className="relative grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
-            Delivery DNA Snapshot
-          </p>
+        <div className="animate-rise">
+          <p className="eyebrow">Delivery DNA Snapshot</p>
           <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
             {String(copy.startHeading)}
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#CBD5E1] sm:text-lg">
+          <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground sm:text-lg">
             {String(copy.introduction)}
           </p>
-          <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#CBD5E1]">
-            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+          <div className="mt-6 flex flex-wrap gap-3 text-sm text-muted-foreground">
+            <span className="rounded-full border border-border bg-muted px-4 py-2">
               15 questions
             </span>
-            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+            <span className="rounded-full border border-border bg-muted px-4 py-2">
               {String(copy.timeEstimate)}
             </span>
-            <span className="rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2">
+            <span className="rounded-full border border-border bg-muted px-4 py-2">
               No account required
             </span>
           </div>
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-[#94A3B8]">
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {String(copy.instructions)}
           </p>
           {error ? (
-            <p className="mt-4 text-sm text-red-300" role="alert">
+            <p className="mt-4 text-sm text-destructive" role="alert">
               {error}
             </p>
           ) : null}
-          <div className="mt-7 grid max-w-2xl gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 sm:grid-cols-2">
-            <label className="text-sm font-semibold text-[#F8FAFC]">
+          <div className="mt-7 grid max-w-2xl gap-4 rounded-[18px] border border-border bg-panel p-5 sm:grid-cols-2">
+            <label className="text-sm font-semibold text-foreground">
               Assessment scope
               <select
                 value={scopeType}
                 onChange={(event) => setScopeType(event.target.value)}
-                className="mt-2 min-h-11 w-full rounded-lg border border-white/10 bg-[#090E1A] px-3 text-sm"
+                className="mt-2 min-h-11 w-full rounded-[10px] border border-input bg-background px-3 text-sm text-foreground"
               >
                 <option value="whole_organisation">Whole organisation</option>
                 <option value="business_unit_or_division">Business unit or division</option>
@@ -235,36 +230,39 @@ function SnapshotStart({
                 </option>
               </select>
             </label>
-            <label className="text-sm font-semibold text-[#F8FAFC]">
+            <label className="text-sm font-semibold text-foreground">
               Organisation or area name
               <input
                 value={scopeDisplayName}
                 maxLength={120}
                 onChange={(event) => setScopeDisplayName(event.target.value)}
                 placeholder="e.g. UK Operations"
-                className="mt-2 min-h-11 w-full rounded-lg border border-white/10 bg-[#090E1A] px-3 text-sm"
+                className="mt-2 min-h-11 w-full rounded-[10px] border border-input bg-background px-3 text-sm text-foreground"
               />
             </label>
           </div>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#CBD5E1]">
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             For this assessment, “the organisation” means{" "}
             {scopeDisplayName.trim() || "the scope named above"}. Answer for how project and change
             delivery usually works across this scope today.
           </p>
           <Button
-            className="snapshot-gradient-button mt-7 min-h-12 gap-2 border-0 px-6 text-white"
+            className="mt-7 min-h-12 gap-2 px-6"
             disabled={busy || scopeDisplayName.trim().length < 2}
             onClick={() => onStart({ scopeType, scopeDisplayName: scopeDisplayName.trim() })}
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
             Start your Snapshot <ArrowRight className="h-4 w-4" aria-hidden />
           </Button>
-          <p className="mt-5 text-xs leading-relaxed text-[#94A3B8]">
+          <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+            Evidence-informed. Explainable. Human-controlled.
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             No personal name, email or account is requested. The scope name is used only for this
             Snapshot, and an unfinished Snapshot expires after 24 hours.
           </p>
         </div>
-        <RibbonStage size="lg" onNavy className="mx-auto hidden lg:grid" />
+        <SignalConverge className="mx-auto hidden max-w-lg lg:block" />
       </div>
     </section>
   );
