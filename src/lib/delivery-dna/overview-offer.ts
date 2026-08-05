@@ -1,24 +1,24 @@
 import { z } from "zod";
 
-import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.0.0 Delivery DNA Commercial Offer Configuration.json";
+import rawConfiguration from "../../../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.1.0 Delivery DNA Commercial Offer Configuration.json";
 
 const offerSchema = z
   .object({
     document: z.object({
       id: z.literal("PDR-003-004A"),
-      version: z.literal("2.0.0"),
+      version: z.literal("2.1.0"),
       status: z.literal("locked"),
       parentDecisionId: z.literal("PDR-003-004"),
-      parentDecisionVersion: z.literal("2.0"),
+      parentDecisionVersion: z.literal("2.1"),
     }),
     activeOffer: z.object({
-      offerId: z.literal("delivery-dna-overview-gbp-2"),
-      offerVersion: z.literal("2.0.0"),
+      offerId: z.literal("delivery-dna-overview-gbp-21"),
+      offerVersion: z.literal("2.1.0"),
       productId: z.literal("delivery-dna-overview"),
-      productVersion: z.literal("2.0.0"),
+      productVersion: z.literal("2.1.0"),
       accessKey: z.literal("delivery_dna_overview"),
-      accessVersion: z.literal("2.0.0"),
-      status: z.literal("active_at_delivery_dna_2_cutover"),
+      accessVersion: z.literal("2.1.0"),
+      status: z.literal("active_at_delivery_dna_21_cutover"),
       chargeType: z.literal("one_off"),
       currency: z.literal("GBP"),
       unitAmountMinor: z.literal(29500),
@@ -35,8 +35,8 @@ const offerSchema = z
     purchaseScope: z
       .object({
         assessmentType: z.literal("delivery-dna"),
-        assessmentVersion: z.literal("2.0.0"),
-        questionSetVersion: z.literal("2.0.0"),
+        assessmentVersion: z.literal("2.1.0"),
+        questionSetVersion: z.literal("2.1.0"),
         capabilityCount: z.literal(15),
         questionCount: z.literal(45),
         remainingQuestionCountAfterSnapshot: z.literal(30),
@@ -123,7 +123,7 @@ const offerSchema = z
           expected: z.record(z.string(), z.unknown()),
         }),
       )
-      .length(9),
+      .length(10),
   })
   .passthrough();
 
@@ -134,7 +134,7 @@ export function validateDeliveryDnaOverviewOfferConfiguration(
 ): DeliveryDnaOverviewOfferConfiguration {
   const parsed = offerSchema.parse(value);
   const fixtureIds = parsed.fixtures.map((fixture) => fixture.id);
-  if (new Set(fixtureIds).size !== 9) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
+  if (new Set(fixtureIds).size !== 10) throw new Error("OVERVIEW_OFFER_CONFIGURATION_INVALID");
   return parsed;
 }
 
@@ -147,7 +147,7 @@ export const deliveryDnaCommercialCopy = deliveryDnaOverviewOfferConfiguration.c
 
 export function activeDeliveryDnaOverviewOffer(now = new Date().toISOString()) {
   void now;
-  return deliveryDnaOverviewOffer.status === "active_at_delivery_dna_2_cutover"
+  return deliveryDnaOverviewOffer.status === "active_at_delivery_dna_21_cutover"
     ? deliveryDnaOverviewOffer
     : null;
 }
@@ -188,8 +188,26 @@ export function evaluateOverviewPaymentFixture(input: {
   subtotalMinor?: number;
   vatAmountMinor?: number;
   customerTotalMinor?: number;
+  snapshotQuestionSetVersion?: string;
+  paymentOfferVersion?: string;
+  requestedAccessVersion?: string;
 }) {
   const offer = deliveryDnaOverviewOffer;
+  if (
+    (input.snapshotQuestionSetVersion !== undefined &&
+      input.snapshotQuestionSetVersion !==
+        deliveryDnaOverviewOfferConfiguration.purchaseScope.questionSetVersion) ||
+    (input.paymentOfferVersion !== undefined && input.paymentOfferVersion !== offer.offerVersion) ||
+    (input.requestedAccessVersion !== undefined &&
+      input.requestedAccessVersion !== offer.accessVersion)
+  ) {
+    return {
+      accessGrantCount: 0,
+      responsesTranslated: false,
+      remainingAssessmentAccessible: false,
+      safeStatus: "assessment_version_mismatch",
+    };
+  }
   if (!input.paymentEventVerified) {
     return {
       accessGrantCount: 0,
@@ -222,6 +240,8 @@ export function evaluateOverviewPaymentFixture(input: {
     accessKey: offer.accessKey,
     accessVersion: offer.accessVersion,
     remainingAssessmentAccessible: true,
+    remainingQuestionsAccessible:
+      deliveryDnaOverviewOfferConfiguration.purchaseScope.remainingQuestionCountAfterSnapshot,
     deliveryDnaActionAccessible: false,
   };
 }

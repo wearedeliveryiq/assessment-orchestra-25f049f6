@@ -55,9 +55,12 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
       assessmentId: run.assessmentSessionId,
       context: verified,
     });
-    const isV2 =
-      (stored.canonicalResult as { schemaVersion?: string }).schemaVersion ===
-      "deliveryiq.intelligence-result/2.0.0";
+    const resultSchemaVersion = (stored.canonicalResult as { schemaVersion?: string })
+      .schemaVersion;
+    const isV2 = [
+      "deliveryiq.intelligence-result/2.0.0",
+      "deliveryiq.intelligence-result/2.1.0",
+    ].includes(resultSchemaVersion ?? "");
     // Only historical 1.0 direct assessments retain their original access.
     // Delivery DNA 2.0 always requires the verified Saved Snapshot scope.
     const access =
@@ -91,7 +94,7 @@ export async function getWorkspaceResult(request: Request, runId: string): Promi
       );
     }
     const portfolio = isV2 ? null : (await recommendationPortfolioService.ensure(run)).portfolio;
-    const etag = `"${stored.resultHash}:PDR-003-004/${isV2 ? "2.0" : "1.1"}:${access.access}"`;
+    const etag = `"${stored.resultHash}:PDR-003-004/${resultSchemaVersion?.endsWith("/2.1.0") ? "2.1" : isV2 ? "2.0" : "1.1"}:${access.access}"`;
     if (request.headers.get("if-none-match") === etag) {
       return new Response(null, {
         status: 304,

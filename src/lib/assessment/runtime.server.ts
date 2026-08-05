@@ -57,9 +57,9 @@ async function requireSession(id: string, ownerKey: string): Promise<AssessmentS
       session.metadata as { deliveryDna?: { questionSetVersion?: unknown } } | null
     )?.deliveryDna?.questionSetVersion;
     throw new RuntimeError(
-      questionSetVersion === "2.0.0"
+      questionSetVersion === "2.1.0"
         ? "Unlock your Delivery DNA Overview to continue with the remaining 30 questions."
-        : "Delivery DNA 1.0 has been replaced. Start the Delivery DNA 2.0 Snapshot.",
+        : "This Delivery DNA version is historical. Start the current Delivery DNA Snapshot.",
       403,
     );
   }

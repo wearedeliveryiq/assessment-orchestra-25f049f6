@@ -55,7 +55,7 @@ const snapshotPolicy = deliveryDnaSnapshotV2Configuration;
 const copy = {
   startHeading: "See the delivery patterns shaping your organisation",
   introduction:
-    "Answer one practice question from each Delivery DNA capability to build a directional five-domain view.",
+    "Answer one Snapshot question from each Delivery DNA capability to build a directional five-domain view.",
   timeEstimate: "6–8 minutes",
   instructions:
     "Choose the anchored statement that best reflects usual project and change delivery practice across the organisation or area in scope.",

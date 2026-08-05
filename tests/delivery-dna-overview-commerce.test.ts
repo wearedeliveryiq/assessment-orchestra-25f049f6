@@ -33,19 +33,21 @@ const ranked = [1, 2, 3, 4].map((rank) => ({
 }));
 
 const capabilityIds = [
-  "strategy_alignment",
-  "governance",
-  "sponsorship",
-  "portfolio",
-  "programme_delivery",
-  "project_delivery",
-  "planning_controls",
-  "benefits",
-  "risk_assurance",
-  "stakeholder_change",
-  "pmo_enablement",
-  "reporting_insight",
-  "continuous_improvement",
+  "strategic_alignment",
+  "portfolio_prioritisation",
+  "benefits_value",
+  "sponsorship_accountability",
+  "governance_decision_making",
+  "risk_assurance_resilience",
+  "delivery_approach_lifecycle",
+  "planning_control_dependencies",
+  "capacity_delivery_ecosystem",
+  "leadership_culture_collaboration",
+  "stakeholder_change_adoption",
+  "delivery_capability_enablement",
+  "data_reporting_decision_insight",
+  "learning_adaptability_improvement",
+  "digital_automation_responsible_ai",
 ];
 
 const stored = {
@@ -56,6 +58,7 @@ const stored = {
   workspaceId: "workspace-1",
   publishedAt: "2026-08-04T12:00:00Z",
   canonicalResult: {
+    schemaVersion: "deliveryiq.intelligence-result/2.1.0",
     generatedAt: "2026-08-04T12:00:00Z",
     versions: { configurationSetId: "restricted-version" },
     overall: { available: true, rawScore: 50, displayScore: 50, band: "developing" },
@@ -63,10 +66,30 @@ const stored = {
       factors: { restrictedFactor: 1 },
       result: { index: 80, displayIndex: 80, band: "high", limitations: [] },
     },
+    domains: [
+      "direction_value",
+      "leadership_governance",
+      "delivery_system",
+      "people_enablement",
+      "insight_adaptation",
+    ].map((domainId) => ({
+      domainId,
+      available: true,
+      rawScore: 50,
+      band: "established",
+      availableCount: 3,
+    })),
     capabilities: capabilityIds.map((id, index) => ({
       id,
       label: id.replaceAll("_", " "),
       order: index + 1,
+      domainId: [
+        "direction_value",
+        "leadership_governance",
+        "delivery_system",
+        "people_enablement",
+        "insight_adaptation",
+      ][Math.floor(index / 3)],
       score: {
         available: true,
         rawScore: 50,
@@ -86,6 +109,20 @@ const stored = {
       insufficientEvidence: [],
     },
     patterns: { detected: [{ id: "restricted-pattern" }], suppressed: [] },
+    industryContext: [
+      {
+        evidenceId: "context-approved",
+        evidenceVersion: "1.0.0",
+        approvedCustomerWording: "Approved industry context.",
+        sourcePublisher: "Delivery Institute",
+        sourceTitle: "Delivery Research",
+        evidenceYear: 2026,
+        scopeCaveat: "General research context.",
+        mandatoryDisclosure:
+          "General industry context; not a benchmark or comparison with your organisation.",
+        originalSourceReference: "https://example.test/research",
+      },
+    ],
     recommendations: { ranked, excluded: [], withheld: [] },
     roadmap: {
       published: true,
@@ -121,12 +158,12 @@ const access = {
   safeStatus: "available",
 } as const;
 
-describe("PDR-003-004/A v2.0 commercial journey", () => {
-  it("executes all nine locked acceptance fixtures", () => {
+describe("PDR-003-004/A v2.1 commercial journey", () => {
+  it("executes all ten locked acceptance fixtures", () => {
     const fixtures = new Map(
       deliveryDnaOverviewOfferConfiguration.fixtures.map((item) => [item.id, item]),
     );
-    expect([...fixtures]).toHaveLength(9);
+    expect([...fixtures]).toHaveLength(10);
     const saved = savedSnapshotFixtureProjection({
       snapshotStatus: "linked",
       authenticated: true,
@@ -147,11 +184,7 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
         currency: "GBP",
         tenantWorkspaceAssessmentMatch: true,
       }),
-    ).toMatchObject({
-      accessGrantCount: 1,
-      accessKey: "delivery_dna_overview",
-      accessVersion: "2.0.0",
-    });
+    ).toMatchObject(fixtures.get("commercial_2_verified_payment_grants_one_scope")!.expected);
     expect(
       evaluateOverviewPaymentFixture({
         successRedirectReceived: true,
@@ -175,7 +208,7 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     ).toMatchObject(fixtures.get("commercial_2_wrong_amount_currency_or_scope_denied")!.expected);
     expect(
       nonVatRegisteredCheckoutTotal({
-        offerVersion: "2.0.0",
+        offerVersion: "2.1.0",
         unitAmountMinor: 29500,
         supplierVatRegistered: false,
         currency: "GBP",
@@ -202,6 +235,13 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     }).toEqual(
       fixtures.get("commercial_2_version1_history_preserved_without_translation")!.expected,
     );
+    expect(
+      evaluateOverviewPaymentFixture({
+        snapshotQuestionSetVersion: "2.0.0",
+        paymentOfferVersion: "2.1.0",
+        requestedAccessVersion: "2.1.0",
+      }),
+    ).toMatchObject(fixtures.get("commercial_21_version20_scope_denied")!.expected);
   });
 
   it("keeps price and purchase scope server-governed and customer copy exact", () => {
@@ -236,7 +276,7 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     expect(params.get("custom_text[after_submit][message]")).toBe(
       "No VAT charged — DeliveryIQ is not VAT registered.",
     );
-    expect(params.get("metadata[offer_version]")).toBe("2.0.0");
+    expect(params.get("metadata[offer_version]")).toBe("2.1.0");
     const customerSurface = [
       params.toString(),
       JSON.stringify(deliveryDnaOverviewOfferConfiguration.activeOffer),
@@ -265,7 +305,7 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     ).toMatchObject({ accessGrantCount: 0, safeStatus: "payment_verification_failed" });
     expect(() =>
       nonVatRegisteredCheckoutTotal({
-        offerVersion: "2.0.0",
+        offerVersion: "2.1.0",
         unitAmountMinor: 29500,
         supplierVatRegistered: true,
         currency: "GBP",
@@ -297,7 +337,6 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     const overview = projectDeliveryDnaOverviewResult({ stored, portfolio, access });
     const serialised = JSON.stringify(overview);
     for (const restricted of [
-      "restricted-pattern",
       "restricted-evidence",
       "restrictedFactor",
       "Restricted measure",
@@ -305,7 +344,6 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
       "customerDecisionControls",
       "actionOwnership",
       '"index":80',
-      '"limitations"',
       '"versions"',
     ])
       expect(serialised).not.toContain(restricted);
@@ -377,7 +415,7 @@ describe("PDR-003-004/A v2.0 commercial journey", () => {
     const overviewRoute = readFileSync("src/routes/dashboard.$id.tsx", "utf8");
 
     expect(runtime).toContain("canUseDeliveryDnaAssessment");
-    expect(runtime).toContain("Delivery DNA 1.0 has been replaced");
+    expect(runtime).toContain("This Delivery DNA version is historical");
     expect(readFileSync("src/lib/delivery-dna/overview-access.server.ts", "utf8")).toContain(
       '["completed", "archived"]',
     );

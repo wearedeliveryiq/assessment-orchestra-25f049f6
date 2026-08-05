@@ -42,7 +42,7 @@ export type SnapshotResult = {
 export type SnapshotState = {
   status: "in_progress" | "completed" | "linked";
   configurationVersion: SnapshotV2ConfigurationVersion;
-  presentationPolicyVersion: "2.0.0";
+  presentationPolicyVersion: "2.1.0";
   expiresAt: string;
   scopeType: string;
   scopeDisplayName: string;

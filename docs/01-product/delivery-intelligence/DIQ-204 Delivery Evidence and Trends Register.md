@@ -3,7 +3,7 @@
 | Control | Value |
 |---|---|
 | Document ID | DIQ-204 |
-| Version | 1.2 |
+| Version | 1.3 |
 | Status | **CONTROLLED** |
 | Owner | Product Owner |
 | Approver | Matt Prust |
@@ -11,9 +11,9 @@
 | Evidence snapshot | 5 August 2026 |
 | Classification | Internal — Controlled |
 | Machine-readable catalogue | [DIQ-204A](<configuration/DIQ-204A Delivery Evidence Catalogue.json>) |
-| Cross-references | [DIQ-002](<../../00-master-index/DIQ-002 Product Architecture.md>), [DIQ-100](<../delivery-dna/DIQ-100 v2.0 Delivery DNA Specification.md>), [DIQ-100A](<../delivery-dna/DIQ-100A Delivery DNA 2.0 Model Catalogue.json>), [DIQ-100B](<../delivery-dna/DIQ-100B Delivery DNA 2.0 Golden Fixtures.json>), [DIQ-200](<DIQ-200 Delivery Intelligence Engine.md>), [DIQ-201](<../recommendation-framework/DIQ-201 Recommendation Framework.md>), [DIQ-202](<DIQ-202 Delivery Intelligence Traceability Model.md>), [DIQ-203](<DIQ-203 Sprint 03 Product Configuration Specification.md>), [DIQ-203A](<configuration/DIQ-203A Sprint 03 Production Configuration.json>), [DIQ-203C](<configuration/DIQ-203C Delivery DNA 1.0.0 Question Catalogue.json>) |
+| Cross-references | [DIQ-002](<../../00-master-index/DIQ-002 Product Architecture.md>), [DIQ-100](<../delivery-dna/DIQ-100 v2.1 Delivery DNA Specification.md>), [DIQ-100A](<../delivery-dna/DIQ-100A v2.1.0 Delivery DNA Model Catalogue.json>), [DIQ-100B](<../delivery-dna/DIQ-100B v2.1.0 Delivery DNA Golden Fixtures.json>), [DIQ-200](<DIQ-200 Delivery Intelligence Engine.md>), [DIQ-201](<../recommendation-framework/DIQ-201 Recommendation Framework.md>), [DIQ-202](<DIQ-202 Delivery Intelligence Traceability Model.md>), [DIQ-203](<DIQ-203 Sprint 03 Product Configuration Specification.md>), [DIQ-203A](<configuration/DIQ-203A Sprint 03 Production Configuration.json>), [DIQ-203C](<configuration/DIQ-203C Delivery DNA 1.0.0 Question Catalogue.json>) |
 
-> **Controlled-document notice.** DIQ-204 governs how external delivery evidence and trends are selected, maintained and used by DeliveryIQ. It never changes scoring, confidence, pattern, recommendation or ranking at runtime. DIQ-203/A/B remain the authority for Delivery DNA 1.0; the final locked DIQ-100/A/B package will govern Delivery DNA 2.0. Evidence may change customer scoring only through a separately approved, versioned configuration release with updated golden fixtures.
+> **Controlled-document notice.** DIQ-204 governs how external delivery evidence and trends are selected, maintained and used by DeliveryIQ. It never changes scoring, confidence, pattern, recommendation or ranking at runtime. DIQ-203/A/B remain the historical authority for Delivery DNA 1.0; locked DIQ-100/A/B/C v2.1 govern new Delivery DNA journeys. Evidence may change customer scoring only through a separately approved, versioned configuration release with updated golden fixtures.
 
 ## 1. Purpose
 
@@ -23,7 +23,7 @@ This register provides:
 
 - a current professional-practice baseline;
 - a machine-readable evidence and fact catalogue;
-- mappings from current trends to the applicable Delivery DNA 1.0 and 2.0 capabilities;
+- mappings from current trends to the applicable Delivery DNA 1.0 and 2.1 capabilities;
 - approved customer-safe wording and prohibited inferences;
 - a lean refresh and promotion process suitable for a startup.
 
@@ -229,7 +229,7 @@ Customer evidence and tenant data must never be added to DIQ-204A. Future outcom
 - External evidence continues to have no scoring, confidence, finding, pattern, recommendation or ranking effect.
 - The seven Wellingtone 2026 evidence items are approved as `B1` directional context for the exact surfaces and capability mappings recorded in DIQ-204A.
 - Wellingtone findings must carry a visible source note and the self-selected-survey caveat; they are not a representative benchmark or prediction.
-- Delivery DNA 2.0 may select approved contextual items only under the locked DIQ-100/A rules and retain the exact evidence ID and version in the result projection.
+- Delivery DNA 2.1 may select approved contextual items only under the locked DIQ-100/A rules and retain the exact evidence ID and version in the result projection.
 - Responsible AI questions remain context-gated and value-led; non-use of AI does not automatically reduce maturity.
 - The next scheduled evidence review is **3 November 2026**.
 
@@ -237,6 +237,7 @@ Customer evidence and tenant data must never be added to DIQ-204A. Future outcom
 
 | Version | Date | Change | Approval |
 |---|---|---|---|
+| 1.3 | 5 August 2026 | Repointed unchanged contextual-evidence mappings and controls to the locked source-reconciled Delivery DNA 2.1 authority | Product Owner |
 | 1.2 | 5 August 2026 | Added seven Wellingtone 2026 directional context items, Delivery DNA 2.0 mappings and result-page source-note controls without changing scoring | Matt Prust |
 | 1.1 | 3 August 2026 | Added the commercial and question-design policy for proportionate, value-led AI adoption without penalising non-use | Matt Prust |
 | 1.0 | 3 August 2026 | Established the evidence hierarchy, current-practice baseline, 13-capability/39-question gap assessment, customer fact policy and initial catalogue | Matt Prust |

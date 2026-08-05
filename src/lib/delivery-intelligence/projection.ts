@@ -154,7 +154,7 @@ export function projectFreeWorkspaceResult(
   };
 }
 
-/** PDR-003-004 v2.0 bounded paid Overview projection. */
+/** PDR-003-004 v2.1 bounded paid Overview projection (with historical 2.0 read support). */
 export function projectDeliveryDnaOverviewResult(input: {
   stored: StoredIntelligenceResult;
   portfolio: RecommendationPortfolioRecord | null;
@@ -220,7 +220,11 @@ export function projectDeliveryDnaOverviewResult(input: {
       caveat: string | null;
     };
   };
-  if (canonical.schemaVersion === "deliveryiq.intelligence-result/2.0.0") {
+  if (
+    canonical.schemaVersion === "deliveryiq.intelligence-result/2.0.0" ||
+    canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0"
+  ) {
+    const current = canonical.schemaVersion === "deliveryiq.intelligence-result/2.1.0";
     const recommendationById = new Map(
       canonical.recommendations.ranked.map((item) => [String(item.id), item]),
     );
@@ -242,8 +246,18 @@ export function projectDeliveryDnaOverviewResult(input: {
       day60: Array<{ id: string; title: string; horizon: string; priorityLabel: string }>;
       day90: Array<{ id: string; title: string; horizon: string; priorityLabel: string }>;
     };
+    const explainability = {
+      overallPosition: canonical.narrative.overallPosition,
+      confidence: canonical.narrative.confidence,
+      strengths: canonical.narrative.strengths.slice(0, 5),
+      opportunities: canonical.narrative.opportunities.slice(0, 5),
+      recommendations: canonical.narrative.recommendations.slice(0, 3),
+      caveat: canonical.narrative.caveat,
+    };
     return {
-      schemaVersion: "deliveryiq.delivery-dna-overview/2.0.0" as const,
+      schemaVersion: current
+        ? ("deliveryiq.delivery-dna-overview/2.1.0" as const)
+        : ("deliveryiq.delivery-dna-overview/2.0.0" as const),
       resultId: input.stored.id,
       analysisRunId: input.stored.analysisRunId,
       generatedAt: input.stored.publishedAt,
@@ -292,7 +306,10 @@ export function projectDeliveryDnaOverviewResult(input: {
       },
       patterns: canonical.patterns.detected.slice(0, 5),
       recommendations: canonical.recommendations.ranked.slice(0, 3).map((item) => ({
-        ...item,
+        id: item.id,
+        title: item.title,
+        impact: item.impact,
+        effort: item.effort,
         priorityLabel: "priority",
         safeReason: Array.isArray(item.reasonIds)
           ? `Prioritised from ${item.reasonIds.join(", ")}.`
@@ -300,7 +317,7 @@ export function projectDeliveryDnaOverviewResult(input: {
         expectedOutcome: item.outcome,
         practicalFirstStep: item.firstStep,
       })),
-      roadmapDirection: canonical.roadmap,
+      roadmapDirection: roadmapPreview,
       roadmapPreview,
       industryContext: (canonical.industryContext ?? []).slice(0, 3).map((raw) => ({
         id: String(raw.evidenceId),
@@ -314,13 +331,13 @@ export function projectDeliveryDnaOverviewResult(input: {
         notCustomerPredictionCaveat: String(raw.mandatoryDisclosure),
         originalSourceReference: String(raw.originalSourceReference),
       })),
-      explainability: canonical.narrative,
-      executiveSummary: canonical.narrative,
+      explainability,
+      executiveSummary: explainability,
       overviewAccess: {
         access: input.access.access,
         productId: "delivery-dna-overview" as const,
         accessKey: "delivery_dna_overview" as const,
-        accessVersion: "2.0.0" as const,
+        accessVersion: current ? ("2.1.0" as const) : ("2.0.0" as const),
       },
       downloadableReport: {
         available: true as const,

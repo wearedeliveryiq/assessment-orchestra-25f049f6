@@ -222,7 +222,7 @@ function contextPage(overview: Overview): PdfPage {
   let y = 700;
   y = paragraph(
     page,
-    "Delivery DNA 2.0 is a deterministic, evidence-led lead perspective. Confidence measures evidential support, not correctness, independent verification or certainty.",
+    "Delivery DNA 2.1 is a deterministic, evidence-led lead perspective. Confidence measures evidential support, not correctness, independent verification or certainty.",
     y,
   );
   y = paragraph(

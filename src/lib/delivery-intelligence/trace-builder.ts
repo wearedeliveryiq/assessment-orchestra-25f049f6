@@ -19,7 +19,10 @@ export async function buildCoreTrace(
   run: AssessmentAnalysisRun,
   result: CanonicalIntelligenceCore | ReturnType<typeof analyseCanonicalInputV2>,
 ): Promise<TraceGraph> {
-  const isV2 = result.schemaVersion === "deliveryiq.intelligence-result/2.0.0";
+  const isV2 = [
+    "deliveryiq.intelligence-result/2.0.0",
+    "deliveryiq.intelligence-result/2.1.0",
+  ].includes(result.schemaVersion);
   const configuration = isV2 ? deliveryDnaV2Catalogue : sprint03Configuration;
   const nodes: TraceNode[] = [];
   const edges: TraceEdge[] = [];
@@ -61,7 +64,7 @@ export async function buildCoreTrace(
       });
       await add(`question:${response.questionId}`, "question", run.questionSetVersion, {
         id: question.id,
-        dimension: question.dimension,
+        role: question.role,
         weight: question.weight,
         questionSetVersion: run.questionSetVersion,
       });

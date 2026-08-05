@@ -88,8 +88,9 @@ export async function resolveDeliveryDnaOverviewAccess(input: {
 }): Promise<DeliveryDnaOverviewAccess | null> {
   const scope = await scopeForAssessment(input.assessmentId);
   if (!scope || !matchesContext(scope, input.context)) return null;
-  const grandfathered = scope.configuration_version !== "2.0.0";
-  const paid = grandfathered ? false : await paidGrantExists(scope);
+  const grandfathered = scope.configuration_version.startsWith("1.");
+  const current = scope.configuration_version === "2.1.0";
+  const paid = current ? await paidGrantExists(scope) : false;
   const access = grandfathered ? "grandfathered" : paid ? "paid" : "none";
   const offer = activeDeliveryDnaOverviewOffer();
   return {
@@ -97,18 +98,23 @@ export async function resolveDeliveryDnaOverviewAccess(input: {
     savedSnapshotId: scope.id,
     access,
     permitted: access !== "none",
-    offer: offer
-      ? {
-          offerId: offer.offerId,
-          offerVersion: offer.offerVersion,
-          displayPrice: offer.displayPrice,
-          taxDisplay: offer.taxDisplay,
-          purchaseAction: deliveryDnaCommercialCopy.overviewOffer.purchaseAction,
-          checkoutAvailable: checkoutConfigured(),
-        }
-      : null,
+    offer:
+      offer && current
+        ? {
+            offerId: offer.offerId,
+            offerVersion: offer.offerVersion,
+            displayPrice: offer.displayPrice,
+            taxDisplay: offer.taxDisplay,
+            purchaseAction: deliveryDnaCommercialCopy.overviewOffer.purchaseAction,
+            checkoutAvailable: checkoutConfigured(),
+          }
+        : null,
     safeStatus:
-      access !== "none" ? "available" : checkoutConfigured() ? null : "checkout_unavailable",
+      access !== "none"
+        ? "available"
+        : current && checkoutConfigured()
+          ? null
+          : "checkout_unavailable",
   };
 }
 
@@ -126,8 +132,8 @@ async function isHistoricalReadOnlyResult(assessmentId: string, ownerKey: string
 }
 
 /**
- * Clean 2.0 runtime guard. Historical completed results remain readable, but
- * no 1.x draft can continue or complete after cutover.
+ * Clean 2.1 runtime guard. Historical completed results remain readable, but
+ * no 1.x or 2.0 draft can continue or complete after cutover.
  */
 export async function canUseDeliveryDnaAssessment(
   assessmentId: string,
@@ -143,11 +149,11 @@ export async function canUseDeliveryDnaAssessment(
     if (error || !data || data.owner_key !== ownerKey) return false;
     const version = (data.metadata as { deliveryDna?: { questionSetVersion?: unknown } } | null)
       ?.deliveryDna?.questionSetVersion;
-    return version !== "2.0.0" && ["completed", "archived"].includes(String(data.status));
+    return version !== "2.1.0" && ["completed", "archived"].includes(String(data.status));
   }
   const [userId, workspaceId] = ownerKey.split(":");
   if (scope.linked_user_id !== userId || scope.workspace_id !== workspaceId) return false;
-  if (scope.configuration_version !== "2.0.0") {
+  if (scope.configuration_version !== "2.1.0") {
     return isHistoricalReadOnlyResult(assessmentId, ownerKey);
   }
   return paidGrantExists(scope);
