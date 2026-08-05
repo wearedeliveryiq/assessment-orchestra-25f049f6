@@ -56,7 +56,7 @@ export function SnapshotPreparation({ onReady }: { onReady: () => void }) {
 
   return (
     <section
-      className="on-navy panel relative mx-auto max-w-3xl overflow-hidden rounded-[22px] px-6 py-10 text-center sm:px-10 sm:py-14"
+      className="panel relative mx-auto max-w-3xl overflow-hidden rounded-[22px] px-6 py-10 text-center sm:px-10 sm:py-14"
       role="status"
       aria-live="polite"
     >
