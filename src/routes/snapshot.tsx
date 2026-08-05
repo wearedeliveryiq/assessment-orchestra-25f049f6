@@ -387,208 +387,219 @@ function SnapshotQuestions({
   };
 
   return (
-    <section className="mx-auto max-w-4xl">
-      <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
-        Delivery DNA Snapshot
-      </p>
-      <p className="mt-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-[#CBD5E1]">
-        For this assessment, “the organisation” means <strong>{snapshot.scopeDisplayName}</strong>.
-        Answer for how project and change delivery usually works across this scope today.
-      </p>
-      <div className="mt-4 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold text-[#94A3B8]">{item.capabilityLabel}</p>
-          <h1
-            ref={headingRef}
-            tabIndex={-1}
-            className="mt-2 text-2xl font-extrabold leading-tight outline-none sm:text-3xl"
-          >
-            {item.question.prompt}
-          </h1>
+    <section className="on-navy -mx-5 rounded-none px-5 py-8 sm:-mx-8 sm:rounded-[22px] sm:px-8 sm:py-10">
+      <div className="mx-auto max-w-4xl">
+        <p className="eyebrow">Delivery DNA Snapshot</p>
+        <p className="mt-3 rounded-[14px] border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
+          For this assessment, “the organisation” means <strong>{snapshot.scopeDisplayName}</strong>.
+          Answer for how project and change delivery usually works across this scope today.
+        </p>
+        <div className="mt-4 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-muted-foreground">{item.capabilityLabel}</p>
+            <h1
+              ref={headingRef}
+              tabIndex={-1}
+              className="mt-2 text-2xl font-extrabold leading-tight outline-none sm:text-3xl"
+            >
+              {item.question.prompt}
+            </h1>
+          </div>
         </div>
-      </div>
-      <p className="sr-only" aria-live="polite">
-        Question {index + 1} of 15
-      </p>
-      <div
-        className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.08]"
-        role="progressbar"
-        aria-label="Snapshot progress"
-        aria-valuemin={0}
-        aria-valuemax={15}
-        aria-valuenow={savedCount}
-      >
+        <p className="sr-only" aria-live="polite">
+          Question {index + 1} of 15
+        </p>
         <div
-          className="h-full rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] transition-[width] duration-500"
-          style={{ width: `${(savedCount / 15) * 100}%` }}
-        />
-      </div>
-      <p className="mt-2 text-xs text-[#94A3B8]">
-        Question {index + 1} of 15 · {snapshot.responses.length} saved
-      </p>
-
-      <fieldset
-        className="snapshot-acquisition-panel mt-7 rounded-[24px] p-5 sm:p-7"
-        disabled={save.isPending}
-      >
-        <legend className="sr-only">{item.question.prompt}</legend>
-        <p className="text-sm leading-relaxed text-[#CBD5E1]">{item.customerHelp}</p>
-
-        <div
-          className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
-          role="radiogroup"
-          aria-label="Choose the response that best reflects your organisation"
-          aria-busy={save.isPending}
-          onKeyDown={(event) => {
-            if (
-              !save.isPending &&
-              ["1", "2", "3", "4"].includes(event.key) &&
-              !(event.target instanceof HTMLTextAreaElement)
-            ) {
-              event.preventDefault();
-              const answer = Number(event.key);
-              void commit({
-                questionId: item.question.id,
-                status: "answered",
-                answer,
-              });
-            }
-          }}
+          className="mt-5 h-1.5 overflow-hidden rounded-full bg-muted"
+          role="progressbar"
+          aria-label="Snapshot progress"
+          aria-valuemin={0}
+          aria-valuemax={15}
+          aria-valuenow={savedCount}
         >
-          {snapshotV2AnswerOptions(item.question.id).map((option, optionIndex) => {
-            const selected = selectedAnswer === option.value && !selectingNotApplicable;
-            return (
-              <button
-                key={option.value}
-                ref={(node) => {
-                  optionRefs.current[optionIndex] = node;
-                }}
-                type="button"
-                role="radio"
-                aria-checked={selected}
-                onKeyDown={(event) => handleArrow(event, optionIndex)}
-                onClick={() =>
-                  void commit({
-                    questionId: item.question.id,
-                    status: "answered",
-                    answer: option.value,
-                  })
-                }
-                className={`h-full min-h-32 rounded-2xl border p-4 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA] ${
-                  selected
-                    ? "scale-[1.02] border-[#60A5FA] bg-[#2563EB]/25 shadow-[0_12px_34px_-20px_rgba(37,99,235,0.9)]"
-                    : "border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
-                }`}
-              >
-                <span className="mt-2 block text-sm font-bold text-[#F8FAFC]">{option.label}</span>
-                <span className="mt-1 block text-xs leading-snug text-[#94A3B8]">
-                  {option.description}
-                </span>
-              </button>
-            );
-          })}
+          <div
+            className="h-full rounded-full bg-[image:var(--signal-line)] transition-[width] duration-500"
+            style={{ width: `${(savedCount / 15) * 100}%` }}
+          />
         </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Question {index + 1} of 15 · {snapshot.responses.length} saved
+        </p>
 
-        <div className="mt-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
-          <button
-            type="button"
-            aria-pressed={selectingNotApplicable}
-            className="flex min-h-11 w-full items-center gap-3 text-left text-sm font-semibold text-[#F8FAFC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
-            onClick={() => {
-              setLocalAnswer(null);
-              setSelectingNotApplicable(true);
-              setFailedInput(null);
+        <fieldset className="panel mt-7 p-5 sm:p-7" disabled={save.isPending}>
+          <legend className="sr-only">{item.question.prompt}</legend>
+          <p className="text-sm leading-relaxed text-muted-foreground">{item.customerHelp}</p>
+
+          <div
+            className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
+            role="radiogroup"
+            aria-label="Choose the response that best reflects your organisation"
+            aria-busy={save.isPending}
+            onKeyDown={(event) => {
+              if (
+                !save.isPending &&
+                ["1", "2", "3", "4"].includes(event.key) &&
+                !(event.target instanceof HTMLTextAreaElement)
+              ) {
+                event.preventDefault();
+                const answer = Number(event.key);
+                void commit({
+                  questionId: item.question.id,
+                  status: "answered",
+                  answer,
+                });
+              }
             }}
           >
-            <span
-              className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                selectingNotApplicable ? "border-[#60A5FA] bg-[#2563EB]" : "border-white/30"
-              }`}
-              aria-hidden="true"
-            >
-              {selectingNotApplicable ? <span className="h-2 w-2 rounded-full bg-white" /> : null}
-            </span>
-            Not applicable
-          </button>
-          {selectingNotApplicable ? (
-            <div className="mt-4">
-              <label htmlFor="snapshot-na-reason" className="text-xs font-semibold text-[#CBD5E1]">
-                Why is this not applicable to the organisation in scope?
-              </label>
-              <textarea
-                id="snapshot-na-reason"
-                value={reason}
-                maxLength={500}
-                onChange={(event) => setReason(event.target.value)}
-                className="mt-2 min-h-24 w-full rounded-xl border border-white/10 bg-[#090E1A] p-3 text-sm text-[#F8FAFC] outline-none focus:border-[#60A5FA] focus:ring-2 focus:ring-[#2563EB]/40"
-              />
-              <Button
-                variant="secondary"
-                className="mt-3 min-h-11"
-                disabled={!reason.trim() || save.isPending}
-                onClick={() =>
-                  void commit({
-                    questionId: item.question.id,
-                    status: "not_applicable",
-                    answer: null,
-                    notApplicableReasonText: reason,
-                  })
-                }
-              >
-                Save and continue
-              </Button>
-            </div>
-          ) : null}
-        </div>
+            {snapshotV2AnswerOptions(item.question.id).map((option, optionIndex) => {
+              const selected = selectedAnswer === option.value && !selectingNotApplicable;
+              return (
+                <button
+                  key={option.value}
+                  ref={(node) => {
+                    optionRefs.current[optionIndex] = node;
+                  }}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onKeyDown={(event) => handleArrow(event, optionIndex)}
+                  onClick={() =>
+                    void commit({
+                      questionId: item.question.id,
+                      status: "answered",
+                      answer: option.value,
+                    })
+                  }
+                  className={`card-lift h-full min-h-32 rounded-[14px] border p-4 text-left ${
+                    selected
+                      ? "border-primary bg-accent"
+                      : "border-border bg-muted hover:border-primary/40"
+                  }`}
+                >
+                  <span className="mt-2 block text-sm font-bold text-foreground">
+                    {option.label}
+                  </span>
+                  <span className="mt-1 block text-xs leading-snug text-muted-foreground">
+                    {option.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-        {save.isPending ? (
-          <p className="mt-4 flex items-center gap-2 text-sm text-[#CBD5E1]" role="status">
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Saving your response
-          </p>
-        ) : null}
-        {save.error ? (
-          <div className="mt-4 rounded-xl border border-red-400/30 bg-red-400/10 p-4" role="alert">
-            <p className="text-sm text-[#F8FAFC]">
-              We couldn’t save that response. Your selection is still here.
-            </p>
-            {failedInput ? (
-              <Button variant="secondary" className="mt-3" onClick={() => void commit(failedInput)}>
-                <RotateCcw className="h-4 w-4" aria-hidden /> Try again
-              </Button>
+          <div className="mt-5 rounded-[14px] border border-border bg-muted p-4">
+            <button
+              type="button"
+              aria-pressed={selectingNotApplicable}
+              className="flex min-h-11 w-full items-center gap-3 text-left text-sm font-semibold text-foreground"
+              onClick={() => {
+                setLocalAnswer(null);
+                setSelectingNotApplicable(true);
+                setFailedInput(null);
+              }}
+            >
+              <span
+                className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                  selectingNotApplicable ? "border-primary bg-primary" : "border-input"
+                }`}
+                aria-hidden="true"
+              >
+                {selectingNotApplicable ? (
+                  <span className="h-2 w-2 rounded-full bg-primary-foreground" />
+                ) : null}
+              </span>
+              Not applicable
+            </button>
+            {selectingNotApplicable ? (
+              <div className="mt-4">
+                <label
+                  htmlFor="snapshot-na-reason"
+                  className="text-xs font-semibold text-muted-foreground"
+                >
+                  Why is this not applicable to the organisation in scope?
+                </label>
+                <textarea
+                  id="snapshot-na-reason"
+                  value={reason}
+                  maxLength={500}
+                  onChange={(event) => setReason(event.target.value)}
+                  className="mt-2 min-h-24 w-full rounded-[14px] border border-input bg-background p-3 text-sm text-foreground"
+                />
+                <Button
+                  variant="secondary"
+                  className="mt-3 min-h-11"
+                  disabled={!reason.trim() || save.isPending}
+                  onClick={() =>
+                    void commit({
+                      questionId: item.question.id,
+                      status: "not_applicable",
+                      answer: null,
+                      notApplicableReasonText: reason,
+                    })
+                  }
+                >
+                  Save and continue
+                </Button>
+              </div>
             ) : null}
           </div>
-        ) : null}
-      </fieldset>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <Button
-          variant="secondary"
-          disabled={index === 0 || save.isPending}
-          onClick={() => move(index - 1)}
-        >
-          <ChevronLeft className="h-4 w-4" aria-hidden /> Back
-        </Button>
-        <div className="text-xs text-[#94A3B8]" aria-live="polite">
-          {snapshot.responses.length} recorded · {answeredCount} applicable
-        </div>
-        {index < 14 && current && !save.isPending ? (
-          <Button variant="ghost" onClick={() => move(index + 1)}>
-            Continue with saved answer <ArrowRight className="h-4 w-4" aria-hidden />
+          {save.isPending ? (
+            <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground" role="status">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Saving your response
+            </p>
+          ) : null}
+          {save.error ? (
+            <div
+              className="mt-4 rounded-[14px] border border-destructive/40 bg-destructive/15 p-4"
+              role="alert"
+            >
+              <p className="text-sm text-foreground">
+                We couldn’t save that response. Your selection is still here.
+              </p>
+              {failedInput ? (
+                <Button
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={() => void commit(failedInput)}
+                >
+                  <RotateCcw className="h-4 w-4" aria-hidden /> Try again
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
+        </fieldset>
+
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <Button
+            variant="secondary"
+            disabled={index === 0 || save.isPending}
+            onClick={() => move(index - 1)}
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden /> Back
           </Button>
-        ) : (
-          <span aria-hidden />
-        )}
-      </div>
-
-      {completionError ? (
-        <div
-          className="mt-6 rounded-2xl border border-amber-300/30 bg-amber-300/10 p-5"
-          role="alert"
-        >
-          <h2 className="font-bold">{String(copy.insufficientHeading)}</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{completionError}</p>
+          <div className="text-xs text-muted-foreground" aria-live="polite">
+            {snapshot.responses.length} recorded · {answeredCount} applicable
+          </div>
+          {index < 14 && current && !save.isPending ? (
+            <Button variant="ghost" onClick={() => move(index + 1)}>
+              Continue with saved answer <ArrowRight className="h-4 w-4" aria-hidden />
+            </Button>
+          ) : (
+            <span aria-hidden />
+          )}
         </div>
-      ) : null}
+
+        {completionError ? (
+          <div
+            className="mt-6 rounded-[18px] border border-border bg-panel p-5"
+            role="alert"
+          >
+            <h2 className="font-bold">{String(copy.insufficientHeading)}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{completionError}</p>
+          </div>
+        ) : null}
+      </div>
     </section>
   );
 }
