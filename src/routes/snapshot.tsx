@@ -750,19 +750,17 @@ function SnapshotResultView({
 
       <section
         id="snapshot-save-panel"
-        className="snapshot-acquisition-panel mt-8 rounded-[28px] p-6 sm:p-9"
+        className="panel mt-8 p-6 sm:p-9"
         aria-labelledby="snapshot-continue-title"
       >
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
-          Delivery DNA Overview
-        </p>
+        <p className="eyebrow">Delivery DNA Overview</p>
 
         {snapshot.status === "linked" && assessmentId ? (
           <>
             <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
               {deliveryDnaCommercialCopy.savedState.heading}
             </h2>
-            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+            <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
               {deliveryDnaCommercialCopy.savedState.body}
             </p>
             <Button
@@ -775,14 +773,14 @@ function SnapshotResultView({
               Download my Snapshot
             </Button>
             {download.error ? (
-              <p className="mt-3 text-sm text-red-300" role="alert">
+              <p className="mt-3 text-sm text-destructive" role="alert">
                 {download.error.message}
               </p>
             ) : null}
             {!access.data?.permitted ? (
               <a
                 href="#delivery-dna-overview-offer"
-                className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-lg border border-[#60A5FA]/50 px-5 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+                className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-[14px] border border-primary/50 px-5 text-sm font-bold text-foreground"
               >
                 {deliveryDnaCommercialCopy.savedState.primaryAction}
                 <ArrowRight className="h-4 w-4" aria-hidden />
@@ -790,27 +788,24 @@ function SnapshotResultView({
             ) : null}
             <div
               id="delivery-dna-overview-offer"
-              className="mt-6 scroll-mt-6 rounded-2xl border border-white/[0.1] bg-[#111827] p-5 sm:p-6"
+              className="mt-6 scroll-mt-6 rounded-[18px] border border-border bg-panel p-5 sm:p-6"
             >
               <h3 className="text-xl font-extrabold">
                 {deliveryDnaCommercialCopy.overviewOffer.heading}
               </h3>
-              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#CBD5E1]">
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
                 {deliveryDnaCommercialCopy.overviewOffer.body}
               </p>
-              <p className="mt-4 text-lg font-extrabold text-[#60A5FA]">
+              <p className="mt-4 text-lg font-extrabold text-primary">
                 {access.data?.offer?.displayPrice}
               </p>
               {access.data?.offer?.taxDisplay ? (
-                <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {access.data.offer.taxDisplay}
                 </p>
               ) : null}
               {access.data?.permitted ? (
-                <Button
-                  asChild
-                  className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
-                >
+                <Button asChild className="mt-5 min-h-12 px-6">
                   <Link to="/assessment/$id" params={{ id: assessmentId }}>
                     {deliveryDnaCommercialCopy.purchasedState.primaryAction}
                     <ArrowRight className="h-4 w-4" aria-hidden />
@@ -818,7 +813,7 @@ function SnapshotResultView({
                 </Button>
               ) : (
                 <Button
-                  className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
+                  className="mt-5 min-h-12 px-6"
                   disabled={
                     checkout.isPending ||
                     access.isPending ||
@@ -834,58 +829,52 @@ function SnapshotResultView({
                 </Button>
               )}
               {checkoutState === "success" && !access.data?.permitted ? (
-                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                <p className="mt-4 text-sm text-muted-foreground" role="status">
                   Payment confirmation is pending. Access appears only after the verified provider
                   event arrives.
                 </p>
               ) : null}
               {checkoutState === "cancelled" ? (
-                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                <p className="mt-4 text-sm text-muted-foreground" role="status">
                   Checkout was cancelled. Your Saved Snapshot is unchanged.
                 </p>
               ) : null}
               {access.data?.safeStatus === "checkout_unavailable" ? (
-                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                <p className="mt-4 text-sm text-muted-foreground" role="status">
                   Purchases are temporarily unavailable. Your Saved Snapshot is safe.
                 </p>
               ) : null}
               {access.isError ? (
-                <p className="mt-4 text-sm text-[#CBD5E1]" role="status">
+                <p className="mt-4 text-sm text-muted-foreground" role="status">
                   Purchases are temporarily unavailable. Your Saved Snapshot is safe.
                 </p>
               ) : null}
               {checkout.error ? (
-                <p className="mt-4 text-sm text-red-300" role="alert">
+                <p className="mt-4 text-sm text-destructive" role="alert">
                   {checkout.error.message}
                 </p>
               ) : null}
             </div>
           </>
         ) : identityLoading ? (
-          <Loader2
-            className="mt-6 h-5 w-5 animate-spin text-[#60A5FA]"
-            aria-label="Checking account"
-          />
+          <Loader2 className="mt-6 h-5 w-5 animate-spin text-primary" aria-label="Checking account" />
         ) : !isAuthenticated ? (
           <>
             <h2 id="snapshot-continue-title" className="mt-3 text-2xl font-extrabold sm:text-3xl">
               {savedSnapshotCopy.saveHeading}
             </h2>
-            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+            <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
               {savedSnapshotCopy.saveBody}
             </p>
-            <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
+            <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
               {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
                 <li key={benefit} className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#14B8A6]" aria-hidden />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                   {benefit}
                 </li>
               ))}
             </ul>
-            <Button
-              asChild
-              className="snapshot-gradient-button mt-6 min-h-12 border-0 px-6 text-white"
-            >
+            <Button asChild className="mt-6 min-h-12 px-6">
               <Link
                 to="/auth/register"
                 search={{ snapshot: "continue", source: undefined, result: undefined }}
@@ -894,28 +883,28 @@ function SnapshotResultView({
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
             </Button>
-            <p className="mt-3 text-xs text-[#94A3B8]">{savedSnapshotCopy.saveAssurance}</p>
+            <p className="mt-3 text-xs text-muted-foreground">{savedSnapshotCopy.saveAssurance}</p>
           </>
         ) : (
           <div className="mt-6">
             <h2 id="snapshot-continue-title" className="text-2xl font-extrabold sm:text-3xl">
               {savedSnapshotCopy.saveHeading}
             </h2>
-            <p className="mt-3 max-w-3xl leading-relaxed text-[#CBD5E1]">
+            <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
               {savedSnapshotCopy.saveBody}
             </p>
-            <ul className="mt-4 grid gap-2 text-sm text-[#CBD5E1] sm:grid-cols-2">
+            <ul className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
               {deliveryDnaSnapshotV2Configuration.copy.saveBenefits.map((benefit) => (
                 <li key={benefit} className="flex gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#14B8A6]" aria-hidden />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                   {benefit}
                 </li>
               ))}
             </ul>
-            <label className="flex cursor-pointer items-start gap-3 text-sm text-[#CBD5E1]">
+            <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-foreground">
               <input
                 type="checkbox"
-                className="mt-0.5 h-5 w-5 accent-[#2563EB]"
+                className="mt-0.5 h-5 w-5 accent-[color:var(--primary)]"
                 checked={consent}
                 onChange={(event) => setConsent(event.target.checked)}
               />
@@ -926,7 +915,7 @@ function SnapshotResultView({
               </span>
             </label>
             <Button
-              className="snapshot-gradient-button mt-5 min-h-12 border-0 px-6 text-white"
+              className="mt-5 min-h-12 px-6"
               disabled={!consent || continuation.isPending}
               onClick={() => continuation.mutate()}
             >
@@ -935,9 +924,9 @@ function SnapshotResultView({
               ) : null}
               {savedSnapshotCopy.saveAction}
             </Button>
-            <p className="mt-3 text-xs text-[#94A3B8]">{savedSnapshotCopy.saveAssurance}</p>
+            <p className="mt-3 text-xs text-muted-foreground">{savedSnapshotCopy.saveAssurance}</p>
             {continuation.error ? (
-              <p className="mt-3 text-sm text-red-300" role="alert">
+              <p className="mt-3 text-sm text-destructive" role="alert">
                 {continuation.error.message}
               </p>
             ) : null}
@@ -945,18 +934,13 @@ function SnapshotResultView({
         )}
       </section>
 
-      <div className="mt-8 border-t border-white/[0.08] pt-6 text-center">
-        <Button
-          variant="ghost"
-          className="text-[#CBD5E1] hover:bg-white/[0.06] hover:text-white"
-          disabled={restarting}
-          onClick={onRestart}
-        >
+      <div className="mt-8 border-t border-border pt-6 text-center">
+        <Button variant="ghost" disabled={restarting} onClick={onRestart}>
           {restarting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
           {String(copy.restartCta)}
         </Button>
         {restartError ? (
-          <p className="mt-3 text-sm text-red-300" role="alert">
+          <p className="mt-3 text-sm text-destructive" role="alert">
             {restartError}
           </p>
         ) : null}
@@ -975,19 +959,21 @@ function SignalGroup({
   items: { domainId: string; domainLabel: string; text: string }[];
 }) {
   return (
-    <section className="rounded-[24px] border border-white/[0.08] bg-[#182131] p-5 sm:p-6">
+    <section className="panel p-5 sm:p-6">
       <h2 className="text-lg font-extrabold">{title}</h2>
-      {helper ? <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{helper}</p> : null}
+      {helper ? (
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{helper}</p>
+      ) : null}
       <div className="mt-4 space-y-3">
         {items.map((item) => (
           <article
             key={item.domainId}
-            className="rounded-2xl border border-white/[0.06] bg-[#111827] p-4"
+            className="rounded-[14px] border border-border bg-panel p-4"
           >
             <h3 className="flex items-center gap-2 text-sm font-bold">
-              <Check className="h-4 w-4 text-[#14B8A6]" aria-hidden /> {item.domainLabel}
+              <Check className="h-4 w-4 text-primary" aria-hidden /> {item.domainLabel}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{item.text}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
           </article>
         ))}
       </div>
@@ -997,13 +983,10 @@ function SignalGroup({
 
 function SnapshotError({ message }: { message: string }) {
   return (
-    <section
-      className="snapshot-acquisition-panel mx-auto max-w-2xl rounded-[24px] p-6"
-      role="alert"
-    >
+    <section className="panel mx-auto max-w-2xl p-6" role="alert">
       <h1 className="text-xl font-extrabold">We could not open your Delivery DNA Snapshot</h1>
-      <p className="mt-3 text-sm text-[#CBD5E1]">{message}</p>
-      <Button asChild className="snapshot-gradient-button mt-5 border-0 text-white">
+      <p className="mt-3 text-sm text-muted-foreground">{message}</p>
+      <Button asChild className="mt-5">
         <Link to="/snapshot" search={{ continue: false }}>
           {String(copy.restartCta)}
         </Link>
