@@ -21,7 +21,7 @@ const itemSchema = z.object({
   scoringEffect: z.literal("none"),
 });
 const catalogueSchema = z.object({
-  document: z.object({ id: z.literal("DIQ-204A"), version: z.literal("1.1.0") }),
+  document: z.object({ id: z.literal("DIQ-204A"), version: z.literal("1.2.0") }),
   policy: z.object({ scoringEffect: z.literal("none") }).passthrough(),
   sources: z.array(sourceSchema),
   evidenceItems: z.array(itemSchema),

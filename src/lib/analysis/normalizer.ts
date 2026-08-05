@@ -1,6 +1,10 @@
 import type { AssessmentResponse, AssessmentSession } from "../assessment/types";
 import { SPRINT03_CONFIGURATION_SET_ID } from "../delivery-intelligence/config";
 import {
+  DELIVERY_DNA_V2_CONFIGURATION_SET_ID,
+  DELIVERY_DNA_V2_VERSION,
+} from "../delivery-dna/catalogue-v2";
+import {
   ANALYSIS_ENGINE_VERSION,
   ANALYSIS_SCHEMA_VERSION,
   type AnalysisRequestedMode,
@@ -30,6 +34,14 @@ export function normaliseAnalysisInput(input: {
   requestedMode?: AnalysisRequestedMode;
 }): CanonicalAnalysisInput {
   const { session, responses, pack } = input;
+  const deliveryDnaEvidence = (
+    (session.metadata ?? {}) as {
+      deliveryDnaEvidence?: {
+        evidenceRecencyDeclaration?: unknown;
+        perspectiveBreadthDeclaration?: unknown;
+      };
+    }
+  ).deliveryDnaEvidence;
   if (session.status !== "completed" || !session.completedAt) {
     throw new AnalysisValidationError(
       "Only a completed assessment can be analysed",
@@ -66,6 +78,12 @@ export function normaliseAnalysisInput(input: {
       workspaceId: session.workspaceId,
       completedAt: session.completedAt,
       consentBasis: session.consentBasis ?? "authenticated_assessment_submission",
+      ...(typeof deliveryDnaEvidence?.evidenceRecencyDeclaration === "string"
+        ? { evidenceRecencyDeclaration: deliveryDnaEvidence.evidenceRecencyDeclaration }
+        : {}),
+      ...(typeof deliveryDnaEvidence?.perspectiveBreadthDeclaration === "string"
+        ? { perspectiveBreadthDeclaration: deliveryDnaEvidence.perspectiveBreadthDeclaration }
+        : {}),
     },
     knowledgePack: {
       id: pack.manifest.id,
@@ -109,12 +127,16 @@ export async function hashAnalysisInput(input: CanonicalAnalysisInput): Promise<
 }
 
 export async function deriveAnalysisIdempotencyKey(input: CanonicalAnalysisInput): Promise<string> {
+  const configurationSetId =
+    input.knowledgePack.version === DELIVERY_DNA_V2_VERSION
+      ? DELIVERY_DNA_V2_CONFIGURATION_SET_ID
+      : SPRINT03_CONFIGURATION_SET_ID;
   const material = [
     input.assessment.organisationId,
     input.assessment.workspaceId,
     input.assessment.sessionId,
     String(input.assessment.revision),
-    SPRINT03_CONFIGURATION_SET_ID,
+    configurationSetId,
     input.requestedMode,
   ].join("\n");
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(material));

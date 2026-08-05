@@ -2,6 +2,11 @@ import {
   sprint03Configuration,
   SPRINT03_CONFIGURATION_SET_ID,
 } from "../delivery-intelligence/config";
+import {
+  DELIVERY_DNA_V2_CONFIGURATION_SET_ID,
+  DELIVERY_DNA_V2_VERSION,
+  deliveryDnaV2QuestionManifest,
+} from "../delivery-dna/catalogue-v2";
 
 export const ANALYSIS_ELIGIBILITY_POLICY_ID = "PDR-003-002";
 export const ANALYSIS_ELIGIBILITY_POLICY_VERSION = "1.0";
@@ -73,6 +78,12 @@ async function sha256(value: unknown): Promise<string> {
 export async function evaluateAnalysisEligibility(
   input: EligibilityInput,
 ): Promise<EligibilityEvaluation> {
+  const isV2 = input.configurationSetId === DELIVERY_DNA_V2_CONFIGURATION_SET_ID;
+  const expectedVersion = isV2 ? DELIVERY_DNA_V2_VERSION : DELIVERY_DNA_VERSION;
+  const expectedConfigurationSetId = isV2
+    ? DELIVERY_DNA_V2_CONFIGURATION_SET_ID
+    : SPRINT03_CONFIGURATION_SET_ID;
+  const expectedQuestionIds = isV2 ? deliveryDnaV2QuestionManifest : configuredQuestionIds;
   const reasons = new Set<AnalysisEligibilityReason>();
   if (
     input.organisationId !== input.expectedOrganisationId ||
@@ -87,24 +98,24 @@ export async function evaluateAnalysisEligibility(
     !input.questionSetId ||
     !input.questionSetVersion ||
     input.assessmentRevision < 1 ||
-    input.configurationSetId !== SPRINT03_CONFIGURATION_SET_ID
+    input.configurationSetId !== expectedConfigurationSetId
   )
     reasons.add("ANALYSIS_ELIGIBILITY_METADATA_MISSING");
   if (input.assessmentType && input.assessmentType !== DELIVERY_DNA_ID)
     reasons.add("ANALYSIS_ASSESSMENT_TYPE_INELIGIBLE");
   if (input.packId && input.packId !== DELIVERY_DNA_ID) reasons.add("ANALYSIS_PACK_ID_INELIGIBLE");
-  if (input.packVersion && input.packVersion !== DELIVERY_DNA_VERSION)
+  if (input.packVersion && input.packVersion !== expectedVersion)
     reasons.add("ANALYSIS_PACK_VERSION_INELIGIBLE");
   if (input.questionSetId && input.questionSetId !== DELIVERY_DNA_ID)
     reasons.add("ANALYSIS_QUESTION_SET_ID_INELIGIBLE");
-  if (input.questionSetVersion && input.questionSetVersion !== DELIVERY_DNA_VERSION)
+  if (input.questionSetVersion && input.questionSetVersion !== expectedVersion)
     reasons.add("ANALYSIS_QUESTION_SET_VERSION_INELIGIBLE");
 
   const sorted = [...input.questionIds].sort();
   const exact =
-    sorted.length === configuredQuestionIds.length &&
+    sorted.length === expectedQuestionIds.length &&
     new Set(sorted).size === sorted.length &&
-    sorted.every((id, index) => id === configuredQuestionIds[index]);
+    sorted.every((id, index) => id === expectedQuestionIds[index]);
   if (!exact) reasons.add("ANALYSIS_QUESTION_SET_INCOMPATIBLE");
   const ordered = precedence.filter((reason) => reasons.has(reason));
   return {
@@ -113,6 +124,6 @@ export async function evaluateAnalysisEligibility(
     secondaryReasons: ordered.slice(1),
     reasons: ordered,
     assessmentManifestDigest: await sha256(sorted),
-    configuredManifestDigest: await sha256(configuredQuestionIds),
+    configuredManifestDigest: await sha256(expectedQuestionIds),
   };
 }

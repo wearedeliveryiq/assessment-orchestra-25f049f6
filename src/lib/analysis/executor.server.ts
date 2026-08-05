@@ -1,5 +1,7 @@
 import * as repository from "./repository.server";
 import { analyseCanonicalInput } from "../delivery-intelligence/engine";
+import { analyseCanonicalInputV2 } from "../delivery-dna/analysis-v2";
+import { DELIVERY_DNA_V2_CONFIGURATION_SET_ID } from "../delivery-dna/catalogue-v2";
 import { publishResult } from "../delivery-intelligence/result-repository.server";
 import { buildCoreTrace } from "../delivery-intelligence/trace-builder";
 import { validateTraceGraph } from "../delivery-intelligence/traceability";
@@ -41,7 +43,10 @@ const defaultDependencies: AnalysisExecutorDependencies = {
   fail: repository.failRun,
   event: repository.appendEvent,
   publish: async (run, owner) => {
-    const core = analyseCanonicalInput(run.input);
+    const core =
+      run.configurationSetId === DELIVERY_DNA_V2_CONFIGURATION_SET_ID
+        ? analyseCanonicalInputV2(run.input)
+        : analyseCanonicalInput(run.input);
     const canonicalResult = {
       ...core,
       analysisRunId: run.id,
@@ -52,7 +57,7 @@ const defaultDependencies: AnalysisExecutorDependencies = {
     if (!validation.valid) {
       throw new Error(`ANALYSIS_TRACE_INCOMPLETE: ${validation.errors.join(",")}`);
     }
-    return publishResult(run, owner, canonicalResult, trace);
+    return publishResult(run, owner, canonicalResult as Parameters<typeof publishResult>[2], trace);
   },
   evaluateRecommendations: async (run) => {
     await recommendationEvaluationService.evaluate(run);
@@ -94,7 +99,9 @@ export class AnalysisRunExecutor {
         inputHash: completed.inputHash,
       });
       let recommendationEvaluationCompleted = false;
-      if (this.deps.evaluateRecommendations) {
+      const usesLegacyRecommendationPipeline =
+        completed.configurationSetId !== DELIVERY_DNA_V2_CONFIGURATION_SET_ID;
+      if (usesLegacyRecommendationPipeline && this.deps.evaluateRecommendations) {
         try {
           await this.deps.evaluateRecommendations(completed);
           recommendationEvaluationCompleted = true;

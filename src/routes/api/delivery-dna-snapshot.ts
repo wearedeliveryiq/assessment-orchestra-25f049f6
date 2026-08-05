@@ -13,7 +13,10 @@ export const Route = createFileRoute("/api/delivery-dna-snapshot")({
           await import("@/lib/delivery-dna/snapshot.server");
         return handleSnapshotRoute(request, async () => {
           const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
-          const started = await startSnapshot(request, body.restart === true);
+          const started = await startSnapshot(request, body.restart === true, {
+            scopeType: body.scopeType,
+            scopeDisplayName: body.scopeDisplayName,
+          });
           return snapshotResponse(started.data, started.cookie, started.token);
         });
       },

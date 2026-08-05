@@ -29,6 +29,8 @@ export interface CanonicalAnalysisInput {
     workspaceId: string;
     completedAt: string;
     consentBasis: string;
+    evidenceRecencyDeclaration?: string;
+    perspectiveBreadthDeclaration?: string;
   };
   knowledgePack: { id: string; version: string; questionSetVersion: string };
   requestedMode: AnalysisRequestedMode;

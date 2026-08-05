@@ -20,13 +20,10 @@ import {
 } from "../audit/runtime-audit.server";
 import { scheduleAnalysisHandoff } from "../analysis/handoff-service.server";
 import {
-  DELIVERY_DNA_ASSESSMENT_TYPE,
-  assertDeliveryDnaManifestDigest,
-  deliveryDnaCatalogue,
-  deliveryDnaManifestDigest,
-  deliveryDnaSessionMetadata,
-  isDeliveryDnaAssessment,
-} from "../delivery-dna/catalogue";
+  DELIVERY_DNA_V2_ASSESSMENT_TYPE,
+  assertDeliveryDnaV2ManifestDigest,
+  deliveryDnaV2Catalogue,
+} from "../delivery-dna/catalogue-v2";
 import {
   answeredEvidenceCount,
   deliveryDnaIdentityOf,
@@ -35,7 +32,6 @@ import {
   type DeliveryDnaCompletionOptions,
 } from "../delivery-dna/submission";
 import * as executionRepo from "../orchestrator/repository.server";
-import { assertDeliveryDnaCatalogueContract } from "../delivery-dna/catalogue-contract.server";
 import { canUseDeliveryDnaAssessment } from "../delivery-dna/overview-access.server";
 
 export class RuntimeError extends Error {
@@ -47,6 +43,9 @@ export class RuntimeError extends Error {
   }
 }
 
+const isDeliveryDnaAssessment = (assessmentType: string) =>
+  assessmentType === DELIVERY_DNA_V2_ASSESSMENT_TYPE;
+
 async function requireSession(id: string, ownerKey: string): Promise<AssessmentSession> {
   const session = await repo.getSession(id, ownerKey);
   if (!session) throw new RuntimeError("Assessment not found", 404);
@@ -54,8 +53,13 @@ async function requireSession(id: string, ownerKey: string): Promise<AssessmentS
     isDeliveryDnaAssessment(session.assessmentType) &&
     !(await canUseDeliveryDnaAssessment(id, ownerKey))
   ) {
+    const questionSetVersion = (
+      session.metadata as { deliveryDna?: { questionSetVersion?: unknown } } | null
+    )?.deliveryDna?.questionSetVersion;
     throw new RuntimeError(
-      "Unlock your Delivery DNA Overview to continue with the remaining 26 questions.",
+      questionSetVersion === "2.0.0"
+        ? "Unlock your Delivery DNA Overview to continue with the remaining 30 questions."
+        : "Delivery DNA 1.0 has been replaced. Start the Delivery DNA 2.0 Snapshot.",
       403,
     );
   }
@@ -76,11 +80,13 @@ export async function createAssessment(input: {
   const name = input.organisationName.trim();
   if (!name) throw new RuntimeError("Organisation name is required", 400);
   const assessmentType = input.assessmentType ?? "delivery-maturity";
-  if (isDeliveryDnaAssessment(assessmentType)) assertDeliveryDnaCatalogueContract();
-  const metadata = isDeliveryDnaAssessment(assessmentType)
-    ? deliveryDnaSessionMetadata(await deliveryDnaManifestDigest())
-    : undefined;
-  return repo.createSession({ ...input, assessmentType, metadata, organisationName: name });
+  if (isDeliveryDnaAssessment(assessmentType)) {
+    throw new RuntimeError(
+      "Start with a Delivery DNA Snapshot, save it, then unlock the complete Delivery DNA.",
+      403,
+    );
+  }
+  return repo.createSession({ ...input, assessmentType, organisationName: name });
 }
 
 export async function listAssessments(
@@ -135,7 +141,7 @@ export async function saveProgress(
       const responses = await repo.getResponses(id);
       const recorded = answeredEvidenceCount(responses);
       const updated = await repo.updateSession(id, {
-        progress: Math.round((recorded / deliveryDnaCatalogue.identity.questionCount) * 100),
+        progress: Math.round((recorded / deliveryDnaV2Catalogue.identity.fullQuestionCount) * 100),
         current_section: input.currentSection ?? session.currentSection,
         status: recorded > 0 ? "in_progress" : "draft",
         ...(input.organisationName ? { organisation_name: input.organisationName.trim() } : {}),
@@ -225,7 +231,7 @@ async function submitDeliveryDnaAssessment(
   try {
     const responses = await repo.getResponses(id);
     const completion = prepareDeliveryDnaCompletion(session, responses, options);
-    await assertDeliveryDnaManifestDigest(completion.identity.questionManifestDigest);
+    await assertDeliveryDnaV2ManifestDigest(completion.identity.questionManifestDigest);
     await repo.upsertResponses(id, completion.missingResponses);
     await executionRepo.ensureCompletedCollectionExecution({
       assessmentSessionId: id,
@@ -248,10 +254,14 @@ async function submitDeliveryDnaAssessment(
       completed_at: completedAt,
       failure_reason: null,
       results: null,
+      metadata: {
+        ...session.metadata,
+        deliveryDnaEvidence: completion.evidenceMetadata,
+      },
     });
     if (!completed.transitioned) return getStatus(id, ownerKey);
     lifecycleEvent(session, ownerKey, "assessment.completed", {
-      assessmentType: DELIVERY_DNA_ASSESSMENT_TYPE,
+      assessmentType: DELIVERY_DNA_V2_ASSESSMENT_TYPE,
       assessmentRevision: session.assessmentRevision ?? 1,
       missingEvidence: completion.missingCount,
     });
@@ -269,7 +279,7 @@ function deliveryDnaRuntimeError(error: unknown): RuntimeError {
       "This Delivery DNA assessment version is unavailable. Your responses are safe.",
     DELIVERY_DNA_QUESTION_INVALID: "A response does not belong to this Delivery DNA assessment.",
     DELIVERY_DNA_MANIFEST_INVALID: "The Delivery DNA response set is invalid.",
-    DELIVERY_DNA_ANSWER_INVALID: "Choose a response from 1 to 5.",
+    DELIVERY_DNA_ANSWER_INVALID: "Choose Emerging, Developing, Established or Leading.",
     DELIVERY_DNA_NOT_APPLICABLE_REASON_REQUIRED:
       "Explain why each not-applicable question does not apply.",
     DELIVERY_DNA_NOT_APPLICABLE_REASON_TOO_LONG:
@@ -278,6 +288,8 @@ function deliveryDnaRuntimeError(error: unknown): RuntimeError {
     DELIVERY_DNA_REVIEW_REQUIRED: "Review your answers before completing the assessment.",
     DELIVERY_DNA_MISSING_ACKNOWLEDGEMENT_REQUIRED:
       "Acknowledge the effect of unanswered questions before completing the assessment.",
+    DELIVERY_DNA_EVIDENCE_METADATA_REQUIRED:
+      "Select how current the evidence is and how many stakeholder groups informed the answers.",
   };
   return new RuntimeError(
     messages[code] ?? "The Delivery DNA assessment could not be completed safely.",

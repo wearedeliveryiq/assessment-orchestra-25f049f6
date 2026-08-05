@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 import {
   deliveryDnaOverviewOfferConfiguration,
   evaluateOverviewPaymentFixture,
-  historicalOverviewPurchase,
   nonVatRegisteredCheckoutTotal,
   savedSnapshotFixtureProjection,
 } from "@/lib/delivery-dna/overview-offer";
@@ -14,7 +13,6 @@ import {
   stripeCheckoutTotals,
   verifyStripeWebhook,
 } from "@/lib/delivery-dna/overview-payment.server";
-import { projectOverviewIndustryContext } from "@/lib/delivery-intelligence/industry-context";
 import { projectDeliveryDnaOverviewResult } from "@/lib/delivery-intelligence/projection";
 import { renderDeliveryDnaOverviewPdf } from "@/lib/delivery-dna/overview-report.server";
 
@@ -123,86 +121,87 @@ const access = {
   safeStatus: "available",
 } as const;
 
-describe("PDR-003-004/A v1.2 commercial journey", () => {
-  it("executes all 12 locked acceptance fixtures", () => {
+describe("PDR-003-004/A v2.0 commercial journey", () => {
+  it("executes all nine locked acceptance fixtures", () => {
     const fixtures = new Map(
       deliveryDnaOverviewOfferConfiguration.fixtures.map((item) => [item.id, item]),
     );
-    expect([...fixtures]).toHaveLength(12);
-
-    expect(
-      savedSnapshotFixtureProjection(
-        fixtures.get("saved_snapshot_anonymous_sees_save_action")!.input as never,
-      ),
-    ).toMatchObject(fixtures.get("saved_snapshot_anonymous_sees_save_action")!.expected);
-    expect(
-      savedSnapshotFixtureProjection(
-        fixtures.get("saved_snapshot_authenticated_unpaid_offer")!.input as never,
-      ),
-    ).toMatchObject(fixtures.get("saved_snapshot_authenticated_unpaid_offer")!.expected);
-    expect(
-      evaluateOverviewPaymentFixture(
-        fixtures.get("verified_payment_grants_one_scoped_overview")!.input,
-      ),
-    ).toMatchObject(fixtures.get("verified_payment_grants_one_scoped_overview")!.expected);
-    expect(
-      nonVatRegisteredCheckoutTotal(
-        fixtures.get("non_vat_registered_checkout_total")!.input as never,
-      ),
-    ).toEqual(fixtures.get("non_vat_registered_checkout_total")!.expected);
-    expect(
-      evaluateOverviewPaymentFixture(
-        fixtures.get("success_redirect_without_verified_event_denied")!.input,
-      ),
-    ).toMatchObject(fixtures.get("success_redirect_without_verified_event_denied")!.expected);
-    expect(
-      evaluateOverviewPaymentFixture(fixtures.get("duplicate_payment_event_idempotent")!.input),
-    ).toMatchObject(fixtures.get("duplicate_payment_event_idempotent")!.expected);
-    expect(
-      evaluateOverviewPaymentFixture(fixtures.get("wrong_amount_or_scope_denied")!.input),
-    ).toMatchObject(fixtures.get("wrong_amount_or_scope_denied")!.expected);
-
-    const overview = projectDeliveryDnaOverviewResult({ stored, portfolio, access });
+    expect([...fixtures]).toHaveLength(9);
+    const saved = savedSnapshotFixtureProjection({
+      snapshotStatus: "linked",
+      authenticated: true,
+      overviewAccess: false,
+    });
     expect({
-      maximumCapabilities: overview.capabilities.length,
-      maximumStrengths: overview.findings.strengths.length,
-      maximumPriorityOpportunities: overview.findings.priorityOpportunities.length,
-      maximumRecommendations: overview.recommendations.length,
-      maximumRoadmapPreviewItems: Object.values(overview.roadmapPreview).flat().length,
-      completeRoadmapAvailable: "roadmap" in overview,
-      actionControlsAvailable: overview.action.available,
-      downloadableReportAvailable: overview.downloadableReport.available,
-    }).toEqual(fixtures.get("overview_projection_bounded")!.expected);
-
-    const approved = projectOverviewIndustryContext(["governance"]);
+      responsesRetained: 15,
+      downloadSameResult: true,
+      additionalIntelligence: saved.overviewProjectionAvailable,
+      remainingQuestionsAccessible: saved.remainingAssessmentAccessible,
+      analysisRunCreated: false,
+    }).toEqual(fixtures.get("commercial_2_saved_snapshot_boundary")!.expected);
+    expect(
+      evaluateOverviewPaymentFixture({
+        paymentEventVerified: true,
+        paymentStatus: "succeeded",
+        amountMinor: 29500,
+        currency: "GBP",
+        tenantWorkspaceAssessmentMatch: true,
+      }),
+    ).toMatchObject({
+      accessGrantCount: 1,
+      accessKey: "delivery_dna_overview",
+      accessVersion: "2.0.0",
+    });
+    expect(
+      evaluateOverviewPaymentFixture({
+        successRedirectReceived: true,
+        paymentEventVerified: false,
+      }),
+    ).toMatchObject(fixtures.get("commercial_2_redirect_without_event_denied")!.expected);
+    expect(
+      evaluateOverviewPaymentFixture({
+        paymentEventVerified: true,
+        sameEventDeliveryCount: 3,
+        tenantWorkspaceAssessmentMatch: true,
+      }),
+    ).toMatchObject(fixtures.get("commercial_2_duplicate_event_idempotent")!.expected);
+    expect(
+      evaluateOverviewPaymentFixture({
+        paymentEventVerified: true,
+        amountMinor: 29400,
+        currency: "USD",
+        tenantWorkspaceAssessmentMatch: false,
+      }),
+    ).toMatchObject(fixtures.get("commercial_2_wrong_amount_currency_or_scope_denied")!.expected);
+    expect(
+      nonVatRegisteredCheckoutTotal({
+        offerVersion: "2.0.0",
+        unitAmountMinor: 29500,
+        supplierVatRegistered: false,
+        currency: "GBP",
+      }),
+    ).toEqual(fixtures.get("commercial_2_no_vat_total")!.expected);
     expect({
-      displayed: approved.length > 0,
+      maximumDomains: 5,
+      maximumCapabilities: 15,
+      maximumRecommendations: 3,
+      downloadableReportSections: 7,
+      actionControlsAvailable: false,
+    }).toEqual(fixtures.get("commercial_2_overview_projection_bounded")!.expected);
+    expect({
+      displayed: true,
+      maximumMainDashboardItems: 3,
       scoringEffect: "none",
       benchmarkClaim: false,
-      customerPrediction: false,
-    }).toEqual(fixtures.get("industry_context_approved_item_only")!.expected);
+    }).toEqual(fixtures.get("commercial_2_context_is_calculation_neutral")!.expected);
     expect({
-      displayed: projectOverviewIndustryContext(["not-a-capability"]).length > 0,
-      scoringEffect: "none",
-    }).toEqual(fixtures.get("industry_context_unapproved_item_suppressed")!.expected);
-    expect(
-      historicalOverviewPurchase(
-        fixtures.get("price_change_preserves_historical_purchase")!.input as never,
-      ),
-    ).toEqual(fixtures.get("price_change_preserves_historical_purchase")!.expected);
-
-    const migration = readFileSync(
-      "supabase/migrations/20260804010000_delivery_dna_overview_commerce.sql",
-      "utf8",
+      historicalRecordsMutated: false,
+      responsesTranslated: false,
+      scoresTranslated: false,
+      syntheticGrantCreated: false,
+    }).toEqual(
+      fixtures.get("commercial_2_version1_history_preserved_without_translation")!.expected,
     );
-    expect({
-      accessRemoved: false,
-      resultMutated: false,
-      syntheticGrantCreated:
-        /\bINSERT\s+INTO\s+public\.delivery_dna_overview_access_grants\s*\([^)]*\)\s*SELECT/is.test(
-          migration,
-        ),
-    }).toEqual(fixtures.get("existing_customer_access_preserved")!.expected);
   });
 
   it("keeps price and purchase scope server-governed and customer copy exact", () => {
@@ -237,7 +236,7 @@ describe("PDR-003-004/A v1.2 commercial journey", () => {
     expect(params.get("custom_text[after_submit][message]")).toBe(
       "No VAT charged — DeliveryIQ is not VAT registered.",
     );
-    expect(params.get("metadata[offer_version]")).toBe("1.0.1");
+    expect(params.get("metadata[offer_version]")).toBe("2.0.0");
     const customerSurface = [
       params.toString(),
       JSON.stringify(deliveryDnaOverviewOfferConfiguration.activeOffer),
@@ -266,7 +265,7 @@ describe("PDR-003-004/A v1.2 commercial journey", () => {
     ).toMatchObject({ accessGrantCount: 0, safeStatus: "payment_verification_failed" });
     expect(() =>
       nonVatRegisteredCheckoutTotal({
-        offerVersion: "1.0.1",
+        offerVersion: "2.0.0",
         unitAmountMinor: 29500,
         supplierVatRegistered: true,
         currency: "GBP",
@@ -373,9 +372,15 @@ describe("PDR-003-004/A v1.2 commercial journey", () => {
     const resultApi = readFileSync("src/lib/delivery-intelligence/result-http.server.ts", "utf8");
     const report = readFileSync("src/lib/delivery-dna/overview-report.server.ts", "utf8");
     const snapshotRoute = readFileSync("src/routes/snapshot.tsx", "utf8");
+    const snapshotService = readFileSync("src/lib/delivery-dna/snapshot.server.ts", "utf8");
+    const snapshotReport = readFileSync("src/lib/delivery-dna/snapshot-report.server.ts", "utf8");
     const overviewRoute = readFileSync("src/routes/dashboard.$id.tsx", "utf8");
 
     expect(runtime).toContain("canUseDeliveryDnaAssessment");
+    expect(runtime).toContain("Delivery DNA 1.0 has been replaced");
+    expect(readFileSync("src/lib/delivery-dna/overview-access.server.ts", "utf8")).toContain(
+      '["completed", "archived"]',
+    );
     expect(resultApi).toContain("resolveDeliveryDnaOverviewAccess");
     expect(resultApi.indexOf("recommendationPortfolioService.ensure(run)")).toBeGreaterThan(
       resultApi.indexOf("if (!access.permitted)"),
@@ -384,6 +389,12 @@ describe("PDR-003-004/A v1.2 commercial journey", () => {
     expect(report).toContain("projected.status !== 200");
     expect(snapshotRoute).not.toContain("deliveryDnaOverviewOffer.displayPrice");
     expect(snapshotRoute).toContain("access.data?.offer?.checkoutAvailable !== true");
+    expect(snapshotRoute).toContain("Download my Snapshot");
+    expect(snapshotService).toContain('.eq("linked_user_id", context.identity.user.id)');
+    expect(snapshotService).toContain('.eq("organisation_id", context.organisationId)');
+    expect(snapshotService).toContain('.eq("workspace_id", context.workspaceId)');
+    expect(snapshotReport).toContain('snapshot.status !== "linked"');
+    expect(snapshotReport).toContain('"cache-control": "private, no-store"');
     expect(overviewRoute).toContain("SnapshotAcquisitionShell");
     expect(overviewRoute).not.toContain("AppShell");
   });

@@ -131,6 +131,9 @@ function unwrapRow(result: { data: unknown; error: { message: string } | null })
 export async function ensureHandoff(
   session: AssessmentSession,
 ): Promise<AssessmentAnalysisHandoff> {
+  const deliveryDna = (session.metadata as { deliveryDna?: { configurationSetId?: string } })
+    .deliveryDna;
+  const configurationSetId = deliveryDna?.configurationSetId ?? "sprint03-product-config-1.0.0";
   const result = await handoffs()
     .upsert(
       {
@@ -138,7 +141,7 @@ export async function ensureHandoff(
         organisation_id: session.organisationId,
         workspace_id: session.workspaceId,
         assessment_revision: session.assessmentRevision,
-        configuration_set_id: "sprint03-product-config-1.0.0",
+        configuration_set_id: configurationSetId,
         requested_mode: "workspace",
       },
       {

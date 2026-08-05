@@ -1,6 +1,10 @@
 import { sprint03Configuration } from "./config";
 
-export type TraceNodeType = (typeof sprint03Configuration.traceability.nodeTypes)[number];
+export type TraceNodeType =
+  | (typeof sprint03Configuration.traceability.nodeTypes)[number]
+  | "response"
+  | "domain_score"
+  | "industry_context_item";
 export type TraceEdgeType = (typeof sprint03Configuration.traceability.edgeTypes)[number];
 
 export interface TraceNode {
@@ -62,6 +66,7 @@ export function validateTraceGraph(graph: TraceGraph) {
       const path = queue.shift()!;
       const current = nodeMap.get(path[path.length - 1]);
       if (current?.nodeType === "evidence") evidencePath = path;
+      else if (current?.nodeType === "response") evidencePath = path;
       else if (current && !visited.has(current.id)) {
         visited.add(current.id);
         for (const parent of reverse.get(current.id) ?? []) queue.push([...path, parent]);

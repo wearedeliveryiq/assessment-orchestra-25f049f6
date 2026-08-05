@@ -101,10 +101,10 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
               )}
               {handoff.canStartDeliveryDna && (
                 <a
-                  href="/sessions/new"
+                  href="/snapshot"
                   className="inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground"
                 >
-                  Start a Delivery DNA assessment
+                  Start the Delivery DNA Snapshot
                 </a>
               )}
             </div>
@@ -239,6 +239,29 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           </div>
         </div>
       </section>
+      {"domains" in result && Array.isArray(result.domains) ? (
+        <section
+          aria-labelledby="domains-title"
+          className="rounded-2xl border border-border bg-card p-6"
+        >
+          <h2 id="domains-title" className="text-xl font-semibold">
+            Five-domain profile
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+            {result.domains.map((domain) => (
+              <article key={domain.id} className="rounded-xl border border-border/70 p-4">
+                <h3 className="text-sm font-medium capitalize">{domain.id.replaceAll("_", " ")}</h3>
+                <p className="mt-3 text-2xl font-semibold text-primary">
+                  {domain.displayScore ?? "—"}
+                </p>
+                <p className="mt-1 text-xs capitalize text-muted-foreground">
+                  {domain.band ?? "Insufficient evidence"}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <section
         aria-labelledby="capabilities-title"
         className="rounded-2xl border border-border bg-card p-6"
@@ -283,13 +306,27 @@ export function DeliveryIntelligenceDashboard({ assessmentId }: { assessmentId: 
           empty="No capability meets the approved priority threshold."
         />
       </div>
+      {"patterns" in result && Array.isArray(result.patterns) && result.patterns.length ? (
+        <section className="rounded-2xl border border-border bg-card p-6">
+          <h2 className="text-xl font-semibold">Cross-domain patterns</h2>
+          <div className="mt-4 space-y-3">
+            {result.patterns.map((pattern) => (
+              <article key={String(pattern.id)} className="rounded-xl border border-border/70 p-4">
+                <p className="text-sm leading-6 text-muted-foreground">
+                  {String(pattern.explanation)}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <RecommendationOverview recommendations={result.recommendations} />
       {result.roadmapPreview ? <RoadmapPreview result={result.roadmapPreview} /> : null}
       <section className="rounded-2xl border border-border bg-card p-6">
         <h2 className="text-xl font-semibold">How this connects to your evidence</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
           The capability profile, findings and priorities are calculated from the recorded
-          39-question Delivery DNA evidence using the locked scoring and confidence rules. Missing
+          45-question Delivery DNA evidence using the locked scoring and confidence rules. Missing
           and not-applicable evidence remain visible in coverage and limitations; restricted
           internal rule predicates and respondent identity are not included in this Overview.
         </p>
@@ -424,19 +461,23 @@ function RoadmapPreview({
       </h2>
       <div className="mt-4 grid gap-4 md:grid-cols-3">
         {(["day30", "day60", "day90"] as const).map((horizon) => {
-          const item = result[horizon][0];
+          const items = result[horizon];
           const label =
             horizon === "day30" ? "30 days" : horizon === "day60" ? "60 days" : "90 days";
           return (
             <div key={horizon} className="rounded-xl border border-border/70 p-4">
               <h3 className="font-medium">{label}</h3>
-              {item ? (
-                <div className="mt-3 text-sm">
-                  <p>{item.title}</p>
-                  <p className="mt-1 capitalize text-muted-foreground">
-                    {item.priorityLabel} priority
-                  </p>
-                </div>
+              {items.length ? (
+                <ol className="mt-3 space-y-3 text-sm">
+                  {items.map((item) => (
+                    <li key={item.title}>
+                      <p>{item.title}</p>
+                      <p className="mt-1 capitalize text-muted-foreground">
+                        {item.priorityLabel} priority
+                      </p>
+                    </li>
+                  ))}
+                </ol>
               ) : (
                 <p className="mt-3 text-sm text-muted-foreground">No item scheduled.</p>
               )}

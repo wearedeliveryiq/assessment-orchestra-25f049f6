@@ -47,7 +47,7 @@ function capabilityPage(overview: Overview): PdfPage {
     const score = item.available ? `${item.displayScore} · ${item.band}` : "Unavailable";
     page.text(score, 355, y - 8, 9, "bold", item.available ? COLOURS.blue : COLOURS.muted);
     page.text(
-      `${item.eligibleAnswerCount}/${item.totalQuestionCount} eligible responses`,
+      `${item.eligibleAnswerCount}/${item.totalQuestionCount ?? 3} eligible responses`,
       445,
       y - 8,
       7.5,
@@ -56,6 +56,41 @@ function capabilityPage(overview: Overview): PdfPage {
     );
     y -= 42;
   });
+  footer(page, 3);
+  return page;
+}
+
+function domainPage(overview: Overview): PdfPage {
+  const page = new PdfPage();
+  pageTitle(page, "Five-domain profile", "Where you are now");
+  const domains = "domains" in overview && Array.isArray(overview.domains) ? overview.domains : [];
+  let y = 700;
+  for (const [index, item] of domains.entries()) {
+    if (index % 2 === 0) page.rect(MARGIN, y - 40, PAGE.width - MARGIN * 2, 50, COLOURS.surface);
+    page.text(item.id.replaceAll("_", " "), MARGIN + 10, y - 10, 11, "bold", COLOURS.ink);
+    page.text(
+      item.available ? `${item.displayScore} · ${item.band}` : "Insufficient evidence",
+      365,
+      y - 10,
+      10,
+      "bold",
+      item.available ? COLOURS.blue : COLOURS.muted,
+    );
+    page.text(
+      `${item.availableCapabilityCount}/3 capabilities available`,
+      MARGIN + 10,
+      y - 29,
+      8,
+      "regular",
+      COLOURS.muted,
+    );
+    y -= 60;
+  }
+  paragraph(
+    page,
+    "Domain positions summarise the underlying capability evidence. They are not benchmarks or predictions.",
+    y - 12,
+  );
   footer(page, 2);
   return page;
 }
@@ -97,7 +132,16 @@ function findingsPage(overview: Overview): PdfPage {
     .forEach((line, index) =>
       page.text(line, MARGIN + 14, y - 52 - index * 12, 8.5, "regular", COLOURS.muted),
     );
-  footer(page, 3);
+  if ("patterns" in overview && Array.isArray(overview.patterns) && overview.patterns.length) {
+    y -= 112;
+    page.text("Cross-domain tensions", MARGIN, y, 14, "bold", COLOURS.ink);
+    y -= 24;
+    for (const pattern of overview.patterns.slice(0, 3)) {
+      y = paragraph(page, String(pattern.explanation ?? pattern.id), y);
+      y -= 8;
+    }
+  }
+  footer(page, 4);
   return page;
 }
 
@@ -132,7 +176,7 @@ function recommendationsPage(overview: Overview): PdfPage {
     y -= 22;
     page.line(MARGIN + 32, y + 10, PAGE.width - MARGIN, y + 10, COLOURS.line, 0.5);
   });
-  footer(page, 4);
+  footer(page, 5);
   return page;
 }
 
@@ -142,7 +186,7 @@ function directionPage(overview: Overview): PdfPage {
   let x = MARGIN;
   const width = (PAGE.width - MARGIN * 2 - 24) / 3;
   (["day30", "day60", "day90"] as const).forEach((key, index) => {
-    const item = overview.roadmapPreview[key][0];
+    const items = overview.roadmapPreview[key];
     page.rect(x, 545, width, 150, index === 0 ? "E8F4F4" : COLOURS.surface);
     page.text(
       index === 0 ? "30 DAYS" : index === 1 ? "60 DAYS" : "90 DAYS",
@@ -152,13 +196,15 @@ function directionPage(overview: Overview): PdfPage {
       "bold",
       COLOURS.teal,
     );
-    if (item) {
-      wrapText(item.title, 10, "bold", width - 28)
-        .slice(0, 5)
-        .forEach((line, lineIndex) =>
-          page.text(line, x + 14, 638 - lineIndex * 15, 10, "bold", COLOURS.ink),
+    if (items.length) {
+      let itemY = 638;
+      for (const item of items) {
+        const lines = wrapText(item.title, 8.5, "bold", width - 28).slice(0, 3);
+        lines.forEach((line, lineIndex) =>
+          page.text(line, x + 14, itemY - lineIndex * 12, 8.5, "bold", COLOURS.ink),
         );
-      page.text(`${item.priorityLabel} priority`, x + 14, 565, 8, "regular", COLOURS.muted);
+        itemY -= lines.length * 12 + 12;
+      }
     } else {
       page.text("No item scheduled", x + 14, 625, 9, "regular", COLOURS.muted);
     }
@@ -166,14 +212,26 @@ function directionPage(overview: Overview): PdfPage {
   });
   page.text("Overview now. Action later.", MARGIN, 482, 14, "bold", COLOURS.ink);
   paragraph(page, overview.action.message, 455);
-  footer(page, 5);
+  footer(page, 6);
   return page;
 }
 
 function contextPage(overview: Overview): PdfPage {
   const page = new PdfPage();
-  pageTitle(page, "Why this matters now", "Industry context");
+  pageTitle(page, "Method, limitations and sources", "Evidence boundary");
   let y = 700;
+  y = paragraph(
+    page,
+    "Delivery DNA 2.0 is a deterministic, evidence-led lead perspective. Confidence measures evidential support, not correctness, independent verification or certainty.",
+    y,
+  );
+  y = paragraph(
+    page,
+    overview.confidence.caveat ?? "No additional limitation is presented.",
+    y - 12,
+  );
+  page.text("Industry context", MARGIN, y - 18, 13, "bold", COLOURS.ink);
+  y -= 46;
   for (const item of overview.industryContext) {
     y = paragraph(page, item.approvedCustomerSafeWording, y);
     page.text(`${item.publisher} · ${item.evidenceYear}`, MARGIN, y - 4, 8, "bold", COLOURS.blue);
@@ -183,7 +241,7 @@ function contextPage(overview: Overview): PdfPage {
     y = paragraph(page, item.notCustomerPredictionCaveat, y - 4, PAGE.width - MARGIN * 2);
     y -= 20;
   }
-  footer(page, 6);
+  footer(page, 7);
   return page;
 }
 
@@ -232,6 +290,7 @@ export function renderDeliveryDnaOverviewPdf(overview: Overview): Uint8Array {
   const pages = [
     cover,
     summary,
+    domainPage(overview),
     capabilityPage(overview),
     findingsPage(overview),
     recommendationsPage(overview),

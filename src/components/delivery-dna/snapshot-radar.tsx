@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 
-import type { SnapshotProfileAxis } from "@/lib/delivery-dna/snapshot";
+import type { SnapshotV2DomainProfile } from "@/lib/delivery-dna/snapshot-v2";
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -23,7 +23,7 @@ function useReducedMotion() {
   return reduced;
 }
 
-export function SnapshotRadar({ profile }: { profile: SnapshotProfileAxis[] }) {
+export function SnapshotRadar({ profile }: { profile: SnapshotV2DomainProfile[] }) {
   const reducedMotion = useReducedMotion();
   const data = profile.map((axis) => ({
     ...axis,
@@ -60,16 +60,16 @@ export function SnapshotRadar({ profile }: { profile: SnapshotProfileAxis[] }) {
                 );
               }}
             />
-            <PolarRadiusAxis domain={[0, 5]} tick={false} axisLine={false} />
+            <PolarRadiusAxis domain={[0, 4]} tick={false} axisLine={false} />
             <Tooltip
               cursor={false}
               content={({ active, payload }) => {
-                const axis = payload?.[0]?.payload as SnapshotProfileAxis | undefined;
+                const axis = payload?.[0]?.payload as SnapshotV2DomainProfile | undefined;
                 if (!active || !axis) return null;
                 return (
                   <div className="max-w-64 rounded-xl border border-white/10 bg-[#111827] p-3 text-xs text-[#F8FAFC] shadow-2xl">
-                    <p className="font-semibold">{axis.capabilityLabel}</p>
-                    <p className="mt-1 text-[#CBD5E1]">{axis.responseLabel}</p>
+                    <p className="font-semibold">{axis.domainLabel}</p>
+                    <p className="mt-1 capitalize text-[#CBD5E1]">{axis.level ?? "N/A"}</p>
                   </div>
                 );
               }}
@@ -97,7 +97,7 @@ export function SnapshotRadar({ profile }: { profile: SnapshotProfileAxis[] }) {
       >
         {profile.map((axis) => (
           <li
-            key={axis.questionId}
+            key={axis.domainId}
             className="flex items-start gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3"
           >
             <span
@@ -107,10 +107,10 @@ export function SnapshotRadar({ profile }: { profile: SnapshotProfileAxis[] }) {
               {axis.axisNumber}
             </span>
             <span>
-              <span className="block text-sm font-semibold text-[#F8FAFC]">
-                {axis.capabilityLabel}
+              <span className="block text-sm font-semibold text-[#F8FAFC]">{axis.domainLabel}</span>
+              <span className="mt-0.5 block text-xs capitalize text-[#CBD5E1]">
+                {axis.level ?? "N/A"}
               </span>
-              <span className="mt-0.5 block text-xs text-[#CBD5E1]">{axis.responseLabel}</span>
             </span>
           </li>
         ))}

@@ -165,3 +165,30 @@ PDR-003-004 v1.2 and PDR-003-004A v1.0.1 promote the existing Overview offer wit
 Checkout, verified-event and immutable access-grant evidence retain the offer version, provider price reference, subtotal, VAT, customer total, currency, tax status, tax policy and customer disclosure. The webhook grants only when the provider-signed event reports subtotal 29500, tax 0 and total 29500 GBP and every existing purchaser/tenant/workspace/Snapshot/assessment field matches. The legacy v1.0.0 fulfilment function remains available only for already-created historical events; new checkout creation uses the v1.0.1 function, so a future tax change requires a new version without rewriting history.
 
 The 12th locked fixture `non_vat_registered_checkout_total` and implementation-specific wrong-VAT/total checks pass alongside the original 11 fixtures and unchanged DIQ-203B regression. The complete regression passed 616/616 tests across 47 files; TypeScript checking, changed-file lint/format and the production build also passed. The two additive migrations contain no seed, customer or grant data. Live checkout remains fail-closed until the four approved Stripe settings are configured and the authorised purchase-to-result smoke in the existing runbook is completed.
+
+## Delivery DNA 2.0 clean replacement — 5 August 2026
+
+### Customer value delivered
+
+The customer journey now starts with the exact 15 Practice questions across five domains, provides a non-numeric indicative result and allows the customer to save, privately return to and download that same Snapshot. A verified £295 purchase will open the remaining 30 exact Foundation/Evidence questions and produce the complete 45-question Delivery DNA Overview. The home and ineligible-result entry points no longer start a 1.0 assessment.
+
+The Overview is one bounded decision product: overall and five-domain position, all 15 capabilities, evidence confidence and limitations, strengths, opportunities, eligible cross-domain patterns, top three recommendations, 30/60/90 direction, explainability and visibly sourced calculation-neutral context. The web experience and report use the same immutable server projection. Perspectives, Action, progress tracking, Knowledge Packs, TeamMates and Enterprise packaging are not introduced.
+
+### Implementation and safety
+
+- `catalogue-v2.ts`, `snapshot-v2.ts`, `analysis-v2.ts` and `context-v2.ts` are deterministic adapters over unchanged locked configuration. DIQ-100A's exact file digest is pinned centrally on every 2.0 run and result.
+- Anonymous Snapshot state remains opaque-token based and contains no PII. Saving requires verified identity, explicit consent and a matching organisation/workspace. Linked Snapshot reads and PDF downloads reverify all three scopes and do not rely on the former anonymous token.
+- The paid boundary reuses the existing fail-closed Stripe foundation, now pinned to offer/access 2.0.0. It validates signature freshness, paid status, £295 subtotal, £0 VAT, £295 total, GBP and the exact purchaser/tenant/workspace/Snapshot/assessment scope before one idempotent grant.
+- The complete assessment records evidence recency and perspective-breadth declarations, preserves exact carried responses/timestamps/status/provenance and uses the shared immutable hand-off and publication pipeline. The legacy Sprint 04 recommendation pipeline is not duplicated for 2.0.
+- The cutover migration preserves historical 1.x rows, accepts only the exact 15-ID 2.0 Snapshot manifest and 1–4 answers for new sessions, disables new 1.0 Snapshot creation and derives the 2.0 analysis configuration from session metadata. It contains no translation, recalculation, synthetic payment or access grant.
+
+### Verification
+
+- All 43 DIQ-100B fixtures and all nine PDR-003-004A fixtures execute unchanged.
+- Historical DIQ-203B and PDR-003-005A regression remains separate and passing; no 1.0 rule is imported into 2.0.
+- Focused tests cover N/A/missing, exact threshold boundaries, availability, population-SD consistency, confidence, finding thresholds/ties, positive/negative pattern cases, exclusions, ranking/deduplication, roadmap dependencies/capacity/cycles, context isolation, Snapshot/Overview allow-lists, full lineage, clean cutover, tenancy, immutability, payment denial/idempotency and web/PDF reconciliation.
+- Full regression: 630/630 tests across 48 files. TypeScript checking, changed-file ESLint/Prettier and the production client/server build pass.
+
+### Deployment and limitation
+
+The application and migrations are ready for the established Lovable-managed deployment path. Before live cutover, production must confirm there are still zero paid 1.0 customers/checkouts/grants; if that fact changed, only preservation of that access requires a migration decision. Stripe credentials and the approved provider price reference are not present locally, so checkout remains safely unavailable and the authorised purchase-to-result smoke cannot be manufactured. Snapshot, Saved Snapshot and all non-provider-dependent behaviour remain deployable and useful.

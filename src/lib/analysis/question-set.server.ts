@@ -6,6 +6,12 @@ import {
 import { knowledgePackLoader } from "../knowledge-packs/loader.server";
 import type { AnalysisQuestionSet } from "./normalizer";
 import { assertDeliveryDnaCatalogueContract } from "../delivery-dna/catalogue-contract.server";
+import {
+  DELIVERY_DNA_V2_ASSESSMENT_TYPE,
+  DELIVERY_DNA_V2_VERSION,
+  deliveryDnaV2Capabilities,
+  deliveryDnaV2Catalogue,
+} from "../delivery-dna/catalogue-v2";
 
 const deliveryDnaQuestionSet: AnalysisQuestionSet = {
   manifest: {
@@ -23,8 +29,24 @@ const deliveryDnaQuestionSet: AnalysisQuestionSet = {
   },
 };
 
+const deliveryDnaV2QuestionSet: AnalysisQuestionSet = {
+  manifest: {
+    id: deliveryDnaV2Catalogue.identity.knowledgePackId,
+    version: deliveryDnaV2Catalogue.identity.knowledgePackVersion,
+    questionSetVersion: deliveryDnaV2Catalogue.identity.questionSetVersion,
+  },
+  questions: {
+    questions: deliveryDnaV2Capabilities.flatMap((capability) =>
+      capability.questions.map((question) => ({ id: question.id, sectionId: capability.id })),
+    ),
+  },
+};
+
 /** Resolve only the immutable question contract needed by analysis normalisation. */
 export function loadAnalysisQuestionSet(id: string, version: string): AnalysisQuestionSet {
+  if (id === DELIVERY_DNA_V2_ASSESSMENT_TYPE && version === DELIVERY_DNA_V2_VERSION) {
+    return deliveryDnaV2QuestionSet;
+  }
   if (id === DELIVERY_DNA_ASSESSMENT_TYPE && version === DELIVERY_DNA_VERSION) {
     assertDeliveryDnaCatalogueContract();
     return deliveryDnaQuestionSet;

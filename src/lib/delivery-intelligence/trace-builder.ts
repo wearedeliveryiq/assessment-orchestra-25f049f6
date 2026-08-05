@@ -1,6 +1,12 @@
 import type { AssessmentAnalysisRun } from "../analysis/types";
 import type { CanonicalIntelligenceCore } from "./engine";
 import { sprint03Configuration } from "./config";
+import { analyseCanonicalInputV2 } from "../delivery-dna/analysis-v2";
+import {
+  deliveryDnaV2Catalogue,
+  deliveryDnaV2Capabilities,
+  deliveryDnaV2Domains,
+} from "../delivery-dna/catalogue-v2";
 import type { TraceEdge, TraceGraph, TraceNode, TraceNodeType } from "./traceability";
 
 async function hash(value: unknown): Promise<string> {
@@ -11,8 +17,10 @@ async function hash(value: unknown): Promise<string> {
 
 export async function buildCoreTrace(
   run: AssessmentAnalysisRun,
-  result: CanonicalIntelligenceCore,
+  result: CanonicalIntelligenceCore | ReturnType<typeof analyseCanonicalInputV2>,
 ): Promise<TraceGraph> {
+  const isV2 = result.schemaVersion === "deliveryiq.intelligence-result/2.0.0";
+  const configuration = isV2 ? deliveryDnaV2Catalogue : sprint03Configuration;
   const nodes: TraceNode[] = [];
   const edges: TraceEdge[] = [];
   const ids = new Map<string, string>();
@@ -41,7 +49,52 @@ export async function buildCoreTrace(
   };
 
   for (const response of run.input.responses) {
-    await add(`evidence:${response.answerId}`, "evidence", response.answerVersion, response);
+    if (isV2) {
+      const question = deliveryDnaV2Capabilities
+        .flatMap((capability) => capability.questions)
+        .find((item) => item.id === response.questionId)!;
+      await add(`response:${response.answerId}`, "response", response.answerVersion, {
+        ...response,
+        evidenceId: response.answerId,
+        evidenceVersion: response.answerVersion,
+        questionSetVersion: run.questionSetVersion,
+      });
+      await add(`question:${response.questionId}`, "question", run.questionSetVersion, {
+        id: question.id,
+        dimension: question.dimension,
+        weight: question.weight,
+        questionSetVersion: run.questionSetVersion,
+      });
+      await add(
+        `contribution:${response.answerId}`,
+        "capability_contribution",
+        run.configurationVersion,
+        {
+          questionId: response.questionId,
+          value: response.value,
+          status: response.status,
+          ruleId: "ddna2.capability_weighted_contribution",
+          ruleVersion: run.configurationVersion,
+        },
+      );
+      edges.push({
+        source: ids.get(`response:${response.answerId}`)!,
+        target: ids.get(`question:${response.questionId}`)!,
+        type: "answers",
+      });
+      edges.push({
+        source: ids.get(`question:${response.questionId}`)!,
+        target: ids.get(`contribution:${response.answerId}`)!,
+        type: "maps_to",
+      });
+      edges.push({
+        source: ids.get(`response:${response.answerId}`)!,
+        target: ids.get(`contribution:${response.answerId}`)!,
+        type: "contributes_to",
+      });
+    } else {
+      await add(`evidence:${response.answerId}`, "evidence", response.answerVersion, response);
+    }
   }
   for (const capability of result.capabilities) {
     await add(
@@ -53,19 +106,52 @@ export async function buildCoreTrace(
     );
     for (const evidenceId of capability.evidenceIds) {
       edges.push({
-        source: ids.get(`evidence:${evidenceId}`)!,
+        source: ids.get(`${isV2 ? "contribution" : "evidence"}:${evidenceId}`)!,
         target: ids.get(`capability:${capability.id}`)!,
         type: "contributes_to",
       });
     }
   }
+  if (isV2 && "domains" in result) {
+    for (const domain of result.domains) {
+      await add(
+        `domain:${domain.domainId}`,
+        "domain_score",
+        run.configurationVersion,
+        {
+          ...domain,
+          ruleId: "ddna2.domain_equal_weight_mean",
+          ruleVersion: run.configurationVersion,
+        },
+        true,
+      );
+      const definition = deliveryDnaV2Domains.find((item) => item.id === domain.domainId)!;
+      for (const capability of definition.capabilities) {
+        edges.push({
+          source: ids.get(`capability:${capability.id}`)!,
+          target: ids.get(`domain:${domain.domainId}`)!,
+          type: "aggregates_into",
+        });
+      }
+    }
+  }
   await add("overall", "overall_score", run.configurationVersion, result.overall, true);
-  for (const capability of result.capabilities.filter((item) => item.score.available)) {
-    edges.push({
-      source: ids.get(`capability:${capability.id}`)!,
-      target: ids.get("overall")!,
-      type: "aggregates_into",
-    });
+  if (isV2 && "domains" in result) {
+    for (const domain of result.domains.filter((item) => item.available)) {
+      edges.push({
+        source: ids.get(`domain:${domain.domainId}`)!,
+        target: ids.get("overall")!,
+        type: "aggregates_into",
+      });
+    }
+  } else {
+    for (const capability of result.capabilities.filter((item) => item.score.available)) {
+      edges.push({
+        source: ids.get(`capability:${capability.id}`)!,
+        target: ids.get("overall")!,
+        type: "aggregates_into",
+      });
+    }
   }
   for (const [factorId, value] of Object.entries(result.confidence.factors)) {
     await add(`confidence-factor:${factorId}`, "confidence_factor", run.configurationVersion, {
@@ -74,7 +160,7 @@ export async function buildCoreTrace(
     });
     for (const response of run.input.responses) {
       edges.push({
-        source: ids.get(`evidence:${response.answerId}`)!,
+        source: ids.get(`${isV2 ? "response" : "evidence"}:${response.answerId}`)!,
         target: ids.get(`confidence-factor:${factorId}`)!,
         type: factorId === "evidence_recency" ? "limits" : "supports",
       });
@@ -108,7 +194,7 @@ export async function buildCoreTrace(
   }
   for (const pattern of result.patterns.detected) {
     await add(`pattern:${pattern.id}`, "pattern", pattern.version, pattern, true);
-    const definition = sprint03Configuration.patterns.find((item) => item.id === pattern.id)!;
+    const definition = configuration.patterns.find((item) => item.id === pattern.id)!;
     const capabilityIds = new Set<string>();
     for (const rawPredicate of definition.predicates) {
       const predicate = rawPredicate as {
@@ -140,9 +226,7 @@ export async function buildCoreTrace(
       recommendation,
       true,
     );
-    const definition = sprint03Configuration.recommendations.find(
-      (item) => item.id === recommendation.id,
-    )!;
+    const definition = configuration.recommendations.find((item) => item.id === recommendation.id)!;
     for (const trigger of definition.triggers.any) {
       if ("opportunity" in trigger && ids.has(`finding:${trigger.opportunity}`)) {
         edges.push({
@@ -189,6 +273,28 @@ export async function buildCoreTrace(
           type: "scheduled_as",
         });
       }
+    }
+  }
+  if (isV2 && "industryContext" in result) {
+    for (const item of result.industryContext) {
+      await add(`context-source:${item.evidenceId}`, "response", item.evidenceVersion, {
+        evidenceId: item.evidenceId,
+        evidenceVersion: item.evidenceVersion,
+        sourcePublisher: item.sourcePublisher,
+        sourceTitle: item.sourceTitle,
+      });
+      await add(
+        `industry-context:${item.evidenceId}`,
+        "industry_context_item",
+        item.evidenceVersion,
+        item,
+        true,
+      );
+      edges.push({
+        source: ids.get(`context-source:${item.evidenceId}`)!,
+        target: ids.get(`industry-context:${item.evidenceId}`)!,
+        type: "supports",
+      });
     }
   }
   const narrativeItems: Array<{ key: string; value: string; source: string }> = [

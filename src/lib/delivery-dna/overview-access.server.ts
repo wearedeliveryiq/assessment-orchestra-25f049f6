@@ -33,6 +33,7 @@ type ScopeRow = {
   organisation_id: string;
   workspace_id: string;
   assessment_session_id: string;
+  configuration_version: string;
 };
 
 function checkoutConfigured(): boolean {
@@ -47,7 +48,9 @@ function checkoutConfigured(): boolean {
 async function scopeForAssessment(assessmentId: string): Promise<ScopeRow | null> {
   const { data, error } = await db
     .from("delivery_dna_snapshot_sessions")
-    .select("id,linked_at,linked_user_id,organisation_id,workspace_id,assessment_session_id")
+    .select(
+      "id,linked_at,linked_user_id,organisation_id,workspace_id,assessment_session_id,configuration_version",
+    )
     .eq("assessment_session_id", assessmentId)
     .eq("status", "linked")
     .maybeSingle();
@@ -85,8 +88,7 @@ export async function resolveDeliveryDnaOverviewAccess(input: {
 }): Promise<DeliveryDnaOverviewAccess | null> {
   const scope = await scopeForAssessment(input.assessmentId);
   if (!scope || !matchesContext(scope, input.context)) return null;
-  const grandfathered =
-    Date.parse(scope.linked_at) < Date.parse(deliveryDnaOverviewOffer.effectiveFrom);
+  const grandfathered = scope.configuration_version !== "2.0.0";
   const paid = grandfathered ? false : await paidGrantExists(scope);
   const access = grandfathered ? "grandfathered" : paid ? "paid" : "none";
   const offer = activeDeliveryDnaOverviewOffer();
@@ -110,19 +112,43 @@ export async function resolveDeliveryDnaOverviewAccess(input: {
   };
 }
 
+async function isHistoricalReadOnlyResult(assessmentId: string, ownerKey: string) {
+  const { data, error } = await db
+    .from("assessment_sessions")
+    .select("owner_key,status")
+    .eq("id", assessmentId)
+    .maybeSingle();
+  return Boolean(
+    !error &&
+    data?.owner_key === ownerKey &&
+    ["completed", "archived"].includes(String(data.status)),
+  );
+}
+
 /**
- * Runtime guard for Snapshot-linked assessments. Direct authenticated Delivery
- * DNA starts remain unchanged; pre-cutover linked drafts are preserved without
- * manufacturing a grant row.
+ * Clean 2.0 runtime guard. Historical completed results remain readable, but
+ * no 1.x draft can continue or complete after cutover.
  */
 export async function canUseDeliveryDnaAssessment(
   assessmentId: string,
   ownerKey: string,
 ): Promise<boolean> {
   const scope = await scopeForAssessment(assessmentId);
-  if (!scope) return true;
+  if (!scope) {
+    const { data, error } = await db
+      .from("assessment_sessions")
+      .select("owner_key,metadata,status")
+      .eq("id", assessmentId)
+      .maybeSingle();
+    if (error || !data || data.owner_key !== ownerKey) return false;
+    const version = (data.metadata as { deliveryDna?: { questionSetVersion?: unknown } } | null)
+      ?.deliveryDna?.questionSetVersion;
+    return version !== "2.0.0" && ["completed", "archived"].includes(String(data.status));
+  }
   const [userId, workspaceId] = ownerKey.split(":");
   if (scope.linked_user_id !== userId || scope.workspace_id !== workspaceId) return false;
-  if (Date.parse(scope.linked_at) < Date.parse(deliveryDnaOverviewOffer.effectiveFrom)) return true;
+  if (scope.configuration_version !== "2.0.0") {
+    return isHistoricalReadOnlyResult(assessmentId, ownerKey);
+  }
   return paidGrantExists(scope);
 }

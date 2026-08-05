@@ -154,13 +154,187 @@ export function projectFreeWorkspaceResult(
   };
 }
 
-/** PDR-003-004 v1.1 bounded paid Overview projection. */
+/** PDR-003-004 v2.0 bounded paid Overview projection. */
 export function projectDeliveryDnaOverviewResult(input: {
   stored: StoredIntelligenceResult;
   portfolio: RecommendationPortfolioRecord | null;
   access: DeliveryDnaOverviewAccess;
 }) {
   if (!input.access.permitted) throw new Error("DELIVERY_DNA_OVERVIEW_ACCESS_REQUIRED");
+  const canonical = input.stored.canonicalResult as unknown as {
+    schemaVersion?: string;
+    domains?: Array<{
+      domainId: string;
+      available: boolean;
+      rawScore: number | null;
+      band: string | null;
+      availableCount: number;
+    }>;
+    industryContext?: Array<Record<string, unknown>>;
+    capabilities: Array<{
+      id: string;
+      label: string;
+      order: number;
+      domainId?: string;
+      score: {
+        available: boolean;
+        displayScore: number | null;
+        band: string | null;
+        eligibleQuestionCount: number;
+        missingQuestionIds: string[];
+        excludedQuestionIds: string[];
+        notApplicableQuestionIds: string[];
+      };
+      confidenceContribution: number;
+    }>;
+    overall: { available: boolean; displayScore: number | null; band: string | null };
+    confidence: {
+      result: { displayIndex: number; band: string; limitations: string[] };
+    };
+    findings: {
+      strengths: string[];
+      priorityOpportunities: string[];
+      insufficientEvidence: string[];
+    };
+    patterns: { detected: Array<Record<string, unknown>> };
+    recommendations: {
+      ranked: Array<{
+        id: string;
+        title: string;
+        impact: string;
+        effort: string;
+        outcome?: string;
+        firstStep?: string;
+        reasonIds?: string[];
+        successMeasures?: string[];
+        [key: string]: unknown;
+      }>;
+    };
+    roadmap: Record<string, unknown>;
+    narrative: {
+      overallPosition: string;
+      confidence: string;
+      strengths: string[];
+      opportunities: string[];
+      recommendations: string[];
+      caveat: string | null;
+    };
+  };
+  if (canonical.schemaVersion === "deliveryiq.intelligence-result/2.0.0") {
+    const recommendationById = new Map(
+      canonical.recommendations.ranked.map((item) => [String(item.id), item]),
+    );
+    const roadmapPreview = Object.fromEntries(
+      (["day30", "day60", "day90"] as const).map((horizon) => [
+        horizon,
+        ((canonical.roadmap[horizon] as Array<{ id: string }> | undefined) ?? []).map((item) => {
+          const recommendation = recommendationById.get(item.id);
+          return {
+            id: item.id,
+            title: String(recommendation?.title ?? item.id),
+            horizon: horizon === "day30" ? "30 days" : horizon === "day60" ? "60 days" : "90 days",
+            priorityLabel: "priority",
+          };
+        }),
+      ]),
+    ) as {
+      day30: Array<{ id: string; title: string; horizon: string; priorityLabel: string }>;
+      day60: Array<{ id: string; title: string; horizon: string; priorityLabel: string }>;
+      day90: Array<{ id: string; title: string; horizon: string; priorityLabel: string }>;
+    };
+    return {
+      schemaVersion: "deliveryiq.delivery-dna-overview/2.0.0" as const,
+      resultId: input.stored.id,
+      analysisRunId: input.stored.analysisRunId,
+      generatedAt: input.stored.publishedAt,
+      overall: {
+        available: canonical.overall.available,
+        displayScore: canonical.overall.displayScore,
+        band: canonical.overall.band,
+      },
+      domains: (canonical.domains ?? []).slice(0, 5).map((domain) => ({
+        id: domain.domainId,
+        available: domain.available,
+        displayScore:
+          domain.rawScore === null
+            ? null
+            : Math.round((domain.rawScore + Number.EPSILON) * 10) / 10,
+        band: domain.band,
+        availableCapabilityCount: domain.availableCount,
+      })),
+      capabilities: canonical.capabilities.slice(0, 15).map((capability) => ({
+        id: capability.id,
+        label: capability.label,
+        domainId: capability.domainId,
+        order: capability.order,
+        available: capability.score.available,
+        displayScore: capability.score.displayScore,
+        band: capability.score.band,
+        eligibleAnswerCount: capability.score.eligibleQuestionCount,
+        totalQuestionCount: 3,
+        confidenceContribution: capability.confidenceContribution,
+        state: capability.score.available ? "available" : "insufficient_evidence",
+        limitation: capability.score.available
+          ? null
+          : "Insufficient eligible evidence for this capability.",
+      })),
+      confidence: {
+        displayIndex: canonical.confidence.result.displayIndex,
+        band: canonical.confidence.result.band,
+        limitations: canonical.confidence.result.limitations,
+        caveat:
+          "Confidence describes evidential support, not correctness, independent verification or certainty.",
+      },
+      findings: {
+        strengths: canonical.findings.strengths.slice(0, 5),
+        priorityOpportunities: canonical.findings.priorityOpportunities.slice(0, 5),
+        insufficientEvidence: canonical.findings.insufficientEvidence,
+      },
+      patterns: canonical.patterns.detected.slice(0, 5),
+      recommendations: canonical.recommendations.ranked.slice(0, 3).map((item) => ({
+        ...item,
+        priorityLabel: "priority",
+        safeReason: Array.isArray(item.reasonIds)
+          ? `Prioritised from ${item.reasonIds.join(", ")}.`
+          : "Prioritised from the recorded Delivery DNA evidence.",
+        expectedOutcome: item.outcome,
+        practicalFirstStep: item.firstStep,
+      })),
+      roadmapDirection: canonical.roadmap,
+      roadmapPreview,
+      industryContext: (canonical.industryContext ?? []).slice(0, 3).map((raw) => ({
+        id: String(raw.evidenceId),
+        evidenceId: String(raw.evidenceId),
+        evidenceVersion: String(raw.evidenceVersion),
+        approvedCustomerSafeWording: String(raw.approvedCustomerWording),
+        publisher: String(raw.sourcePublisher),
+        sourceTitle: String(raw.sourceTitle),
+        evidenceYear: Number(raw.evidenceYear),
+        scopeOrMethodCaveat: String(raw.scopeCaveat),
+        notCustomerPredictionCaveat: String(raw.mandatoryDisclosure),
+        originalSourceReference: String(raw.originalSourceReference),
+      })),
+      explainability: canonical.narrative,
+      executiveSummary: canonical.narrative,
+      overviewAccess: {
+        access: input.access.access,
+        productId: "delivery-dna-overview" as const,
+        accessKey: "delivery_dna_overview" as const,
+        accessVersion: "2.0.0" as const,
+      },
+      downloadableReport: {
+        available: true as const,
+        sectionCount: 7 as const,
+        href: `/api/delivery-dna-overviews/${input.stored.analysisRunId}/report.pdf`,
+        label: "Download my Delivery DNA Overview",
+      },
+      action: {
+        available: false as const,
+        message:
+          "Decision tracking, assigned actions and outcome measurement are not included in this Overview.",
+      },
+    };
+  }
   const result = projectFreeWorkspaceResult(input.stored, input.portfolio);
   const relevantCapabilityIds = [
     ...result.findings.strengths,
