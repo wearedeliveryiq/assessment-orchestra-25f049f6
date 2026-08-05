@@ -106,10 +106,10 @@ export function SnapshotRadar({ profile }: { profile: SnapshotV2DomainProfile[] 
             >
               {axis.axisNumber}
             </span>
-            <span>
+            <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-[#F8FAFC]">{axis.domainLabel}</span>
-              <span className="mt-0.5 block text-xs capitalize text-[#CBD5E1]">
-                {axis.level ?? "N/A"}
+              <span className="mt-2 inline-flex rounded-full border border-[#60A5FA]/45 bg-[#2563EB]/20 px-2.5 py-1 text-xs font-semibold text-[#F8FAFC]">
+                {axis.level ? axis.level[0].toUpperCase() + axis.level.slice(1) : "Not applicable"}
               </span>
             </span>
           </li>

@@ -1,6 +1,7 @@
 import { buildPdf, PdfPage, wrapText } from "@/lib/reports/pdf.server";
 
 import { getSnapshot } from "./snapshot.server";
+import { deliveryDnaV2Catalogue } from "./catalogue-v2";
 import { deliveryDnaSnapshotV2Configuration } from "./snapshot-v2";
 
 const PAGE = { width: 595.28, height: 841.89 };
@@ -54,6 +55,15 @@ export function renderDeliveryDnaSnapshotPdf(snapshot: SnapshotProjection): Uint
   cover.text(snapshot.scopeDisplayName, MARGIN, 616, 14, "regular", "C7D2E1");
   cover.text("Your indicative delivery maturity", MARGIN, 505, 12, "regular", "C7D2E1");
   cover.text(level, MARGIN, 448, 42, "bold", COLOURS.white);
+  cover.text("What this means", MARGIN, 390, 13, "bold", COLOURS.teal);
+  const interpretation =
+    deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations[
+      result.indicativeMaturityLevel
+    ];
+  const interpretationLines = wrapText(interpretation, 9, "regular", PAGE.width - MARGIN * 2);
+  interpretationLines
+    .slice(0, 9)
+    .forEach((line, index) => cover.text(line, MARGIN, 366 - index * 14, 9, "regular", "C7D2E1"));
   cover.text("Private · Indicative result", MARGIN, 64, 8, "regular", "A7B5C8");
 
   const profile = new PdfPage();
@@ -76,11 +86,16 @@ export function renderDeliveryDnaSnapshotPdf(snapshot: SnapshotProjection): Uint
   footer(profile, 1);
 
   const signals = new PdfPage();
-  title(signals, "What this suggests", "Signals to carry forward");
+  title(signals, "What this suggests", "Your directional signals");
   y = 700;
   if (result.positiveSignals.length) {
-    signals.text("Positive signals", MARGIN, y, 14, "bold", COLOURS.teal);
-    y -= 30;
+    signals.text("Areas of Strength", MARGIN, y, 14, "bold", COLOURS.teal);
+    y = paragraph(
+      signals,
+      deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.areasOfStrength.helperText,
+      y - 24,
+    );
+    y -= 12;
     for (const item of result.positiveSignals) y = paragraph(signals, `• ${item.text}`, y) - 8;
     y -= 14;
   }
@@ -94,11 +109,8 @@ export function renderDeliveryDnaSnapshotPdf(snapshot: SnapshotProjection): Uint
     y -= 14;
     signals.text("Industry context", MARGIN, y, 13, "bold", COLOURS.ink);
     y = paragraph(signals, item.approvedCustomerWording, y - 26);
-    y = paragraph(
-      signals,
-      `Source: ${item.sourcePublisher}, ${item.sourceTitle}, ${item.evidenceYear}. ${item.scopeCaveat} ${item.mandatoryDisclosure}`,
-      y - 8,
-    );
+    y = paragraph(signals, item.mandatoryDisclosure, y - 8);
+    y = paragraph(signals, item.sourceNote, y - 8);
   }
   footer(signals, 2);
 

@@ -1,11 +1,25 @@
 import rawEvidence from "../../../docs/01-product/delivery-intelligence/configuration/DIQ-204A Delivery Evidence Catalogue.json";
 
 const MANDATORY_DISCLOSURE =
-  "General industry context; not a benchmark or comparison with your organisation.";
+  "Industry research only — not a benchmark or a comparison with your organisation.";
 
 type ContextSurface = "snapshot_context" | "overview_context" | "report_context";
 
-type ContextItem = (typeof rawEvidence.evidenceItems)[number];
+type ContextItem = {
+  id: string;
+  version: string;
+  sourceId: string;
+  status: string;
+  approvedCustomerWording: string;
+  permittedUses: string[];
+  scoringEffect: string;
+  reviewBy: string;
+  domainIds?: string[];
+  capabilityIds?: string[];
+  mappingPriority?: number;
+  customerSourceNote?: string;
+  snapshotDomainPriorities?: Record<string, number>;
+};
 type ContextProjection = {
   evidenceId: string;
   evidenceVersion: string;
@@ -13,6 +27,7 @@ type ContextProjection = {
   footnoteMarker: string;
   sourcePublisher: string;
   sourceTitle: string;
+  sourceNote: string;
   originalSourceReference: string;
   evidenceYear: number;
   scopeCaveat: string;
@@ -21,6 +36,7 @@ type ContextProjection = {
 };
 
 const sourceById = new Map(rawEvidence.sources.map((source) => [source.id, source]));
+const contextItems = rawEvidence.evidenceItems as unknown as ContextItem[];
 
 export function deliveryDnaContextEligible(
   item: ContextItem,
@@ -45,6 +61,9 @@ function project(item: ContextItem, index: number, reason: string): ContextProje
     footnoteMarker: index === 0 ? "*" : String(index + 1),
     sourcePublisher: source.publisher,
     sourceTitle: source.title,
+    sourceNote:
+      item.customerSourceNote ??
+      `* ${source.publisher}, ${source.title} ${Number(source.publishedAt.slice(0, 4))}`,
     originalSourceReference: source.url,
     evidenceYear: Number(source.publishedAt.slice(0, 4)),
     scopeCaveat: source.context,
@@ -54,15 +73,19 @@ function project(item: ContextItem, index: number, reason: string): ContextProje
 }
 
 export function selectSnapshotContext(domainId: string): ContextProjection[] {
-  const selected = rawEvidence.evidenceItems
+  const selected = contextItems
     .filter(
       (item) =>
         deliveryDnaContextEligible(item, "snapshot_context") && item.domainIds?.includes(domainId),
     )
     .sort(
       (left, right) =>
-        (left.mappingPriority ?? Number.MAX_SAFE_INTEGER) -
-          (right.mappingPriority ?? Number.MAX_SAFE_INTEGER) || left.id.localeCompare(right.id),
+        (left.snapshotDomainPriorities?.[domainId] ??
+          left.mappingPriority ??
+          Number.MAX_SAFE_INTEGER) -
+          (right.snapshotDomainPriorities?.[domainId] ??
+            right.mappingPriority ??
+            Number.MAX_SAFE_INTEGER) || left.id.localeCompare(right.id),
     )
     .slice(0, 1);
   return selected.map((item, index) => project(item, index, `mapped_to_domain:${domainId}`));
@@ -74,7 +97,7 @@ export function selectOverviewContext(input: {
 }): ContextProjection[] {
   const domainSet = new Set(input.domainIds);
   const capabilitySet = new Set(input.capabilityIds);
-  const selected = rawEvidence.evidenceItems
+  const selected = contextItems
     .filter(
       (item) =>
         deliveryDnaContextEligible(item, "overview_context") &&

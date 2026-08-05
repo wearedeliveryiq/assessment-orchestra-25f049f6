@@ -224,6 +224,17 @@ const recommendationProductHandoffHardening = readFileSync(
   ),
   "utf8",
 );
+const deliveryDna22CutoverMigration = readFileSync(
+  new URL("../supabase/migrations/20260805040000_delivery_dna_2_2_cutover.sql", import.meta.url),
+  "utf8",
+);
+const deliveryDna22HardeningMigration = readFileSync(
+  new URL(
+    "../supabase/migrations/20260805041000_harden_delivery_dna_2_2_permissions.sql",
+    import.meta.url,
+  ),
+  "utf8",
+);
 
 describe("Sprint 03 migration security", () => {
   it("binds event reads to active tenant membership and workspace scope", () => {
@@ -645,6 +656,42 @@ describe("Sprint 03 migration security", () => {
   });
 });
 
+describe("Delivery DNA 2.2 cutover security", () => {
+  it("keeps current collection server-only and superseded entry points disabled", () => {
+    for (const functionName of [
+      "create_delivery_dna_snapshot_v22(text, text, text, text)",
+      "link_delivery_dna_snapshot_v22(text, uuid, uuid, uuid, text, jsonb, boolean)",
+    ]) {
+      expect(deliveryDna22CutoverMigration).toContain(`public.${functionName}`);
+      expect(deliveryDna22HardeningMigration).toContain(`public.${functionName}`);
+    }
+
+    expect(deliveryDna22CutoverMigration).toContain("REVOKE ALL ON FUNCTION");
+    expect(deliveryDna22HardeningMigration).toContain("FROM PUBLIC, anon, authenticated");
+    expect(deliveryDna22HardeningMigration).toContain("TO service_role");
+    expect(deliveryDna22HardeningMigration).toContain(
+      "public.create_delivery_dna_snapshot_v21(text, text, text, text)",
+    );
+    expect(deliveryDna22HardeningMigration).toContain(
+      "public.link_delivery_dna_snapshot_v21(text, uuid, uuid, uuid, text, jsonb, boolean)",
+    );
+    expect(deliveryDna22HardeningMigration).toContain(
+      "FROM PUBLIC, anon, authenticated, service_role",
+    );
+  });
+
+  it("contains no customer, payment, grant, analysis or historical response data mutation", () => {
+    for (const sql of [deliveryDna22CutoverMigration, deliveryDna22HardeningMigration]) {
+      expect(sql).not.toMatch(/UPDATE\s+public\.delivery_dna_snapshot_responses/i);
+      expect(sql).not.toMatch(
+        /UPDATE\s+public\.delivery_dna_overview_(checkouts|payment_events|access_grants)/i,
+      );
+      expect(sql).not.toMatch(/UPDATE\s+public\.assessment_analysis_runs/i);
+      expect(sql).not.toMatch(/INSERT\s+INTO\s+public\.delivery_dna_overview_access_grants/i);
+    }
+  });
+});
+
 describe("S4-011 product hand-off migration security", () => {
   it("stores immutable consent and consumption audit without an activation side effect", () => {
     expect(recommendationProductHandoffMigration).toContain(
@@ -773,5 +820,38 @@ describe("Delivery DNA 2.1.1 Snapshot presentation security", () => {
     expect(presentation).toContain("FROM PUBLIC, anon, authenticated");
     expect(presentation).toContain("TO service_role");
     expect(presentation).not.toContain("CREATE POLICY");
+  });
+});
+
+describe("Delivery DNA 2.2 cutover security", () => {
+  const cutover = readFileSync(
+    new URL("../supabase/migrations/20260805040000_delivery_dna_2_2_cutover.sql", import.meta.url),
+    "utf8",
+  );
+
+  it("pins only new collection and linking to 2.2 without translating historical data", () => {
+    expect(cutover).toContain("p_token_hash, '2.2.0', '2.2.0', p_scope_type");
+    expect(cutover).toContain("v_snapshot.configuration_version <> '2.2.0'");
+    expect(cutover).toContain("'delivery-dna-snapshot', '2.2.0', responded_at");
+    expect(cutover).toContain("configurationSetId}' <> 'delivery-dna-product-config-2.2.0'");
+    expect(cutover).not.toMatch(/UPDATE public\.assessment_responses/i);
+    expect(cutover).not.toMatch(/INSERT INTO public\.delivery_dna_overview_access_grants/i);
+    expect(cutover).not.toMatch(/INSERT INTO public\.assessment_analysis_runs/i);
+  });
+
+  it("keeps tenant validation and service-role-only access while disabling superseded entry points", () => {
+    expect(cutover).toContain("SECURITY DEFINER SET search_path = public, pg_temp");
+    expect(cutover).toContain("membership.user_id = p_user_id");
+    expect(cutover).toContain("workspace.organisation_id = p_organisation_id");
+    expect(cutover).toContain("FOR UPDATE");
+    expect(cutover).toContain("public.create_delivery_dna_snapshot_v22(text, text, text, text)");
+    expect(cutover).toContain(
+      "public.link_delivery_dna_snapshot_v22(text, uuid, uuid, uuid, text, jsonb, boolean)",
+    );
+    expect(cutover).toContain("FROM PUBLIC, anon, authenticated");
+    expect(cutover).toContain("TO service_role");
+    expect(cutover).toContain("public.create_delivery_dna_snapshot_v21(text, text, text, text)");
+    expect(cutover).toContain("FROM PUBLIC, anon, authenticated, service_role");
+    expect(cutover).not.toContain("CREATE POLICY");
   });
 });

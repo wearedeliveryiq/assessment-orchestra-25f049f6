@@ -240,3 +240,31 @@ PR #50 merged as `e7ad4c764873a8eb876caaed5356239d195e00f5`. Lovable applied the
 Historical completed session `6af3c925-520a-43a2-9845-97934df00835` remains configuration/presentation `2.1.0`, completed, with its 15 responses and fingerprint unchanged. Its five domain means are all 3.0. The raw access token cannot be recovered from the retained SHA-256 hash, so verification did not mutate the historical row. A separate anonymous verification session replayed the identical answer set through the existing API and pinned configuration `2.1.0` / presentation `2.1.1`; the production build returned `Established`, empty positive and area lists, and omitted both sections at 390px and 1280px while retaining the five accessible domain labels, sourced Wellingtone context, caveat and Save CTA. Fresh live hosted start-page checks at both widths confirmed the Lovable badge remains absent and there is no horizontal overflow. The isolated anonymous verification Snapshot is the only new test record; no customer row was updated or deleted and no assessment, analysis, checkout, payment or grant was created. The Product Owner independently rechecked the live result and accepted the correction on 5 August 2026; the free Delivery DNA 2.1 Snapshot is authorised for customer promotion. Paid checkout remains fail-closed until its separately recorded activation evidence is available.
 
 Provider activation and the purchase-to-result smoke remain legitimately unavailable; checkout continues to fail closed and no customer or payment evidence is manufactured.
+
+## Delivery DNA 2.2 language and Snapshot experience — 5 August 2026
+
+### Customer value delivered
+
+Delivery DNA 2.2 keeps the approved five-domain, 15-capability model and improves the public Snapshot where customer language, answer-card readability, preparation feedback, interpretation and conversion clarity mattered. The question journey uses the exact DIQ-100E replacements, removes internal first-person and central-enablement language, and presents the four anchored maturity options as even cards with a distinct reason-required Not applicable action.
+
+The preparation screen performs the real result operation behind a visible DeliveryIQ ribbon and five-domain flow, showing one truthful step at a time, completed states, the exact delayed heading and a non-animated reduced-motion alternative. The result keeps the maturity label and exact expanded interpretation together, then shows the caveat and compact Save action before the accessible profile. Domain levels are visually and textually prominent, relative positives are labelled Areas of Strength with the exact helper, industry research is separately marked as non-benchmark context, and the full Saved Snapshot panel repeats the governed action.
+
+### Versioning, evidence and safety
+
+- DIQ-100A v2.2.0 and DIQ-100B v2.2.0 are the minimum machine-readable successors issued under DIQ-100E. The catalogue pins configuration, question set and presentation policy 2.2.0 and retains the unchanged scoring, weight, threshold, selection, entitlement, price and payment rules.
+- DIQ-204 v1.4 and DIQ-204A v1.3.0 add only the four approved contextual items, exact customer wording/source notes and deterministic per-domain selection priority. Every item remains visibly sourced and calculation-neutral.
+- The additive cutover migration creates service-role-only 2.2 create/link routines and expands only governed version/provenance constraints. It contains no seed, customer migration, translation, recalculation, analysis, checkout, payment or grant data.
+- Historical 1.x, 2.0 and 2.1 sessions, responses, fingerprints and provenance remain unchanged. Superseded collection entry points lose service-role execution at cutover; their immutable records remain preserved.
+- Anonymous privacy, 24-hour retention, rate limiting, verified registration, explicit consent, tenant/workspace checks, idempotent linking and fail-closed commerce are unchanged.
+
+### Verification actually run
+
+- All 61 DIQ-100B v2.2.0 fixtures: pass by exact fixture ID, including all language, answer layout, active/reduced-motion preparation, hierarchy, clipping/zoom contract, domain accessibility, Areas of Strength, evidence mapping, CTA and version-cutover cases.
+- All 53 DIQ-203B fixtures: pass unchanged.
+- Targeted Delivery DNA and migration suite: 64/64 tests pass.
+- Complete Vitest regression: 642/642 tests across 48 files pass.
+- Type checking: pass.
+
+### Remaining release condition
+
+Stripe activation remains intentionally unavailable and no payment evidence was manufactured. The 2.2 free Snapshot can be merged, migrated and deployed, but active customer promotion remains paused until a fresh hosted 2.2 completion passes Product Owner visual acceptance at the required responsive sizes and text zoom. Final deployment and hosted identifiers are reported with the release hand-off rather than invented in advance.

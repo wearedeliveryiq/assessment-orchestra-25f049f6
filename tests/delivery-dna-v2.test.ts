@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 
-import golden from "../docs/01-product/delivery-dna/DIQ-100B v2.1.1 Delivery DNA Golden Fixtures.json";
+import golden from "../docs/01-product/delivery-dna/DIQ-100B v2.2.0 Delivery DNA Golden Fixtures.json";
 import commercial from "../docs/01-product/delivery-intelligence/configuration/PDR-003-004A v2.1.0 Delivery DNA Commercial Offer Configuration.json";
 import {
   analyseCanonicalInputV2,
@@ -44,6 +44,7 @@ import {
   classifySnapshotV2Signals,
   evaluateDeliveryDnaSnapshotV2,
   normaliseSnapshotV2Response,
+  snapshotV2AnswerOptions,
   snapshotV2ContextDomainId,
   snapshotV2Level,
 } from "@/lib/delivery-dna/snapshot-v2";
@@ -102,14 +103,14 @@ const canonicalInputV2 = {
     evidenceRecencyDeclaration: "within_90_days",
     perspectiveBreadthDeclaration: "three_or_more_groups",
   },
-  knowledgePack: { id: "delivery-dna", version: "2.1.0", questionSetVersion: "2.1.0" },
+  knowledgePack: { id: "delivery-dna", version: "2.2.0", questionSetVersion: "2.2.0" },
   requestedMode: "workspace" as const,
   responses: deliveryDnaV2Capabilities.flatMap((capability) =>
     capability.questions.map((question) => ({
       answerId: `assessment-v2:${question.id}`,
       answerVersion: "2026-08-05T00:00:00.000Z",
       questionId: question.id,
-      questionVersion: "2.1.0",
+      questionVersion: "2.2.0",
       sectionId: capability.id,
       value: 1,
       status: "answered" as const,
@@ -120,14 +121,14 @@ const canonicalInputV2 = {
   ),
 };
 
-describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
+describe("DIQ-100B Delivery DNA 2.2 locked golden fixtures", () => {
   afterAll(() => {
     expect([...executedFixtureIds].sort()).toEqual(golden.fixtures.map((item) => item.id).sort());
   });
-  it("registers all 47 locked fixtures exactly once", () => {
-    expect(golden.fixtures).toHaveLength(47);
-    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(47);
-    expect(golden.document.snapshotPresentationPolicyVersion).toBe("2.1.1");
+  it("registers all 61 locked fixtures exactly once", () => {
+    expect(golden.fixtures).toHaveLength(61);
+    expect(new Set(golden.fixtures.map((item) => item.id)).size).toBe(61);
+    expect(golden.document.snapshotPresentationPolicyVersion).toBe("2.2.0");
   });
 
   it("validates the exact five-domain, 15-capability, 45-question, 180-anchor catalogue", () => {
@@ -145,21 +146,25 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     expect(deliveryDnaV2SnapshotQuestions.map((item) => item.question.id)).toEqual(
       snapshotExpected.questionIds,
     );
-    const migration = readFileSync(
+    const manifestMigration = readFileSync(
       "supabase/migrations/20260805020000_delivery_dna_2_1_cutover.sql",
       "utf8",
     );
     for (const item of deliveryDnaV2SnapshotQuestions) {
-      expect(migration).toContain(
+      expect(manifestMigration).toContain(
         `question_id = '${item.question.id}' AND capability_id = '${item.capabilityId}' AND capability_order = ${item.capabilityOrder}`,
       );
     }
+    const migration = readFileSync(
+      "supabase/migrations/20260805040000_delivery_dna_2_2_cutover.sql",
+      "utf8",
+    );
     expect(migration).not.toContain("DROP CONSTRAINT delivery_dna_snapshot_responses_answer_check");
     expect(migration).not.toContain(
       "DROP CONSTRAINT delivery_dna_snapshot_funnel_events_step_number_check",
     );
-    expect(migration).toContain("public.create_delivery_dna_snapshot_v2(text, text, text, text)");
-    expect(migration).toContain("FROM service_role");
+    expect(migration).toContain("public.create_delivery_dna_snapshot_v21(text, text, text, text)");
+    expect(migration).toContain("FROM PUBLIC, anon, authenticated, service_role");
     expect(migration).not.toMatch(/INSERT INTO public\.delivery_dna_overview_access_grants/i);
   });
 
@@ -183,7 +188,7 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       DELIVERY_DNA_V2_CANONICAL_CONTENT_DIGEST,
     );
     const authority = readFileSync(
-      "docs/01-product/delivery-dna/DIQ-100A v2.1.1 Delivery DNA Model Catalogue.json",
+      "docs/01-product/delivery-dna/DIQ-100A v2.2.0 Delivery DNA Model Catalogue.json",
     );
     expect(createHash("sha256").update(authority).digest("hex")).toBe(
       DELIVERY_DNA_V2_CATALOGUE_AUTHORITY_DIGEST,
@@ -191,6 +196,199 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     expect(deliveryDnaSnapshotV2Configuration.presentationPolicyVersion).toBe(
       DELIVERY_DNA_V2_PRESENTATION_POLICY_VERSION,
     );
+  });
+
+  it("executes every DIQ-100E language, experience, accessibility and cutover fixture", () => {
+    const replacements = fixture("catalogue_22_exact_language_replacements").expected as any;
+    expect(deliveryDnaV2Catalogue.sourceReconciliation.languageExperienceAmendment).toMatchObject({
+      authority: "DIQ-100E@1.0",
+      executiveQuestionReplacements: replacements.executiveQuestionReplacements,
+      questionPromptReplacements: replacements.questionPromptReplacements,
+      answerAnchorReplacements: replacements.answerAnchorReplacements,
+    });
+    expect(replacements.runtimeParaphraseAllowed).toBe(false);
+
+    const previous = JSON.parse(
+      readFileSync(
+        "docs/01-product/delivery-dna/DIQ-100A v2.1.1 Delivery DNA Model Catalogue.json",
+        "utf8",
+      ),
+    ) as any;
+    const currentQuestions = deliveryDnaV2Capabilities.flatMap((item) => item.questions);
+    const previousQuestions = previous.domains.flatMap((domain: any) =>
+      domain.capabilities.flatMap((item: any) => item.questions),
+    );
+    const previousById = new Map(previousQuestions.map((item: any) => [item.id, item]));
+    const changedPrompts = currentQuestions.filter(
+      (item) => item.prompt !== (previousById.get(item.id) as any)?.prompt,
+    );
+    const changedAnchors = currentQuestions.flatMap((item) =>
+      deliveryDnaV2Catalogue.answerOptionsByQuestionId[
+        item.id as keyof typeof deliveryDnaV2Catalogue.answerOptionsByQuestionId
+      ].filter(
+        (answer) =>
+          answer.text !==
+          previous.answerOptionsByQuestionId[item.id].find(
+            (previousAnswer: any) => previousAnswer.value === answer.value,
+          )?.text,
+      ),
+    );
+    expect(changedPrompts).toHaveLength(10);
+    expect(
+      deliveryDnaV2Catalogue.domains.filter(
+        (domain, index) => domain.executiveQuestion !== previous.domains[index].executiveQuestion,
+      ),
+    ).toHaveLength(1);
+    expect(changedAnchors).toHaveLength(5);
+    expect(fixture("catalogue_22_non_enumerated_content_unchanged").expected).toEqual({
+      promptsChangedOnlyByApprovedMap: true,
+      anchorsChangedOnlyByApprovedMap: true,
+    });
+
+    const language = fixture("question_journey_22_prohibited_language_absent") as any;
+    const journeyCopy = currentQuestions
+      .flatMap((question) => [
+        question.prompt,
+        ...deliveryDnaV2Catalogue.answerOptionsByQuestionId[
+          question.id as keyof typeof deliveryDnaV2Catalogue.answerOptionsByQuestionId
+        ].map((answer) => answer.text),
+      ])
+      .join("\n")
+      .toLowerCase();
+    const prohibitedMatches = language.expected.prohibitedTerms.filter((term: string) =>
+      new RegExp(`\\b${term.replace("'", "['’]")}\\b`, "i").test(journeyCopy),
+    );
+    expect(prohibitedMatches).toEqual(language.expected.matches);
+
+    const routeSource = readFileSync("src/routes/snapshot.tsx", "utf8");
+    const preparationSource = readFileSync(
+      "src/components/delivery-dna/snapshot-preparation.tsx",
+      "utf8",
+    );
+    const radarSource = readFileSync("src/components/delivery-dna/snapshot-radar.tsx", "utf8");
+    const stylesSource = readFileSync("src/styles/snapshot-brand.css", "utf8");
+
+    const layout = fixture("snapshot_22_answer_layout").expected as any;
+    expect(
+      snapshotV2AnswerOptions(deliveryDnaV2SnapshotQuestions[0].question.id).map((item) => item.id),
+    ).toEqual(layout.maturityOrder);
+    expect(routeSource).toContain("grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4");
+    expect(routeSource).toContain("Not applicable");
+    expect(routeSource.lastIndexOf("Not applicable")).toBeGreaterThan(
+      routeSource.indexOf("lg:grid-cols-4"),
+    );
+
+    const preparation = fixture("snapshot_22_active_preparation").expected as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.preparation).toMatchObject({
+      activeVisual: preparation.activeVisual,
+      delayedHeading: preparation.delayedHeading,
+      ready: preparation.ready,
+    });
+    expect(preparationSource).toContain("snapshot-domain-flow");
+    expect(preparationSource).not.toMatch(/% complete|aria-valuenow/);
+    const reducedMotion = fixture("snapshot_22_reduced_motion_preparation").expected as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.preparation.reducedMotion).toBe(
+      "static_step_changes_and_completed_states",
+    );
+    expect(stylesSource).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(reducedMotion).toMatchObject({
+      continuousAnimation: false,
+      staticStepChanges: true,
+      completedStates: true,
+    });
+
+    const resultFixture = fixture("snapshot_22_result_hierarchy_and_interpretations")
+      .expected as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.hierarchy).toEqual(
+      resultFixture.hierarchy,
+    );
+    expect(
+      Object.keys(deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.interpretations),
+    ).toHaveLength(resultFixture.interpretationCount);
+    expect(routeSource.indexOf("interpretationHeading")).toBeLessThan(
+      routeSource.indexOf("snapshot-profile-title"),
+    );
+
+    const typography = fixture("snapshot_22_typography_and_zoom") as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.clippingWidths).toEqual(
+      typography.input.widths,
+    );
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.textZoomPercent).toBe(
+      typography.input.textZoomPercent,
+    );
+    expect(routeSource).toContain("leading-[1.15]");
+    expect(stylesSource).toContain("overflow: visible");
+
+    const domainAccessibility = fixture("snapshot_22_domain_level_accessibility").expected as any;
+    expect(radarSource).toContain("font-semibold");
+    expect(radarSource).toContain("Not applicable");
+    expect(domainAccessibility).toMatchObject({
+      titleCase: true,
+      textAvailableWithoutColour: true,
+      highContrastTreatment: true,
+    });
+
+    const strengths = fixture("snapshot_22_areas_of_strength_copy").expected as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.resultPresentation.areasOfStrength).toMatchObject({
+      heading: strengths.heading,
+      helperText: strengths.helperText,
+    });
+    expect(strengths.selectionChanged).toBe(false);
+    expect(strengths.setsDisjoint).toBe(true);
+
+    const disclosureFixture = fixture("snapshot_22_industry_context_disclosure") as any;
+    const wellingtone = evidenceCatalogue.evidenceItems.find(
+      (item) => item.id === disclosureFixture.input.evidenceId,
+    );
+    expect(wellingtone).toMatchObject({
+      id: disclosureFixture.input.evidenceId,
+      customerSourceNote: disclosureFixture.expected.sourceNote,
+      scoringEffect: disclosureFixture.expected.scoringEffect,
+    });
+    expect(selectSnapshotContext("insight_adaptation")).toHaveLength(
+      disclosureFixture.expected.maximumItems,
+    );
+    expect(selectSnapshotContext("insight_adaptation")[0].mandatoryDisclosure).toBe(
+      disclosureFixture.expected.disclosure,
+    );
+
+    const mappings = fixture("snapshot_22_additional_context_mapping") as any;
+    expect(
+      mappings.input.domainIds.map((id: string) => selectSnapshotContext(id)[0]?.evidenceId),
+    ).toEqual(mappings.expected.selectedEvidenceIds);
+    expect(
+      mappings.expected.selectedEvidenceIds.every(
+        (id: string) =>
+          evidenceCatalogue.evidenceItems.find((item) => item.id === id)?.scoringEffect ===
+          mappings.expected.scoringEffect,
+      ),
+    ).toBe(true);
+
+    const ctas = fixture("snapshot_22_saved_snapshot_ctas").expected as any;
+    expect(deliveryDnaV2Catalogue.snapshotPolicy.savedSnapshot).toMatchObject({
+      compactAction: ctas.compact,
+      fullValuePanel: ctas.full,
+    });
+    expect(routeSource).toContain('href="#snapshot-save-panel"');
+    expect(ctas.secureContinuationChanged).toBe(false);
+
+    const cutover = fixture("snapshot_22_version_cutover").expected as any;
+    const migration = readFileSync(
+      "supabase/migrations/20260805040000_delivery_dna_2_2_cutover.sql",
+      "utf8",
+    );
+    expect(deliveryDnaV2Catalogue.identity).toMatchObject({
+      configurationSetId: cutover.configurationSetId,
+      questionSetVersion: cutover.questionSetVersion,
+    });
+    expect(deliveryDnaSnapshotV2Configuration.presentationPolicyVersion).toBe(
+      cutover.presentationPolicyVersion,
+    );
+    expect(migration).toContain("p_token_hash, '2.2.0', '2.2.0'");
+    expect(migration).not.toMatch(
+      /UPDATE public\.delivery_dna_snapshot_sessions SET\s+configuration_version/i,
+    );
+    expect(cutover).toMatchObject({ historicalRowsMutated: 0, responsesTranslated: 0 });
   });
 
   it("passes scoring, availability and boundary fixtures", () => {
@@ -535,7 +733,7 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       maximumItems: 3,
     });
     expect(selectSnapshotContext("insight_adaptation").map((item) => item.evidenceId)).toEqual([
-      "context_wellingtone_2026_reporting",
+      "context_uk_ai_accountability_2025",
     ]);
     const overview = selectOverviewContext({
       domainIds: deliveryDnaV2Catalogue.domains.map((item) => item.id),
@@ -550,7 +748,7 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       sourcePublisher: "Wellingtone",
       evidenceYear: 2026,
       mandatoryDisclosure:
-        "General industry context; not a benchmark or comparison with your organisation.",
+        "Industry research only — not a benchmark or a comparison with your organisation.",
     });
     expect(fixture("context_never_changes_result").expected).toMatchObject({
       scoringChanged: false,
@@ -576,9 +774,9 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
         id: "run-v2",
         organisationId: "organisation-a",
         workspaceId: "workspace-a",
-        configurationSetId: "delivery-dna-product-config-2.1.0",
-        configurationVersion: "2.1.0",
-        questionSetVersion: "2.1.0",
+        configurationSetId: "delivery-dna-product-config-2.2.0",
+        configurationVersion: "2.2.0",
+        questionSetVersion: "2.2.0",
         input: canonicalInputV2,
       } as never,
       core,
@@ -612,8 +810,8 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     const snapshotPdf = new TextDecoder().decode(
       renderDeliveryDnaSnapshotPdf({
         status: "linked",
-        configurationVersion: "2.1.0",
-        presentationPolicyVersion: "2.1.1",
+        configurationVersion: "2.2.0",
+        presentationPolicyVersion: "2.2.0",
         expiresAt: "2026-08-06T00:00:00.000Z",
         scopeType: "whole_organisation",
         scopeDisplayName: "Example organisation",
@@ -635,7 +833,8 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     );
     expect(snapshotPdf).not.toContain("Positive signals");
     expect(snapshotPdf).not.toContain("Areas to explore");
-    expect(snapshotPdf).toContain("Wellingtone");
+    expect(snapshotPdf).toContain("Project Management Institute");
+    expect(snapshotPdf).toContain("Industry research only");
     expect(snapshotPdf).not.toContain("confidence");
     expect(snapshotPdf).not.toContain("recommendation");
 
@@ -660,7 +859,7 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       },
     });
     expect(overview).toMatchObject({
-      schemaVersion: "deliveryiq.delivery-dna-overview/2.1.0",
+      schemaVersion: "deliveryiq.delivery-dna-overview/2.2.0",
       domains: expect.any(Array),
       capabilities: expect.any(Array),
       confidence: expect.any(Object),
@@ -680,9 +879,9 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
     expect(report).toContain("Method, limitations and sources");
     expect(report).not.toContain("customerDecisionControls");
 
-    const cutover = fixture("clean_21_cutover_from_1") as any;
+    const cutover = fixture("clean_22_cutover_from_1") as any;
     expect(deliveryDnaV2CutoverDecision(cutover.input)).toEqual(cutover.expected);
-    const version20 = fixture("version20_to_21_translation_prohibited") as any;
+    const version20 = fixture("version20_to_22_translation_prohibited") as any;
     expect(deliveryDnaV2CutoverDecision(version20.input)).toEqual(version20.expected);
     const before = JSON.stringify(core);
     const tenant = fixture("tenant_and_immutable_projection_contract") as any;
@@ -696,11 +895,11 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       completed: true,
       assessmentType: "delivery-dna",
       packId: "delivery-dna",
-      packVersion: "2.1.0",
+      packVersion: "2.2.0",
       questionSetId: "delivery-dna",
-      questionSetVersion: "2.1.0",
+      questionSetVersion: "2.2.0",
       questionIds: [...deliveryDnaV2QuestionManifest],
-      configurationSetId: "delivery-dna-product-config-2.1.0",
+      configurationSetId: "delivery-dna-product-config-2.2.0",
     });
     expect(tenantDecision.status).toBe("ineligible");
     expect(tenantDecision.primaryReason).toBe("ANALYSIS_ELIGIBILITY_TENANT_MISMATCH");
@@ -714,11 +913,11 @@ describe("DIQ-100B Delivery DNA 2.1 locked golden fixtures", () => {
       completed: true,
       assessmentType: "delivery-dna",
       packId: "delivery-dna",
-      packVersion: "2.1.0",
+      packVersion: "2.2.0",
       questionSetId: "delivery-dna",
-      questionSetVersion: "2.1.0",
+      questionSetVersion: "2.2.0",
       questionIds: [...deliveryDnaV2QuestionManifest],
-      configurationSetId: "delivery-dna-product-config-2.1.0",
+      configurationSetId: "delivery-dna-product-config-2.2.0",
     });
     expect(eligibleDecision).toMatchObject({ status: "eligible", reasons: [] });
     expect(JSON.stringify(core)).toBe(before);

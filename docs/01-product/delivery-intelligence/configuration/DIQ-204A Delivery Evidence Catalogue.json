@@ -1,7 +1,7 @@
 {
   "document": {
     "id": "DIQ-204A",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "status": "controlled",
     "title": "Delivery Evidence Catalogue",
     "owner": "Product Owner",
@@ -9,7 +9,9 @@
     "authorisedAt": "2026-08-05",
     "evidenceSnapshotAt": "2026-08-05",
     "parentDocumentId": "DIQ-204",
-    "nextScheduledReviewAt": "2026-11-03"
+    "nextScheduledReviewAt": "2026-11-03",
+    "supersedes": "DIQ-204A@1.2.0",
+    "amendmentAuthority": "DIQ-100E@1.0"
   },
   "policy": {
     "runtimeIngestion": "prohibited",
@@ -222,6 +224,36 @@
       "sourceType": "professional_vendor_self_selected_survey",
       "grade": "B1",
       "context": "International self-selected online survey of project professionals conducted through Q4 2025. Respondents were typically experienced and professionally qualified; the average respondent worked in a PMO in an organisation with more than 5,000 employees. The report does not provide per-question denominators and contains inconsistent organisation-count statements, so findings are directional context rather than a representative benchmark."
+    },
+    {
+      "id": "src_apm_success_conditions_2015",
+      "publisher": "Association for Project Management",
+      "title": "Conditions for Project Success",
+      "publishedAt": "2015",
+      "url": "https://www.apm.org.uk/resources/find-a-resource/conditions-for-project-success/",
+      "sourceType": "professional_body_primary_research",
+      "grade": "A2",
+      "context": "APM research into the conditions associated with project success; contextual evidence only and not a prediction for an assessed organisation."
+    },
+    {
+      "id": "src_pmi_success_value_2024",
+      "publisher": "Project Management Institute",
+      "title": "Maximizing Project Success",
+      "publishedAt": "2024",
+      "url": "https://www.pmi.org/learning/thought-leadership/project-success",
+      "sourceType": "professional_body_primary_research",
+      "grade": "A2",
+      "context": "PMI global research into definitions and drivers of project success; contextual evidence only and not a comparison with an assessed organisation."
+    },
+    {
+      "id": "src_govuk_ai_playbook_2025",
+      "publisher": "UK Government",
+      "title": "AI Playbook for the UK Government",
+      "publishedAt": "2025",
+      "url": "https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government",
+      "sourceType": "official_government_guidance",
+      "grade": "A1",
+      "context": "Official UK Government guidance for responsible public-sector AI use; contextual guidance rather than an industry benchmark."
     }
   ],
   "watchlist": [
@@ -257,8 +289,19 @@
       "claim": "Modern project management combines principles, performance domains and non-prescriptive process guidance with emphasis on value delivery, adaptability and accountability.",
       "approvedCustomerWording": "Current PMI guidance emphasises value delivery, adaptability and accountability alongside practical project-management processes.",
       "prohibitedInference": "Do not claim that PMBOK adoption guarantees success or that one lifecycle is universally superior.",
-      "capabilityIds": ["strategy_alignment", "governance", "programme_delivery", "project_delivery", "benefits", "pmo_enablement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context"],
+      "capabilityIds": [
+        "strategy_alignment",
+        "governance",
+        "programme_delivery",
+        "project_delivery",
+        "benefits",
+        "pmo_enablement"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -272,8 +315,19 @@
       "claim": "APM's current body of knowledge expands emphasis on systems thinking, leadership, sustainability, project controls, data and AI.",
       "approvedCustomerWording": "APM's current professional guidance gives greater attention to systems thinking, leadership, sustainability, project controls, data and AI.",
       "prohibitedInference": "Do not treat topic inclusion as evidence that a specific organisation is deficient.",
-      "capabilityIds": ["strategy_alignment", "governance", "planning_controls", "stakeholder_change", "reporting_insight", "continuous_improvement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "strategy_alignment",
+        "governance",
+        "planning_controls",
+        "stakeholder_change",
+        "reporting_insight",
+        "continuous_improvement"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -287,8 +341,20 @@
       "claim": "Current agile guidance supports fit-for-purpose selection across predictive, agile and hybrid lifecycles and includes product delivery, flow, psychological safety, AI-enabled work and sustainability.",
       "approvedCustomerWording": "Modern agile guidance recommends selecting and tailoring the delivery approach to the work rather than applying one method universally.",
       "prohibitedInference": "Do not state that agile, predictive or hybrid delivery is inherently superior.",
-      "capabilityIds": ["portfolio", "programme_delivery", "project_delivery", "planning_controls", "stakeholder_change", "continuous_improvement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context", "website_context"],
+      "capabilityIds": [
+        "portfolio",
+        "programme_delivery",
+        "project_delivery",
+        "planning_controls",
+        "stakeholder_change",
+        "continuous_improvement"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -302,8 +368,18 @@
       "claim": "Responsible use of AI in project work includes human review, accountable governance, data quality, risk management and ethical and legal guardrails.",
       "approvedCustomerWording": "Current PMI guidance places human oversight, accountability, data quality, risk and ethical safeguards at the centre of AI-supported project work.",
       "prohibitedInference": "Do not claim legal or regulatory compliance or infer that AI should be used on every initiative.",
-      "capabilityIds": ["governance", "risk_assurance", "reporting_insight", "continuous_improvement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context", "website_context"],
+      "capabilityIds": [
+        "governance",
+        "risk_assurance",
+        "reporting_insight",
+        "continuous_improvement"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -317,8 +393,19 @@
       "claim": "Project-management guidance can apply across organisations and predictive, incremental, iterative, adaptive and hybrid delivery approaches with focus on benefits, outcomes and oversight.",
       "approvedCustomerWording": "International guidance supports a method-neutral approach that connects delivery practices to oversight, benefits and outcomes.",
       "prohibitedInference": "Do not claim ISO certification or compliance for DeliveryIQ or a customer.",
-      "capabilityIds": ["governance", "programme_delivery", "project_delivery", "planning_controls", "benefits", "risk_assurance"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "governance",
+        "programme_delivery",
+        "project_delivery",
+        "planning_controls",
+        "benefits",
+        "risk_assurance"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -333,7 +420,11 @@
       "approvedCustomerWording": "Current international guidance extends evaluation beyond closure to actual outcomes, benefits and the effectiveness of governance and management.",
       "prohibitedInference": "Do not claim that a single review proves long-term benefits or causality.",
       "capabilityIds": ["governance", "benefits", "reporting_insight", "continuous_improvement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -347,8 +438,18 @@
       "claim": "PRINCE2 7 gives greater emphasis to people, tailoring, digital and data management, sustainability and compatibility with agile and lean approaches.",
       "approvedCustomerWording": "PRINCE2 7 reflects modern delivery through greater attention to people, tailoring, digital and data management and sustainability.",
       "prohibitedInference": "Do not claim PRINCE2 certification, compliance or universal suitability.",
-      "capabilityIds": ["governance", "project_delivery", "stakeholder_change", "reporting_insight", "continuous_improvement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "governance",
+        "project_delivery",
+        "stakeholder_change",
+        "reporting_insight",
+        "continuous_improvement"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -362,8 +463,20 @@
       "claim": "GovS 002 version 2.1 sets expectations across portfolio, programme and project governance, planning, control and solution delivery and adds stronger treatment of policy, evaluation, accountable roles, transition, use and disposal.",
       "approvedCustomerWording": "Current UK government guidance connects clear governance roles with planning, control, evaluation and the transition and use of delivered solutions.",
       "prohibitedInference": "Do not present government requirements as mandatory for private-sector customers.",
-      "capabilityIds": ["governance", "sponsorship", "portfolio", "programme_delivery", "project_delivery", "planning_controls", "benefits"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context"],
+      "capabilityIds": [
+        "governance",
+        "sponsorship",
+        "portfolio",
+        "programme_delivery",
+        "project_delivery",
+        "planning_controls",
+        "benefits"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -375,11 +488,19 @@
       "sourceId": "src_pmi_pulse_2018",
       "status": "approved_for_customer_context",
       "claim": "PMI reported that 52% of projects completed in the preceding 12 months experienced scope creep or uncontrolled scope change, compared with 43% five years earlier.",
-      "values": {"observedPercent": 52, "historicalComparatorPercent": 43},
+      "values": {
+        "observedPercent": 52,
+        "historicalComparatorPercent": 43
+      },
       "approvedCustomerWording": "In PMI's 2018 global research, 52% of completed projects experienced scope creep or uncontrolled scope change, up from 43% five years earlier.",
       "prohibitedInference": "Do not say that scope creep caused a stated proportion of project failures or predict an individual project's outcome.",
       "capabilityIds": ["project_delivery", "planning_controls", "governance"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -391,11 +512,24 @@
       "sourceId": "src_pmi_pulse_2018",
       "status": "approved_for_customer_context",
       "claim": "PMI estimated that 9.9% of each dollar invested was wasted through poor project performance in 2018, down from 13.5% in 2013.",
-      "values": {"observedPercent": 9.9, "historicalComparatorPercent": 13.5},
+      "values": {
+        "observedPercent": 9.9,
+        "historicalComparatorPercent": 13.5
+      },
       "approvedCustomerWording": "PMI estimated in 2018 that poor project performance wasted 9.9% of project investment, compared with 13.5% in 2013.",
       "prohibitedInference": "Do not apply this percentage to a customer's expenditure or claim that DeliveryIQ will recover that amount.",
-      "capabilityIds": ["strategy_alignment", "portfolio", "programme_delivery", "project_delivery", "benefits"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "strategy_alignment",
+        "portfolio",
+        "programme_delivery",
+        "project_delivery",
+        "benefits"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -407,7 +541,10 @@
       "sourceId": "src_pmi_pulse_2018",
       "status": "approved_for_customer_context",
       "claim": "Using PMI's 2018 definitions, champion organisations reported 92% project success compared with 32% for underperformers.",
-      "values": {"championPercent": 92, "underperformerPercent": 32},
+      "values": {
+        "championPercent": 92,
+        "underperformerPercent": 32
+      },
       "approvedCustomerWording": "In PMI's 2018 study, organisations in its defined 'champion' group reported 92% project success, compared with 32% for its underperformer group.",
       "prohibitedInference": "Do not classify a DeliveryIQ customer into either PMI segment or attribute the difference to a single practice.",
       "capabilityIds": ["governance", "sponsorship", "pmo_enablement", "continuous_improvement"],
@@ -423,7 +560,9 @@
       "sourceId": "src_pmi_pulse_2024",
       "status": "approved_for_customer_context",
       "claim": "PMI reported an average project performance rate of 73.8% across its 2024 survey respondents.",
-      "values": {"averagePerformancePercent": 73.8},
+      "values": {
+        "averagePerformancePercent": 73.8
+      },
       "approvedCustomerWording": "PMI's 2024 research reported an average project performance rate of 73.8% across surveyed respondents.",
       "prohibitedInference": "Do not present 73.8% as a universal success rate or compare it directly with a Delivery DNA score.",
       "capabilityIds": ["programme_delivery", "project_delivery", "reporting_insight"],
@@ -439,11 +578,19 @@
       "sourceId": "src_pmi_pulse_2024",
       "status": "approved_for_customer_context",
       "claim": "Reported use of hybrid delivery approaches increased from 20% in 2020 to 31.5% in 2023, an increase of about 57%.",
-      "values": {"2020Percent": 20, "2023Percent": 31.5, "relativeIncreasePercent": 57},
+      "values": {
+        "2020Percent": 20,
+        "2023Percent": 31.5,
+        "relativeIncreasePercent": 57
+      },
       "approvedCustomerWording": "PMI reported that use of hybrid delivery approaches rose from 20% in 2020 to 31.5% in 2023.",
       "prohibitedInference": "Do not claim that hybrid adoption caused improved performance or is the correct approach for every initiative.",
       "capabilityIds": ["programme_delivery", "project_delivery", "planning_controls"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -455,11 +602,19 @@
       "sourceId": "src_pmi_pulse_2024",
       "status": "approved_for_customer_context",
       "claim": "PMI reported similar project performance rates for remote, hybrid and in-person work arrangements in its 2024 research.",
-      "values": {"remotePercent": 73.2, "hybridPercent": 73.4, "inPersonPercent": 74.6},
+      "values": {
+        "remotePercent": 73.2,
+        "hybridPercent": 73.4,
+        "inPersonPercent": 74.6
+      },
       "approvedCustomerWording": "PMI's 2024 study reported similar project performance for remote (73.2%), hybrid (73.4%) and in-person (74.6%) working arrangements.",
       "prohibitedInference": "Do not claim that location never matters or apply these averages to a specific team without context.",
       "capabilityIds": ["project_delivery", "stakeholder_change", "pmo_enablement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -471,11 +626,19 @@
       "sourceId": "src_pmi_pulse_2025",
       "status": "approved_for_customer_context",
       "claim": "PMI classified 18% of surveyed project professionals as having high business-acumen proficiency, 66% moderate and 16% low.",
-      "values": {"highPercent": 18, "moderatePercent": 66, "lowPercent": 16},
+      "values": {
+        "highPercent": 18,
+        "moderatePercent": 66,
+        "lowPercent": 16
+      },
       "approvedCustomerWording": "In PMI's 2025 research, 18% of surveyed project professionals demonstrated high business-acumen proficiency.",
       "prohibitedInference": "Do not infer an individual customer's proficiency or use the statistic as a Delivery DNA benchmark.",
       "capabilityIds": ["strategy_alignment", "sponsorship", "portfolio", "benefits"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -487,11 +650,30 @@
       "sourceId": "src_pmi_pulse_2025",
       "status": "approved_for_customer_context",
       "claim": "Professionals with high business acumen reported higher rates of meeting business goals, budget and schedule, and a lower project-failure rate than other respondents.",
-      "values": {"businessGoalsHighPercent": 83, "businessGoalsOthersPercent": 78, "budgetHighPercent": 73, "budgetOthersPercent": 68, "scheduleHighPercent": 63, "scheduleOthersPercent": 59, "failureHighPercent": 8, "failureOthersPercent": 11},
+      "values": {
+        "businessGoalsHighPercent": 83,
+        "businessGoalsOthersPercent": 78,
+        "budgetHighPercent": 73,
+        "budgetOthersPercent": 68,
+        "scheduleHighPercent": 63,
+        "scheduleOthersPercent": 59,
+        "failureHighPercent": 8,
+        "failureOthersPercent": 11
+      },
       "approvedCustomerWording": "PMI's 2025 study associated high business acumen with stronger reported business-goal, budget and schedule outcomes and a lower reported failure rate.",
       "prohibitedInference": "Do not claim business acumen alone caused the differences or guarantees a successful project.",
-      "capabilityIds": ["strategy_alignment", "sponsorship", "portfolio", "benefits", "project_delivery"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context"],
+      "capabilityIds": [
+        "strategy_alignment",
+        "sponsorship",
+        "portfolio",
+        "benefits",
+        "project_delivery"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -503,11 +685,26 @@
       "sourceId": "src_pmi_pulse_2026",
       "status": "approved_for_customer_context",
       "claim": "PMI reported that 97% of project professionals managed at least one complex project in the previous year, more than half of projects were classified as complex, and 81% said complexity had increased in recent years.",
-      "values": {"professionalsWithComplexProjectPercent": 97, "projectsComplex": "more_than_half", "reportedComplexityIncreasePercent": 81, "reportedSignificantIncreasePercent": 37},
+      "values": {
+        "professionalsWithComplexProjectPercent": 97,
+        "projectsComplex": "more_than_half",
+        "reportedComplexityIncreasePercent": 81,
+        "reportedSignificantIncreasePercent": 37
+      },
       "approvedCustomerWording": "PMI's 2026 research found that 97% of project professionals had managed at least one complex project in the previous year, while 81% said project complexity had increased.",
       "prohibitedInference": "Do not infer the complexity or likely outcome of a specific customer initiative from these population results.",
-      "capabilityIds": ["governance", "portfolio", "programme_delivery", "risk_assurance", "stakeholder_change"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "governance",
+        "portfolio",
+        "programme_delivery",
+        "risk_assurance",
+        "stakeholder_change"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -519,11 +716,27 @@
       "sourceId": "src_pmi_pulse_2026",
       "status": "approved_for_customer_context",
       "claim": "PMI reported that 31% of complex projects failed to achieve the full scope of intended benefits, compared with 13% of projects overall; effective complexity management was associated with about five times the likelihood of success.",
-      "values": {"complexProjectsNotFullBenefitsPercent": 31, "allProjectsComparatorPercent": 13, "successLikelihoodMultiplier": 5},
+      "values": {
+        "complexProjectsNotFullBenefitsPercent": 31,
+        "allProjectsComparatorPercent": 13,
+        "successLikelihoodMultiplier": 5
+      },
       "approvedCustomerWording": "PMI's 2026 research reported that 31% of complex projects did not achieve their full intended benefits, compared with 13% of projects overall.",
       "prohibitedInference": "Do not describe the association as a causal guarantee or predict a customer's chance of failure.",
-      "capabilityIds": ["strategy_alignment", "governance", "programme_delivery", "benefits", "risk_assurance", "stakeholder_change"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "recommendation_context", "website_context"],
+      "capabilityIds": [
+        "strategy_alignment",
+        "governance",
+        "programme_delivery",
+        "benefits",
+        "risk_assurance",
+        "stakeholder_change"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -535,11 +748,20 @@
       "sourceId": "src_apm_golden_thread_2024",
       "status": "approved_for_customer_context",
       "claim": "APM estimated that the UK project profession supported approximately 2.32 million full-time-equivalent roles and contributed £186.8 billion in annual gross value added in 2024.",
-      "values": {"fullTimeEquivalentRoles": 2320000, "annualGrossValueAddedGbp": 186800000000, "fteIncreaseFrom2019Percent": 8, "gvaIncreaseFrom2019Percent": 19},
+      "values": {
+        "fullTimeEquivalentRoles": 2320000,
+        "annualGrossValueAddedGbp": 186800000000,
+        "fteIncreaseFrom2019Percent": 8,
+        "gvaIncreaseFrom2019Percent": 19
+      },
       "approvedCustomerWording": "APM estimated that the UK project profession supported about 2.32 million full-time-equivalent roles and contributed £186.8 billion to the UK economy in 2024.",
       "prohibitedInference": "Do not equate economic contribution with project success or apply the estimate outside its UK study scope.",
       "capabilityIds": ["strategy_alignment", "portfolio", "pmo_enablement"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -551,11 +773,26 @@
       "sourceId": "src_nista_2025_26",
       "status": "approved_for_customer_context",
       "claim": "At 31 March 2026, the UK Government Major Projects Portfolio contained 189 projects with £924.2 billion whole-life cost and £603.6 billion of monetised benefits across 20 departments and arm's-length bodies.",
-      "values": {"projectCount": 189, "wholeLifeCostGbp": 924200000000, "monetisedBenefitsGbp": 603600000000, "departmentCount": 20},
+      "values": {
+        "projectCount": 189,
+        "wholeLifeCostGbp": 924200000000,
+        "monetisedBenefitsGbp": 603600000000,
+        "departmentCount": 20
+      },
       "approvedCustomerWording": "The UK Government Major Projects Portfolio reported 189 projects with £924.2 billion whole-life cost and £603.6 billion of monetised benefits at 31 March 2026.",
       "prohibitedInference": "Do not generalise the portfolio's scale, risk or confidence ratings to SMEs or private-sector projects.",
-      "capabilityIds": ["governance", "portfolio", "programme_delivery", "benefits", "risk_assurance"],
-      "permittedUses": ["internal_product_discovery", "knowledge_pack_education", "website_context"],
+      "capabilityIds": [
+        "governance",
+        "portfolio",
+        "programme_delivery",
+        "benefits",
+        "risk_assurance"
+      ],
+      "permittedUses": [
+        "internal_product_discovery",
+        "knowledge_pack_education",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     },
@@ -573,9 +810,16 @@
       "capabilityIds": ["portfolio_prioritisation", "capacity_delivery_ecosystem"],
       "domainIds": ["direction_value", "delivery_system"],
       "mappingPriority": 1,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_benefits",
@@ -585,16 +829,25 @@
       "sourceId": "src_wellingtone_state_pm_2026",
       "status": "approved_for_customer_context",
       "claim": "Forty-two percent of respondents said their organisations mostly or always delivered the full benefits of projects, while benefits realisation was among the hardest processes to embed.",
-      "values": {"mostlyOrAlwaysDeliverFullBenefitsPercent": 42},
+      "values": {
+        "mostlyOrAlwaysDeliverFullBenefitsPercent": 42
+      },
       "approvedCustomerWording": "In Wellingtone's 2026 survey, 42% said their organisations mostly or always delivered the full benefits of projects, while benefits realisation remained one of the hardest disciplines to embed.",
       "shortScopeCaveat": "Self-selected survey of project professionals conducted through Q4 2025; directional context only.",
       "prohibitedInference": "Do not infer the assessed organisation's benefit performance or probability of success from the survey percentage.",
       "capabilityIds": ["benefits_value"],
       "domainIds": ["direction_value"],
       "mappingPriority": 2,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_sponsorship",
@@ -610,9 +863,16 @@
       "capabilityIds": ["sponsorship_accountability", "leadership_culture_collaboration"],
       "domainIds": ["leadership_governance", "people_enablement"],
       "mappingPriority": 1,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_delivery_basics",
@@ -622,16 +882,32 @@
       "sourceId": "src_wellingtone_state_pm_2026",
       "status": "approved_for_customer_context",
       "claim": "Fifty-eight percent of respondents mostly or always applied a defined project methodology, 55% mostly or always created a scoping document, 65% mostly or always actively used a schedule and 60% mostly or always engaged in risk management.",
-      "values": {"definedMethodologyPercent": 58, "scopingDocumentPercent": 55, "activeSchedulePercent": 65, "riskManagementPercent": 60},
+      "values": {
+        "definedMethodologyPercent": 58,
+        "scopingDocumentPercent": 55,
+        "activeSchedulePercent": 65,
+        "riskManagementPercent": 60
+      },
       "approvedCustomerWording": "Wellingtone's 2026 survey found that consistent use of core delivery practices was not universal: reported figures ranged from 55% for scoping documents to 65% for actively used schedules.",
       "shortScopeCaveat": "Self-selected survey of project professionals conducted through Q4 2025; directional context only.",
       "prohibitedInference": "Do not prescribe one method or infer the assessed organisation's delivery practice from survey averages.",
-      "capabilityIds": ["delivery_approach_lifecycle", "planning_control_dependencies", "risk_assurance_resilience"],
+      "capabilityIds": [
+        "delivery_approach_lifecycle",
+        "planning_control_dependencies",
+        "risk_assurance_resilience"
+      ],
       "domainIds": ["delivery_system", "leadership_governance"],
       "mappingPriority": 2,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_reporting",
@@ -641,16 +917,26 @@
       "sourceId": "src_wellingtone_state_pm_2026",
       "status": "approved_for_customer_context",
       "claim": "Seventy-two percent of respondents spent at least half a day each month manually collating project reports, while 40% reported access to real-time centralised project KPIs.",
-      "values": {"manualReportingHalfDayOrMorePercent": 72, "realTimeCentralisedKpiAccessPercent": 40},
+      "values": {
+        "manualReportingHalfDayOrMorePercent": 72,
+        "realTimeCentralisedKpiAccessPercent": 40
+      },
       "approvedCustomerWording": "In Wellingtone's 2026 survey, 72% spent at least half a day each month manually collating project reports, while 40% reported access to real-time centralised project KPIs.",
       "shortScopeCaveat": "Self-selected survey of project professionals conducted through Q4 2025; directional context only.",
       "prohibitedInference": "Do not estimate the assessed organisation's reporting effort, technology maturity or potential savings from these percentages.",
       "capabilityIds": ["data_reporting_decision_insight", "digital_automation_responsible_ai"],
       "domainIds": ["insight_adaptation"],
       "mappingPriority": 1,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_delivery_skills",
@@ -660,16 +946,25 @@
       "sourceId": "src_wellingtone_state_pm_2026",
       "status": "approved_for_customer_context",
       "claim": "Seventy-three percent of respondents expected the proportion of people needing project-management skills to increase.",
-      "values": {"expectMorePeopleNeedProjectManagementSkillsPercent": 73},
+      "values": {
+        "expectMorePeopleNeedProjectManagementSkillsPercent": 73
+      },
       "approvedCustomerWording": "In Wellingtone's 2026 survey, 73% expected the proportion of people needing project-management skills to increase.",
       "shortScopeCaveat": "Self-selected survey of project professionals conducted through Q4 2025; directional context only.",
       "prohibitedInference": "Do not infer a customer skills gap or future workforce requirement from respondent expectations.",
       "capabilityIds": ["delivery_capability_enablement", "leadership_culture_collaboration"],
       "domainIds": ["people_enablement"],
       "mappingPriority": 2,
-      "permittedUses": ["snapshot_context", "overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
-      "reviewBy": "2026-11-03"
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
     },
     {
       "id": "context_wellingtone_2026_project_performance",
@@ -679,32 +974,228 @@
       "sourceId": "src_wellingtone_state_pm_2026",
       "status": "approved_for_customer_context",
       "claim": "Thirty-six percent of respondents said their organisations mostly or always completed projects on time, 49% on budget and 42% with full benefits, while 52% said their organisation had a track record of project success.",
-      "values": {"mostlyOrAlwaysOnTimePercent": 36, "mostlyOrAlwaysOnBudgetPercent": 49, "mostlyOrAlwaysFullBenefitsPercent": 42, "perceivedTrackRecordOfSuccessPercent": 52},
+      "values": {
+        "mostlyOrAlwaysOnTimePercent": 36,
+        "mostlyOrAlwaysOnBudgetPercent": 49,
+        "mostlyOrAlwaysFullBenefitsPercent": 42,
+        "perceivedTrackRecordOfSuccessPercent": 52
+      },
       "approvedCustomerWording": "Wellingtone's 2026 survey showed a gap between reported delivery outcomes and overall perceptions of success, reinforcing the value of evidence-led assessment.",
       "shortScopeCaveat": "Self-selected survey of project professionals conducted through Q4 2025; directional context only.",
       "prohibitedInference": "Do not combine the figures into a failure rate, claim causality or predict an assessed organisation's project outcomes.",
-      "capabilityIds": ["benefits_value", "planning_control_dependencies", "data_reporting_decision_insight"],
+      "capabilityIds": [
+        "benefits_value",
+        "planning_control_dependencies",
+        "data_reporting_decision_insight"
+      ],
       "domainIds": ["direction_value", "delivery_system", "insight_adaptation"],
       "mappingPriority": 3,
-      "permittedUses": ["overview_context", "report_context", "recommendation_context", "website_context"],
+      "permittedUses": [
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
+      "scoringEffect": "none",
+      "reviewBy": "2026-11-03",
+      "customerSourceNote": "* Wellingtone, The State of Project Management 2026"
+    },
+    {
+      "id": "context_apm_success_conditions_2015",
+      "version": "1.0.0",
+      "evidenceType": "professional_body_primary_research",
+      "grade": "A2",
+      "sourceId": "src_apm_success_conditions_2015",
+      "status": "approved_for_customer_context",
+      "claim": "APM research identified planning and review, clear goals, effective governance, competent teams and commitment to success as the five factors with the strongest and most consistent relationship to time, cost and quality.",
+      "approvedCustomerWording": "APM research identified planning and review, clear goals, effective governance, competent teams and commitment to success as the five factors with the strongest and most consistent relationship to time, cost and quality.",
+      "customerSourceNote": "* Association for Project Management, Conditions for Project Success 2015",
+      "prohibitedInference": "Do not claim that these conditions cause success or diagnose an assessed organisation without its own evidence.",
+      "capabilityIds": [
+        "strategic_alignment",
+        "sponsorship_accountability",
+        "leadership_culture_collaboration",
+        "planning_control_dependencies"
+      ],
+      "domainIds": [
+        "direction_value",
+        "leadership_governance",
+        "delivery_system",
+        "people_enablement"
+      ],
+      "mappingPriority": 2,
+      "snapshotDomainPriorities": {
+        "delivery_system": 0,
+        "people_enablement": 0
+      },
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
+      "scoringEffect": "none",
+      "reviewBy": "2026-11-03"
+    },
+    {
+      "id": "context_pmi_success_value_2024",
+      "version": "1.0.0",
+      "evidenceType": "professional_body_primary_research",
+      "grade": "A2",
+      "sourceId": "src_pmi_success_value_2024",
+      "status": "approved_for_customer_context",
+      "claim": "In PMI's global research, 74% defined project success as being on time, on budget and delivering a valuable outcome.",
+      "values": {
+        "definedSuccessWithTimeBudgetValuePercent": 74
+      },
+      "approvedCustomerWording": "In PMI's global research, 74% defined project success as being on time, on budget and delivering a valuable outcome.",
+      "customerSourceNote": "* Project Management Institute, Maximizing Project Success 2024",
+      "prohibitedInference": "Do not turn this definition into a benchmark, probability of success or score for an assessed organisation.",
+      "capabilityIds": ["strategic_alignment", "benefits_value", "portfolio_prioritisation"],
+      "domainIds": ["direction_value"],
+      "mappingPriority": 0,
+      "snapshotDomainPriorities": {
+        "direction_value": 0
+      },
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
+      "scoringEffect": "none",
+      "reviewBy": "2026-11-03"
+    },
+    {
+      "id": "context_uk_ai_accountability_2025",
+      "version": "1.0.0",
+      "evidenceType": "official_government_guidance",
+      "grade": "A1",
+      "sourceId": "src_govuk_ai_playbook_2025",
+      "status": "approved_for_customer_context",
+      "claim": "UK Government guidance recommends clear human responsibility, traceability and risk-based controls across the AI lifecycle.",
+      "approvedCustomerWording": "UK Government guidance recommends clear human responsibility, traceability and risk-based controls across the AI lifecycle.",
+      "customerSourceNote": "* UK Government, AI Playbook for the UK Government 2025",
+      "prohibitedInference": "Do not imply regulatory compliance, prescribe government controls to every organisation or score AI adoption from this guidance.",
+      "capabilityIds": [
+        "digital_automation_responsible_ai",
+        "risk_assurance_resilience",
+        "data_reporting_decision_insight"
+      ],
+      "domainIds": ["insight_adaptation", "leadership_governance"],
+      "mappingPriority": 1,
+      "snapshotDomainPriorities": {
+        "insight_adaptation": 0
+      },
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
+      "scoringEffect": "none",
+      "reviewBy": "2026-11-03"
+    },
+    {
+      "id": "context_nista_confidence_snapshot_2026",
+      "version": "1.0.0",
+      "evidenceType": "official_government_portfolio_data",
+      "grade": "A1",
+      "sourceId": "src_nista_2025_26",
+      "status": "approved_for_customer_context",
+      "claim": "NISTA's 2025–26 report emphasises that delivery-confidence ratings are a point-in-time view of risk, not a definitive judgement of whether a project will succeed or fail.",
+      "approvedCustomerWording": "NISTA's 2025–26 report emphasises that delivery-confidence ratings are a point-in-time view of risk, not a definitive judgement of whether a project will succeed or fail.",
+      "customerSourceNote": "* NISTA, Major Projects Annual Report 2025–26",
+      "prohibitedInference": "Do not present government major-project confidence ratings as a representative SME or cross-industry benchmark.",
+      "capabilityIds": ["risk_assurance_resilience", "data_reporting_decision_insight"],
+      "domainIds": ["leadership_governance", "insight_adaptation"],
+      "mappingPriority": 1,
+      "snapshotDomainPriorities": {
+        "leadership_governance": 0
+      },
+      "permittedUses": [
+        "snapshot_context",
+        "overview_context",
+        "report_context",
+        "recommendation_context",
+        "website_context"
+      ],
       "scoringEffect": "none",
       "reviewBy": "2026-11-03"
     }
   ],
   "capabilityAssessment": [
-    {"capabilityId": "strategy_alignment", "coverage": "strong", "candidateTopics": ["sustainability_and_whole_life_value", "ai_use_case_value_when_applicable"]},
-    {"capabilityId": "governance", "coverage": "strong_with_partial_gap", "candidateTopics": ["proportionate_responsible_ai_accountability_when_applicable"]},
-    {"capabilityId": "sponsorship", "coverage": "strong", "candidateTopics": ["business_acumen_evidence"]},
-    {"capabilityId": "portfolio", "coverage": "strong", "candidateTopics": []},
-    {"capabilityId": "programme_delivery", "coverage": "strong_with_partial_gap", "candidateTopics": ["systems_complexity", "inter_organisational_relationships"]},
-    {"capabilityId": "project_delivery", "coverage": "strong", "candidateTopics": ["flow_metrics_as_contextual_evidence"]},
-    {"capabilityId": "planning_controls", "coverage": "strong", "candidateTopics": ["flow_metrics_as_contextual_evidence"]},
-    {"capabilityId": "benefits", "coverage": "strong", "candidateTopics": ["formal_post_project_evaluation"]},
-    {"capabilityId": "risk_assurance", "coverage": "strong_with_partial_gap", "candidateTopics": ["ai_data_and_ethical_risk"]},
-    {"capabilityId": "stakeholder_change", "coverage": "strong_with_partial_gap", "candidateTopics": ["psychological_safety", "team_sustainability"]},
-    {"capabilityId": "pmo_enablement", "coverage": "strong", "candidateTopics": []},
-    {"capabilityId": "reporting_insight", "coverage": "strong_with_partial_gap", "candidateTopics": ["ai_output_human_review", "data_provenance"]},
-    {"capabilityId": "continuous_improvement", "coverage": "strong", "candidateTopics": ["post_project_learning"]}
+    {
+      "capabilityId": "strategy_alignment",
+      "coverage": "strong",
+      "candidateTopics": [
+        "sustainability_and_whole_life_value",
+        "ai_use_case_value_when_applicable"
+      ]
+    },
+    {
+      "capabilityId": "governance",
+      "coverage": "strong_with_partial_gap",
+      "candidateTopics": ["proportionate_responsible_ai_accountability_when_applicable"]
+    },
+    {
+      "capabilityId": "sponsorship",
+      "coverage": "strong",
+      "candidateTopics": ["business_acumen_evidence"]
+    },
+    {
+      "capabilityId": "portfolio",
+      "coverage": "strong",
+      "candidateTopics": []
+    },
+    {
+      "capabilityId": "programme_delivery",
+      "coverage": "strong_with_partial_gap",
+      "candidateTopics": ["systems_complexity", "inter_organisational_relationships"]
+    },
+    {
+      "capabilityId": "project_delivery",
+      "coverage": "strong",
+      "candidateTopics": ["flow_metrics_as_contextual_evidence"]
+    },
+    {
+      "capabilityId": "planning_controls",
+      "coverage": "strong",
+      "candidateTopics": ["flow_metrics_as_contextual_evidence"]
+    },
+    {
+      "capabilityId": "benefits",
+      "coverage": "strong",
+      "candidateTopics": ["formal_post_project_evaluation"]
+    },
+    {
+      "capabilityId": "risk_assurance",
+      "coverage": "strong_with_partial_gap",
+      "candidateTopics": ["ai_data_and_ethical_risk"]
+    },
+    {
+      "capabilityId": "stakeholder_change",
+      "coverage": "strong_with_partial_gap",
+      "candidateTopics": ["psychological_safety", "team_sustainability"]
+    },
+    {
+      "capabilityId": "pmo_enablement",
+      "coverage": "strong",
+      "candidateTopics": []
+    },
+    {
+      "capabilityId": "reporting_insight",
+      "coverage": "strong_with_partial_gap",
+      "candidateTopics": ["ai_output_human_review", "data_provenance"]
+    },
+    {
+      "capabilityId": "continuous_improvement",
+      "coverage": "strong",
+      "candidateTopics": ["post_project_learning"]
+    }
   ],
   "questionSetDecision": {
     "questionSetId": "delivery-dna",

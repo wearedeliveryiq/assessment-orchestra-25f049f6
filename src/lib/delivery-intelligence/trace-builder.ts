@@ -22,6 +22,7 @@ export async function buildCoreTrace(
   const isV2 = [
     "deliveryiq.intelligence-result/2.0.0",
     "deliveryiq.intelligence-result/2.1.0",
+    "deliveryiq.intelligence-result/2.2.0",
   ].includes(result.schemaVersion);
   const configuration = isV2 ? deliveryDnaV2Catalogue : sprint03Configuration;
   const nodes: TraceNode[] = [];

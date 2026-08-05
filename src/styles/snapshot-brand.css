@@ -65,6 +65,7 @@
   background: var(--snapshot-gradient);
   background-clip: text;
   color: transparent;
+  overflow: visible;
 }
 
 .snapshot-gradient-button {
@@ -97,12 +98,72 @@
   }
 }
 
+@keyframes snapshot-preparation-orbit {
+  from {
+    transform: rotate(0deg) scale(0.96);
+    border-color: rgba(96, 165, 250, 0.18);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.04);
+    border-color: rgba(20, 184, 166, 0.48);
+  }
+  to {
+    transform: rotate(360deg) scale(0.96);
+    border-color: rgba(96, 165, 250, 0.18);
+  }
+}
+
+@keyframes snapshot-preparation-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.72);
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.25);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 9px rgba(96, 165, 250, 0);
+  }
+}
+
 .snapshot-ribbon-float {
   animation: snapshot-ribbon-float 8s ease-in-out infinite;
 }
 
 .snapshot-ribbon-glow {
   animation: snapshot-glow 5s ease-in-out infinite;
+}
+
+.snapshot-preparation-orbit {
+  animation: snapshot-preparation-orbit 3.6s linear infinite;
+}
+
+.snapshot-preparation-ribbon {
+  animation: snapshot-ribbon-float 3.2s ease-in-out infinite;
+}
+
+.snapshot-preparation-pulse {
+  animation: snapshot-preparation-pulse 1.2s ease-in-out infinite;
+}
+
+.snapshot-domain-flow-node:not(:last-child)::after {
+  position: absolute;
+  top: 1.08rem;
+  left: calc(50% + 1.15rem);
+  width: calc(100% - 2.3rem);
+  height: 2px;
+  content: "";
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.snapshot-domain-flow-node[data-state="complete"]:not(:last-child)::after {
+  background: linear-gradient(90deg, #14b8a6, #2563eb);
+}
+
+.snapshot-domain-flow-node[data-state="active"] > span {
+  border-color: rgba(96, 165, 250, 0.8);
+  box-shadow: 0 0 28px -8px rgba(96, 165, 250, 0.95);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -113,6 +174,11 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .snapshot-preparation-orbit {
+    border-color: rgba(20, 184, 166, 0.4);
+    transform: none;
   }
 }
 

@@ -106,7 +106,7 @@ export function DeliveryDnaAssessmentJourney({
   const carriedResponseCount = detail.responses.filter(
     (response) =>
       response.provenanceSource === "delivery-dna-snapshot" &&
-      response.provenanceVersion === "2.1.0",
+      response.provenanceVersion === "2.2.0",
   ).length;
 
   const save = useMutation({
