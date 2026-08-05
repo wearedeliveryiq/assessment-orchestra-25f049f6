@@ -265,6 +265,12 @@ The preparation screen performs the real result operation behind a visible Deliv
 - Complete Vitest regression: 642/642 tests across 48 files pass.
 - Type checking: pass.
 
-### Remaining release condition
+### Production deployment and Product Owner acceptance
 
-Stripe activation remains intentionally unavailable and no payment evidence was manufactured. The 2.2 free Snapshot can be merged, migrated and deployed, but active customer promotion remains paused until a fresh hosted 2.2 completion passes Product Owner visual acceptance at the required responsive sizes and text zoom. Final deployment and hosted identifiers are reported with the release hand-off rather than invented in advance.
+PR #52 merged as `d55c702737acf60991c2c6f627de4ab69d03c64f`. Lovable applied the cutover and hardening migrations as `20260805123736_8a06419c-a877-4c07-966c-0e395aa36211.sql` and `20260805123811_84f83ac2-2f2b-4488-9cce-d891cf63ecf3.sql`, then published deployment `58eb7410-257d-492a-997c-6869044992b5` at <https://assessment-orchestra.lovable.app>.
+
+Fresh production session `ae427b19-8ad5-4680-b612-8ab27b2a52fe` completed with 15/15 answered responses and immutable configuration/presentation provenance `2.2.0`. It returned Established with the exact expanded interpretation, five accessible domain labels, disjoint Areas of Strength and Areas to Explore, visibly sourced APM context, separate non-benchmark disclosure and both Saved Snapshot actions. No assessment, analysis run, checkout, payment event or access grant was created. Hosted checks found no Lovable control or horizontal overflow at 320px, 390px, 768px, 1280px or 1440px; the locked regression remains the evidence for 200% text zoom.
+
+The Product Owner independently inspected the completed result at 390px and 1280px on 5 August 2026 and accepted the promotion gate with no customer-visible remediation. Delivery DNA 2.2 is authorised for customer promotion.
+
+Stripe activation remains intentionally fail-closed and no payment evidence was manufactured. This is a separate commercial activation limitation and does not block the free Snapshot or Saved Snapshot promotion.
