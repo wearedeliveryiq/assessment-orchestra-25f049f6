@@ -656,40 +656,35 @@ function SnapshotResultView({
 
   return (
     <section className="mx-auto max-w-5xl">
-      <section className="snapshot-acquisition-panel relative overflow-hidden rounded-[30px] px-6 py-10 text-center sm:px-10 sm:py-14">
-        <div
-          className="snapshot-ribbon-glow pointer-events-none absolute left-1/2 top-0 h-56 w-96 -translate-x-1/2 rounded-full bg-[linear-gradient(90deg,#14B8A6,#2563EB,#7C3AED)] blur-[100px]"
-          aria-hidden="true"
-        />
-        <RibbonStage size="sm" onNavy className="mx-auto" />
-        <p className="relative mt-3 text-xs font-bold uppercase tracking-[0.24em] text-[#14B8A6]">
-          {String(copy.readyHeading)}
-        </p>
+      <section className="on-navy relative overflow-hidden rounded-[22px] px-6 py-10 text-center sm:px-10 sm:py-14">
+        <SignalField />
+        <SignalConverge className="relative mx-auto max-w-md" />
+        <p className="eyebrow relative mt-4">{String(copy.readyHeading)}</p>
         <h1 className="relative mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">
           {String(copy.resultHeading)}
         </h1>
-        <p className="snapshot-gradient-text relative mt-5 break-words px-2 py-2 text-5xl font-extrabold leading-[1.15] tracking-tight sm:text-6xl">
+        <p className="relative mt-5 break-words px-2 py-2 font-display text-5xl font-extrabold leading-[1.15] tracking-tight text-primary sm:text-6xl">
           {maturity.label}
         </p>
-        <div className="relative mx-auto mt-7 max-w-3xl border-t border-white/[0.08] pt-6 text-left">
+        <div className="relative mx-auto mt-7 max-w-3xl border-t border-border pt-6 text-left">
           <h2 className="text-xl font-extrabold">{String(copy.interpretationHeading)}</h2>
-          <p className="mt-3 leading-relaxed text-[#CBD5E1]">{maturity.interpretation}</p>
+          <p className="mt-3 leading-relaxed text-muted-foreground">{maturity.interpretation}</p>
         </div>
       </section>
 
-      <p className="mt-6 rounded-2xl border border-white/[0.08] bg-[#111827] p-5 text-sm leading-relaxed text-[#CBD5E1]">
+      <p className="panel mt-6 p-5 text-sm leading-relaxed text-muted-foreground">
         {copy.resultCaveat}
       </p>
 
       {snapshot.status !== "linked" ? (
-        <section className="mt-6 flex flex-col items-start gap-4 rounded-[22px] border border-[#60A5FA]/40 bg-[#2563EB]/15 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <section className="mt-6 flex flex-col items-start gap-4 rounded-[18px] border border-primary/40 bg-accent p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
-            <p className="font-bold text-[#F8FAFC]">{savedSnapshotCopy.saveSupporting}</p>
-            <p className="mt-1 text-sm text-[#CBD5E1]">{savedSnapshotCopy.saveAssurance}</p>
+            <p className="font-bold text-foreground">{savedSnapshotCopy.saveSupporting}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{savedSnapshotCopy.saveAssurance}</p>
           </div>
           <a
             href="#snapshot-save-panel"
-            className="snapshot-gradient-button inline-flex min-h-12 shrink-0 items-center gap-2 rounded-lg px-6 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+            className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-[14px] bg-primary px-6 text-sm font-bold text-primary-foreground"
           >
             {savedSnapshotCopy.saveAction}
             <ArrowRight className="h-4 w-4" aria-hidden />
@@ -697,14 +692,11 @@ function SnapshotResultView({
         </section>
       ) : null}
 
-      <section
-        className="snapshot-acquisition-panel mt-7 rounded-[28px] p-5 sm:p-8"
-        aria-labelledby="snapshot-profile-title"
-      >
+      <section className="on-navy mt-7 rounded-[22px] p-5 sm:p-8" aria-labelledby="snapshot-profile-title">
         <h2 id="snapshot-profile-title" className="text-2xl font-extrabold tracking-tight">
           {String(copy.profileHeading)}
         </h2>
-        <p className="mt-2 text-sm text-[#CBD5E1]">{String(copy.profileBody)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{String(copy.profileBody)}</p>
         <div className="mt-4">
           <SnapshotRadar profile={result.profile} />
         </div>
@@ -730,17 +722,17 @@ function SnapshotResultView({
       ) : null}
 
       {result.industryContext?.[0] ? (
-        <aside className="mt-7 rounded-[24px] border border-white/[0.08] bg-[#111827] p-5 sm:p-6">
+        <aside className="panel mt-7 p-5 sm:p-6">
           <h2 className="text-lg font-extrabold">Industry context</h2>
-          <p className="text-sm leading-relaxed text-[#CBD5E1]">
+          <p className="text-sm leading-relaxed text-muted-foreground">
             {result.industryContext[0].approvedCustomerWording}
             <sup className="ml-1">{result.industryContext[0].footnoteMarker}</sup>
           </p>
-          <p className="mt-4 text-sm font-semibold leading-relaxed text-[#F8FAFC]">
+          <p className="mt-4 text-sm font-semibold leading-relaxed text-foreground">
             {result.industryContext[0].mandatoryDisclosure}
           </p>
-          <details className="mt-4 text-xs text-[#94A3B8]">
-            <summary className="cursor-pointer font-semibold text-[#CBD5E1]">
+          <details className="mt-4 text-xs text-muted-foreground">
+            <summary className="cursor-pointer font-semibold text-foreground">
               About this source
             </summary>
             <p className="mt-2 leading-relaxed">{result.industryContext[0].scopeCaveat}</p>
@@ -749,7 +741,7 @@ function SnapshotResultView({
             href={result.industryContext[0].originalSourceReference}
             target="_blank"
             rel="noreferrer"
-            className="mt-5 block border-t border-white/[0.08] pt-4 text-xs leading-relaxed text-[#94A3B8] underline decoration-white/30 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60A5FA]"
+            className="mt-5 block border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground underline underline-offset-4"
           >
             {result.industryContext[0].sourceNote}
           </a>
